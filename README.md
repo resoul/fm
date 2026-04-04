@@ -1,4 +1,4 @@
-# ⚽ Football Manager UI
+# ⚽ Football Manager UI Hello
 
 A modern, feature-rich **Football Manager**-style web application built with React, TypeScript, and Vite. The project replicates the look and feel of a professional football management game — including tactics, inbox, transfers, squad management, finances, scouting, and much more.
 
