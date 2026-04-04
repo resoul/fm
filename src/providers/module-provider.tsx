@@ -1,15 +1,11 @@
 import { lazy, Suspense, type ComponentType, type LazyExoticComponent } from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import { ScreenLoader } from '@/components/screen-loader';
-import { useAuth } from '@/providers/auth-context';
 
 interface ModuleRoute {
     path: string;
     module: LazyExoticComponent<ComponentType>;
 }
-
-const AuthModule = lazy(() => import('@/modules/auth'));
-const MainModule = lazy(() => import('@/modules/main'));
 
 const routes: ModuleRoute[] = [
     { path: 'home', module: lazy(() => import('@/modules/home')) },
@@ -31,64 +27,9 @@ const routes: ModuleRoute[] = [
     { path: 'dynamics', module: lazy(() => import('@/modules/dynamics')) },
     { path: 'finances', module: lazy(() => import('@/modules/finances')) },
     { path: 'team', module: lazy(() => import('@/modules/team')) },
-    { path: 'career', module: MainModule },
 ];
 
 export function ModuleProvider() {
-    const { isAuthenticated, isLoading, needsOnboarding, needsCareerSelection } = useAuth();
-
-    if (isLoading) {
-        return <ScreenLoader />;
-    }
-
-    if (!isAuthenticated) {
-        return (
-            <Routes>
-                <Route
-                    path="/auth/*"
-                    element={
-                        <Suspense fallback={<ScreenLoader />}>
-                            <AuthModule />
-                        </Suspense>
-                    }
-                />
-                <Route path="*" element={<Navigate to="/auth/login" replace />} />
-            </Routes>
-        );
-    }
-
-    if (needsOnboarding) {
-        return (
-            <Routes>
-                <Route
-                    path="/onboard/*"
-                    element={
-                        <Suspense fallback={<ScreenLoader />}>
-                            <MainModule />
-                        </Suspense>
-                    }
-                />
-                <Route path="*" element={<Navigate to="/onboard" replace />} />
-            </Routes>
-        );
-    }
-
-    if (needsCareerSelection) {
-        return (
-            <Routes>
-                <Route
-                    path="/career/*"
-                    element={
-                        <Suspense fallback={<ScreenLoader />}>
-                            <MainModule />
-                        </Suspense>
-                    }
-                />
-                <Route path="*" element={<Navigate to="/career" replace />} />
-            </Routes>
-        );
-    }
-
     return (
         <Routes>
             {routes.map(({ path, module: Module }) => (
@@ -102,9 +43,7 @@ export function ModuleProvider() {
                     }
                 />
             ))}
-            <Route path="/onboard/*" element={<Navigate to="/career" replace />} />
-            <Route path="/auth/*" element={<Navigate to="/career" replace />} />
-            <Route path="*" element={<Navigate to="/career" replace />} />
+            <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>
     );
 }
