@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.17",
+    "@tanstack/react-query": "^5.96.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "invariant": "^2.2.4",
@@ -31,6 +32,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@mswjs/data": "^0.16.2",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
@@ -39,9 +41,15 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
+    "msw": "^2.13.1",
     "sass-embedded": "^1.93.3",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
     "vite": "^7.2.4"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }

@@ -2,43 +2,13 @@ import { useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/scroll-area";
 import { Button } from "@/components/button";
-import { ChevronRight } from "lucide-react";
 import { JuveBadge } from "@/modules/home/layout/juve-badge";
+import LeagueTable from "../windows/LeagueTable";
+import NextMatch from "../windows/NextMatch";
+import { SectionHeader } from "../../componets/SectionHeader";
 
-function SectionHeader({ title, chevron = true }: { title: string; chevron?: boolean }) {
-    return (
-        <div className="flex items-center justify-between mb-2">
-            <span className={cn("text-xs font-bold uppercase tracking-wider", chevron ? "text-teal-400 cursor-pointer hover:text-teal-300" : "text-zinc-400")}>
-                {title} {chevron && <ChevronRight className="inline size-3" />}
-            </span>
-        </div>
-    );
-}
 
 // ─── HOME PAGE ────────────────────────────────────────────────────────────────
-
-const LEAGUE_TABLE = [
-    { pos: 1, team: 'Atalanta', p: 0, gd: 0, pts: 0, color: 'bg-blue-500' },
-    { pos: 2, team: 'Bologna', p: 0, gd: 0, pts: 0, color: 'bg-red-600' },
-    { pos: 3, team: 'Brianza', p: 0, gd: 0, pts: 0, color: 'bg-red-500' },
-    { pos: 4, team: 'Capitoline', p: 0, gd: 0, pts: 0, color: 'bg-yellow-500' },
-    { pos: 5, team: 'Cremonese', p: 0, gd: 0, pts: 0, color: 'bg-red-700' },
-    { pos: 6, team: 'Empoli', p: 0, gd: 0, pts: 0, color: 'bg-blue-400' },
-    { pos: 7, team: 'Fiorentina', p: 0, gd: 0, pts: 0, color: 'bg-purple-600' },
-    { pos: 8, team: 'Inter', p: 0, gd: 0, pts: 0, color: 'bg-blue-700' },
-    { pos: 9, team: 'Juventus', p: 0, gd: 0, pts: 0, highlighted: true, color: 'bg-zinc-800' },
-    { pos: 10, team: 'Lazio', p: 0, gd: 0, pts: 0, color: 'bg-blue-300' },
-    { pos: 11, team: 'Milan', p: 0, gd: 0, pts: 0, color: 'bg-red-700' },
-    { pos: 12, team: 'Parthenope', p: 0, gd: 0, pts: 0, color: 'bg-blue-500' },
-    { pos: 13, team: 'Salento', p: 0, gd: 0, pts: 0, color: 'bg-yellow-600' },
-    { pos: 14, team: 'Salernitana', p: 0, gd: 0, pts: 0, color: 'bg-red-500' },
-    { pos: 15, team: 'Sampdoria', p: 0, gd: 0, pts: 0, color: 'bg-blue-600' },
-    { pos: 16, team: 'Sassuolo', p: 0, gd: 0, pts: 0, color: 'bg-green-600' },
-    { pos: 17, team: 'Spezia', p: 0, gd: 0, pts: 0, color: 'bg-zinc-700' },
-    { pos: 18, team: 'Torino', p: 0, gd: 0, pts: 0, color: 'bg-red-800' },
-    { pos: 19, team: 'Udinese', p: 0, gd: 0, pts: 0, color: 'bg-zinc-600' },
-    { pos: 20, team: 'Verona', p: 0, gd: 0, pts: 0, color: 'bg-yellow-600' },
-];
 
 const FIXTURES = [
     { date: '12/07', venue: 'N', opponent: 'Juventus Second XI', type: 'FR', opponentBadge: null },
@@ -109,68 +79,12 @@ function HomePageContent() {
                     </div>
 
                     {/* Next Match */}
-                    <div className="border border-zinc-700/60 rounded-lg bg-zinc-900/80 p-4">
-                        <div className="text-center mb-3">
-                            <p className="text-xs font-bold text-teal-400 uppercase tracking-wider">NEXT MATCH</p>
-                            <p className="text-xs text-zinc-400">Tuesday 12th July 2022 (Tomorrow)</p>
-                        </div>
-                        <div className="flex items-center justify-center gap-8">
-                            <JuveBadge size="lg" />
-                            <div className="text-center flex-1">
-                                <h2 className="text-base font-bold text-zinc-100">Juventus v Juventus Second XI</h2>
-                                <p className="text-xs text-teal-400 mt-0.5">Friendly</p>
-                                <p className="text-xs text-zinc-500 mt-1">⚽ Giuseppe Moccagatta &nbsp;🌡 31°C</p>
-                                <div className="flex items-center justify-center gap-8 mt-2 text-xs text-zinc-500">
-                                    <div>
-                                        <p className="text-[10px] uppercase tracking-wider text-zinc-600">MANAGER</p>
-                                        <p className="text-zinc-300">Yurii Maksymov</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-[10px] uppercase tracking-wider text-zinc-600">PREVIOUS MEETINGS</p>
-                                        <p className="text-zinc-300">None</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <JuveBadge size="lg" />
-                        </div>
-                    </div>
+                    <NextMatch />
 
                     {/* 4-col grid */}
                     <div className="grid grid-cols-4 gap-2">
                         {/* League Table */}
-                        <div className="border border-zinc-700/60 rounded-lg bg-zinc-900/80 p-3">
-                            <SectionHeader title="LEAGUE TABLE" />
-                            <p className="text-[10px] text-zinc-500 text-center mb-2">League Positions</p>
-                            <table className="w-full text-xs">
-                                <thead>
-                                <tr className="text-zinc-600 text-[10px]">
-                                    <th className="text-left py-0.5 w-6">POS</th>
-                                    <th className="text-left py-0.5">TEAM</th>
-                                    <th className="text-right py-0.5 w-4">P</th>
-                                    <th className="text-right py-0.5 w-6">GD</th>
-                                    <th className="text-right py-0.5 w-7">PTS</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {LEAGUE_TABLE.map(row => (
-                                    <tr key={row.pos} className={cn('cursor-pointer hover:bg-zinc-800/30 transition-colors', row.highlighted && 'bg-zinc-800/50')}>
-                                        <td className="py-px text-zinc-600 text-[10px]">{row.pos}</td>
-                                        <td className="py-px">
-                                            <div className="flex items-center gap-1">
-                                                <div className={cn('size-2.5 rounded-full shrink-0', row.color ?? 'bg-zinc-600')} />
-                                                <span className={cn('truncate text-[11px]', row.highlighted ? 'text-teal-400 font-medium' : 'text-zinc-300')}>
-                                                        {row.team}
-                                                    </span>
-                                            </div>
-                                        </td>
-                                        <td className="py-px text-right text-zinc-600 text-[10px]">{row.p}</td>
-                                        <td className="py-px text-right text-zinc-600 text-[10px]">{row.gd}</td>
-                                        <td className="py-px text-right text-zinc-500 text-[10px] font-medium">{row.pts}</td>
-                                    </tr>
-                                ))}
-                                </tbody>
-                            </table>
-                        </div>
+                        <LeagueTable />
 
                         {/* Player Stats */}
                         <div className="border border-zinc-700/60 rounded-lg bg-zinc-900/80 p-3">
@@ -409,7 +323,6 @@ function EmptyPage({ message = '' }: { message?: string }) {
 
 export function Page() {
     const { pathname } = useLocation();
-
 
     if (pathname.endsWith('/contract-offer') || pathname.endsWith('/resign')) return <ContractOfferContent />;
     if (pathname.endsWith('/overview')) return <HistoryOverviewContent />;
