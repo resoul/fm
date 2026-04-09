@@ -18,6 +18,8 @@ export { default as HelmetData } from './HelmetData';
 export { default as HelmetProvider } from './Provider';
 
 type Props = { [key: string]: any };
+type ChildProps = { children?: ReactNode } & Record<string, any>;
+type ArrayTypeChildren = Record<string, Props[]>;
 
 export class Helmet extends Component<PropsWithChildren<HelmetProps>> {
   static defaultProps = {
@@ -54,15 +56,17 @@ export class Helmet extends Component<PropsWithChildren<HelmetProps>> {
   }
 
   flattenArrayTypeChildren(
-    child: JSX.Element,
-    arrayTypeChildren: { [key: string]: JSX.Element[] },
+    child: ReactElement,
+    arrayTypeChildren: ArrayTypeChildren,
     newChildProps: Props,
     nestedChildren: ReactNode
   ) {
+    const childType = String(child.type);
+
     return {
       ...arrayTypeChildren,
-      [child.type]: [
-        ...(arrayTypeChildren[child.type] || []),
+      [childType]: [
+        ...(arrayTypeChildren[childType] || []),
         {
           ...newChildProps,
           ...this.mapNestedChildrenToProps(child, nestedChildren),
@@ -72,7 +76,7 @@ export class Helmet extends Component<PropsWithChildren<HelmetProps>> {
   }
 
   mapObjectTypeChildren(
-    child: JSX.Element,
+    child: ReactElement,
     newProps: Props,
     newChildProps: Props,
     nestedChildren: ReactNode
@@ -99,12 +103,12 @@ export class Helmet extends Component<PropsWithChildren<HelmetProps>> {
       default:
         return {
           ...newProps,
-          [child.type]: { ...newChildProps },
+          [String(child.type)]: { ...newChildProps },
         };
     }
   }
 
-  mapArrayTypeChildrenToProps(arrayTypeChildren: { [key: string]: JSX.Element }, newProps: Props) {
+  mapArrayTypeChildrenToProps(arrayTypeChildren: ArrayTypeChildren, newProps: Props) {
     let newFlattenedProps = { ...newProps };
 
     Object.keys(arrayTypeChildren).forEach(arrayChildName => {
@@ -117,7 +121,7 @@ export class Helmet extends Component<PropsWithChildren<HelmetProps>> {
     return newFlattenedProps;
   }
 
-  warnOnInvalidChildren(child: JSX.Element, nestedChildren: ReactNode) {
+  warnOnInvalidChildren(child: ReactElement, nestedChildren: ReactNode) {
     invariant(
       VALID_TAG_NAMES.some(name => child.type === name),
       typeof child.type === 'function'
@@ -141,28 +145,29 @@ export class Helmet extends Component<PropsWithChildren<HelmetProps>> {
   }
 
   mapChildrenToProps(children: ReactNode, newProps: Props) {
-    let arrayTypeChildren = {};
+    let arrayTypeChildren: ArrayTypeChildren = {};
 
-    React.Children.forEach(children as JSX.Element, (child: ReactElement) => {
-      if (!child || !child.props) {
+    React.Children.forEach(children, childNode => {
+      if (!React.isValidElement(childNode) || !childNode.props) {
         return;
       }
+      const child = childNode as ReactElement<ChildProps>;
+      const { children: nestedChildren = null, ...childProps } = child.props;
 
-      const { children: nestedChildren, ...childProps } = child.props;
       // convert React props to HTML attributes
       const newChildProps = Object.keys(childProps).reduce((obj: Props, key) => {
         obj[HTML_TAG_MAP[key] || key] = childProps[key];
         return obj;
       }, {});
 
-      let { type } = child;
-      if (typeof type === 'symbol') {
-        type = (type as 'symbol').toString();
-      } else {
+      const childType = child.type as unknown;
+      if (typeof childType !== 'symbol') {
         this.warnOnInvalidChildren(child, nestedChildren);
       }
+      const normalizedType =
+        typeof childType === 'symbol' ? childType.toString() : String(childType);
 
-      switch (type) {
+      switch (normalizedType) {
         case TAG_NAMES.FRAGMENT:
           newProps = this.mapChildrenToProps(nestedChildren, newProps);
           break;

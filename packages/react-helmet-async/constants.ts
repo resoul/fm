@@ -1,35 +1,35 @@
-export enum TAG_PROPERTIES {
-  CHARSET = 'charset',
-  CSS_TEXT = 'cssText',
-  HREF = 'href',
-  HTTPEQUIV = 'http-equiv',
-  INNER_HTML = 'innerHTML',
-  ITEM_PROP = 'itemprop',
-  NAME = 'name',
-  PROPERTY = 'property',
-  REL = 'rel',
-  SRC = 'src',
-}
+export const TAG_PROPERTIES = {
+  CHARSET: 'charset',
+  CSS_TEXT: 'cssText',
+  HREF: 'href',
+  HTTPEQUIV: 'http-equiv',
+  INNER_HTML: 'innerHTML',
+  ITEM_PROP: 'itemprop',
+  NAME: 'name',
+  PROPERTY: 'property',
+  REL: 'rel',
+  SRC: 'src',
+} as const;
 
-export enum ATTRIBUTE_NAMES {
-  BODY = 'bodyAttributes',
-  HTML = 'htmlAttributes',
-  TITLE = 'titleAttributes',
-}
+export const ATTRIBUTE_NAMES = {
+  BODY: 'bodyAttributes',
+  HTML: 'htmlAttributes',
+  TITLE: 'titleAttributes',
+} as const;
 
-export enum TAG_NAMES {
-  BASE = 'base',
-  BODY = 'body',
-  HEAD = 'head',
-  HTML = 'html',
-  LINK = 'link',
-  META = 'meta',
-  NOSCRIPT = 'noscript',
-  SCRIPT = 'script',
-  STYLE = 'style',
-  TITLE = 'title',
-  FRAGMENT = 'Symbol(react.fragment)',
-}
+export const TAG_NAMES = {
+  BASE: 'base',
+  BODY: 'body',
+  HEAD: 'head',
+  HTML: 'html',
+  LINK: 'link',
+  META: 'meta',
+  NOSCRIPT: 'noscript',
+  SCRIPT: 'script',
+  STYLE: 'style',
+  TITLE: 'title',
+  FRAGMENT: 'Symbol(react.fragment)',
+} as const;
 
 export const SEO_PRIORITY_TAGS = {
   link: { rel: ['amphtml', 'canonical', 'alternate'] },
