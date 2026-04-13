@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Football Manager — Database Schema</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0d1117;
+    color: #e6edf3;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    min-height: 100vh;
+    padding: 32px 24px;
+  }
+  header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  header h1 {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #58a6ff;
+  }
+  header p {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #8b949e;
+    letter-spacing: 0.05em;
+  }
+  #diagram {
+    max-width: 1400px;
+    margin: 0 auto;
+    overflow-x: auto;
+  }
+  .mermaid {
+    display: flex;
+    justify-content: center;
+  }
+  .mermaid svg {
+    max-width: 100%;
+    height: auto;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>⚽ Football Manager — Database Schema</h1>
+  <p>Entity Relationship Diagram · 14 tables</p>
+</header>
+<div id="diagram">
+<div class="mermaid">
+erDiagram
+  COUNTRY {
+    int id PK
+    string name
+    string code
+    string flag_url
+    string continent
+  }
+
+  CONFEDERATION {
+    int id PK
+    string name
+    string code
+    int country_id FK
+  }
+
+  COMPETITION {
+    int id PK
+    string name
+    string type
+    int country_id FK
+    int confederation_id FK
+    int max_teams
+    bool is_international
+  }
+
+  SEASON {
+    int id PK
+    int competition_id FK
+    string name
+    date start_date
+    date end_date
+    bool is_active
+  }
+
+  TEAM {
+    int id PK
+    string name
+    string short_name
+    int country_id FK
+    int stadium_id FK
+    int founded_year
+    string primary_color
+    decimal reputation
+  }
+
+  STADIUM {
+    int id PK
+    string name
+    int city_id FK
+    int capacity
+    string surface
+  }
+
+  CITY {
+    int id PK
+    string name
+    int country_id FK
+    decimal latitude
+    decimal longitude
+  }
+
+  SEASON_TEAM {
+    int id PK
+    int season_id FK
+    int team_id FK
+    string group_name
+    int position
+    int points
+    int played
+    int won
+    int drawn
+    int lost
+    int goals_for
+    int goals_against
+  }
+
+  MATCH {
+    int id PK
+    int season_id FK
+    int home_team_id FK
+    int away_team_id FK
+    int stadium_id FK
+    datetime scheduled_at
+    string status
+    int home_score
+    int away_score
+    int round
+    string phase
+  }
+
+  PERSON {
+    int id PK
+    string first_name
+    string last_name
+    date birth_date
+    int nationality_id FK
+    string position_code
+    decimal overall_rating
+    decimal potential_rating
+    string role
+  }
+
+  CONTRACT {
+    int id PK
+    int person_id FK
+    int team_id FK
+    date start_date
+    date end_date
+    decimal salary
+    decimal release_clause
+    string status
+  }
+
+  PLAYER_STATS {
+    int id PK
+    int person_id FK
+    int season_id FK
+    int team_id FK
+    int appearances
+    int goals
+    int assists
+    int yellow_cards
+    int red_cards
+    int minutes_played
+  }
+
+  TRANSFER {
+    int id PK
+    int person_id FK
+    int from_team_id FK
+    int to_team_id FK
+    date transfer_date
+    decimal fee
+    string type
+  }
+
+  MATCH_EVENT {
+    int id PK
+    int match_id FK
+    int person_id FK
+    int team_id FK
+    string event_type
+    int minute
+    int extra_minute
+  }
+
+  COUNTRY ||--o{ CONFEDERATION : "hosts"
+  COUNTRY ||--o{ COMPETITION : "organizes"
+  COUNTRY ||--o{ TEAM : "based in"
+  COUNTRY ||--o{ CITY : "contains"
+  COUNTRY ||--o{ PERSON : "nationality"
+  CONFEDERATION ||--o{ COMPETITION : "runs"
+  COMPETITION ||--o{ SEASON : "has"
+  SEASON ||--o{ SEASON_TEAM : "includes"
+  SEASON ||--o{ MATCH : "schedules"
+  SEASON ||--o{ PLAYER_STATS : "records"
+  TEAM ||--o{ SEASON_TEAM : "participates"
+  TEAM ||--o{ CONTRACT : "employs"
+  TEAM ||--o{ PLAYER_STATS : "tracks"
+  TEAM ||--o{ TRANSFER : "sells from"
+  TEAM ||--o{ TRANSFER : "buys to"
+  TEAM }o--|| STADIUM : "home ground"
+  STADIUM }o--|| CITY : "located in"
+  MATCH }o--|| STADIUM : "held at"
+  MATCH }o--|| TEAM : "home"
+  MATCH }o--|| TEAM : "away"
+  MATCH ||--o{ MATCH_EVENT : "contains"
+  PERSON ||--o{ CONTRACT : "has"
+  PERSON ||--o{ PLAYER_STATS : "recorded in"
+  PERSON ||--o{ TRANSFER : "involved in"
+  PERSON ||--o{ MATCH_EVENT : "performs"
+</div>
+</div>
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'dark',
+    er: {
+      diagramPadding: 24,
+      layoutDirection: 'TB',
+      minEntityWidth: 100,
+      minEntityHeight: 75,
+      entityPadding: 15,
+      useMaxWidth: true,
+    },
+    themeVariables: {
+      darkMode: true,
+      fontSize: '13px',
+      fontFamily: "'SF Mono', 'Fira Code', monospace",
+      primaryColor: '#161b22',
+      primaryBorderColor: '#30363d',
+      primaryTextColor: '#e6edf3',
+      lineColor: '#58a6ff',
+      secondaryColor: '#0d1117',
+      tertiaryColor: '#1c2128',
+      edgeLabelBackground: '#0d1117',
+      attributeBackgroundColorEven: '#161b22',
+      attributeBackgroundColorOdd: '#1c2128',
+    }
+  });
+</script>
+</body>
+</html>
