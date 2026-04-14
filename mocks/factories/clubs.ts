@@ -387,13 +387,13 @@ export const europeanClubsData = [
     { name: 'Rukh Lviv', leagueName: 'Ukrainian Premier League' },
 ];
 
-export const clubsCreate = () => {
-    const leagues = db.league.findMany({});
+export const clubsCreate = async () => {
     let i = 1;
     let prevLeagueName = '';
+    let id = 1;
 
-    return europeanClubsData.map((clubData) => {
-        const league = leagues.find(l => l.name === clubData.leagueName);
+    return europeanClubsData.map(async (clubData) => {
+        const league = db.competition.findFirst(l => l.where({ name: clubData.leagueName }));
         if (prevLeagueName !== clubData.leagueName) {
             i = 1;
             prevLeagueName = clubData.leagueName;
@@ -403,9 +403,10 @@ export const clubsCreate = () => {
             throw new Error(`League ${clubData.leagueName} not found`);
         }
 
-        return db.club.create({
+        await db.club.create({
+            id: id++,
             name: clubData.name,
-            leagueId: league.id,
+            competitionId: league.id,
             pos: i++,
             p: 0, 
             gd: 0, 

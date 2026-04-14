@@ -14,7 +14,7 @@ export default function LeagueTable() {
     const leagueTable = useQuery({
         queryKey: ['homeLeagueTable', manager.id],
         queryFn: async () => {
-            const response = await fetch(`/leagueClubs/${manager.leagueId}`);
+            const response = await fetch(`/leagueClubs/${manager.competitionId}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch home league table');
             }

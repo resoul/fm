@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
 export const ClubSchema = z.object({
-    id: z.string(),
+    id: z.number(),
     name: z.string(),
-    leagueId: z.string(),
+    competitionId: z.number(),
     pos: z.number(),
     color: z.string(),
     p: z.number(),

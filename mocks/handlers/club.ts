@@ -2,22 +2,15 @@ import { http, HttpResponse } from 'msw';
 import { db } from '../db';
 
 export const clubHandlers = [
-    http.get('/leagueClubs/:leagueId', ({ params }) => {
+    http.get('/leagueClubs/:competitionId', ({ params }) => {
 
-        const { leagueId } = params;
-
-        if (!leagueId || typeof leagueId !== 'string') {
-        return HttpResponse.json({ error: 'League ID is required' }, { status: 400 });
+        const { competitionId } = params;
+        if (typeof competitionId !== 'string' || isNaN(Number(competitionId))) {
+            return HttpResponse.json({ error: 'Competition ID is required' }, { status: 400 });
         }
 
         return HttpResponse.json(db.club.findMany(
-            {
-                where: {
-                    leagueId: {
-                        equals: leagueId
-                    }
-                }
-            }
-        ));  
+            c => c.where({ competitionId: com => Number(competitionId) === com }
+        )));
     }),
 ];

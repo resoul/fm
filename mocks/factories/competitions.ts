@@ -1,6 +1,6 @@
 import { db } from '../db';
 
-export const europeanLeaguesData = [
+export const europeancompetitionsData = [
     { name: 'Premier League', country: 'England' },
     { name: 'La Liga', country: 'Spain' },
     { name: 'Bundesliga', country: 'Germany' },
@@ -24,4 +24,22 @@ export const europeanLeaguesData = [
     { name: 'Ukrainian Premier League', country: 'Ukraine' },
 ];
 
-export const leaguesCreate = () => europeanLeaguesData.map((league) => db.league.create(league));
+let competitionId = 1;
+
+export const competitionsCreate = async () => europeancompetitionsData.map(
+    
+    async (competition) => {
+        const country = db.country.findFirst(c => c.where({name: competition.country}));
+
+        if (!country) {
+            throw new Error(`Country not found for competition ${competition.name}`);
+        }
+        await db.competition.create({
+            ...competition, 
+            id: competitionId++, 
+            countryId: country.id, 
+            continentId: country.continentId,
+            // clubs: []
+        });
+    }
+);
