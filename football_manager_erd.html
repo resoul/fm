@@ -1,59 +1,25 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Football Manager — Database Schema</title>
-<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background: #0d1117;
-    color: #e6edf3;
-    font-family: 'SF Mono', 'Fira Code', monospace;
-    min-height: 100vh;
-    padding: 32px 24px;
-  }
-  header {
-    text-align: center;
-    margin-bottom: 32px;
-  }
-  header h1 {
-    font-size: 22px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #58a6ff;
-  }
-  header p {
-    margin-top: 6px;
-    font-size: 12px;
-    color: #8b949e;
-    letter-spacing: 0.05em;
-  }
-  #diagram {
-    max-width: 1400px;
-    margin: 0 auto;
-    overflow-x: auto;
-  }
-  .mermaid {
-    display: flex;
-    justify-content: center;
-  }
-  .mermaid svg {
-    max-width: 100%;
-    height: auto;
-  }
+#erd svg { max-width: 100%; height: auto; }
 </style>
-</head>
-<body>
-<header>
-  <h1>⚽ Football Manager — Database Schema</h1>
-  <p>Entity Relationship Diagram · 14 tables</p>
-</header>
-<div id="diagram">
-<div class="mermaid">
-erDiagram
+<div id="erd"></div>
+<script type="module">
+import mermaid from 'https://esm.sh/mermaid@11/dist/mermaid.esm.min.mjs';
+const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+await document.fonts.ready;
+mermaid.initialize({
+  startOnLoad: false,
+  theme: 'base',
+  fontFamily: '"Anthropic Sans", sans-serif',
+  themeVariables: {
+    darkMode: dark,
+    fontSize: '12px',
+    fontFamily: '"Anthropic Sans", sans-serif',
+    lineColor: dark ? '#9c9a92' : '#73726c',
+    textColor: dark ? '#c2c0b6' : '#3d3d3a',
+  },
+});
+const diagram = `erDiagram
   COUNTRY {
     int id PK
     string name
@@ -61,24 +27,24 @@ erDiagram
     string flag_url
     string continent
   }
-
   CONFEDERATION {
     int id PK
     string name
     string code
     int country_id FK
   }
-
   COMPETITION {
     int id PK
     string name
+    string slug
     string type
     int country_id FK
     int confederation_id FK
+    int tier
     int max_teams
     bool is_international
+    bool is_cup
   }
-
   SEASON {
     int id PK
     int competition_id FK
@@ -87,18 +53,18 @@ erDiagram
     date end_date
     bool is_active
   }
-
   TEAM {
     int id PK
     string name
     string short_name
+    string tm_href
     int country_id FK
     int stadium_id FK
     int founded_year
     string primary_color
     decimal reputation
+    decimal market_value
   }
-
   STADIUM {
     int id PK
     string name
@@ -106,7 +72,6 @@ erDiagram
     int capacity
     string surface
   }
-
   CITY {
     int id PK
     string name
@@ -114,7 +79,6 @@ erDiagram
     decimal latitude
     decimal longitude
   }
-
   SEASON_TEAM {
     int id PK
     int season_id FK
@@ -129,44 +93,48 @@ erDiagram
     int goals_for
     int goals_against
   }
-
   MATCH {
     int id PK
-    int season_id FK
+    int season_id FK "nullable"
     int home_team_id FK
     int away_team_id FK
     int stadium_id FK
     datetime scheduled_at
     string status
+    string match_type
     int home_score
     int away_score
     int round
     string phase
   }
-
   PERSON {
     int id PK
     string first_name
     string last_name
+    string tm_href
     date birth_date
     int nationality_id FK
+    int second_nationality_id FK "nullable"
     string position_code
+    string position_group
+    int jersey_number
+    decimal market_value
     decimal overall_rating
     decimal potential_rating
     string role
+    bool is_captain
   }
-
   CONTRACT {
     int id PK
     int person_id FK
     int team_id FK
+    string contract_type
     date start_date
     date end_date
     decimal salary
     decimal release_clause
     string status
   }
-
   PLAYER_STATS {
     int id PK
     int person_id FK
@@ -178,18 +146,18 @@ erDiagram
     int yellow_cards
     int red_cards
     int minutes_played
+    int clean_sheets
   }
-
   TRANSFER {
     int id PK
     int person_id FK
     int from_team_id FK
     int to_team_id FK
+    int agent_id FK "nullable"
     date transfer_date
     decimal fee
     string type
   }
-
   MATCH_EVENT {
     int id PK
     int match_id FK
@@ -198,6 +166,25 @@ erDiagram
     string event_type
     int minute
     int extra_minute
+    int related_person_id FK "nullable"
+  }
+  INJURY {
+    int id PK
+    int person_id FK
+    int team_id FK
+    string injury_type
+    date start_date
+    date expected_return
+    date actual_return
+    string severity
+  }
+  PLAYER_ATTRIBUTE {
+    int id PK
+    int person_id FK
+    int season_id FK
+    string attribute_group
+    string attribute_name
+    int value
   }
 
   COUNTRY ||--o{ CONFEDERATION : "hosts"
@@ -222,46 +209,34 @@ erDiagram
   MATCH }o--|| TEAM : "away"
   MATCH ||--o{ MATCH_EVENT : "contains"
   PERSON ||--o{ CONTRACT : "has"
-  PERSON ||--o{ PLAYER_STATS : "recorded in"
+  PERSON ||--o{ PLAYER_STATS : "recorded"
   PERSON ||--o{ TRANSFER : "involved in"
   PERSON ||--o{ MATCH_EVENT : "performs"
-</div>
-</div>
-<script>
-  mermaid.initialize({
-    startOnLoad: true,
-    theme: 'dark',
-    er: {
-      diagramPadding: 24,
-      layoutDirection: 'TB',
-      minEntityWidth: 100,
-      minEntityHeight: 75,
-      entityPadding: 15,
-      useMaxWidth: true,
-    },
-    themeVariables: {
-      darkMode: true,
-      fontSize: '13px',
-      fontFamily: "'SF Mono', 'Fira Code', monospace",
-      primaryColor: '#161b22',
-      primaryBorderColor: '#30363d',
-      primaryTextColor: '#e6edf3',
-      lineColor: '#58a6ff',
-      secondaryColor: '#0d1117',
-      tertiaryColor: '#1c2128',
-      edgeLabelBackground: '#0d1117',
-      attributeBackgroundColorEven: '#161b22',
-      attributeBackgroundColorOdd: '#1c2128',
-    }
-  });
+  PERSON ||--o{ INJURY : "suffers"
+  PERSON ||--o{ PLAYER_ATTRIBUTE : "has"
+`;
+const { svg } = await mermaid.render('erd-svg', diagram);
+document.getElementById('erd').innerHTML = svg;
+document.querySelectorAll('#erd svg .node').forEach(node => {
+  const firstPath = node.querySelector('path[d]');
+  if (!firstPath) return;
+  const d = firstPath.getAttribute('d');
+  const nums = d.match(/-?[\d.]+/g)?.map(Number);
+  if (!nums || nums.length < 8) return;
+  const xs = [nums[0], nums[2], nums[4], nums[6]];
+  const ys = [nums[1], nums[3], nums[5], nums[7]];
+  const x = Math.min(...xs), y = Math.min(...ys);
+  const w = Math.max(...xs) - x, h = Math.max(...ys) - y;
+  const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  rect.setAttribute('x', x); rect.setAttribute('y', y);
+  rect.setAttribute('width', w); rect.setAttribute('height', h);
+  rect.setAttribute('rx', '8');
+  for (const a of ['fill','stroke','stroke-width','class','style']) {
+    if (firstPath.hasAttribute(a)) rect.setAttribute(a, firstPath.getAttribute(a));
+  }
+  firstPath.replaceWith(rect);
+});
+document.querySelectorAll('#erd svg .row-rect-odd path, #erd svg .row-rect-even path').forEach(p => {
+  p.setAttribute('stroke', 'none');
+});
 </script>
-<div style="display: none">
-География — country, confederation, city, stadium. Страны принадлежат конфедерациям (UEFA, CONMEBOL и т.д.), города привязаны к странам, стадионы — к городам.
-Соревнования — competition + season. Один тип соревнования (например, Premier League) имеет много сезонов. Поле type разделяет: league, cup, champions_cup, super_cup. Флаг is_international отделяет клубные турниры от сборных.
-Команды и участие — team хранит базовые данные, season_team — участие команды в конкретном сезоне с очками, позицией, голами. Это промежуточная таблица для M:N между season и team.
-Матчи — match хранит расписание и результаты. Поля round и phase позволяют отличить групповой этап от плей-офф, финала кубка и т.д.
-Персонал — person универсальная таблица для игроков, тренеров, агентов (разделяются по role и position_code). contract отслеживает текущие и исторические контракты, включая release clause.
-Статистика и трансферы — player_stats агрегирует статистику по сезону, transfer хранит полную историю переходов с суммой и типом (transfer, loan, free).
-</div>
-</body>
-</html>
