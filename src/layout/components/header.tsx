@@ -13,8 +13,9 @@ import {
 } from "lucide-react";
 import { useLayout } from "./use-layout";
 import { NavbarMenu } from './navbar-menu';
-import { useNavigate } from "react-router-dom";
+import { data, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { useDateTime, nextDateTimeAction } from "@/state/useDateTime";
 
 // Mock club data - replace with real data from context/props
 const clubData = {
@@ -24,14 +25,11 @@ const clubData = {
     logoUrl: undefined as string | undefined, // replace with actual logo URL
 };
 
-const gameData = {
-    time: "Tue 13:00",
-    date: "13 Sep 2022",
-};
-
 export function Header() {
     const { toggleSidebar, sidebarCollapsed } = useLayout();
     const navigate = useNavigate();
+
+    const dateTime = useDateTime(state => state.dateTime);
 
     return (
         <div className="flex flex-col">
@@ -139,15 +137,16 @@ export function Header() {
                     {/* Date / Time */}
                     <div className="flex flex-col items-end justify-center min-w-[90px]">
                         <span className="text-xs font-semibold text-foreground leading-tight">
-                            {gameData.time}
+                            {dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
                         <span className="text-xs text-muted-foreground leading-tight">
-                            {gameData.date}
+                            {dateTime.toLocaleDateString()}
                         </span>
                     </div>
 
                     {/* Continue button */}
                     <Button
+                        onClick={nextDateTimeAction}
                         size="sm"
                         className={cn(
                             "ms-2 gap-1.5 font-bold tracking-wider uppercase text-xs px-4 h-9",

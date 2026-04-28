@@ -38,6 +38,7 @@
     "noUncheckedSideEffectImports": true
   },
   "include": [
-    "src"
+    "src",
+    "mocks"
   ]
 }

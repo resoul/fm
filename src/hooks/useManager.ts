@@ -1,7 +1,8 @@
+import type { Manager } from '@/schemas/manager';
 import { useQuery } from '@tanstack/react-query';
 
-export function useManager() {
-    return useQuery({
+export function useManager()  {
+    return useQuery<Manager>({
         queryKey: ['manager'],
         queryFn: async () => {
             const response = await fetch('/manager');

@@ -1,9 +1,15 @@
-import { leaguesCreate } from './factories/leagues';
+import { continentsCreate } from './factories/continents';
+import { countriesCreate } from './factories/countries';
+import { competitionsCreate } from './factories/competitions';
 import { clubsCreate } from './factories/clubs';
 import { managerCreate } from './factories/manager';
+import { schedulesCreate } from './factories/schedules';
 
-export default function createFactories() {
-    leaguesCreate();
-    clubsCreate();
-    managerCreate();
+export default async function createFactories() {
+    await continentsCreate();
+    await countriesCreate();
+    await competitionsCreate();
+    await clubsCreate();
+    await managerCreate();
+    await schedulesCreate();
 }

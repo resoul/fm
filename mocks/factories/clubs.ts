@@ -66,27 +66,27 @@ export const europeanClubsData = [
     { name: 'Werder Bremen', leagueName: 'Bundesliga' },
     { name: 'Wolfsburg', leagueName: 'Bundesliga' },
 
-    // Serie A (Italy)
-    { name: 'Atalanta', leagueName: 'Serie A' },
-    { name: 'Bologna', leagueName: 'Serie A' },
-    { name: 'Cagliari', leagueName: 'Serie A' },
-    { name: 'Empoli', leagueName: 'Serie A' },
-    { name: 'Fiorentina', leagueName: 'Serie A' },
-    { name: 'Frosinone', leagueName: 'Serie A' },
-    { name: 'Genoa', leagueName: 'Serie A' },
-    { name: 'Hellas Verona', leagueName: 'Serie A' },
-    { name: 'Inter Milan', leagueName: 'Serie A' },
-    { name: 'Juventus', leagueName: 'Serie A' },
-    { name: 'Lazio', leagueName: 'Serie A' },
-    { name: 'Lecce', leagueName: 'Serie A' },
-    { name: 'Milan', leagueName: 'Serie A' },
-    { name: 'Monza', leagueName: 'Serie A' },
-    { name: 'Napoli', leagueName: 'Serie A' },
-    { name: 'Roma', leagueName: 'Serie A' },
-    { name: 'Salernitana', leagueName: 'Serie A' },
-    { name: 'Sassuolo', leagueName: 'Serie A' },
-    { name: 'Torino', leagueName: 'Serie A' },
-    { name: 'Udinese', leagueName: 'Serie A' },
+    // Seria A (Italy)
+    { name: 'Atalanta', leagueName: 'Seria A' },
+    { name: 'Bologna', leagueName: 'Seria A' },
+    { name: 'Cagliari', leagueName: 'Seria A' },
+    { name: 'Empoli', leagueName: 'Seria A' },
+    { name: 'Fiorentina', leagueName: 'Seria A' },
+    { name: 'Frosinone', leagueName: 'Seria A' },
+    { name: 'Genoa', leagueName: 'Seria A' },
+    { name: 'Hellas Verona', leagueName: 'Seria A' },
+    { name: 'Inter Milan', leagueName: 'Seria A' },
+    { name: 'Juventus', leagueName: 'Seria A' },
+    { name: 'Lazio', leagueName: 'Seria A' },
+    { name: 'Lecce', leagueName: 'Seria A' },
+    { name: 'Milan', leagueName: 'Seria A' },
+    { name: 'Monza', leagueName: 'Seria A' },
+    { name: 'Napoli', leagueName: 'Seria A' },
+    { name: 'Roma', leagueName: 'Seria A' },
+    { name: 'Salernitana', leagueName: 'Seria A' },
+    { name: 'Sassuolo', leagueName: 'Seria A' },
+    { name: 'Torino', leagueName: 'Seria A' },
+    { name: 'Udinese', leagueName: 'Seria A' },
 
     // Ligue 1 (France)
     { name: 'Angers', leagueName: 'Ligue 1' },
@@ -387,13 +387,13 @@ export const europeanClubsData = [
     { name: 'Rukh Lviv', leagueName: 'Ukrainian Premier League' },
 ];
 
-export const clubsCreate = () => {
-    const leagues = db.league.findMany({});
+export const clubsCreate = async () => {
     let i = 1;
     let prevLeagueName = '';
+    let id = 1;
 
-    return europeanClubsData.map((clubData) => {
-        const league = leagues.find(l => l.name === clubData.leagueName);
+    return europeanClubsData.map(async (clubData) => {
+        const league = db.competition.findFirst(l => l.where({ name: clubData.leagueName }));
         if (prevLeagueName !== clubData.leagueName) {
             i = 1;
             prevLeagueName = clubData.leagueName;
@@ -403,14 +403,20 @@ export const clubsCreate = () => {
             throw new Error(`League ${clubData.leagueName} not found`);
         }
 
-        return db.club.create({
+        const club =await db.club.create({
+            id: id++,
             name: clubData.name,
-            leagueId: league.id,
             pos: i++,
             p: 0, 
             gd: 0, 
             pts: 0,
             color: 'bg-zinc-800',
+        });
+
+        await db.competitionClub.create({
+            id: id++,
+            clubId: club.id,
+            competitionId: league.id,
         });
     });
 };

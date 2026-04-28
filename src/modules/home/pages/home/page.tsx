@@ -1,22 +1,14 @@
 import { useLocation } from "react-router-dom";
-import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/scroll-area";
 import { Button } from "@/components/button";
 import { JuveBadge } from "@/modules/home/layout/juve-badge";
 import LeagueTable from "../windows/LeagueTable";
 import NextMatch from "../windows/NextMatch";
 import { SectionHeader } from "../../componets/SectionHeader";
+import Fixtures from "../windows/Fixtures";
 
 
 // ─── HOME PAGE ────────────────────────────────────────────────────────────────
-
-const FIXTURES = [
-    { date: '12/07', venue: 'N', opponent: 'Juventus Second XI', type: 'FR', opponentBadge: null },
-    { date: '16/07', venue: 'A', opponent: 'Galatasaray', type: 'FR', opponentBadge: 'bg-yellow-500' },
-    { date: '30/07', venue: 'H', opponent: 'Milan', type: 'FR', opponentBadge: 'bg-red-700' },
-    { date: '03/08', venue: 'A', opponent: 'Shakhtar', type: 'FR', opponentBadge: 'bg-orange-500' },
-    { date: '06/08', venue: 'A', opponent: 'PAOK', type: 'FR', opponentBadge: 'bg-zinc-700' },
-];
 
 function HomePageContent() {
     return (
@@ -41,41 +33,7 @@ function HomePageContent() {
                             <p className="text-xs text-zinc-500 ml-2">No team news</p>
                         </div>
 
-                        <div className="border border-zinc-700/60 rounded-lg bg-zinc-900/80 p-3">
-                            <SectionHeader title="JUVENTUS FIXTURES" />
-                            <table className="w-full text-xs">
-                                <tbody>
-                                {FIXTURES.map((fix, i) => (
-                                    <tr key={i} className="hover:bg-zinc-800/40 cursor-pointer transition-colors">
-                                        <td className="py-1 text-zinc-400 w-12">{fix.date}</td>
-                                        <td className="py-1 w-8">
-                                                <span className={cn('text-[10px] font-bold px-1',
-                                                    fix.venue === 'H' ? 'text-teal-400' :
-                                                        fix.venue === 'A' ? 'text-zinc-400' : 'text-yellow-400'
-                                                )}>
-                                                    {fix.venue}
-                                                </span>
-                                        </td>
-                                        <td className="py-1">
-                                            <div className="flex items-center gap-1.5">
-                                                {fix.opponentBadge ? (
-                                                    <div className={cn('size-4 rounded-full shrink-0 flex items-center justify-center', fix.opponentBadge)}>
-                                                        <svg viewBox="0 0 32 36" className="size-2.5 text-white/70" fill="currentColor">
-                                                            <path d="M16 2L3 8v10c0 8.5 5.5 16.5 13 19 7.5-2.5 13-10.5 13-19V8L16 2z" />
-                                                        </svg>
-                                                    </div>
-                                                ) : (
-                                                    <JuveBadge size="xs" />
-                                                )}
-                                                <span className={cn('text-zinc-300', i === 0 && 'text-teal-400')}>{fix.opponent}</span>
-                                            </div>
-                                        </td>
-                                        <td className="py-1 text-right text-zinc-500">{fix.type}</td>
-                                    </tr>
-                                ))}
-                                </tbody>
-                            </table>
-                        </div>
+                        <Fixtures />
                     </div>
 
                     {/* Next Match */}
