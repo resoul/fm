@@ -1,4 +1,3 @@
-import type { Club } from "@/schemas/club";
 import Draw from "./Draw";
 import { type Match } from "@/schemas/match";
 
