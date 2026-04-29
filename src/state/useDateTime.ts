@@ -10,7 +10,7 @@ type DateTimeState = {
 
 export const useDateTime = create<DateTimeState>(() => {
     return {
-        dateTime: new Date('2024-06-01T12:00:00'),
+        dateTime: new Date('2025-06-29T12:00:00'),
         processing: false,
     };
 });

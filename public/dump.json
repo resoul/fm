@@ -1,0 +1,139 @@
+{
+  "formatName": "dexie",
+  "formatVersion": 1,
+  "data": {
+    "databaseName": "FootballDatabase",
+    "databaseVersion": 1,
+    "tables": [
+      {
+        "name": "manager",
+        "schema": "++id, name, clubId",
+        "rowCount": 1,
+        "rows": [
+          { "id": 1, "name": "Alexandro Del Piero", "clubId": 2 }
+        ]
+      },
+      {
+        "name": "continent",
+        "schema": "++id, name, code",
+        "rowCount": 6,
+        "rows": [
+          { "id": 1, "name": "Europe", "code": "EU" },
+          { "id": 2, "name": "Asia", "code": "AS" },
+          { "id": 3, "name": "Africa", "code": "AF" },
+          { "id": 4, "name": "North America", "code": "NA" },
+          { "id": 5, "name": "South America", "code": "SA" },
+          { "id": 6, "name": "Oceania", "code": "OC" }
+        ]
+      },
+      {
+        "name": "country",
+        "schema": "++id, name, code, continentId",
+        "rowCount": 6,
+        "rows": [
+          { "id": 1, "name": "Italy", "code": "IT", "continentId": 1 },
+          { "id": 2, "name": "Spain", "code": "ES", "continentId": 1 },
+          { "id": 3, "name": "England", "code": "EN", "continentId": 1 },
+          { "id": 4, "name": "Germany", "code": "DE", "continentId": 1 },
+          { "id": 5, "name": "France", "code": "FR", "continentId": 1 },
+          { "id": 6, "name": "Ukraine", "code": "UA", "continentId": 1 }
+        ]
+      },
+      {
+        "name": "competition",
+        "schema": "++id, name, countryId, type",
+        "rowCount": 18,
+        "rows": [
+          { "id": 1, "name": "Serie A", "countryId": 1, "type": "league" },
+          { "id": 2, "name": "Serie B", "countryId": 1, "type": "league" },
+          { "id": 3, "name": "Serie C", "countryId": 1, "type": "league" },
+          { "id": 4, "name": "La Liga", "countryId": 2, "type": "league" },
+          { "id": 5, "name": "La Liga 2", "countryId": 2, "type": "league" },
+          { "id": 6, "name": "Premier League", "countryId": 3, "type": "league" },
+          { "id": 7, "name": "Championship", "countryId": 3, "type": "league" },
+          { "id": 8, "name": "Bundesliga", "countryId": 4, "type": "league" },
+          { "id": 9, "name": "2. Bundesliga", "countryId": 4, "type": "league" },
+          { "id": 10, "name": "Ligue 1", "countryId": 5, "type": "league" },
+          { "id": 11, "name": "Ligue 2", "countryId": 5, "type": "league" },
+          { "id": 12, "name": "Ukrainian Premier League", "countryId": 6, "type": "league" },
+          { "id": 13, "name": "Ukrainian First League", "countryId": 6, "type": "league" },
+          { "id": 14, "name": "Coppa Italia", "countryId": 1, "type": "cup" },
+          { "id": 15, "name": "Copa del Rey", "countryId": 2, "type": "cup" },
+          { "id": 16, "name": "FA Cup", "countryId": 3, "type": "cup" },
+          { "id": 17, "name": "DFB-Pokal", "countryId": 4, "type": "cup" },
+          { "id": 18, "name": "Coupe de France", "countryId": 5, "type": "cup" }
+        ]
+      },
+      {
+        "name": "draw",
+        "schema": "++id, name, seasonId, date",
+        "rowCount": 1,
+        "rows": [
+          { "id": 1, "name": "Serie A 2025/2026 Draw", "seasonId": 1, "date": "2025-06-29T13:00:00" }
+        ]
+      },
+      {
+        "name": "club",
+        "schema": "++id, name, countryId",
+        "rowCount": 20,
+        "rows": [
+           { "id": 1, "name": "Inter Milan", "countryId": 1 },
+            { "id": 2, "name": "Juventus FC", "countryId": 1 },
+            { "id": 3, "name": "AC Milan", "countryId": 1 },
+            { "id": 4, "name": "AS Roma", "countryId": 1 },
+            { "id": 5, "name": "SSC Napoli", "countryId": 1 },
+            { "id": 6, "name": "Atalanta BC", "countryId": 1 },
+            { "id": 7, "name": "Como 1907", "countryId": 1 },
+            { "id": 8, "name": "Bologna FC 1909", "countryId": 1 },
+            { "id": 9, "name": "ACF Fiorentina", "countryId": 1 },
+            { "id": 10, "name": "SS Lazio", "countryId": 1 },
+            { "id": 11, "name": "US Sassuolo", "countryId": 1 },
+            { "id": 12, "name": "Parma Calcio 1913", "countryId": 1 },
+            { "id": 13, "name": "Udinese Calcio", "countryId": 1 },
+            { "id": 14, "name": "Genoa CFC", "countryId": 1 },
+            { "id": 15, "name": "Cagliari Calcio", "countryId": 1 },
+            { "id": 16, "name": "Torino FC", "countryId": 1 },
+            { "id": 17, "name": "Pisa Sporting Club", "countryId": 1 },
+            { "id": 18, "name": "Hellas Verona", "countryId": 1 },
+            { "id": 19, "name": "US Lecce", "countryId": 1 },
+            { "id": 20, "name": "US Cremonese", "countryId": 1 }
+        ]
+      },
+      {
+        "name": "season",
+        "schema": "++id, name, startDate, endDate, isActive",
+        "rowCount": 1,
+        "rows": [
+          { "id": 1, "name": "2025/2025", "competitionId": 1, "startDate": "2025-07-01", "endDate": "2025-05-31", "isActive": true }
+        ]
+      },
+      {
+        "name": "seasonClub",
+        "schema": "++id, seasonId, clubId, [seasonId+clubId]",
+        "rowCount": 20,
+        "rows": [
+          { "id": 1, "seasonId": 1, "clubId": 1 },
+          { "id": 2, "seasonId": 1, "clubId": 2 },
+          { "id": 3, "seasonId": 1, "clubId": 3 },
+          { "id": 4, "seasonId": 1, "clubId": 4 },
+          { "id": 5, "seasonId": 1, "clubId": 5 },
+          { "id": 6, "seasonId": 1, "clubId": 6 },
+          { "id": 7, "seasonId": 1, "clubId": 7 },
+          { "id": 8, "seasonId": 1, "clubId": 8 },
+          { "id": 9, "seasonId": 1, "clubId": 9 },
+          { "id": 10, "seasonId": 1, "clubId": 10 },
+          { "id": 11, "seasonId": 1, "clubId": 11 },
+          { "id": 12, "seasonId": 1, "clubId": 12 },
+          { "id": 13, "seasonId": 1, "clubId": 13 },
+          { "id": 14, "seasonId": 1, "clubId": 14 },
+          { "id": 15, "seasonId": 1, "clubId": 15 },
+          { "id": 16, "seasonId": 1, "clubId": 16 },
+          { "id": 17, "seasonId": 1, "clubId": 17 },
+          { "id": 18, "seasonId": 1, "clubId": 18 },
+          { "id": 19, "seasonId": 1, "clubId": 19 },
+          { "id": 20, "seasonId": 1, "clubId": 20 }
+         ]
+      }
+    ]
+  }
+}

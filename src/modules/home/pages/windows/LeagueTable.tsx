@@ -1,34 +1,30 @@
 import { cn } from "@/lib/utils";
 import { SectionHeader } from "../../componets/SectionHeader";
 import { useManager } from "@/hooks/useManager";
-import { useQuery } from "@tanstack/react-query";
-import { ClubSchema } from "@/schemas/club";
 import type { Club } from "@/schemas/club";
+import { useLiveQuery } from "dexie-react-hooks";
+import db  from "@/../db/db";
 
 export default function LeagueTable() {
 
-    const {data: manager} = useManager();
+    const manager = useManager();
 
-    if (!manager) return null;
-    
-    const leagueTable = useQuery({
-        queryKey: ['homeLeagueTable', manager.id],
-        queryFn: async () => {
-            const response = await fetch(`/leagueClubs/${manager.clubId}`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch home league table');
-            }
-            const data = await response.json();
-            return data.map((club: Club) => ClubSchema.parse(club));
+    const leagueTable = useLiveQuery(
+        async () => {
+            const seasonClubs = await db.table('seasonClub').where('seasonId').equals(1).toArray();
+            // Fetch club data for each team in the season
+            const clubs = await Promise.all(
+                seasonClubs.map(async (seasonClub) => {
+                    const club = await db.table('club').get(seasonClub.clubId);
+                    return club;
+                })
+            );
+            return clubs;
         }
-    });
+    );
 
-    if (leagueTable.isLoading) {
+    if (leagueTable == undefined || manager == undefined) {
         return <>Loading...</>;
-    }
-
-    if (leagueTable.isError) {
-        return <>Error fetching home league table</>;
     }
 
     return (
@@ -46,7 +42,7 @@ export default function LeagueTable() {
                 </tr>
                 </thead>
                 <tbody>
-                {leagueTable.data?.map((club: Club) => (
+                {leagueTable.map((club: Club) => (
                     <tr key={club.id} className={cn('cursor-pointer hover:bg-zinc-800/30 transition-colors', club.id == manager.clubId && 'bg-zinc-800/50')}>
                         <td className="py-px text-zinc-600 text-[10px]">{club.pos}</td>
                         <td className="py-px">

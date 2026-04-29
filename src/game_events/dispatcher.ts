@@ -1,6 +1,6 @@
 import type { IEvent } from "./IEvent";
 import MatchesEvent from "./matchesEvent";
-import StartSeasonEvent from "./startSeasonEvent";
+import DrawEvent from "./DrawEvent";
 
 export default class Dispatcher implements IEvent {
 
@@ -8,7 +8,7 @@ export default class Dispatcher implements IEvent {
 
     constructor() {
         this.events = [
-            new StartSeasonEvent(),
+            new DrawEvent(),
             new MatchesEvent(),
         ];
     }

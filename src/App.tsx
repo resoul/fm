@@ -8,10 +8,17 @@ import { Toaster } from '@/components/sonner';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
 import DayTransitionModule from './modules/day-transition/index';
+import useDatabaseSync from '../db/useDatabaseSync';
 
 const { BASE_URL } = import.meta.env;
 
 export default function App() {
+    const isDatabaseReady = useDatabaseSync();
+
+    if (!isDatabaseReady) {
+        return <div>Initializing database...</div>;
+    }
+
     return (
         <ThemeProvider
             attribute="class"

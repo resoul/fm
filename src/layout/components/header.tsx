@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { useLayout } from "./use-layout";
 import { NavbarMenu } from './navbar-menu';
-import { data, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useDateTime, nextDateTimeAction } from "@/state/useDateTime";
 

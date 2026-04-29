@@ -3,9 +3,9 @@ import { JuveBadge } from "@/modules/home/layout/juve-badge";
 
 export default function NextMatch() {
 
-    const {data: manager} = useManager();
+    const manager = useManager();
 
-    if (!manager) return null;
+    if (!manager) return <>Loadding...</>;
 
     return (
         <div className="border border-zinc-700/60 rounded-lg bg-zinc-900/80 p-4">

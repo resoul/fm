@@ -3,13 +3,8 @@ import { Layout } from "@/layout";
 import { SectionLayout } from "@/layout/components/section-layout";
 import { getMenuItems } from "./layout/menus";
 import { Page } from "./pages/home/page";
-import { useManager } from '@/hooks/useManager';
 
 export default function HomeModule() {
-
-    const { isLoading: isManagerLoading } = useManager();
-
-    if (isManagerLoading) return <>Loading...</>
 
     return (
         <Routes>

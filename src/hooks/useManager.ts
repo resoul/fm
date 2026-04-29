@@ -1,15 +1,11 @@
-import type { Manager } from '@/schemas/manager';
-import { useQuery } from '@tanstack/react-query';
+import { useLiveQuery } from "dexie-react-hooks";
+import db from '@/../db/db';
 
 export function useManager()  {
-    return useQuery<Manager>({
-        queryKey: ['manager'],
-        queryFn: async () => {
-            const response = await fetch('/manager');
-            if (!response.ok) {
-                throw new Error('Failed to fetch manager');
-            }
-            return response.json();
-        },
-    });
+    return useLiveQuery(
+        async () => {
+            const manager = await db.table('manager').get(1);
+            return manager;
+        }
+    );
 }
