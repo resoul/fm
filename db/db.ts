@@ -3,6 +3,7 @@
 const db = new Dexie('FootballDatabase');
 
 db.version(1).stores({
+    currentDate: 'date', //todo
     manager: '++id, name, clubId',
     continent: '++id, name',
     country: '++id, name, continentId',

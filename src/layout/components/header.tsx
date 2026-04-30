@@ -16,6 +16,7 @@ import { NavbarMenu } from './navbar-menu';
 import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useDateTime, nextDateTimeAction } from "@/state/useDateTime";
+import Settings from "./menu/settings";
 
 // Mock club data - replace with real data from context/props
 const clubData = {
@@ -127,9 +128,10 @@ export function Header() {
                     </Button>
 
                     {/* FM badge */}
-                    <div className="px-2 py-0.5 text-xs font-bold text-muted-foreground rounded">
+                    <Settings />
+                    {/* <div className="px-2 py-0.5 text-xs font-bold text-muted-foreground rounded">
                         FM
-                    </div>
+                    </div> */}
 
                     {/* Divider */}
                     <div className="w-px h-7 bg-input mx-1" />

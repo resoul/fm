@@ -98,7 +98,6 @@ export default function LeagueTable() {
         return b.goalDifference - a.goalDifference;
     });
 
-    console.log(table);
     return (
         <div className="border border-zinc-700/60 rounded-lg bg-zinc-900/80 p-3">
             <SectionHeader title="LEAGUE TABLE" />
