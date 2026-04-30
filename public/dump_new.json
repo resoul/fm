@@ -1,0 +1,5205 @@
+{
+  "formatName": "dexie",
+  "formatVersion": 1,
+  "data": {
+    "databaseName": "FootballDatabase",
+    "databaseVersion": 1,
+    "tables": [
+      {
+        "name": "manager",
+        "schema": "++id, name, clubId",
+        "rowCount": 1,
+        "rows": [
+          {
+            "id": 1,
+            "name": "Alexandro Del Piero",
+            "clubId": 2
+          }
+        ]
+      },
+      {
+        "name": "continent",
+        "schema": "++id, name, code",
+        "rowCount": 6,
+        "rows": [
+          {
+            "id": 1,
+            "name": "Europe",
+            "code": "EU"
+          },
+          {
+            "id": 2,
+            "name": "Asia",
+            "code": "AS"
+          },
+          {
+            "id": 3,
+            "name": "Africa",
+            "code": "AF"
+          },
+          {
+            "id": 4,
+            "name": "North America",
+            "code": "NA"
+          },
+          {
+            "id": 5,
+            "name": "South America",
+            "code": "SA"
+          },
+          {
+            "id": 6,
+            "name": "Oceania",
+            "code": "OC"
+          }
+        ]
+      },
+      {
+        "name": "country",
+        "schema": "++id, name, code, continentId",
+        "rowCount": 6,
+        "rows": [
+          {
+            "id": 1,
+            "name": "Italy",
+            "code": "IT",
+            "continentId": 1
+          },
+          {
+            "id": 2,
+            "name": "Spain",
+            "code": "ES",
+            "continentId": 1
+          },
+          {
+            "id": 3,
+            "name": "England",
+            "code": "EN",
+            "continentId": 1
+          },
+          {
+            "id": 4,
+            "name": "Germany",
+            "code": "DE",
+            "continentId": 1
+          },
+          {
+            "id": 5,
+            "name": "France",
+            "code": "FR",
+            "continentId": 1
+          },
+          {
+            "id": 6,
+            "name": "Ukraine",
+            "code": "UA",
+            "continentId": 1
+          }
+        ]
+      },
+      {
+        "name": "competition",
+        "schema": "++id, name, countryId, type",
+        "rowCount": 30,
+        "rows": [
+          {
+            "id": 1,
+            "name": "Serie A",
+            "countryId": 1,
+            "type": "league"
+          },
+          {
+            "id": 2,
+            "name": "Serie B",
+            "countryId": 1,
+            "type": "league"
+          },
+          {
+            "id": 3,
+            "name": "Serie C",
+            "countryId": 1,
+            "type": "league"
+          },
+          {
+            "id": 4,
+            "name": "La Liga",
+            "countryId": 2,
+            "type": "league"
+          },
+          {
+            "id": 5,
+            "name": "La Liga 2",
+            "countryId": 2,
+            "type": "league"
+          },
+          {
+            "id": 6,
+            "name": "Premier League",
+            "countryId": 3,
+            "type": "league"
+          },
+          {
+            "id": 7,
+            "name": "Championship",
+            "countryId": 3,
+            "type": "league"
+          },
+          {
+            "id": 8,
+            "name": "Bundesliga",
+            "countryId": 4,
+            "type": "league"
+          },
+          {
+            "id": 9,
+            "name": "2. Bundesliga",
+            "countryId": 4,
+            "type": "league"
+          },
+          {
+            "id": 10,
+            "name": "Ligue 1",
+            "countryId": 5,
+            "type": "league"
+          },
+          {
+            "id": 11,
+            "name": "Ligue 2",
+            "countryId": 5,
+            "type": "league"
+          },
+          {
+            "id": 12,
+            "name": "Ukrainian Premier League",
+            "countryId": 6,
+            "type": "league"
+          },
+          {
+            "id": 13,
+            "name": "Ukrainian First League",
+            "countryId": 6,
+            "type": "league"
+          },
+          {
+            "id": 14,
+            "name": "Coppa Italia",
+            "countryId": 1,
+            "type": "cup"
+          },
+          {
+            "id": 15,
+            "name": "Copa del Rey",
+            "countryId": 2,
+            "type": "cup"
+          },
+          {
+            "id": 16,
+            "name": "FA Cup",
+            "countryId": 3,
+            "type": "cup"
+          },
+          {
+            "id": 17,
+            "name": "DFB-Pokal",
+            "countryId": 4,
+            "type": "cup"
+          },
+          {
+            "id": 18,
+            "name": "Coupe de France",
+            "countryId": 5,
+            "type": "cup"
+          },
+          {
+            "id": 19,
+            "name": "Serie C - Group A (IT3A)",
+            "countryId": 1,
+            "type": "league"
+          },
+          {
+            "id": 20,
+            "name": "Serie C - Group B (IT3B)",
+            "countryId": 1,
+            "type": "league"
+          },
+          {
+            "id": 21,
+            "name": "Serie C - Group C (IT3C)",
+            "countryId": 1,
+            "type": "league"
+          },
+          {
+            "id": 22,
+            "name": "Serie D - Group A (IT4A)",
+            "countryId": 1,
+            "type": "league"
+          },
+          {
+            "id": 23,
+            "name": "Serie D - Group B (IT4B)",
+            "countryId": 1,
+            "type": "league"
+          },
+          {
+            "id": 24,
+            "name": "Serie D - Group C (IT4C)",
+            "countryId": 1,
+            "type": "league"
+          },
+          {
+            "id": 25,
+            "name": "Serie D - Group D (IT4D)",
+            "countryId": 1,
+            "type": "league"
+          },
+          {
+            "id": 26,
+            "name": "Primera Federacion - Group 1 (E3G1)",
+            "countryId": 2,
+            "type": "league"
+          },
+          {
+            "id": 27,
+            "name": "Primera Federacion - Group 2 (E3G2)",
+            "countryId": 2,
+            "type": "league"
+          },
+          {
+            "id": 28,
+            "name": "League One (GB3)",
+            "countryId": 3,
+            "type": "league"
+          },
+          {
+            "id": 29,
+            "name": "League Two (GB4)",
+            "countryId": 3,
+            "type": "league"
+          },
+          {
+            "id": 30,
+            "name": "3. Liga (L3)",
+            "countryId": 4,
+            "type": "league"
+          }
+        ]
+      },
+      {
+        "name": "draw",
+        "schema": "++id, name, seasonId, date",
+        "rowCount": 1,
+        "rows": [
+          {
+            "id": 1,
+            "name": "Serie A 2025/2026 Draw",
+            "seasonId": 1,
+            "date": "2025-06-29T13:00:00"
+          }
+        ]
+      },
+      {
+        "name": "club",
+        "schema": "++id, name, countryId",
+        "rowCount": 469,
+        "rows": [
+          {
+            "id": 1,
+            "name": "Inter Milan",
+            "countryId": 1
+          },
+          {
+            "id": 2,
+            "name": "Juventus FC",
+            "countryId": 1
+          },
+          {
+            "id": 3,
+            "name": "AC Milan",
+            "countryId": 1
+          },
+          {
+            "id": 4,
+            "name": "AS Roma",
+            "countryId": 1
+          },
+          {
+            "id": 5,
+            "name": "SSC Napoli",
+            "countryId": 1
+          },
+          {
+            "id": 6,
+            "name": "Atalanta BC",
+            "countryId": 1
+          },
+          {
+            "id": 7,
+            "name": "Como 1907",
+            "countryId": 1
+          },
+          {
+            "id": 8,
+            "name": "Bologna FC 1909",
+            "countryId": 1
+          },
+          {
+            "id": 9,
+            "name": "ACF Fiorentina",
+            "countryId": 1
+          },
+          {
+            "id": 10,
+            "name": "SS Lazio",
+            "countryId": 1
+          },
+          {
+            "id": 11,
+            "name": "US Sassuolo",
+            "countryId": 1
+          },
+          {
+            "id": 12,
+            "name": "Parma Calcio 1913",
+            "countryId": 1
+          },
+          {
+            "id": 13,
+            "name": "Udinese Calcio",
+            "countryId": 1
+          },
+          {
+            "id": 14,
+            "name": "Genoa CFC",
+            "countryId": 1
+          },
+          {
+            "id": 15,
+            "name": "Cagliari Calcio",
+            "countryId": 1
+          },
+          {
+            "id": 16,
+            "name": "Torino FC",
+            "countryId": 1
+          },
+          {
+            "id": 17,
+            "name": "Pisa Sporting Club",
+            "countryId": 1
+          },
+          {
+            "id": 18,
+            "name": "Hellas Verona",
+            "countryId": 1
+          },
+          {
+            "id": 19,
+            "name": "US Lecce",
+            "countryId": 1
+          },
+          {
+            "id": 20,
+            "name": "US Cremonese",
+            "countryId": 1
+          },
+          {
+            "id": 21,
+            "name": "Venezia FC",
+            "countryId": 1
+          },
+          {
+            "id": 22,
+            "name": "AC Monza",
+            "countryId": 1
+          },
+          {
+            "id": 23,
+            "name": "UC Sampdoria",
+            "countryId": 1
+          },
+          {
+            "id": 24,
+            "name": "Frosinone Calcio",
+            "countryId": 1
+          },
+          {
+            "id": 25,
+            "name": "Palermo FC",
+            "countryId": 1
+          },
+          {
+            "id": 26,
+            "name": "US Catanzaro",
+            "countryId": 1
+          },
+          {
+            "id": 27,
+            "name": "Spezia Calcio",
+            "countryId": 1
+          },
+          {
+            "id": 28,
+            "name": "FC Empoli",
+            "countryId": 1
+          },
+          {
+            "id": 29,
+            "name": "Modena FC",
+            "countryId": 1
+          },
+          {
+            "id": 30,
+            "name": "Cesena FC",
+            "countryId": 1
+          },
+          {
+            "id": 31,
+            "name": "SSC Bari",
+            "countryId": 1
+          },
+          {
+            "id": 32,
+            "name": "Mantova 1911",
+            "countryId": 1
+          },
+          {
+            "id": 33,
+            "name": "Carrarese Calcio 1908",
+            "countryId": 1
+          },
+          {
+            "id": 34,
+            "name": "SS Juve Stabia",
+            "countryId": 1
+          },
+          {
+            "id": 35,
+            "name": "US Avellino 1912",
+            "countryId": 1
+          },
+          {
+            "id": 36,
+            "name": "Delfino Pescara 1936",
+            "countryId": 1
+          },
+          {
+            "id": 37,
+            "name": "FC Südtirol",
+            "countryId": 1
+          },
+          {
+            "id": 38,
+            "name": "AC Reggiana 1919",
+            "countryId": 1
+          },
+          {
+            "id": 39,
+            "name": "Calcio Padova",
+            "countryId": 1
+          },
+          {
+            "id": 40,
+            "name": "Virtus Entella",
+            "countryId": 1
+          },
+          {
+            "id": 41,
+            "name": "Inter U23",
+            "countryId": 1
+          },
+          {
+            "id": 42,
+            "name": "LR Vicenza",
+            "countryId": 1
+          },
+          {
+            "id": 43,
+            "name": "Union Brescia",
+            "countryId": 1
+          },
+          {
+            "id": 44,
+            "name": "AS Cittadella",
+            "countryId": 1
+          },
+          {
+            "id": 45,
+            "name": "Calcio Lecco 1912",
+            "countryId": 1
+          },
+          {
+            "id": 46,
+            "name": "AC Trento",
+            "countryId": 1
+          },
+          {
+            "id": 47,
+            "name": "Dolomiti Bellunesi",
+            "countryId": 1
+          },
+          {
+            "id": 48,
+            "name": "Alcione Milano",
+            "countryId": 1
+          },
+          {
+            "id": 49,
+            "name": "FC Pro Vercelli 1892",
+            "countryId": 1
+          },
+          {
+            "id": 50,
+            "name": "Novara FC",
+            "countryId": 1
+          },
+          {
+            "id": 51,
+            "name": "FC Lumezzane",
+            "countryId": 1
+          },
+          {
+            "id": 52,
+            "name": "AC Renate",
+            "countryId": 1
+          },
+          {
+            "id": 53,
+            "name": "Virtusvecomp Verona",
+            "countryId": 1
+          },
+          {
+            "id": 54,
+            "name": "AS Giana Erminio",
+            "countryId": 1
+          },
+          {
+            "id": 55,
+            "name": "UC AlbinoLeffe",
+            "countryId": 1
+          },
+          {
+            "id": 56,
+            "name": "Arzignano Valchiampo",
+            "countryId": 1
+          },
+          {
+            "id": 57,
+            "name": "Aurora Pro Patria",
+            "countryId": 1
+          },
+          {
+            "id": 58,
+            "name": "CPR Ospitaletto",
+            "countryId": 1
+          },
+          {
+            "id": 59,
+            "name": "US Pergolettese 1932",
+            "countryId": 1
+          },
+          {
+            "id": 60,
+            "name": "US Triestina",
+            "countryId": 1
+          },
+          {
+            "id": 61,
+            "name": "Juventus Next Gen",
+            "countryId": 1
+          },
+          {
+            "id": 62,
+            "name": "SS Arezzo",
+            "countryId": 1
+          },
+          {
+            "id": 63,
+            "name": "Ascoli Calcio",
+            "countryId": 1
+          },
+          {
+            "id": 64,
+            "name": "Ternana Calcio",
+            "countryId": 1
+          },
+          {
+            "id": 65,
+            "name": "Ravenna FC",
+            "countryId": 1
+          },
+          {
+            "id": 66,
+            "name": "US Livorno 1915",
+            "countryId": 1
+          },
+          {
+            "id": 67,
+            "name": "Forlì FC",
+            "countryId": 1
+          },
+          {
+            "id": 68,
+            "name": "Vis Pesaro 1898",
+            "countryId": 1
+          },
+          {
+            "id": 69,
+            "name": "Guidonia Montecelio 1937 FC",
+            "countryId": 1
+          },
+          {
+            "id": 70,
+            "name": "AC Perugia Calcio",
+            "countryId": 1
+          },
+          {
+            "id": 71,
+            "name": "US Sambenedettese",
+            "countryId": 1
+          },
+          {
+            "id": 72,
+            "name": "Pineto Calcio",
+            "countryId": 1
+          },
+          {
+            "id": 73,
+            "name": "US Città di Pontedera",
+            "countryId": 1
+          },
+          {
+            "id": 74,
+            "name": "AS Gubbio 1910",
+            "countryId": 1
+          },
+          {
+            "id": 75,
+            "name": "Campobasso FC",
+            "countryId": 1
+          },
+          {
+            "id": 76,
+            "name": "SEF Torres 1903",
+            "countryId": 1
+          },
+          {
+            "id": 77,
+            "name": "AC Carpi",
+            "countryId": 1
+          },
+          {
+            "id": 78,
+            "name": "US Pianese",
+            "countryId": 1
+          },
+          {
+            "id": 79,
+            "name": "AC Bra",
+            "countryId": 1
+          },
+          {
+            "id": 80,
+            "name": "Atalanta U23",
+            "countryId": 1
+          },
+          {
+            "id": 81,
+            "name": "Benevento Calcio",
+            "countryId": 1
+          },
+          {
+            "id": 82,
+            "name": "US Salernitana 1919",
+            "countryId": 1
+          },
+          {
+            "id": 83,
+            "name": "Catania FC",
+            "countryId": 1
+          },
+          {
+            "id": 84,
+            "name": "Cosenza Calcio",
+            "countryId": 1
+          },
+          {
+            "id": 85,
+            "name": "Casertana FC",
+            "countryId": 1
+          },
+          {
+            "id": 86,
+            "name": "Potenza Calcio",
+            "countryId": 1
+          },
+          {
+            "id": 87,
+            "name": "Casarano Calcio",
+            "countryId": 1
+          },
+          {
+            "id": 88,
+            "name": "FC Crotone",
+            "countryId": 1
+          },
+          {
+            "id": 89,
+            "name": "Calcio Foggia 1920",
+            "countryId": 1
+          },
+          {
+            "id": 90,
+            "name": "Giugliano Calcio 1928",
+            "countryId": 1
+          },
+          {
+            "id": 91,
+            "name": "FC Trapani 1905",
+            "countryId": 1
+          },
+          {
+            "id": 92,
+            "name": "Latina Calcio 1932",
+            "countryId": 1
+          },
+          {
+            "id": 93,
+            "name": "SS Monopoli 1966",
+            "countryId": 1
+          },
+          {
+            "id": 94,
+            "name": "Audace Cerignola",
+            "countryId": 1
+          },
+          {
+            "id": 95,
+            "name": "ASD Team Altamura",
+            "countryId": 1
+          },
+          {
+            "id": 96,
+            "name": "Cavese 1919",
+            "countryId": 1
+          },
+          {
+            "id": 97,
+            "name": "AZ Picerno",
+            "countryId": 1
+          },
+          {
+            "id": 98,
+            "name": "Sorrento 1945",
+            "countryId": 1
+          },
+          {
+            "id": 99,
+            "name": "Siracusa Calcio",
+            "countryId": 1
+          },
+          {
+            "id": 100,
+            "name": "FC Vado",
+            "countryId": 1
+          },
+          {
+            "id": 101,
+            "name": "SC Ligorna 1922",
+            "countryId": 1
+          },
+          {
+            "id": 102,
+            "name": "Derthona FBC",
+            "countryId": 1
+          },
+          {
+            "id": 103,
+            "name": "USD Sestri Levante 1919",
+            "countryId": 1
+          },
+          {
+            "id": 104,
+            "name": "ASD Asti",
+            "countryId": 1
+          },
+          {
+            "id": 105,
+            "name": "Club Milano",
+            "countryId": 1
+          },
+          {
+            "id": 106,
+            "name": "ASD Chisola Calcio",
+            "countryId": 1
+          },
+          {
+            "id": 107,
+            "name": "SSD Imperia 1923",
+            "countryId": 1
+          },
+          {
+            "id": 108,
+            "name": "ASD Cairese",
+            "countryId": 1
+          },
+          {
+            "id": 109,
+            "name": "USD Lavagnese 1919",
+            "countryId": 1
+          },
+          {
+            "id": 110,
+            "name": "AC Saluzzo",
+            "countryId": 1
+          },
+          {
+            "id": 111,
+            "name": "Sanremese Calcio",
+            "countryId": 1
+          },
+          {
+            "id": 112,
+            "name": "ASDC Gozzano",
+            "countryId": 1
+          },
+          {
+            "id": 113,
+            "name": "Valenzana Mado SSD",
+            "countryId": 1
+          },
+          {
+            "id": 114,
+            "name": "Varese Football Club",
+            "countryId": 1
+          },
+          {
+            "id": 115,
+            "name": "Celle Varazze",
+            "countryId": 1
+          },
+          {
+            "id": 116,
+            "name": "ASD La Biellese",
+            "countryId": 1
+          },
+          {
+            "id": 117,
+            "name": "SSD NovaRomentin",
+            "countryId": 1
+          },
+          {
+            "id": 118,
+            "name": "Milan Futuro",
+            "countryId": 1
+          },
+          {
+            "id": 119,
+            "name": "Chievo Verona",
+            "countryId": 1
+          },
+          {
+            "id": 120,
+            "name": "US Folgore Caratese",
+            "countryId": 1
+          },
+          {
+            "id": 121,
+            "name": "Varesina Calcio",
+            "countryId": 1
+          },
+          {
+            "id": 122,
+            "name": "Casatese Merate",
+            "countryId": 1
+          },
+          {
+            "id": 123,
+            "name": "Caldiero Terme",
+            "countryId": 1
+          },
+          {
+            "id": 124,
+            "name": "AC Leon",
+            "countryId": 1
+          },
+          {
+            "id": 125,
+            "name": "Villa Valle",
+            "countryId": 1
+          },
+          {
+            "id": 126,
+            "name": "Oltrepò FBC",
+            "countryId": 1
+          },
+          {
+            "id": 127,
+            "name": "USD Castellanzese 1921",
+            "countryId": 1
+          },
+          {
+            "id": 128,
+            "name": "Calcio Brusaporto",
+            "countryId": 1
+          },
+          {
+            "id": 129,
+            "name": "USD Breno",
+            "countryId": 1
+          },
+          {
+            "id": 130,
+            "name": "Real Calepina FC",
+            "countryId": 1
+          },
+          {
+            "id": 131,
+            "name": "Virtus Ciserano Bergamo 1909",
+            "countryId": 1
+          },
+          {
+            "id": 132,
+            "name": "Nuova Sondrio Calcio",
+            "countryId": 1
+          },
+          {
+            "id": 133,
+            "name": "Pavia Calcio 1911",
+            "countryId": 1
+          },
+          {
+            "id": 134,
+            "name": "USD Scanzorosciate",
+            "countryId": 1
+          },
+          {
+            "id": 135,
+            "name": "AVC Vogherese",
+            "countryId": 1
+          },
+          {
+            "id": 136,
+            "name": "Treviso FBC 1993",
+            "countryId": 1
+          },
+          {
+            "id": 137,
+            "name": "AC Mestre",
+            "countryId": 1
+          },
+          {
+            "id": 138,
+            "name": "Cjarlins Muzane",
+            "countryId": 1
+          },
+          {
+            "id": 139,
+            "name": "AC Este 1920",
+            "countryId": 1
+          },
+          {
+            "id": 140,
+            "name": "FC Legnago Salus",
+            "countryId": 1
+          },
+          {
+            "id": 141,
+            "name": "AC Vigasio",
+            "countryId": 1
+          },
+          {
+            "id": 142,
+            "name": "FC Bassano",
+            "countryId": 1
+          },
+          {
+            "id": 143,
+            "name": "ASD Brian Lignano",
+            "countryId": 1
+          },
+          {
+            "id": 144,
+            "name": "Luparense FC",
+            "countryId": 1
+          },
+          {
+            "id": 145,
+            "name": "AC Campodarsego",
+            "countryId": 1
+          },
+          {
+            "id": 146,
+            "name": "Union Clodiense Chioggia",
+            "countryId": 1
+          },
+          {
+            "id": 147,
+            "name": "Conegliano Calcio",
+            "countryId": 1
+          },
+          {
+            "id": 148,
+            "name": "FC Calvi Noale",
+            "countryId": 1
+          },
+          {
+            "id": 149,
+            "name": "Unione La Rocca Altavilla",
+            "countryId": 1
+          },
+          {
+            "id": 150,
+            "name": "FC Obermais",
+            "countryId": 1
+          },
+          {
+            "id": 151,
+            "name": "San Luigi Calcio",
+            "countryId": 1
+          },
+          {
+            "id": 152,
+            "name": "US Adriese 1906",
+            "countryId": 1
+          },
+          {
+            "id": 153,
+            "name": "Portogruaro Calcio",
+            "countryId": 1
+          },
+          {
+            "id": 154,
+            "name": "FC Pistoiese",
+            "countryId": 1
+          },
+          {
+            "id": 155,
+            "name": "Piacenza Calcio 1919",
+            "countryId": 1
+          },
+          {
+            "id": 156,
+            "name": "Calcio Desenzano",
+            "countryId": 1
+          },
+          {
+            "id": 157,
+            "name": "Lentigione Calcio",
+            "countryId": 1
+          },
+          {
+            "id": 158,
+            "name": "Correggese Calcio 1948",
+            "countryId": 1
+          },
+          {
+            "id": 159,
+            "name": "Imolese Calcio 1919",
+            "countryId": 1
+          },
+          {
+            "id": 160,
+            "name": "Sant'Angelo",
+            "countryId": 1
+          },
+          {
+            "id": 161,
+            "name": "SS Cittadella Vis Modena",
+            "countryId": 1
+          },
+          {
+            "id": 162,
+            "name": "Pro Palazzolo",
+            "countryId": 1
+          },
+          {
+            "id": 163,
+            "name": "Pro Sesto 1913",
+            "countryId": 1
+          },
+          {
+            "id": 164,
+            "name": "Sangiuliano City",
+            "countryId": 1
+          },
+          {
+            "id": 165,
+            "name": "Rovato Vertovese",
+            "countryId": 1
+          },
+          {
+            "id": 166,
+            "name": "C.S. Trevigliese",
+            "countryId": 1
+          },
+          {
+            "id": 167,
+            "name": "AC Crema 1908",
+            "countryId": 1
+          },
+          {
+            "id": 168,
+            "name": "Sasso Marconi 1924",
+            "countryId": 1
+          },
+          {
+            "id": 169,
+            "name": "SCD Progresso Calcio",
+            "countryId": 1
+          },
+          {
+            "id": 170,
+            "name": "AC Tuttocuoio",
+            "countryId": 1
+          },
+          {
+            "id": 171,
+            "name": "Tropical Coriano",
+            "countryId": 1
+          },
+          {
+            "id": 172,
+            "name": "Real Madrid",
+            "countryId": 2
+          },
+          {
+            "id": 173,
+            "name": "FC Barcelona",
+            "countryId": 2
+          },
+          {
+            "id": 174,
+            "name": "Atlético de Madrid",
+            "countryId": 2
+          },
+          {
+            "id": 175,
+            "name": "Villarreal CF",
+            "countryId": 2
+          },
+          {
+            "id": 176,
+            "name": "Athletic Bilbao",
+            "countryId": 2
+          },
+          {
+            "id": 177,
+            "name": "Real Sociedad",
+            "countryId": 2
+          },
+          {
+            "id": 178,
+            "name": "Real Betis Balompié",
+            "countryId": 2
+          },
+          {
+            "id": 179,
+            "name": "Celta de Vigo",
+            "countryId": 2
+          },
+          {
+            "id": 180,
+            "name": "Valencia CF",
+            "countryId": 2
+          },
+          {
+            "id": 181,
+            "name": "Girona FC",
+            "countryId": 2
+          },
+          {
+            "id": 182,
+            "name": "Sevilla FC",
+            "countryId": 2
+          },
+          {
+            "id": 183,
+            "name": "RCD Espanyol Barcelona",
+            "countryId": 2
+          },
+          {
+            "id": 184,
+            "name": "Rayo Vallecano",
+            "countryId": 2
+          },
+          {
+            "id": 185,
+            "name": "CA Osasuna",
+            "countryId": 2
+          },
+          {
+            "id": 186,
+            "name": "RCD Mallorca",
+            "countryId": 2
+          },
+          {
+            "id": 187,
+            "name": "Levante UD",
+            "countryId": 2
+          },
+          {
+            "id": 188,
+            "name": "Elche CF",
+            "countryId": 2
+          },
+          {
+            "id": 189,
+            "name": "Getafe CF",
+            "countryId": 2
+          },
+          {
+            "id": 190,
+            "name": "Deportivo Alavés",
+            "countryId": 2
+          },
+          {
+            "id": 191,
+            "name": "Real Oviedo",
+            "countryId": 2
+          },
+          {
+            "id": 192,
+            "name": "Racing Santander",
+            "countryId": 2
+          },
+          {
+            "id": 193,
+            "name": "Deportivo de La Coruña",
+            "countryId": 2
+          },
+          {
+            "id": 194,
+            "name": "UD Almería",
+            "countryId": 2
+          },
+          {
+            "id": 195,
+            "name": "UD Las Palmas",
+            "countryId": 2
+          },
+          {
+            "id": 196,
+            "name": "Real Valladolid CF",
+            "countryId": 2
+          },
+          {
+            "id": 197,
+            "name": "Málaga CF",
+            "countryId": 2
+          },
+          {
+            "id": 198,
+            "name": "Sporting Gijón",
+            "countryId": 2
+          },
+          {
+            "id": 199,
+            "name": "Cádiz CF",
+            "countryId": 2
+          },
+          {
+            "id": 200,
+            "name": "Granada CF",
+            "countryId": 2
+          },
+          {
+            "id": 201,
+            "name": "Real Zaragoza",
+            "countryId": 2
+          },
+          {
+            "id": 202,
+            "name": "CD Leganés",
+            "countryId": 2
+          },
+          {
+            "id": 203,
+            "name": "FC Andorra",
+            "countryId": 2
+          },
+          {
+            "id": 204,
+            "name": "Burgos CF",
+            "countryId": 2
+          },
+          {
+            "id": 205,
+            "name": "CD Castellón",
+            "countryId": 2
+          },
+          {
+            "id": 206,
+            "name": "Real Sociedad B",
+            "countryId": 2
+          },
+          {
+            "id": 207,
+            "name": "CD Mirandés",
+            "countryId": 2
+          },
+          {
+            "id": 208,
+            "name": "Córdoba CF",
+            "countryId": 2
+          },
+          {
+            "id": 209,
+            "name": "SD Eibar",
+            "countryId": 2
+          },
+          {
+            "id": 210,
+            "name": "Albacete Balompié",
+            "countryId": 2
+          },
+          {
+            "id": 211,
+            "name": "SD Huesca",
+            "countryId": 2
+          },
+          {
+            "id": 212,
+            "name": "Cultural Leonesa",
+            "countryId": 2
+          },
+          {
+            "id": 213,
+            "name": "AD Ceuta FC",
+            "countryId": 2
+          },
+          {
+            "id": 214,
+            "name": "Real Madrid Castilla",
+            "countryId": 2
+          },
+          {
+            "id": 215,
+            "name": "Bilbao Athletic",
+            "countryId": 2
+          },
+          {
+            "id": 216,
+            "name": "CD Tenerife",
+            "countryId": 2
+          },
+          {
+            "id": 217,
+            "name": "CA Osasuna Promesas",
+            "countryId": 2
+          },
+          {
+            "id": 218,
+            "name": "Racing Ferrol",
+            "countryId": 2
+          },
+          {
+            "id": 219,
+            "name": "RC Celta Fortuna",
+            "countryId": 2
+          },
+          {
+            "id": 220,
+            "name": "CD Lugo",
+            "countryId": 2
+          },
+          {
+            "id": 221,
+            "name": "Pontevedra CF",
+            "countryId": 2
+          },
+          {
+            "id": 222,
+            "name": "Ourense CF",
+            "countryId": 2
+          },
+          {
+            "id": 223,
+            "name": "Unionistas CF",
+            "countryId": 2
+          },
+          {
+            "id": 224,
+            "name": "SD Ponferradina",
+            "countryId": 2
+          },
+          {
+            "id": 225,
+            "name": "Mérida AD",
+            "countryId": 2
+          },
+          {
+            "id": 226,
+            "name": "Zamora CF",
+            "countryId": 2
+          },
+          {
+            "id": 227,
+            "name": "CD Guadalajara",
+            "countryId": 2
+          },
+          {
+            "id": 228,
+            "name": "Barakaldo CF",
+            "countryId": 2
+          },
+          {
+            "id": 229,
+            "name": "Real Avilés Industrial",
+            "countryId": 2
+          },
+          {
+            "id": 230,
+            "name": "CF Talavera de la Reina",
+            "countryId": 2
+          },
+          {
+            "id": 231,
+            "name": "Arenas Club",
+            "countryId": 2
+          },
+          {
+            "id": 232,
+            "name": "CP Cacereño",
+            "countryId": 2
+          },
+          {
+            "id": 233,
+            "name": "CD Arenteiro",
+            "countryId": 2
+          },
+          {
+            "id": 234,
+            "name": "Betis Deportivo Balompié",
+            "countryId": 2
+          },
+          {
+            "id": 235,
+            "name": "Atlético Madrileño",
+            "countryId": 2
+          },
+          {
+            "id": 236,
+            "name": "Villarreal CF B",
+            "countryId": 2
+          },
+          {
+            "id": 237,
+            "name": "Hércules CF",
+            "countryId": 2
+          },
+          {
+            "id": 238,
+            "name": "CE Sabadell FC",
+            "countryId": 2
+          },
+          {
+            "id": 239,
+            "name": "UD Ibiza",
+            "countryId": 2
+          },
+          {
+            "id": 240,
+            "name": "Gimnàstic de Tarragona",
+            "countryId": 2
+          },
+          {
+            "id": 241,
+            "name": "FC Cartagena",
+            "countryId": 2
+          },
+          {
+            "id": 242,
+            "name": "CD Eldense",
+            "countryId": 2
+          },
+          {
+            "id": 243,
+            "name": "Real Murcia CF",
+            "countryId": 2
+          },
+          {
+            "id": 244,
+            "name": "AD Alcorcón",
+            "countryId": 2
+          },
+          {
+            "id": 245,
+            "name": "Antequera CF",
+            "countryId": 2
+          },
+          {
+            "id": 246,
+            "name": "Sevilla Atlético",
+            "countryId": 2
+          },
+          {
+            "id": 247,
+            "name": "CE Europa",
+            "countryId": 2
+          },
+          {
+            "id": 248,
+            "name": "SD Tarazona",
+            "countryId": 2
+          },
+          {
+            "id": 249,
+            "name": "Juventud Torremolinos CF",
+            "countryId": 2
+          },
+          {
+            "id": 250,
+            "name": "CD Teruel",
+            "countryId": 2
+          },
+          {
+            "id": 251,
+            "name": "Marbella FC",
+            "countryId": 2
+          },
+          {
+            "id": 252,
+            "name": "Algeciras CF",
+            "countryId": 2
+          },
+          {
+            "id": 253,
+            "name": "Atlético Sanluqueño CF",
+            "countryId": 2
+          },
+          {
+            "id": 254,
+            "name": "Manchester City",
+            "countryId": 3
+          },
+          {
+            "id": 255,
+            "name": "Arsenal FC",
+            "countryId": 3
+          },
+          {
+            "id": 256,
+            "name": "Chelsea FC",
+            "countryId": 3
+          },
+          {
+            "id": 257,
+            "name": "Liverpool FC",
+            "countryId": 3
+          },
+          {
+            "id": 258,
+            "name": "Tottenham Hotspur",
+            "countryId": 3
+          },
+          {
+            "id": 259,
+            "name": "Manchester United",
+            "countryId": 3
+          },
+          {
+            "id": 260,
+            "name": "Newcastle United",
+            "countryId": 3
+          },
+          {
+            "id": 261,
+            "name": "Nottingham Forest",
+            "countryId": 3
+          },
+          {
+            "id": 262,
+            "name": "Aston Villa",
+            "countryId": 3
+          },
+          {
+            "id": 263,
+            "name": "Crystal Palace",
+            "countryId": 3
+          },
+          {
+            "id": 264,
+            "name": "AFC Bournemouth",
+            "countryId": 3
+          },
+          {
+            "id": 265,
+            "name": "Brighton & Hove Albion",
+            "countryId": 3
+          },
+          {
+            "id": 266,
+            "name": "Brentford FC",
+            "countryId": 3
+          },
+          {
+            "id": 267,
+            "name": "Everton FC",
+            "countryId": 3
+          },
+          {
+            "id": 268,
+            "name": "Fulham FC",
+            "countryId": 3
+          },
+          {
+            "id": 269,
+            "name": "Sunderland AFC",
+            "countryId": 3
+          },
+          {
+            "id": 270,
+            "name": "West Ham United",
+            "countryId": 3
+          },
+          {
+            "id": 271,
+            "name": "Leeds United",
+            "countryId": 3
+          },
+          {
+            "id": 272,
+            "name": "Wolverhampton Wanderers",
+            "countryId": 3
+          },
+          {
+            "id": 273,
+            "name": "Burnley FC",
+            "countryId": 3
+          },
+          {
+            "id": 274,
+            "name": "Ipswich Town",
+            "countryId": 3
+          },
+          {
+            "id": 275,
+            "name": "Coventry City",
+            "countryId": 3
+          },
+          {
+            "id": 276,
+            "name": "Southampton FC",
+            "countryId": 3
+          },
+          {
+            "id": 277,
+            "name": "Leicester City",
+            "countryId": 3
+          },
+          {
+            "id": 278,
+            "name": "Sheffield United",
+            "countryId": 3
+          },
+          {
+            "id": 279,
+            "name": "Middlesbrough FC",
+            "countryId": 3
+          },
+          {
+            "id": 280,
+            "name": "Birmingham City",
+            "countryId": 3
+          },
+          {
+            "id": 281,
+            "name": "Norwich City",
+            "countryId": 3
+          },
+          {
+            "id": 282,
+            "name": "Stoke City",
+            "countryId": 3
+          },
+          {
+            "id": 283,
+            "name": "Swansea City",
+            "countryId": 3
+          },
+          {
+            "id": 284,
+            "name": "Millwall FC",
+            "countryId": 3
+          },
+          {
+            "id": 285,
+            "name": "Hull City",
+            "countryId": 3
+          },
+          {
+            "id": 286,
+            "name": "Watford FC",
+            "countryId": 3
+          },
+          {
+            "id": 287,
+            "name": "Bristol City",
+            "countryId": 3
+          },
+          {
+            "id": 288,
+            "name": "Wrexham AFC",
+            "countryId": 3
+          },
+          {
+            "id": 289,
+            "name": "Derby County",
+            "countryId": 3
+          },
+          {
+            "id": 290,
+            "name": "West Bromwich Albion",
+            "countryId": 3
+          },
+          {
+            "id": 291,
+            "name": "Preston North End",
+            "countryId": 3
+          },
+          {
+            "id": 292,
+            "name": "Queens Park Rangers",
+            "countryId": 3
+          },
+          {
+            "id": 293,
+            "name": "Blackburn Rovers",
+            "countryId": 3
+          },
+          {
+            "id": 294,
+            "name": "Oxford United",
+            "countryId": 3
+          },
+          {
+            "id": 295,
+            "name": "Portsmouth FC",
+            "countryId": 3
+          },
+          {
+            "id": 296,
+            "name": "Charlton Athletic",
+            "countryId": 3
+          },
+          {
+            "id": 297,
+            "name": "Sheffield Wednesday",
+            "countryId": 3
+          },
+          {
+            "id": 298,
+            "name": "Cardiff City",
+            "countryId": 3
+          },
+          {
+            "id": 299,
+            "name": "Luton Town",
+            "countryId": 3
+          },
+          {
+            "id": 300,
+            "name": "Bolton Wanderers",
+            "countryId": 3
+          },
+          {
+            "id": 301,
+            "name": "Huddersfield Town",
+            "countryId": 3
+          },
+          {
+            "id": 302,
+            "name": "Blackpool FC",
+            "countryId": 3
+          },
+          {
+            "id": 303,
+            "name": "Reading FC",
+            "countryId": 3
+          },
+          {
+            "id": 304,
+            "name": "Leyton Orient",
+            "countryId": 3
+          },
+          {
+            "id": 305,
+            "name": "Stockport County",
+            "countryId": 3
+          },
+          {
+            "id": 306,
+            "name": "Wycombe Wanderers",
+            "countryId": 3
+          },
+          {
+            "id": 307,
+            "name": "Plymouth Argyle",
+            "countryId": 3
+          },
+          {
+            "id": 308,
+            "name": "Rotherham United",
+            "countryId": 3
+          },
+          {
+            "id": 309,
+            "name": "Port Vale FC",
+            "countryId": 3
+          },
+          {
+            "id": 310,
+            "name": "Wigan Athletic",
+            "countryId": 3
+          },
+          {
+            "id": 311,
+            "name": "Bradford City",
+            "countryId": 3
+          },
+          {
+            "id": 312,
+            "name": "Mansfield Town",
+            "countryId": 3
+          },
+          {
+            "id": 313,
+            "name": "Stevenage FC",
+            "countryId": 3
+          },
+          {
+            "id": 314,
+            "name": "Barnsley FC",
+            "countryId": 3
+          },
+          {
+            "id": 315,
+            "name": "Burton Albion",
+            "countryId": 3
+          },
+          {
+            "id": 316,
+            "name": "Lincoln City",
+            "countryId": 3
+          },
+          {
+            "id": 317,
+            "name": "Peterborough United",
+            "countryId": 3
+          },
+          {
+            "id": 318,
+            "name": "Exeter City",
+            "countryId": 3
+          },
+          {
+            "id": 319,
+            "name": "Doncaster Rovers",
+            "countryId": 3
+          },
+          {
+            "id": 320,
+            "name": "Northampton Town",
+            "countryId": 3
+          },
+          {
+            "id": 321,
+            "name": "AFC Wimbledon",
+            "countryId": 3
+          },
+          {
+            "id": 322,
+            "name": "Milton Keynes Dons",
+            "countryId": 3
+          },
+          {
+            "id": 323,
+            "name": "Salford City",
+            "countryId": 3
+          },
+          {
+            "id": 324,
+            "name": "Bristol Rovers",
+            "countryId": 3
+          },
+          {
+            "id": 325,
+            "name": "Crawley Town",
+            "countryId": 3
+          },
+          {
+            "id": 326,
+            "name": "Chesterfield FC",
+            "countryId": 3
+          },
+          {
+            "id": 327,
+            "name": "Notts County",
+            "countryId": 3
+          },
+          {
+            "id": 328,
+            "name": "Crewe Alexandra",
+            "countryId": 3
+          },
+          {
+            "id": 329,
+            "name": "Cambridge United",
+            "countryId": 3
+          },
+          {
+            "id": 330,
+            "name": "Walsall FC",
+            "countryId": 3
+          },
+          {
+            "id": 331,
+            "name": "Grimsby Town",
+            "countryId": 3
+          },
+          {
+            "id": 332,
+            "name": "Fleetwood Town",
+            "countryId": 3
+          },
+          {
+            "id": 333,
+            "name": "Gillingham FC",
+            "countryId": 3
+          },
+          {
+            "id": 334,
+            "name": "Swindon Town",
+            "countryId": 3
+          },
+          {
+            "id": 335,
+            "name": "Colchester United",
+            "countryId": 3
+          },
+          {
+            "id": 336,
+            "name": "Tranmere Rovers",
+            "countryId": 3
+          },
+          {
+            "id": 337,
+            "name": "Shrewsbury Town",
+            "countryId": 3
+          },
+          {
+            "id": 338,
+            "name": "Barrow AFC",
+            "countryId": 3
+          },
+          {
+            "id": 339,
+            "name": "Bromley FC",
+            "countryId": 3
+          },
+          {
+            "id": 340,
+            "name": "Barnet FC",
+            "countryId": 3
+          },
+          {
+            "id": 341,
+            "name": "Cheltenham Town",
+            "countryId": 3
+          },
+          {
+            "id": 342,
+            "name": "Harrogate Town",
+            "countryId": 3
+          },
+          {
+            "id": 343,
+            "name": "Newport County",
+            "countryId": 3
+          },
+          {
+            "id": 344,
+            "name": "Oldham Athletic",
+            "countryId": 3
+          },
+          {
+            "id": 345,
+            "name": "Accrington Stanley",
+            "countryId": 3
+          },
+          {
+            "id": 346,
+            "name": "Bayern Munich",
+            "countryId": 4
+          },
+          {
+            "id": 347,
+            "name": "Borussia Dortmund",
+            "countryId": 4
+          },
+          {
+            "id": 348,
+            "name": "RB Leipzig",
+            "countryId": 4
+          },
+          {
+            "id": 349,
+            "name": "Bayer 04 Leverkusen",
+            "countryId": 4
+          },
+          {
+            "id": 350,
+            "name": "Eintracht Frankfurt",
+            "countryId": 4
+          },
+          {
+            "id": 351,
+            "name": "VfB Stuttgart",
+            "countryId": 4
+          },
+          {
+            "id": 352,
+            "name": "TSG 1899 Hoffenheim",
+            "countryId": 4
+          },
+          {
+            "id": 353,
+            "name": "VfL Wolfsburg",
+            "countryId": 4
+          },
+          {
+            "id": 354,
+            "name": "SC Freiburg",
+            "countryId": 4
+          },
+          {
+            "id": 355,
+            "name": "SV Werder Bremen",
+            "countryId": 4
+          },
+          {
+            "id": 356,
+            "name": "Hamburger SV",
+            "countryId": 4
+          },
+          {
+            "id": 357,
+            "name": "FC Augsburg",
+            "countryId": 4
+          },
+          {
+            "id": 358,
+            "name": "Borussia Mönchengladbach",
+            "countryId": 4
+          },
+          {
+            "id": 359,
+            "name": "1.FSV Mainz 05",
+            "countryId": 4
+          },
+          {
+            "id": 360,
+            "name": "1.FC Köln",
+            "countryId": 4
+          },
+          {
+            "id": 361,
+            "name": "1.FC Union Berlin",
+            "countryId": 4
+          },
+          {
+            "id": 362,
+            "name": "FC St. Pauli",
+            "countryId": 4
+          },
+          {
+            "id": 363,
+            "name": "1.FC Heidenheim 1846",
+            "countryId": 4
+          },
+          {
+            "id": 364,
+            "name": "Hertha BSC",
+            "countryId": 4
+          },
+          {
+            "id": 365,
+            "name": "VfL Bochum",
+            "countryId": 4
+          },
+          {
+            "id": 366,
+            "name": "Hannover 96",
+            "countryId": 4
+          },
+          {
+            "id": 367,
+            "name": "FC Schalke 04",
+            "countryId": 4
+          },
+          {
+            "id": 368,
+            "name": "SC Paderborn 07",
+            "countryId": 4
+          },
+          {
+            "id": 369,
+            "name": "1.FC Nuremberg",
+            "countryId": 4
+          },
+          {
+            "id": 370,
+            "name": "Karlsruher SC",
+            "countryId": 4
+          },
+          {
+            "id": 371,
+            "name": "Fortuna Düsseldorf",
+            "countryId": 4
+          },
+          {
+            "id": 372,
+            "name": "SV Darmstadt 98",
+            "countryId": 4
+          },
+          {
+            "id": 373,
+            "name": "Holstein Kiel",
+            "countryId": 4
+          },
+          {
+            "id": 374,
+            "name": "1.FC Kaiserslautern",
+            "countryId": 4
+          },
+          {
+            "id": 375,
+            "name": "SV 07 Elversberg",
+            "countryId": 4
+          },
+          {
+            "id": 376,
+            "name": "SpVgg Greuther Fürth",
+            "countryId": 4
+          },
+          {
+            "id": 377,
+            "name": "1.FC Magdeburg",
+            "countryId": 4
+          },
+          {
+            "id": 378,
+            "name": "Eintracht Braunschweig",
+            "countryId": 4
+          },
+          {
+            "id": 379,
+            "name": "Preußen Münster",
+            "countryId": 4
+          },
+          {
+            "id": 380,
+            "name": "SG Dynamo Dresden",
+            "countryId": 4
+          },
+          {
+            "id": 381,
+            "name": "Arminia Bielefeld",
+            "countryId": 4
+          },
+          {
+            "id": 382,
+            "name": "TSG 1899 Hoffenheim II",
+            "countryId": 4
+          },
+          {
+            "id": 383,
+            "name": "VfB Stuttgart II",
+            "countryId": 4
+          },
+          {
+            "id": 384,
+            "name": "TSV 1860 Munich",
+            "countryId": 4
+          },
+          {
+            "id": 385,
+            "name": "FC Hansa Rostock",
+            "countryId": 4
+          },
+          {
+            "id": 386,
+            "name": "SV Wehen Wiesbaden",
+            "countryId": 4
+          },
+          {
+            "id": 387,
+            "name": "1.FC Saarbrücken",
+            "countryId": 4
+          },
+          {
+            "id": 388,
+            "name": "Alemannia Aachen",
+            "countryId": 4
+          },
+          {
+            "id": 389,
+            "name": "MSV Duisburg",
+            "countryId": 4
+          },
+          {
+            "id": 390,
+            "name": "SSV Jahn Regensburg",
+            "countryId": 4
+          },
+          {
+            "id": 391,
+            "name": "SSV Ulm 1846",
+            "countryId": 4
+          },
+          {
+            "id": 392,
+            "name": "SC Verl",
+            "countryId": 4
+          },
+          {
+            "id": 393,
+            "name": "Rot-Weiss Essen",
+            "countryId": 4
+          },
+          {
+            "id": 394,
+            "name": "VfL Osnabrück",
+            "countryId": 4
+          },
+          {
+            "id": 395,
+            "name": "FC Ingolstadt 04",
+            "countryId": 4
+          },
+          {
+            "id": 396,
+            "name": "SV Waldhof Mannheim",
+            "countryId": 4
+          },
+          {
+            "id": 397,
+            "name": "FC Energie Cottbus",
+            "countryId": 4
+          },
+          {
+            "id": 398,
+            "name": "FC Viktoria Köln",
+            "countryId": 4
+          },
+          {
+            "id": 399,
+            "name": "FC Erzgebirge Aue",
+            "countryId": 4
+          },
+          {
+            "id": 400,
+            "name": "1.FC Schweinfurt 05",
+            "countryId": 4
+          },
+          {
+            "id": 401,
+            "name": "TSV Havelse",
+            "countryId": 4
+          },
+          {
+            "id": 402,
+            "name": "Paris Saint-Germain",
+            "countryId": 5
+          },
+          {
+            "id": 403,
+            "name": "AS Monaco",
+            "countryId": 5
+          },
+          {
+            "id": 404,
+            "name": "Olympique Marseille",
+            "countryId": 5
+          },
+          {
+            "id": 405,
+            "name": "RC Strasbourg Alsace",
+            "countryId": 5
+          },
+          {
+            "id": 406,
+            "name": "Olympique Lyon",
+            "countryId": 5
+          },
+          {
+            "id": 407,
+            "name": "LOSC Lille",
+            "countryId": 5
+          },
+          {
+            "id": 408,
+            "name": "Stade Rennais FC",
+            "countryId": 5
+          },
+          {
+            "id": 409,
+            "name": "RC Lens",
+            "countryId": 5
+          },
+          {
+            "id": 410,
+            "name": "OGC Nice",
+            "countryId": 5
+          },
+          {
+            "id": 411,
+            "name": "FC Toulouse",
+            "countryId": 5
+          },
+          {
+            "id": 412,
+            "name": "Paris FC",
+            "countryId": 5
+          },
+          {
+            "id": 413,
+            "name": "FC Nantes",
+            "countryId": 5
+          },
+          {
+            "id": 414,
+            "name": "FC Lorient",
+            "countryId": 5
+          },
+          {
+            "id": 415,
+            "name": "Stade Brestois 29",
+            "countryId": 5
+          },
+          {
+            "id": 416,
+            "name": "AJ Auxerre",
+            "countryId": 5
+          },
+          {
+            "id": 417,
+            "name": "Le Havre AC",
+            "countryId": 5
+          },
+          {
+            "id": 418,
+            "name": "Angers SCO",
+            "countryId": 5
+          },
+          {
+            "id": 419,
+            "name": "FC Metz",
+            "countryId": 5
+          },
+          {
+            "id": 420,
+            "name": "Stade Reims",
+            "countryId": 5
+          },
+          {
+            "id": 421,
+            "name": "AS Saint-Étienne",
+            "countryId": 5
+          },
+          {
+            "id": 422,
+            "name": "ESTAC Troyes",
+            "countryId": 5
+          },
+          {
+            "id": 423,
+            "name": "USL Dunkerque",
+            "countryId": 5
+          },
+          {
+            "id": 424,
+            "name": "Amiens SC",
+            "countryId": 5
+          },
+          {
+            "id": 425,
+            "name": "Montpellier HSC",
+            "countryId": 5
+          },
+          {
+            "id": 426,
+            "name": "Pau FC",
+            "countryId": 5
+          },
+          {
+            "id": 427,
+            "name": "EA Guingamp",
+            "countryId": 5
+          },
+          {
+            "id": 428,
+            "name": "Clermont Foot 63",
+            "countryId": 5
+          },
+          {
+            "id": 429,
+            "name": "Red Star FC",
+            "countryId": 5
+          },
+          {
+            "id": 430,
+            "name": "Rodez AF",
+            "countryId": 5
+          },
+          {
+            "id": 431,
+            "name": "SC Bastia",
+            "countryId": 5
+          },
+          {
+            "id": 432,
+            "name": "Grenoble Foot 38",
+            "countryId": 5
+          },
+          {
+            "id": 433,
+            "name": "AS Nancy-Lorraine",
+            "countryId": 5
+          },
+          {
+            "id": 434,
+            "name": "Le Mans FC",
+            "countryId": 5
+          },
+          {
+            "id": 435,
+            "name": "Stade Lavallois",
+            "countryId": 5
+          },
+          {
+            "id": 436,
+            "name": "FC Annecy",
+            "countryId": 5
+          },
+          {
+            "id": 437,
+            "name": "US Boulogne",
+            "countryId": 5
+          },
+          {
+            "id": 438,
+            "name": "Shakhtar Donetsk",
+            "countryId": 6
+          },
+          {
+            "id": 439,
+            "name": "Dynamo Kyiv",
+            "countryId": 6
+          },
+          {
+            "id": 440,
+            "name": "Polissya Zhytomyr",
+            "countryId": 6
+          },
+          {
+            "id": 441,
+            "name": "Metalist 1925 Kharkiv",
+            "countryId": 6
+          },
+          {
+            "id": 442,
+            "name": "LNZ Cherkasy",
+            "countryId": 6
+          },
+          {
+            "id": 443,
+            "name": "Karpaty Lviv",
+            "countryId": 6
+          },
+          {
+            "id": 444,
+            "name": "Kryvbas Kryvyi Rig",
+            "countryId": 6
+          },
+          {
+            "id": 445,
+            "name": "Kolos Kovalivka",
+            "countryId": 6
+          },
+          {
+            "id": 446,
+            "name": "Zorya Lugansk",
+            "countryId": 6
+          },
+          {
+            "id": 447,
+            "name": "FC Oleksandriya",
+            "countryId": 6
+          },
+          {
+            "id": 448,
+            "name": "NK Veres Rivne",
+            "countryId": 6
+          },
+          {
+            "id": 449,
+            "name": "Rukh Lviv",
+            "countryId": 6
+          },
+          {
+            "id": 450,
+            "name": "Obolon Kyiv",
+            "countryId": 6
+          },
+          {
+            "id": 451,
+            "name": "FC Kudrivka",
+            "countryId": 6
+          },
+          {
+            "id": 452,
+            "name": "Epicentr Kamyanets-Podilskyi",
+            "countryId": 6
+          },
+          {
+            "id": 453,
+            "name": "SC Poltava",
+            "countryId": 6
+          },
+          {
+            "id": 454,
+            "name": "Bukovyna Chernivtsi",
+            "countryId": 6
+          },
+          {
+            "id": 455,
+            "name": "Chornomorets Odesa",
+            "countryId": 6
+          },
+          {
+            "id": 456,
+            "name": "Livyi Bereg Kyiv",
+            "countryId": 6
+          },
+          {
+            "id": 457,
+            "name": "Metalist Kharkiv",
+            "countryId": 6
+          },
+          {
+            "id": 458,
+            "name": "Feniks-Mariupol",
+            "countryId": 6
+          },
+          {
+            "id": 459,
+            "name": "Agrobiznes Volochysk",
+            "countryId": 6
+          },
+          {
+            "id": 460,
+            "name": "Ingulets Petrove",
+            "countryId": 6
+          },
+          {
+            "id": 461,
+            "name": "Viktoriya Sumy",
+            "countryId": 6
+          },
+          {
+            "id": 462,
+            "name": "Nyva Ternopil",
+            "countryId": 6
+          },
+          {
+            "id": 463,
+            "name": "Vorskla Poltava",
+            "countryId": 6
+          },
+          {
+            "id": 464,
+            "name": "FC Chernigiv",
+            "countryId": 6
+          },
+          {
+            "id": 465,
+            "name": "UCSA Tarasivka",
+            "countryId": 6
+          },
+          {
+            "id": 466,
+            "name": "Prykarpattya-Blago Ivano-Frankivsk",
+            "countryId": 6
+          },
+          {
+            "id": 467,
+            "name": "Podillya Khmelnytskyi",
+            "countryId": 6
+          },
+          {
+            "id": 468,
+            "name": "Probiy Gorodenka",
+            "countryId": 6
+          },
+          {
+            "id": 469,
+            "name": "SC Metalurg Zaporizhya",
+            "countryId": 6
+          }
+        ]
+      },
+      {
+        "name": "season",
+        "schema": "++id, name, startDate, endDate, isActive",
+        "rowCount": 24,
+        "rows": [
+          {
+            "id": 1,
+            "name": "2025/2025",
+            "competitionId": 1,
+            "startDate": "2025-07-01",
+            "endDate": "2025-05-31",
+            "isActive": true
+          },
+          {
+            "id": 2,
+            "name": "2025/2026",
+            "competitionId": 2,
+            "startDate": "2025-07-01",
+            "endDate": "2026-05-31",
+            "isActive": true
+          },
+          {
+            "id": 3,
+            "name": "2025/2026",
+            "competitionId": 19,
+            "startDate": "2025-07-01",
+            "endDate": "2026-05-31",
+            "isActive": true
+          },
+          {
+            "id": 4,
+            "name": "2025/2026",
+            "competitionId": 20,
+            "startDate": "2025-07-01",
+            "endDate": "2026-05-31",
+            "isActive": true
+          },
+          {
+            "id": 5,
+            "name": "2025/2026",
+            "competitionId": 21,
+            "startDate": "2025-07-01",
+            "endDate": "2026-05-31",
+            "isActive": true
+          },
+          {
+            "id": 6,
+            "name": "2025/2026",
+            "competitionId": 22,
+            "startDate": "2025-07-01",
+            "endDate": "2026-05-31",
+            "isActive": true
+          },
+          {
+            "id": 7,
+            "name": "2025/2026",
+            "competitionId": 23,
+            "startDate": "2025-07-01",
+            "endDate": "2026-05-31",
+            "isActive": true
+          },
+          {
+            "id": 8,
+            "name": "2025/2026",
+            "competitionId": 24,
+            "startDate": "2025-07-01",
+            "endDate": "2026-05-31",
+            "isActive": true
+          },
+          {
+            "id": 9,
+            "name": "2025/2026",
+            "competitionId": 25,
+            "startDate": "2025-07-01",
+            "endDate": "2026-05-31",
+            "isActive": true
+          },
+          {
+            "id": 10,
+            "name": "2025/2026",
+            "competitionId": 4,
+            "startDate": "2025-07-01",
+            "endDate": "2026-05-31",
+            "isActive": true
+          },
+          {
+            "id": 11,
+            "name": "2025/2026",
+            "competitionId": 5,
+            "startDate": "2025-07-01",
+            "endDate": "2026-05-31",
+            "isActive": true
+          },
+          {
+            "id": 12,
+            "name": "2025/2026",
+            "competitionId": 26,
+            "startDate": "2025-07-01",
+            "endDate": "2026-05-31",
+            "isActive": true
+          },
+          {
+            "id": 13,
+            "name": "2025/2026",
+            "competitionId": 27,
+            "startDate": "2025-07-01",
+            "endDate": "2026-05-31",
+            "isActive": true
+          },
+          {
+            "id": 14,
+            "name": "2025/2026",
+            "competitionId": 6,
+            "startDate": "2025-07-01",
+            "endDate": "2026-05-31",
+            "isActive": true
+          },
+          {
+            "id": 15,
+            "name": "2025/2026",
+            "competitionId": 7,
+            "startDate": "2025-07-01",
+            "endDate": "2026-05-31",
+            "isActive": true
+          },
+          {
+            "id": 16,
+            "name": "2025/2026",
+            "competitionId": 28,
+            "startDate": "2025-07-01",
+            "endDate": "2026-05-31",
+            "isActive": true
+          },
+          {
+            "id": 17,
+            "name": "2025/2026",
+            "competitionId": 29,
+            "startDate": "2025-07-01",
+            "endDate": "2026-05-31",
+            "isActive": true
+          },
+          {
+            "id": 18,
+            "name": "2025/2026",
+            "competitionId": 8,
+            "startDate": "2025-07-01",
+            "endDate": "2026-05-31",
+            "isActive": true
+          },
+          {
+            "id": 19,
+            "name": "2025/2026",
+            "competitionId": 9,
+            "startDate": "2025-07-01",
+            "endDate": "2026-05-31",
+            "isActive": true
+          },
+          {
+            "id": 20,
+            "name": "2025/2026",
+            "competitionId": 30,
+            "startDate": "2025-07-01",
+            "endDate": "2026-05-31",
+            "isActive": true
+          },
+          {
+            "id": 21,
+            "name": "2025/2026",
+            "competitionId": 10,
+            "startDate": "2025-07-01",
+            "endDate": "2026-05-31",
+            "isActive": true
+          },
+          {
+            "id": 22,
+            "name": "2025/2026",
+            "competitionId": 11,
+            "startDate": "2025-07-01",
+            "endDate": "2026-05-31",
+            "isActive": true
+          },
+          {
+            "id": 23,
+            "name": "2025/2026",
+            "competitionId": 12,
+            "startDate": "2025-07-01",
+            "endDate": "2026-05-31",
+            "isActive": true
+          },
+          {
+            "id": 24,
+            "name": "2025/2026",
+            "competitionId": 13,
+            "startDate": "2025-07-01",
+            "endDate": "2026-05-31",
+            "isActive": true
+          }
+        ]
+      },
+      {
+        "name": "seasonClub",
+        "schema": "++id, seasonId, clubId, [seasonId+clubId]",
+        "rowCount": 469,
+        "rows": [
+          {
+            "id": 1,
+            "seasonId": 1,
+            "clubId": 1
+          },
+          {
+            "id": 2,
+            "seasonId": 1,
+            "clubId": 2
+          },
+          {
+            "id": 3,
+            "seasonId": 1,
+            "clubId": 3
+          },
+          {
+            "id": 4,
+            "seasonId": 1,
+            "clubId": 4
+          },
+          {
+            "id": 5,
+            "seasonId": 1,
+            "clubId": 5
+          },
+          {
+            "id": 6,
+            "seasonId": 1,
+            "clubId": 6
+          },
+          {
+            "id": 7,
+            "seasonId": 1,
+            "clubId": 7
+          },
+          {
+            "id": 8,
+            "seasonId": 1,
+            "clubId": 8
+          },
+          {
+            "id": 9,
+            "seasonId": 1,
+            "clubId": 9
+          },
+          {
+            "id": 10,
+            "seasonId": 1,
+            "clubId": 10
+          },
+          {
+            "id": 11,
+            "seasonId": 1,
+            "clubId": 11
+          },
+          {
+            "id": 12,
+            "seasonId": 1,
+            "clubId": 12
+          },
+          {
+            "id": 13,
+            "seasonId": 1,
+            "clubId": 13
+          },
+          {
+            "id": 14,
+            "seasonId": 1,
+            "clubId": 14
+          },
+          {
+            "id": 15,
+            "seasonId": 1,
+            "clubId": 15
+          },
+          {
+            "id": 16,
+            "seasonId": 1,
+            "clubId": 16
+          },
+          {
+            "id": 17,
+            "seasonId": 1,
+            "clubId": 17
+          },
+          {
+            "id": 18,
+            "seasonId": 1,
+            "clubId": 18
+          },
+          {
+            "id": 19,
+            "seasonId": 1,
+            "clubId": 19
+          },
+          {
+            "id": 20,
+            "seasonId": 1,
+            "clubId": 20
+          },
+          {
+            "id": 21,
+            "seasonId": 2,
+            "clubId": 21
+          },
+          {
+            "id": 22,
+            "seasonId": 2,
+            "clubId": 22
+          },
+          {
+            "id": 23,
+            "seasonId": 2,
+            "clubId": 23
+          },
+          {
+            "id": 24,
+            "seasonId": 2,
+            "clubId": 24
+          },
+          {
+            "id": 25,
+            "seasonId": 2,
+            "clubId": 25
+          },
+          {
+            "id": 26,
+            "seasonId": 2,
+            "clubId": 26
+          },
+          {
+            "id": 27,
+            "seasonId": 2,
+            "clubId": 27
+          },
+          {
+            "id": 28,
+            "seasonId": 2,
+            "clubId": 28
+          },
+          {
+            "id": 29,
+            "seasonId": 2,
+            "clubId": 29
+          },
+          {
+            "id": 30,
+            "seasonId": 2,
+            "clubId": 30
+          },
+          {
+            "id": 31,
+            "seasonId": 2,
+            "clubId": 31
+          },
+          {
+            "id": 32,
+            "seasonId": 2,
+            "clubId": 32
+          },
+          {
+            "id": 33,
+            "seasonId": 2,
+            "clubId": 33
+          },
+          {
+            "id": 34,
+            "seasonId": 2,
+            "clubId": 34
+          },
+          {
+            "id": 35,
+            "seasonId": 2,
+            "clubId": 35
+          },
+          {
+            "id": 36,
+            "seasonId": 2,
+            "clubId": 36
+          },
+          {
+            "id": 37,
+            "seasonId": 2,
+            "clubId": 37
+          },
+          {
+            "id": 38,
+            "seasonId": 2,
+            "clubId": 38
+          },
+          {
+            "id": 39,
+            "seasonId": 2,
+            "clubId": 39
+          },
+          {
+            "id": 40,
+            "seasonId": 2,
+            "clubId": 40
+          },
+          {
+            "id": 41,
+            "seasonId": 3,
+            "clubId": 41
+          },
+          {
+            "id": 42,
+            "seasonId": 3,
+            "clubId": 42
+          },
+          {
+            "id": 43,
+            "seasonId": 3,
+            "clubId": 43
+          },
+          {
+            "id": 44,
+            "seasonId": 3,
+            "clubId": 44
+          },
+          {
+            "id": 45,
+            "seasonId": 3,
+            "clubId": 45
+          },
+          {
+            "id": 46,
+            "seasonId": 3,
+            "clubId": 46
+          },
+          {
+            "id": 47,
+            "seasonId": 3,
+            "clubId": 47
+          },
+          {
+            "id": 48,
+            "seasonId": 3,
+            "clubId": 48
+          },
+          {
+            "id": 49,
+            "seasonId": 3,
+            "clubId": 49
+          },
+          {
+            "id": 50,
+            "seasonId": 3,
+            "clubId": 50
+          },
+          {
+            "id": 51,
+            "seasonId": 3,
+            "clubId": 51
+          },
+          {
+            "id": 52,
+            "seasonId": 3,
+            "clubId": 52
+          },
+          {
+            "id": 53,
+            "seasonId": 3,
+            "clubId": 53
+          },
+          {
+            "id": 54,
+            "seasonId": 3,
+            "clubId": 54
+          },
+          {
+            "id": 55,
+            "seasonId": 3,
+            "clubId": 55
+          },
+          {
+            "id": 56,
+            "seasonId": 3,
+            "clubId": 56
+          },
+          {
+            "id": 57,
+            "seasonId": 3,
+            "clubId": 57
+          },
+          {
+            "id": 58,
+            "seasonId": 3,
+            "clubId": 58
+          },
+          {
+            "id": 59,
+            "seasonId": 3,
+            "clubId": 59
+          },
+          {
+            "id": 60,
+            "seasonId": 3,
+            "clubId": 60
+          },
+          {
+            "id": 61,
+            "seasonId": 4,
+            "clubId": 61
+          },
+          {
+            "id": 62,
+            "seasonId": 4,
+            "clubId": 62
+          },
+          {
+            "id": 63,
+            "seasonId": 4,
+            "clubId": 63
+          },
+          {
+            "id": 64,
+            "seasonId": 4,
+            "clubId": 64
+          },
+          {
+            "id": 65,
+            "seasonId": 4,
+            "clubId": 65
+          },
+          {
+            "id": 66,
+            "seasonId": 4,
+            "clubId": 66
+          },
+          {
+            "id": 67,
+            "seasonId": 4,
+            "clubId": 67
+          },
+          {
+            "id": 68,
+            "seasonId": 4,
+            "clubId": 68
+          },
+          {
+            "id": 69,
+            "seasonId": 4,
+            "clubId": 69
+          },
+          {
+            "id": 70,
+            "seasonId": 4,
+            "clubId": 70
+          },
+          {
+            "id": 71,
+            "seasonId": 4,
+            "clubId": 71
+          },
+          {
+            "id": 72,
+            "seasonId": 4,
+            "clubId": 72
+          },
+          {
+            "id": 73,
+            "seasonId": 4,
+            "clubId": 73
+          },
+          {
+            "id": 74,
+            "seasonId": 4,
+            "clubId": 74
+          },
+          {
+            "id": 75,
+            "seasonId": 4,
+            "clubId": 75
+          },
+          {
+            "id": 76,
+            "seasonId": 4,
+            "clubId": 76
+          },
+          {
+            "id": 77,
+            "seasonId": 4,
+            "clubId": 77
+          },
+          {
+            "id": 78,
+            "seasonId": 4,
+            "clubId": 78
+          },
+          {
+            "id": 79,
+            "seasonId": 4,
+            "clubId": 79
+          },
+          {
+            "id": 80,
+            "seasonId": 5,
+            "clubId": 80
+          },
+          {
+            "id": 81,
+            "seasonId": 5,
+            "clubId": 81
+          },
+          {
+            "id": 82,
+            "seasonId": 5,
+            "clubId": 82
+          },
+          {
+            "id": 83,
+            "seasonId": 5,
+            "clubId": 83
+          },
+          {
+            "id": 84,
+            "seasonId": 5,
+            "clubId": 84
+          },
+          {
+            "id": 85,
+            "seasonId": 5,
+            "clubId": 85
+          },
+          {
+            "id": 86,
+            "seasonId": 5,
+            "clubId": 86
+          },
+          {
+            "id": 87,
+            "seasonId": 5,
+            "clubId": 87
+          },
+          {
+            "id": 88,
+            "seasonId": 5,
+            "clubId": 88
+          },
+          {
+            "id": 89,
+            "seasonId": 5,
+            "clubId": 89
+          },
+          {
+            "id": 90,
+            "seasonId": 5,
+            "clubId": 90
+          },
+          {
+            "id": 91,
+            "seasonId": 5,
+            "clubId": 91
+          },
+          {
+            "id": 92,
+            "seasonId": 5,
+            "clubId": 92
+          },
+          {
+            "id": 93,
+            "seasonId": 5,
+            "clubId": 93
+          },
+          {
+            "id": 94,
+            "seasonId": 5,
+            "clubId": 94
+          },
+          {
+            "id": 95,
+            "seasonId": 5,
+            "clubId": 95
+          },
+          {
+            "id": 96,
+            "seasonId": 5,
+            "clubId": 96
+          },
+          {
+            "id": 97,
+            "seasonId": 5,
+            "clubId": 97
+          },
+          {
+            "id": 98,
+            "seasonId": 5,
+            "clubId": 98
+          },
+          {
+            "id": 99,
+            "seasonId": 5,
+            "clubId": 99
+          },
+          {
+            "id": 100,
+            "seasonId": 6,
+            "clubId": 100
+          },
+          {
+            "id": 101,
+            "seasonId": 6,
+            "clubId": 101
+          },
+          {
+            "id": 102,
+            "seasonId": 6,
+            "clubId": 102
+          },
+          {
+            "id": 103,
+            "seasonId": 6,
+            "clubId": 103
+          },
+          {
+            "id": 104,
+            "seasonId": 6,
+            "clubId": 104
+          },
+          {
+            "id": 105,
+            "seasonId": 6,
+            "clubId": 105
+          },
+          {
+            "id": 106,
+            "seasonId": 6,
+            "clubId": 106
+          },
+          {
+            "id": 107,
+            "seasonId": 6,
+            "clubId": 107
+          },
+          {
+            "id": 108,
+            "seasonId": 6,
+            "clubId": 108
+          },
+          {
+            "id": 109,
+            "seasonId": 6,
+            "clubId": 109
+          },
+          {
+            "id": 110,
+            "seasonId": 6,
+            "clubId": 110
+          },
+          {
+            "id": 111,
+            "seasonId": 6,
+            "clubId": 111
+          },
+          {
+            "id": 112,
+            "seasonId": 6,
+            "clubId": 112
+          },
+          {
+            "id": 113,
+            "seasonId": 6,
+            "clubId": 113
+          },
+          {
+            "id": 114,
+            "seasonId": 6,
+            "clubId": 114
+          },
+          {
+            "id": 115,
+            "seasonId": 6,
+            "clubId": 115
+          },
+          {
+            "id": 116,
+            "seasonId": 6,
+            "clubId": 116
+          },
+          {
+            "id": 117,
+            "seasonId": 6,
+            "clubId": 117
+          },
+          {
+            "id": 118,
+            "seasonId": 7,
+            "clubId": 118
+          },
+          {
+            "id": 119,
+            "seasonId": 7,
+            "clubId": 119
+          },
+          {
+            "id": 120,
+            "seasonId": 7,
+            "clubId": 120
+          },
+          {
+            "id": 121,
+            "seasonId": 7,
+            "clubId": 121
+          },
+          {
+            "id": 122,
+            "seasonId": 7,
+            "clubId": 122
+          },
+          {
+            "id": 123,
+            "seasonId": 7,
+            "clubId": 123
+          },
+          {
+            "id": 124,
+            "seasonId": 7,
+            "clubId": 124
+          },
+          {
+            "id": 125,
+            "seasonId": 7,
+            "clubId": 125
+          },
+          {
+            "id": 126,
+            "seasonId": 7,
+            "clubId": 126
+          },
+          {
+            "id": 127,
+            "seasonId": 7,
+            "clubId": 127
+          },
+          {
+            "id": 128,
+            "seasonId": 7,
+            "clubId": 128
+          },
+          {
+            "id": 129,
+            "seasonId": 7,
+            "clubId": 129
+          },
+          {
+            "id": 130,
+            "seasonId": 7,
+            "clubId": 130
+          },
+          {
+            "id": 131,
+            "seasonId": 7,
+            "clubId": 131
+          },
+          {
+            "id": 132,
+            "seasonId": 7,
+            "clubId": 132
+          },
+          {
+            "id": 133,
+            "seasonId": 7,
+            "clubId": 133
+          },
+          {
+            "id": 134,
+            "seasonId": 7,
+            "clubId": 134
+          },
+          {
+            "id": 135,
+            "seasonId": 7,
+            "clubId": 135
+          },
+          {
+            "id": 136,
+            "seasonId": 8,
+            "clubId": 136
+          },
+          {
+            "id": 137,
+            "seasonId": 8,
+            "clubId": 137
+          },
+          {
+            "id": 138,
+            "seasonId": 8,
+            "clubId": 138
+          },
+          {
+            "id": 139,
+            "seasonId": 8,
+            "clubId": 139
+          },
+          {
+            "id": 140,
+            "seasonId": 8,
+            "clubId": 140
+          },
+          {
+            "id": 141,
+            "seasonId": 8,
+            "clubId": 141
+          },
+          {
+            "id": 142,
+            "seasonId": 8,
+            "clubId": 142
+          },
+          {
+            "id": 143,
+            "seasonId": 8,
+            "clubId": 143
+          },
+          {
+            "id": 144,
+            "seasonId": 8,
+            "clubId": 144
+          },
+          {
+            "id": 145,
+            "seasonId": 8,
+            "clubId": 145
+          },
+          {
+            "id": 146,
+            "seasonId": 8,
+            "clubId": 146
+          },
+          {
+            "id": 147,
+            "seasonId": 8,
+            "clubId": 147
+          },
+          {
+            "id": 148,
+            "seasonId": 8,
+            "clubId": 148
+          },
+          {
+            "id": 149,
+            "seasonId": 8,
+            "clubId": 149
+          },
+          {
+            "id": 150,
+            "seasonId": 8,
+            "clubId": 150
+          },
+          {
+            "id": 151,
+            "seasonId": 8,
+            "clubId": 151
+          },
+          {
+            "id": 152,
+            "seasonId": 8,
+            "clubId": 152
+          },
+          {
+            "id": 153,
+            "seasonId": 8,
+            "clubId": 153
+          },
+          {
+            "id": 154,
+            "seasonId": 9,
+            "clubId": 154
+          },
+          {
+            "id": 155,
+            "seasonId": 9,
+            "clubId": 155
+          },
+          {
+            "id": 156,
+            "seasonId": 9,
+            "clubId": 156
+          },
+          {
+            "id": 157,
+            "seasonId": 9,
+            "clubId": 157
+          },
+          {
+            "id": 158,
+            "seasonId": 9,
+            "clubId": 158
+          },
+          {
+            "id": 159,
+            "seasonId": 9,
+            "clubId": 159
+          },
+          {
+            "id": 160,
+            "seasonId": 9,
+            "clubId": 160
+          },
+          {
+            "id": 161,
+            "seasonId": 9,
+            "clubId": 161
+          },
+          {
+            "id": 162,
+            "seasonId": 9,
+            "clubId": 162
+          },
+          {
+            "id": 163,
+            "seasonId": 9,
+            "clubId": 163
+          },
+          {
+            "id": 164,
+            "seasonId": 9,
+            "clubId": 164
+          },
+          {
+            "id": 165,
+            "seasonId": 9,
+            "clubId": 165
+          },
+          {
+            "id": 166,
+            "seasonId": 9,
+            "clubId": 166
+          },
+          {
+            "id": 167,
+            "seasonId": 9,
+            "clubId": 167
+          },
+          {
+            "id": 168,
+            "seasonId": 9,
+            "clubId": 168
+          },
+          {
+            "id": 169,
+            "seasonId": 9,
+            "clubId": 169
+          },
+          {
+            "id": 170,
+            "seasonId": 9,
+            "clubId": 170
+          },
+          {
+            "id": 171,
+            "seasonId": 9,
+            "clubId": 171
+          },
+          {
+            "id": 172,
+            "seasonId": 10,
+            "clubId": 172
+          },
+          {
+            "id": 173,
+            "seasonId": 10,
+            "clubId": 173
+          },
+          {
+            "id": 174,
+            "seasonId": 10,
+            "clubId": 174
+          },
+          {
+            "id": 175,
+            "seasonId": 10,
+            "clubId": 175
+          },
+          {
+            "id": 176,
+            "seasonId": 10,
+            "clubId": 176
+          },
+          {
+            "id": 177,
+            "seasonId": 10,
+            "clubId": 177
+          },
+          {
+            "id": 178,
+            "seasonId": 10,
+            "clubId": 178
+          },
+          {
+            "id": 179,
+            "seasonId": 10,
+            "clubId": 179
+          },
+          {
+            "id": 180,
+            "seasonId": 10,
+            "clubId": 180
+          },
+          {
+            "id": 181,
+            "seasonId": 10,
+            "clubId": 181
+          },
+          {
+            "id": 182,
+            "seasonId": 10,
+            "clubId": 182
+          },
+          {
+            "id": 183,
+            "seasonId": 10,
+            "clubId": 183
+          },
+          {
+            "id": 184,
+            "seasonId": 10,
+            "clubId": 184
+          },
+          {
+            "id": 185,
+            "seasonId": 10,
+            "clubId": 185
+          },
+          {
+            "id": 186,
+            "seasonId": 10,
+            "clubId": 186
+          },
+          {
+            "id": 187,
+            "seasonId": 10,
+            "clubId": 187
+          },
+          {
+            "id": 188,
+            "seasonId": 10,
+            "clubId": 188
+          },
+          {
+            "id": 189,
+            "seasonId": 10,
+            "clubId": 189
+          },
+          {
+            "id": 190,
+            "seasonId": 10,
+            "clubId": 190
+          },
+          {
+            "id": 191,
+            "seasonId": 10,
+            "clubId": 191
+          },
+          {
+            "id": 192,
+            "seasonId": 11,
+            "clubId": 192
+          },
+          {
+            "id": 193,
+            "seasonId": 11,
+            "clubId": 193
+          },
+          {
+            "id": 194,
+            "seasonId": 11,
+            "clubId": 194
+          },
+          {
+            "id": 195,
+            "seasonId": 11,
+            "clubId": 195
+          },
+          {
+            "id": 196,
+            "seasonId": 11,
+            "clubId": 196
+          },
+          {
+            "id": 197,
+            "seasonId": 11,
+            "clubId": 197
+          },
+          {
+            "id": 198,
+            "seasonId": 11,
+            "clubId": 198
+          },
+          {
+            "id": 199,
+            "seasonId": 11,
+            "clubId": 199
+          },
+          {
+            "id": 200,
+            "seasonId": 11,
+            "clubId": 200
+          },
+          {
+            "id": 201,
+            "seasonId": 11,
+            "clubId": 201
+          },
+          {
+            "id": 202,
+            "seasonId": 11,
+            "clubId": 202
+          },
+          {
+            "id": 203,
+            "seasonId": 11,
+            "clubId": 203
+          },
+          {
+            "id": 204,
+            "seasonId": 11,
+            "clubId": 204
+          },
+          {
+            "id": 205,
+            "seasonId": 11,
+            "clubId": 205
+          },
+          {
+            "id": 206,
+            "seasonId": 11,
+            "clubId": 206
+          },
+          {
+            "id": 207,
+            "seasonId": 11,
+            "clubId": 207
+          },
+          {
+            "id": 208,
+            "seasonId": 11,
+            "clubId": 208
+          },
+          {
+            "id": 209,
+            "seasonId": 11,
+            "clubId": 209
+          },
+          {
+            "id": 210,
+            "seasonId": 11,
+            "clubId": 210
+          },
+          {
+            "id": 211,
+            "seasonId": 11,
+            "clubId": 211
+          },
+          {
+            "id": 212,
+            "seasonId": 11,
+            "clubId": 212
+          },
+          {
+            "id": 213,
+            "seasonId": 11,
+            "clubId": 213
+          },
+          {
+            "id": 214,
+            "seasonId": 12,
+            "clubId": 214
+          },
+          {
+            "id": 215,
+            "seasonId": 12,
+            "clubId": 215
+          },
+          {
+            "id": 216,
+            "seasonId": 12,
+            "clubId": 216
+          },
+          {
+            "id": 217,
+            "seasonId": 12,
+            "clubId": 217
+          },
+          {
+            "id": 218,
+            "seasonId": 12,
+            "clubId": 218
+          },
+          {
+            "id": 219,
+            "seasonId": 12,
+            "clubId": 219
+          },
+          {
+            "id": 220,
+            "seasonId": 12,
+            "clubId": 220
+          },
+          {
+            "id": 221,
+            "seasonId": 12,
+            "clubId": 221
+          },
+          {
+            "id": 222,
+            "seasonId": 12,
+            "clubId": 222
+          },
+          {
+            "id": 223,
+            "seasonId": 12,
+            "clubId": 223
+          },
+          {
+            "id": 224,
+            "seasonId": 12,
+            "clubId": 224
+          },
+          {
+            "id": 225,
+            "seasonId": 12,
+            "clubId": 225
+          },
+          {
+            "id": 226,
+            "seasonId": 12,
+            "clubId": 226
+          },
+          {
+            "id": 227,
+            "seasonId": 12,
+            "clubId": 227
+          },
+          {
+            "id": 228,
+            "seasonId": 12,
+            "clubId": 228
+          },
+          {
+            "id": 229,
+            "seasonId": 12,
+            "clubId": 229
+          },
+          {
+            "id": 230,
+            "seasonId": 12,
+            "clubId": 230
+          },
+          {
+            "id": 231,
+            "seasonId": 12,
+            "clubId": 231
+          },
+          {
+            "id": 232,
+            "seasonId": 12,
+            "clubId": 232
+          },
+          {
+            "id": 233,
+            "seasonId": 12,
+            "clubId": 233
+          },
+          {
+            "id": 234,
+            "seasonId": 13,
+            "clubId": 234
+          },
+          {
+            "id": 235,
+            "seasonId": 13,
+            "clubId": 235
+          },
+          {
+            "id": 236,
+            "seasonId": 13,
+            "clubId": 236
+          },
+          {
+            "id": 237,
+            "seasonId": 13,
+            "clubId": 237
+          },
+          {
+            "id": 238,
+            "seasonId": 13,
+            "clubId": 238
+          },
+          {
+            "id": 239,
+            "seasonId": 13,
+            "clubId": 239
+          },
+          {
+            "id": 240,
+            "seasonId": 13,
+            "clubId": 240
+          },
+          {
+            "id": 241,
+            "seasonId": 13,
+            "clubId": 241
+          },
+          {
+            "id": 242,
+            "seasonId": 13,
+            "clubId": 242
+          },
+          {
+            "id": 243,
+            "seasonId": 13,
+            "clubId": 243
+          },
+          {
+            "id": 244,
+            "seasonId": 13,
+            "clubId": 244
+          },
+          {
+            "id": 245,
+            "seasonId": 13,
+            "clubId": 245
+          },
+          {
+            "id": 246,
+            "seasonId": 13,
+            "clubId": 246
+          },
+          {
+            "id": 247,
+            "seasonId": 13,
+            "clubId": 247
+          },
+          {
+            "id": 248,
+            "seasonId": 13,
+            "clubId": 248
+          },
+          {
+            "id": 249,
+            "seasonId": 13,
+            "clubId": 249
+          },
+          {
+            "id": 250,
+            "seasonId": 13,
+            "clubId": 250
+          },
+          {
+            "id": 251,
+            "seasonId": 13,
+            "clubId": 251
+          },
+          {
+            "id": 252,
+            "seasonId": 13,
+            "clubId": 252
+          },
+          {
+            "id": 253,
+            "seasonId": 13,
+            "clubId": 253
+          },
+          {
+            "id": 254,
+            "seasonId": 14,
+            "clubId": 254
+          },
+          {
+            "id": 255,
+            "seasonId": 14,
+            "clubId": 255
+          },
+          {
+            "id": 256,
+            "seasonId": 14,
+            "clubId": 256
+          },
+          {
+            "id": 257,
+            "seasonId": 14,
+            "clubId": 257
+          },
+          {
+            "id": 258,
+            "seasonId": 14,
+            "clubId": 258
+          },
+          {
+            "id": 259,
+            "seasonId": 14,
+            "clubId": 259
+          },
+          {
+            "id": 260,
+            "seasonId": 14,
+            "clubId": 260
+          },
+          {
+            "id": 261,
+            "seasonId": 14,
+            "clubId": 261
+          },
+          {
+            "id": 262,
+            "seasonId": 14,
+            "clubId": 262
+          },
+          {
+            "id": 263,
+            "seasonId": 14,
+            "clubId": 263
+          },
+          {
+            "id": 264,
+            "seasonId": 14,
+            "clubId": 264
+          },
+          {
+            "id": 265,
+            "seasonId": 14,
+            "clubId": 265
+          },
+          {
+            "id": 266,
+            "seasonId": 14,
+            "clubId": 266
+          },
+          {
+            "id": 267,
+            "seasonId": 14,
+            "clubId": 267
+          },
+          {
+            "id": 268,
+            "seasonId": 14,
+            "clubId": 268
+          },
+          {
+            "id": 269,
+            "seasonId": 14,
+            "clubId": 269
+          },
+          {
+            "id": 270,
+            "seasonId": 14,
+            "clubId": 270
+          },
+          {
+            "id": 271,
+            "seasonId": 14,
+            "clubId": 271
+          },
+          {
+            "id": 272,
+            "seasonId": 14,
+            "clubId": 272
+          },
+          {
+            "id": 273,
+            "seasonId": 14,
+            "clubId": 273
+          },
+          {
+            "id": 274,
+            "seasonId": 15,
+            "clubId": 274
+          },
+          {
+            "id": 275,
+            "seasonId": 15,
+            "clubId": 275
+          },
+          {
+            "id": 276,
+            "seasonId": 15,
+            "clubId": 276
+          },
+          {
+            "id": 277,
+            "seasonId": 15,
+            "clubId": 277
+          },
+          {
+            "id": 278,
+            "seasonId": 15,
+            "clubId": 278
+          },
+          {
+            "id": 279,
+            "seasonId": 15,
+            "clubId": 279
+          },
+          {
+            "id": 280,
+            "seasonId": 15,
+            "clubId": 280
+          },
+          {
+            "id": 281,
+            "seasonId": 15,
+            "clubId": 281
+          },
+          {
+            "id": 282,
+            "seasonId": 15,
+            "clubId": 282
+          },
+          {
+            "id": 283,
+            "seasonId": 15,
+            "clubId": 283
+          },
+          {
+            "id": 284,
+            "seasonId": 15,
+            "clubId": 284
+          },
+          {
+            "id": 285,
+            "seasonId": 15,
+            "clubId": 285
+          },
+          {
+            "id": 286,
+            "seasonId": 15,
+            "clubId": 286
+          },
+          {
+            "id": 287,
+            "seasonId": 15,
+            "clubId": 287
+          },
+          {
+            "id": 288,
+            "seasonId": 15,
+            "clubId": 288
+          },
+          {
+            "id": 289,
+            "seasonId": 15,
+            "clubId": 289
+          },
+          {
+            "id": 290,
+            "seasonId": 15,
+            "clubId": 290
+          },
+          {
+            "id": 291,
+            "seasonId": 15,
+            "clubId": 291
+          },
+          {
+            "id": 292,
+            "seasonId": 15,
+            "clubId": 292
+          },
+          {
+            "id": 293,
+            "seasonId": 15,
+            "clubId": 293
+          },
+          {
+            "id": 294,
+            "seasonId": 15,
+            "clubId": 294
+          },
+          {
+            "id": 295,
+            "seasonId": 15,
+            "clubId": 295
+          },
+          {
+            "id": 296,
+            "seasonId": 15,
+            "clubId": 296
+          },
+          {
+            "id": 297,
+            "seasonId": 15,
+            "clubId": 297
+          },
+          {
+            "id": 298,
+            "seasonId": 16,
+            "clubId": 298
+          },
+          {
+            "id": 299,
+            "seasonId": 16,
+            "clubId": 299
+          },
+          {
+            "id": 300,
+            "seasonId": 16,
+            "clubId": 300
+          },
+          {
+            "id": 301,
+            "seasonId": 16,
+            "clubId": 301
+          },
+          {
+            "id": 302,
+            "seasonId": 16,
+            "clubId": 302
+          },
+          {
+            "id": 303,
+            "seasonId": 16,
+            "clubId": 303
+          },
+          {
+            "id": 304,
+            "seasonId": 16,
+            "clubId": 304
+          },
+          {
+            "id": 305,
+            "seasonId": 16,
+            "clubId": 305
+          },
+          {
+            "id": 306,
+            "seasonId": 16,
+            "clubId": 306
+          },
+          {
+            "id": 307,
+            "seasonId": 16,
+            "clubId": 307
+          },
+          {
+            "id": 308,
+            "seasonId": 16,
+            "clubId": 308
+          },
+          {
+            "id": 309,
+            "seasonId": 16,
+            "clubId": 309
+          },
+          {
+            "id": 310,
+            "seasonId": 16,
+            "clubId": 310
+          },
+          {
+            "id": 311,
+            "seasonId": 16,
+            "clubId": 311
+          },
+          {
+            "id": 312,
+            "seasonId": 16,
+            "clubId": 312
+          },
+          {
+            "id": 313,
+            "seasonId": 16,
+            "clubId": 313
+          },
+          {
+            "id": 314,
+            "seasonId": 16,
+            "clubId": 314
+          },
+          {
+            "id": 315,
+            "seasonId": 16,
+            "clubId": 315
+          },
+          {
+            "id": 316,
+            "seasonId": 16,
+            "clubId": 316
+          },
+          {
+            "id": 317,
+            "seasonId": 16,
+            "clubId": 317
+          },
+          {
+            "id": 318,
+            "seasonId": 16,
+            "clubId": 318
+          },
+          {
+            "id": 319,
+            "seasonId": 16,
+            "clubId": 319
+          },
+          {
+            "id": 320,
+            "seasonId": 16,
+            "clubId": 320
+          },
+          {
+            "id": 321,
+            "seasonId": 16,
+            "clubId": 321
+          },
+          {
+            "id": 322,
+            "seasonId": 17,
+            "clubId": 322
+          },
+          {
+            "id": 323,
+            "seasonId": 17,
+            "clubId": 323
+          },
+          {
+            "id": 324,
+            "seasonId": 17,
+            "clubId": 324
+          },
+          {
+            "id": 325,
+            "seasonId": 17,
+            "clubId": 325
+          },
+          {
+            "id": 326,
+            "seasonId": 17,
+            "clubId": 326
+          },
+          {
+            "id": 327,
+            "seasonId": 17,
+            "clubId": 327
+          },
+          {
+            "id": 328,
+            "seasonId": 17,
+            "clubId": 328
+          },
+          {
+            "id": 329,
+            "seasonId": 17,
+            "clubId": 329
+          },
+          {
+            "id": 330,
+            "seasonId": 17,
+            "clubId": 330
+          },
+          {
+            "id": 331,
+            "seasonId": 17,
+            "clubId": 331
+          },
+          {
+            "id": 332,
+            "seasonId": 17,
+            "clubId": 332
+          },
+          {
+            "id": 333,
+            "seasonId": 17,
+            "clubId": 333
+          },
+          {
+            "id": 334,
+            "seasonId": 17,
+            "clubId": 334
+          },
+          {
+            "id": 335,
+            "seasonId": 17,
+            "clubId": 335
+          },
+          {
+            "id": 336,
+            "seasonId": 17,
+            "clubId": 336
+          },
+          {
+            "id": 337,
+            "seasonId": 17,
+            "clubId": 337
+          },
+          {
+            "id": 338,
+            "seasonId": 17,
+            "clubId": 338
+          },
+          {
+            "id": 339,
+            "seasonId": 17,
+            "clubId": 339
+          },
+          {
+            "id": 340,
+            "seasonId": 17,
+            "clubId": 340
+          },
+          {
+            "id": 341,
+            "seasonId": 17,
+            "clubId": 341
+          },
+          {
+            "id": 342,
+            "seasonId": 17,
+            "clubId": 342
+          },
+          {
+            "id": 343,
+            "seasonId": 17,
+            "clubId": 343
+          },
+          {
+            "id": 344,
+            "seasonId": 17,
+            "clubId": 344
+          },
+          {
+            "id": 345,
+            "seasonId": 17,
+            "clubId": 345
+          },
+          {
+            "id": 346,
+            "seasonId": 18,
+            "clubId": 346
+          },
+          {
+            "id": 347,
+            "seasonId": 18,
+            "clubId": 347
+          },
+          {
+            "id": 348,
+            "seasonId": 18,
+            "clubId": 348
+          },
+          {
+            "id": 349,
+            "seasonId": 18,
+            "clubId": 349
+          },
+          {
+            "id": 350,
+            "seasonId": 18,
+            "clubId": 350
+          },
+          {
+            "id": 351,
+            "seasonId": 18,
+            "clubId": 351
+          },
+          {
+            "id": 352,
+            "seasonId": 18,
+            "clubId": 352
+          },
+          {
+            "id": 353,
+            "seasonId": 18,
+            "clubId": 353
+          },
+          {
+            "id": 354,
+            "seasonId": 18,
+            "clubId": 354
+          },
+          {
+            "id": 355,
+            "seasonId": 18,
+            "clubId": 355
+          },
+          {
+            "id": 356,
+            "seasonId": 18,
+            "clubId": 356
+          },
+          {
+            "id": 357,
+            "seasonId": 18,
+            "clubId": 357
+          },
+          {
+            "id": 358,
+            "seasonId": 18,
+            "clubId": 358
+          },
+          {
+            "id": 359,
+            "seasonId": 18,
+            "clubId": 359
+          },
+          {
+            "id": 360,
+            "seasonId": 18,
+            "clubId": 360
+          },
+          {
+            "id": 361,
+            "seasonId": 18,
+            "clubId": 361
+          },
+          {
+            "id": 362,
+            "seasonId": 18,
+            "clubId": 362
+          },
+          {
+            "id": 363,
+            "seasonId": 18,
+            "clubId": 363
+          },
+          {
+            "id": 364,
+            "seasonId": 19,
+            "clubId": 364
+          },
+          {
+            "id": 365,
+            "seasonId": 19,
+            "clubId": 365
+          },
+          {
+            "id": 366,
+            "seasonId": 19,
+            "clubId": 366
+          },
+          {
+            "id": 367,
+            "seasonId": 19,
+            "clubId": 367
+          },
+          {
+            "id": 368,
+            "seasonId": 19,
+            "clubId": 368
+          },
+          {
+            "id": 369,
+            "seasonId": 19,
+            "clubId": 369
+          },
+          {
+            "id": 370,
+            "seasonId": 19,
+            "clubId": 370
+          },
+          {
+            "id": 371,
+            "seasonId": 19,
+            "clubId": 371
+          },
+          {
+            "id": 372,
+            "seasonId": 19,
+            "clubId": 372
+          },
+          {
+            "id": 373,
+            "seasonId": 19,
+            "clubId": 373
+          },
+          {
+            "id": 374,
+            "seasonId": 19,
+            "clubId": 374
+          },
+          {
+            "id": 375,
+            "seasonId": 19,
+            "clubId": 375
+          },
+          {
+            "id": 376,
+            "seasonId": 19,
+            "clubId": 376
+          },
+          {
+            "id": 377,
+            "seasonId": 19,
+            "clubId": 377
+          },
+          {
+            "id": 378,
+            "seasonId": 19,
+            "clubId": 378
+          },
+          {
+            "id": 379,
+            "seasonId": 19,
+            "clubId": 379
+          },
+          {
+            "id": 380,
+            "seasonId": 19,
+            "clubId": 380
+          },
+          {
+            "id": 381,
+            "seasonId": 19,
+            "clubId": 381
+          },
+          {
+            "id": 382,
+            "seasonId": 20,
+            "clubId": 382
+          },
+          {
+            "id": 383,
+            "seasonId": 20,
+            "clubId": 383
+          },
+          {
+            "id": 384,
+            "seasonId": 20,
+            "clubId": 384
+          },
+          {
+            "id": 385,
+            "seasonId": 20,
+            "clubId": 385
+          },
+          {
+            "id": 386,
+            "seasonId": 20,
+            "clubId": 386
+          },
+          {
+            "id": 387,
+            "seasonId": 20,
+            "clubId": 387
+          },
+          {
+            "id": 388,
+            "seasonId": 20,
+            "clubId": 388
+          },
+          {
+            "id": 389,
+            "seasonId": 20,
+            "clubId": 389
+          },
+          {
+            "id": 390,
+            "seasonId": 20,
+            "clubId": 390
+          },
+          {
+            "id": 391,
+            "seasonId": 20,
+            "clubId": 391
+          },
+          {
+            "id": 392,
+            "seasonId": 20,
+            "clubId": 392
+          },
+          {
+            "id": 393,
+            "seasonId": 20,
+            "clubId": 393
+          },
+          {
+            "id": 394,
+            "seasonId": 20,
+            "clubId": 394
+          },
+          {
+            "id": 395,
+            "seasonId": 20,
+            "clubId": 395
+          },
+          {
+            "id": 396,
+            "seasonId": 20,
+            "clubId": 396
+          },
+          {
+            "id": 397,
+            "seasonId": 20,
+            "clubId": 397
+          },
+          {
+            "id": 398,
+            "seasonId": 20,
+            "clubId": 398
+          },
+          {
+            "id": 399,
+            "seasonId": 20,
+            "clubId": 399
+          },
+          {
+            "id": 400,
+            "seasonId": 20,
+            "clubId": 400
+          },
+          {
+            "id": 401,
+            "seasonId": 20,
+            "clubId": 401
+          },
+          {
+            "id": 402,
+            "seasonId": 21,
+            "clubId": 402
+          },
+          {
+            "id": 403,
+            "seasonId": 21,
+            "clubId": 403
+          },
+          {
+            "id": 404,
+            "seasonId": 21,
+            "clubId": 404
+          },
+          {
+            "id": 405,
+            "seasonId": 21,
+            "clubId": 405
+          },
+          {
+            "id": 406,
+            "seasonId": 21,
+            "clubId": 406
+          },
+          {
+            "id": 407,
+            "seasonId": 21,
+            "clubId": 407
+          },
+          {
+            "id": 408,
+            "seasonId": 21,
+            "clubId": 408
+          },
+          {
+            "id": 409,
+            "seasonId": 21,
+            "clubId": 409
+          },
+          {
+            "id": 410,
+            "seasonId": 21,
+            "clubId": 410
+          },
+          {
+            "id": 411,
+            "seasonId": 21,
+            "clubId": 411
+          },
+          {
+            "id": 412,
+            "seasonId": 21,
+            "clubId": 412
+          },
+          {
+            "id": 413,
+            "seasonId": 21,
+            "clubId": 413
+          },
+          {
+            "id": 414,
+            "seasonId": 21,
+            "clubId": 414
+          },
+          {
+            "id": 415,
+            "seasonId": 21,
+            "clubId": 415
+          },
+          {
+            "id": 416,
+            "seasonId": 21,
+            "clubId": 416
+          },
+          {
+            "id": 417,
+            "seasonId": 21,
+            "clubId": 417
+          },
+          {
+            "id": 418,
+            "seasonId": 21,
+            "clubId": 418
+          },
+          {
+            "id": 419,
+            "seasonId": 21,
+            "clubId": 419
+          },
+          {
+            "id": 420,
+            "seasonId": 22,
+            "clubId": 420
+          },
+          {
+            "id": 421,
+            "seasonId": 22,
+            "clubId": 421
+          },
+          {
+            "id": 422,
+            "seasonId": 22,
+            "clubId": 422
+          },
+          {
+            "id": 423,
+            "seasonId": 22,
+            "clubId": 423
+          },
+          {
+            "id": 424,
+            "seasonId": 22,
+            "clubId": 424
+          },
+          {
+            "id": 425,
+            "seasonId": 22,
+            "clubId": 425
+          },
+          {
+            "id": 426,
+            "seasonId": 22,
+            "clubId": 426
+          },
+          {
+            "id": 427,
+            "seasonId": 22,
+            "clubId": 427
+          },
+          {
+            "id": 428,
+            "seasonId": 22,
+            "clubId": 428
+          },
+          {
+            "id": 429,
+            "seasonId": 22,
+            "clubId": 429
+          },
+          {
+            "id": 430,
+            "seasonId": 22,
+            "clubId": 430
+          },
+          {
+            "id": 431,
+            "seasonId": 22,
+            "clubId": 431
+          },
+          {
+            "id": 432,
+            "seasonId": 22,
+            "clubId": 432
+          },
+          {
+            "id": 433,
+            "seasonId": 22,
+            "clubId": 433
+          },
+          {
+            "id": 434,
+            "seasonId": 22,
+            "clubId": 434
+          },
+          {
+            "id": 435,
+            "seasonId": 22,
+            "clubId": 435
+          },
+          {
+            "id": 436,
+            "seasonId": 22,
+            "clubId": 436
+          },
+          {
+            "id": 437,
+            "seasonId": 22,
+            "clubId": 437
+          },
+          {
+            "id": 438,
+            "seasonId": 23,
+            "clubId": 438
+          },
+          {
+            "id": 439,
+            "seasonId": 23,
+            "clubId": 439
+          },
+          {
+            "id": 440,
+            "seasonId": 23,
+            "clubId": 440
+          },
+          {
+            "id": 441,
+            "seasonId": 23,
+            "clubId": 441
+          },
+          {
+            "id": 442,
+            "seasonId": 23,
+            "clubId": 442
+          },
+          {
+            "id": 443,
+            "seasonId": 23,
+            "clubId": 443
+          },
+          {
+            "id": 444,
+            "seasonId": 23,
+            "clubId": 444
+          },
+          {
+            "id": 445,
+            "seasonId": 23,
+            "clubId": 445
+          },
+          {
+            "id": 446,
+            "seasonId": 23,
+            "clubId": 446
+          },
+          {
+            "id": 447,
+            "seasonId": 23,
+            "clubId": 447
+          },
+          {
+            "id": 448,
+            "seasonId": 23,
+            "clubId": 448
+          },
+          {
+            "id": 449,
+            "seasonId": 23,
+            "clubId": 449
+          },
+          {
+            "id": 450,
+            "seasonId": 23,
+            "clubId": 450
+          },
+          {
+            "id": 451,
+            "seasonId": 23,
+            "clubId": 451
+          },
+          {
+            "id": 452,
+            "seasonId": 23,
+            "clubId": 452
+          },
+          {
+            "id": 453,
+            "seasonId": 23,
+            "clubId": 453
+          },
+          {
+            "id": 454,
+            "seasonId": 24,
+            "clubId": 454
+          },
+          {
+            "id": 455,
+            "seasonId": 24,
+            "clubId": 455
+          },
+          {
+            "id": 456,
+            "seasonId": 24,
+            "clubId": 456
+          },
+          {
+            "id": 457,
+            "seasonId": 24,
+            "clubId": 457
+          },
+          {
+            "id": 458,
+            "seasonId": 24,
+            "clubId": 458
+          },
+          {
+            "id": 459,
+            "seasonId": 24,
+            "clubId": 459
+          },
+          {
+            "id": 460,
+            "seasonId": 24,
+            "clubId": 460
+          },
+          {
+            "id": 461,
+            "seasonId": 24,
+            "clubId": 461
+          },
+          {
+            "id": 462,
+            "seasonId": 24,
+            "clubId": 462
+          },
+          {
+            "id": 463,
+            "seasonId": 24,
+            "clubId": 463
+          },
+          {
+            "id": 464,
+            "seasonId": 24,
+            "clubId": 464
+          },
+          {
+            "id": 465,
+            "seasonId": 24,
+            "clubId": 465
+          },
+          {
+            "id": 466,
+            "seasonId": 24,
+            "clubId": 466
+          },
+          {
+            "id": 467,
+            "seasonId": 24,
+            "clubId": 467
+          },
+          {
+            "id": 468,
+            "seasonId": 24,
+            "clubId": 468
+          },
+          {
+            "id": 469,
+            "seasonId": 24,
+            "clubId": 469
+          }
+        ]
+      }
+    ]
+  }
+}
