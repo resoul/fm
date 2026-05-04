@@ -20,12 +20,11 @@ import Settings from "./menu/settings";
 import { useLiveQuery } from "dexie-react-hooks";
 import db from "@/../db/db";
 
-// Mock club data - replace with real data from context/props
-const clubData = {
-    number: 22,
-    name: "YEHOR KLYMENCHUK",
-    subtitle: "Defender (Left) / WB (L), DM - Metalist",
-    logoUrl: undefined as string | undefined, // replace with actual logo URL
+type HeaderEntityData = {
+    number?: number;
+    name: string;
+    subtitle: string;
+    logoUrl?: string | undefined;
 };
 
 export function Header() {
@@ -44,11 +43,21 @@ export function Header() {
 
     const leagueMatch = pathname.match(/^\/league\/(\d+)(?:\/|$)/);
     const leagueTeamMatch = pathname.match(/^\/league\/(\d+)\/team\/(\d+)(?:\/|$)/);
+    const leaguePlayerMatch = pathname.match(/^\/league\/(\d+)\/team\/(\d+)\/player\/(\d+)(?:\/|$)/);
     const currentLeagueId = leagueMatch ? Number(leagueMatch[1]) : null;
-    const currentClubId = leagueTeamMatch ? Number(leagueTeamMatch[2]) : null;
+    const currentClubId = leaguePlayerMatch
+        ? Number(leaguePlayerMatch[2])
+        : leagueTeamMatch
+            ? Number(leagueTeamMatch[2])
+            : null;
+    const currentPlayerId = leaguePlayerMatch ? Number(leaguePlayerMatch[3]) : null;
     const isLeaguePage = currentLeagueId !== null;
     const isLeagueTeamPage = currentLeagueId !== null && currentClubId !== null;
+    const isLeaguePlayerPage = currentLeagueId !== null && currentClubId !== null && currentPlayerId !== null;
     const leagueIdForTeams = leagueTeamMatch ? Number(leagueTeamMatch[1]) : null;
+
+    const teamIdForPlayers = leaguePlayerMatch ? Number(leaguePlayerMatch[2]) : null;
+    const leagueIdForPlayers = leaguePlayerMatch ? Number(leaguePlayerMatch[1]) : null;
 
     const leagueTeams = useLiveQuery(
         async () => {
@@ -71,6 +80,74 @@ export function Header() {
                 .sort((a, b) => a.name.localeCompare(b.name));
         },
         [leagueIdForTeams]
+    );
+
+    const teamPlayers = useLiveQuery(
+        async () => {
+            if (teamIdForPlayers === null) return [];
+            const players = await db
+                .table('person')
+                .where('clubId')
+                .equals(teamIdForPlayers)
+                .and((p) => p.role === 'player')
+                .toArray();
+
+            return players.sort((a, b) => a.name.localeCompare(b.name));
+        },
+        [teamIdForPlayers]
+    );
+
+    const headerEntityData = useLiveQuery<HeaderEntityData>(
+        async () => {
+            if (isLeaguePlayerPage && currentLeagueId !== null && currentClubId !== null && currentPlayerId !== null) {
+                const [player, club] = await Promise.all([
+                    db.table('person').get(currentPlayerId),
+                    db.table('club').get(currentClubId),
+                ]);
+
+                return {
+                    number: player?.number ? Number(player.number) : undefined,
+                    name: player?.name || `Player ${currentPlayerId}`,
+                    subtitle: `${player?.position || '-'} - ${club?.name || '-'}`,
+                    logoUrl: undefined,
+                };
+            }
+
+            if (isLeagueTeamPage && currentLeagueId !== null && currentClubId !== null) {
+                const [competition, club] = await Promise.all([
+                    db.table('competition').get(currentLeagueId),
+                    db.table('club').get(currentClubId),
+                ]);
+
+                return {
+                    name: club?.name || `Club ${currentClubId}`,
+                    subtitle: `League: ${competition?.name || '-'}`,
+                    logoUrl: undefined,
+                };
+            }
+
+            if (isLeaguePage && currentLeagueId !== null) {
+                const competition = await db.table('competition').get(currentLeagueId);
+                const seasons = await db.table('season').where('competitionId').equals(currentLeagueId).toArray();
+                const activeSeason =
+                    seasons.find((s) => s.isActive) ||
+                    [...seasons].sort((a, b) => (b.id || 0) - (a.id || 0))[0];
+
+                return {
+                    name: competition?.name || `League ${currentLeagueId}`,
+                    subtitle: `Season: ${activeSeason?.name || '-'}`,
+                    logoUrl: undefined,
+                };
+            }
+
+            return {
+                number: 22,
+                name: "YEHOR KLYMENCHUK",
+                subtitle: "Defender (Left) / WB (L), DM - Metalist",
+                logoUrl: undefined,
+            };
+        },
+        [pathname, isLeaguePage, isLeagueTeamPage, isLeaguePlayerPage, currentLeagueId, currentClubId, currentPlayerId]
     );
 
     const browseLeague = (direction: 'up' | 'down') => {
@@ -101,7 +178,33 @@ export function Header() {
         navigate(`/league/${currentLeagueId}/team/${leagueTeams[nextIndex].id}`);
     };
 
+    const browseLeaguePlayer = (direction: 'up' | 'down') => {
+        if (
+            !isLeaguePlayerPage ||
+            !teamPlayers ||
+            teamPlayers.length === 0 ||
+            currentPlayerId === null ||
+            currentClubId === null ||
+            leagueIdForPlayers === null
+        ) return;
+
+        const currentIndex = teamPlayers.findIndex((player) => player.id === currentPlayerId);
+        if (currentIndex === -1) return;
+
+        const nextIndex =
+            direction === 'up'
+                ? (currentIndex - 1 + teamPlayers.length) % teamPlayers.length
+                : (currentIndex + 1) % teamPlayers.length;
+
+        navigate(`/league/${leagueIdForPlayers}/team/${currentClubId}/player/${teamPlayers[nextIndex].id}`);
+    };
+
     const browseEntities = (direction: 'up' | 'down') => {
+        if (isLeaguePlayerPage) {
+            browseLeaguePlayer(direction);
+            return;
+        }
+
         if (isLeagueTeamPage) {
             browseLeagueTeam(direction);
             return;
@@ -150,8 +253,8 @@ export function Header() {
                 <div className="flex items-center gap-2 px-3">
                     {/* Club logo */}
                     <div className="relative flex items-center justify-center size-9 rounded-md overflow-hidden bg-muted shrink-0">
-                        {clubData.logoUrl ? (
-                            <img src={clubData.logoUrl} alt="Club logo" className="size-full object-contain" />
+                        {headerEntityData?.logoUrl ? (
+                            <img src={headerEntityData?.logoUrl} alt="Club logo" className="size-full object-contain" />
                         ) : (
                             // Placeholder shield
                             <svg viewBox="0 0 32 36" className="size-7 text-yellow-500" fill="currentColor">
@@ -187,13 +290,13 @@ export function Header() {
                     {/* Name & subtitle */}
                     <div className="flex flex-col justify-center min-w-0">
                         <span className="text-sm font-bold text-foreground leading-tight tracking-wide truncate">
-                            {clubData.number && (
-                                <span className="text-muted-foreground font-normal mr-1">{clubData.number}.</span>
+                            {headerEntityData?.number && (
+                                <span className="text-muted-foreground font-normal mr-1">{headerEntityData?.number}.</span>
                             )}
-                            {clubData.name}
+                            {headerEntityData?.name || 'Football Manager'}
                         </span>
                         <span className="text-xs text-muted-foreground leading-tight truncate">
-                            {clubData.subtitle}
+                            {headerEntityData?.subtitle || '-'}
                         </span>
                     </div>
                 </div>
