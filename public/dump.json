@@ -525,19 +525,19 @@
         "schema": "++id, name, startDate, endDate, isActive",
         "rowCount": 13,
         "rows": [
-          {"id":2,"name":"2025/2026","competitionId":1,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":true},
-          {"id":3,"name":"2025/2026","competitionId":2,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":true},
-          {"id":4,"name":"2025/2026","competitionId":3,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":true},
-          {"id":5,"name":"2025/2026","competitionId":4,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":true},
-          {"id":6,"name":"2025/2026","competitionId":5,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":true},
-          {"id":7,"name":"2025/2026","competitionId":6,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":true},
-          {"id":8,"name":"2025/2026","competitionId":7,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":true},
-          {"id":9,"name":"2025/2026","competitionId":8,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":true},
-          {"id":10,"name":"2025/2026","competitionId":9,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":true},
-          {"id":11,"name":"2025/2026","competitionId":10,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":true},
-          {"id":12,"name":"2025/2026","competitionId":11,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":true},
-          {"id":13,"name":"2025/2026","competitionId":12,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":true},
-          {"id":14,"name":"2025/2026","competitionId":13,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":true}
+          {"id":2,"name":"2025/2026","competitionId":1,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":1},
+          {"id":3,"name":"2025/2026","competitionId":2,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":1},
+          {"id":4,"name":"2025/2026","competitionId":3,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":1},
+          {"id":5,"name":"2025/2026","competitionId":4,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":1},
+          {"id":6,"name":"2025/2026","competitionId":5,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":1},
+          {"id":7,"name":"2025/2026","competitionId":6,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":1},
+          {"id":8,"name":"2025/2026","competitionId":7,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":1},
+          {"id":9,"name":"2025/2026","competitionId":8,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":1},
+          {"id":10,"name":"2025/2026","competitionId":9,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":1},
+          {"id":11,"name":"2025/2026","competitionId":10,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":1},
+          {"id":12,"name":"2025/2026","competitionId":11,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":1},
+          {"id":13,"name":"2025/2026","competitionId":12,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":1},
+          {"id":14,"name":"2025/2026","competitionId":13,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":1}
         ]
       },
       {

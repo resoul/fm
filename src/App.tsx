@@ -10,13 +10,24 @@ import DayTransitionModule from './modules/day-transition/index';
 import useDatabaseSync from '../db/useDatabaseSync';
 import { ScreenLoader } from '@/components/screen-loader';
 import RouterProvider from './providers/RouterProvider';
+import { useManager } from './state/useManager';
+import { useLiveQuery } from 'dexie-react-hooks';
+import db from '@/../db/db';
 
 const { BASE_URL } = import.meta.env;
 
 export default function App() {
     const isDatabaseReady = useDatabaseSync();
+    const changeManager = useManager(state => state.changeManager);
+    const manager = useLiveQuery(
+        async () => {
+            const manager = await db.table('manager').get(1);
+            changeManager(manager);
+            return manager;
+        }
+    );
 
-    if (!isDatabaseReady) {
+    if (!isDatabaseReady || manager.id == 0) {
         return <ScreenLoader />;
     }
 

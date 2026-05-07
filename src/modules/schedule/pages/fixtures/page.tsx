@@ -1,6 +1,6 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import db from "@/../db/db";
-import { useManager } from "@/hooks/useManager";
+import { useManager } from "@/state/useManager";
 import { ScrollArea } from "@/components/scroll-area";
 
 type FixtureRow = {
@@ -12,7 +12,7 @@ type FixtureRow = {
 };
 
 export function Page() {
-    const manager = useManager() as { clubId: number } | undefined;
+    const manager = useManager(state => state.manager);
 
     const fixtures = useLiveQuery<FixtureRow[]>(
         async () => {

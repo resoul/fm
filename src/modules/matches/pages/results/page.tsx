@@ -1,7 +1,7 @@
 import db from '@/../db/db';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useDateTime } from '@/state/useDateTime';
-import { useManager } from '@/hooks/useManager';
+import { useManager } from '@/state/useManager';
 import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -19,7 +19,7 @@ export function Page() {
 
     const dateTime = useDateTime(state => state.dateTime);
 
-    const manager = useManager();
+    const manager = useManager(state => state.manager);
 
     const games = useLiveQuery<GameType[]>(
         async () => {

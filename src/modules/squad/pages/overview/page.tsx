@@ -1,6 +1,6 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import db from "@/../db/db";
-import { useManager } from "@/hooks/useManager";
+import { useManager } from "@/state/useManager";
 import { ScrollArea } from "@/components/scroll-area";
 
 type PersonRow = {
@@ -12,7 +12,7 @@ type PersonRow = {
 };
 
 export function Page() {
-    const manager = useManager() as { id: number; name: string; clubId: number } | undefined;
+    const manager = useManager(state => state.manager);
 
     const squad = useLiveQuery<PersonRow[]>(
         async () => {

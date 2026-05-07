@@ -11,6 +11,7 @@ import Fixtures from "../windows/Fixtures";
 // ─── HOME PAGE ────────────────────────────────────────────────────────────────
 
 function HomePageContent() {
+     
     return (
         <div className="h-[calc(100vh-120px)] px-2.5 pb-2.5">
             <ScrollArea className="h-full">

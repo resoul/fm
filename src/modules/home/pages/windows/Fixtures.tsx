@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
 import { SectionHeader } from '../../componets/SectionHeader';
 import { JuveBadge } from "@/modules/home/layout/juve-badge";
-import { useManager } from '@/hooks/useManager';
+import { useManager } from '@/state/useManager';
 import { useLiveQuery } from 'dexie-react-hooks';
 import db from '@/../db/db';
 import { useDateTime } from '@/state/useDateTime';
@@ -17,14 +17,11 @@ type FixtureType = {
 
 export default function Fixtures() {
 
-    const manager = useManager();
+    const manager = useManager(state => state.manager);
     const dateTime = useDateTime(state => state.dateTime);
 
     const schedule = useLiveQuery<FixtureType[]>(
         async () => {
-            if (!manager?.clubId) {
-                return [];
-            }
             const matches = await db.table('match').where('homeClubId').equals(manager.clubId).and(
                 match => new Date(match.date) >= dateTime
             ).toArray();

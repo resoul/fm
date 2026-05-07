@@ -1,11 +1,9 @@
-import { useManager } from "@/hooks/useManager";
+import { useManager } from "@/state/useManager";
 import { JuveBadge } from "@/modules/home/layout/juve-badge";
 
 export default function NextMatch() {
 
-    const manager = useManager();
-
-    if (!manager) return <>Loadding...</>;
+    const manager = useManager(state => state.manager);
 
     return (
         <div className="border border-zinc-700/60 rounded-lg bg-zinc-900/80 p-4">
