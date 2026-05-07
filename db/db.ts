@@ -8,9 +8,9 @@ db.version(2).stores({
     person: '++id, name, role, clubId, position',
     continent: '++id, name',
     country: '++id, name, continentId',
-    competition: '++id, name, countryId, season',
+    competition: '++id, name, countryId', //type
     draw: '++id, name, seasonId, date',
-    season: '++id, name, competitionId', //startDate, endDate',
+    season: '++id, name, competitionId, isActive, [competitionId+isActive]', //startDate, endDate',
     club: '++id, name, countryId',
     seasonClub: '++id, seasonId, clubId, [seasonId+clubId]',
     round: '++id, name, seasonId',

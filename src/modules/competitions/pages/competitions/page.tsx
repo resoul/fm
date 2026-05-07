@@ -3,7 +3,7 @@ import { ScrollArea } from '@/components/scroll-area';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import db from '@/../db/db';
-import { useManager } from '@/hooks/useManager';
+import { useManager } from '@/state/useManager';
 import { useDateTime } from '@/state/useDateTime';
 import { Link } from 'react-router-dom';
 
@@ -104,7 +104,7 @@ const YELLOW_CARDS: PlayerStat[] = [
 // ─── COMPONENTS ───────────────────────────────────────────────────────────────
 
 function StandingsTable() {
-    const manager = useManager() as { clubId: number } | undefined;
+    const manager = useManager(state => state.manager);
     const seasonId = 1;
 
     const table = useLiveQuery(
