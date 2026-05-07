@@ -18,7 +18,6 @@ const routes: ModuleRoute[] = [
     { path: 'scouting', module: lazy(() => import('@/modules/scouting')) },
     { path: 'transfers', module: lazy(() => import('@/modules/transfers')) },
     { path: 'schedule', module: lazy(() => import('@/modules/schedule')) },
-    { path: 'team', module: lazy(() => import('@/modules/team')) },
     { path: 'matches', module: lazy(() => import('@/modules/matches')) },
     { path: 'league/:competitionId', module: lazy(() => import('@/modules/league')) },
 ];

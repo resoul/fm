@@ -2,7 +2,8 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { Layout } from "@/layout";
 import { SectionLayout } from "@/layout/components/section-layout";
 import { getMenuItems } from "./layout/menus";
-import { Page } from "./pages/overview/page";
+import { OverviewPage } from "./pages/overview/page";
+import { Page } from "./pages/player/page";
 
 export default function TacticsModule() {
     return (
@@ -11,7 +12,7 @@ export default function TacticsModule() {
                 <Route element={<SectionLayout menu={getMenuItems()}/>}>
                     <Route index element={<Navigate to="overview" replace />} />
 
-                    <Route path="overview" element={<Page />} />
+                    <Route path="overview" element={<OverviewPage />} />
                     <Route path="player" element={<Page />} />
                     <Route path="captains" element={<Page />} />
                     <Route path="set-piece-takers" element={<Page />} />
