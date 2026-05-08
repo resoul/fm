@@ -22,27 +22,7 @@ export default function Fixtures() {
 
     const schedule = useLiveQuery<FixtureType[]>(
         async () => {
-            const matches = await db.table('match').where('homeClubId').equals(manager.clubId).and(
-                match => new Date(match.date) >= dateTime
-            ).toArray();
-            const awayMatches = await db.table('match').where('awayClubId').equals(manager.clubId).and(
-                match => new Date(match.date) >= dateTime
-            ).toArray();
-            const allMatches = [...matches, ...awayMatches];
-            allMatches.sort((a, b) => a.date.localeCompare(b.date));
-            const fixtures = await Promise.all(allMatches.map(async (match) => {
-                const [homeClub, awayClub] = await Promise.all([
-                    db.table('club').get(match.homeClubId),
-                    db.table('club').get(match.awayClubId)
-                ]);
-                return {
-                    date: new Date(match.date).toLocaleDateString(),
-                    venue: match.venue,
-                    homeClub: homeClub,
-                    awayClub: awayClub,
-                };
-            }));
-            return fixtures;
+            return await manager.schedule(dateTime);
         }, [manager?.clubId, dateTime]
     );
 

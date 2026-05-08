@@ -1,56 +1,37 @@
 import { ScrollArea } from '@/components/scroll-area';
 import db from '@/../db/db';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import type { LeagueTableType } from '@/db_queries/leaguaTable';
-import { leguaTableByCompetionId } from '@/db_queries/leaguaTable';
-
+import { Competion } from '@/../db/models/Competition';
+import type Table from 'db/projections/Table';
+import type { TableClub } from '@/../db/projections/Table';
 
 export function Page() {
     const { competitionId } = useParams();
-    const parsedCompetitionId = useMemo(() => Number(competitionId), [competitionId]);
-    const [sort, setSort] = useState<Exclude<keyof LeagueTableType, "club">>('points');
+    const [sort, setSort] = useState<Exclude<keyof TableClub, "club">>('points');
 
-    const data = useLiveQuery<{competitionName?: string, seasonName?: string, table: LeagueTableType[], error?: string}>(async () => {
-        if (!Number.isFinite(parsedCompetitionId) || parsedCompetitionId <= 0) {
-            return { error: 'Invalid competition id', table: [] } as const;
+    const data = useLiveQuery<{competitionName?: string, seasonName?: string, table: Table|null, error?: string}>(async () => {
+
+        try {
+            const competition = await db.oneOrError<Competion>('competition', competitionId);
+            const season = await competition.getActiveSeason();
+            const table = await competition.getTable();
+            await table.initTable();
+
+            return {
+                competitionName: competition.name,
+                seasonName: season.name,
+                table,
+            };
+        } catch (e: any){
+            console.log(e);
+            return {competitionName: '', seasonName: '', table: null, error: e.messge}
         }
-
-        const competition = await db.table('competition').get(parsedCompetitionId);
-        if (!competition) {
-            return { error: `Competition ${parsedCompetitionId} not found`, table: [] } as const;
-        }
-
-        const season = await db.table('season').where({ competitionId: parsedCompetitionId, isActive: 1 }).toArray();
-        if (!season) {
-            return { competitionName: competition.name, table: [] } as const;
-        }
-
-        let table: LeagueTableType[] = await leguaTableByCompetionId(parsedCompetitionId);
-
-        return {
-            competitionName: competition.name,
-            seasonName: 'test',
-            table,
-        };
-    }, [parsedCompetitionId]);
+    }, [competitionId]);
 
     if (!data) {
         return <>Loading...</>
-    }
-
-    if (sort == 'points'){
-        data.table.sort((a, b) => {
-            if (b.points !== a.points) {
-                return b.points - a.points;
-            }
-            return b.goalDifference - a.goalDifference;
-        });
-    } else {
-        data.table.sort((a, b) => {
-            return b[sort] - a[sort];
-        });
     }
 
     return (
@@ -82,15 +63,15 @@ export function Page() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {data?.table?.map((row, idx) => (
+                                    {data.table?.getTable(sort).map((row, idx) => (
                                         <tr key={row.club.id} className="border-t border-zinc-800/70 text-zinc-200 hover:bg-zinc-800/30 transition-colors">
                                             <td className="py-2">{idx + 1}</td>
                                             <td className="py-2">
-                                                <Link to={`/league/${parsedCompetitionId}/team/${row.club.id}`} className="hover:text-teal-300 transition-colors">
+                                                <Link to={`/league/${competitionId}/team/${row.club.id}`} className="hover:text-teal-300 transition-colors">
                                                     {row.club.name}
                                                 </Link>
                                             </td>
-                                            <td className="py-2 text-right">{row.points}</td>
+                                            <td className="py-2 text-right">{row.played}</td>
                                             <td className="py-2 text-right">{row.wins}</td>
                                             <td className="py-2 text-right">{row.draws}</td>
                                             <td className="py-2 text-right">{row.losses}</td>
