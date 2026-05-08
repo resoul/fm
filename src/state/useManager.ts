@@ -1,17 +1,18 @@
 import { create } from 'zustand';
-
-type ManagerType = {
-    id: number,
-    clubId: number,
-    name: string
-}
+import { Manager } from '@/../db/models';
 
 type ManagerState = {
-    manager: ManagerType,
-    changeManager: (manager: ManagerType) => void
+    manager: Manager,
+    changeManager: (manager: Manager) => void
 }
 
+const defaultManager = new Manager();
+defaultManager.id = 0;
+defaultManager.name = 'preload manager';
+defaultManager.clubId = 0;
+
+
 export const useManager = create<ManagerState>((set) => ({
-    manager: {id: 0, clubId: 0, name: 'preload manager'},
+    manager: defaultManager,
     changeManager: (manager) => set({manager: manager})
 }));

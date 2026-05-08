@@ -2,41 +2,27 @@ import { cn } from "@/lib/utils";
 import { SectionHeader } from "../../componets/SectionHeader";
 import { useManager } from "@/state/useManager";
 import { useLiveQuery } from "dexie-react-hooks";
-import { competionByClubId } from "@/db_queries/competion";
-import type { LeagueTableType } from "@/db_queries/leaguaTable";
-import { leaguaTableBySeasonId } from "@/db_queries/leaguaTable";
 import { useState } from "react";
-
+import type Table from "@/../db/projections/Table";
+import type { TableClub } from "@/../db/projections/Table";
 
 export default function LeagueTable() {
 
     const manager = useManager(state => state.manager);
-    const [sort, setSort] = useState<Exclude<keyof LeagueTableType, "club">>('points');
+    const [sort, setSort] = useState<Exclude<keyof TableClub, "club">>('points');
 
-    const table = useLiveQuery<LeagueTableType[]>(
+    const table = useLiveQuery<Table>(
         async () => {
-            const competition = await competionByClubId(manager.clubId);
-            const seasonId = competition?.season?.id;
-            const table = await leaguaTableBySeasonId(seasonId);
+            const competition = await manager.getCompetion('league');
+            const table = await competition.getTable();
+            await table.initTable();
+
             return table;
         }, [manager.id]
     );
 
-    if (table == undefined || manager == undefined) {
+    if (table == undefined) {
         return <>Loading...</>;
-    }
-
-    if (sort == 'points'){
-        table.sort((a, b) => {
-            if (b.points !== a.points) {
-                return b.points - a.points;
-            }
-            return b.goalDifference - a.goalDifference;
-        });
-    } else {
-        table.sort((a, b) => {
-            return b[sort] - a[sort];
-        });
     }
 
     return (
@@ -54,9 +40,9 @@ export default function LeagueTable() {
                 </tr>
                 </thead>
                 <tbody>
-                {table.map((table: LeagueTableType) => (
+                {table.getTable(sort).map((table: TableClub, idx: number) => (
                     <tr key={table.club.id} className={cn('cursor-pointer hover:bg-zinc-800/30 transition-colors', table.club.id == manager.clubId && 'bg-zinc-800/50')}>
-                        <td className="py-px text-zinc-600 text-[10px]">{table.club.pos}</td>
+                        <td className="py-px text-zinc-600 text-[10px]">{idx + 1}</td>
                         <td className="py-px">
                             <div className="flex items-center gap-1">
                                 <div className={cn('size-2.5 rounded-full shrink-0', table.club.color ?? 'bg-zinc-600')} />
