@@ -1,14 +1,31 @@
+import { SpaceAwareness } from "../ai/SpaceAwareness";
+import { ChainTracker } from "../ai/PossessionChain";
+import { TeamShape } from "../ai/TeamShape";
 import type { SimulationContext } from "../context";
 import type { SimulationSystem } from "../pipeline";
 import { distVec } from "../physics";
 import type { Command } from "../core/Command";
-import type { Player, Vec2 } from "../types";
+import type { Player, TeamSide, TeamTacticalPhase, TeamTacticalState, Vec2 } from "../types";
+
+// How many ticks counts as "immediate transition" (≈1 second at 60fps)
+const TRANSITION_WINDOW = 60;
 
 export class TacticalSystem implements SimulationSystem {
     name = "TacticalSystem";
 
     private readonly GRID_COLS = 10;
     private readonly GRID_ROWS = 7;
+
+    // Track possession changes across ticks
+    private _lastPossessionTeam: TeamSide | null = null;
+    private _ticksSinceChange = 0;
+
+    // 4.1 Possession chain trackers
+    private _homeChain = new ChainTracker();
+    private _awayChain = new ChainTracker();
+
+    // Last owner id to detect pass completion
+    private _lastBallOwner: string | null = null;
 
     update(ctx: SimulationContext): Command[] {
         if (!ctx.tactical || !ctx.tactical.influenceMap) {
@@ -19,22 +36,137 @@ export class TacticalSystem implements SimulationSystem {
                 awayCompactness: 0,
                 influenceMap: Array(this.GRID_COLS).fill(0).map(() => Array(this.GRID_ROWS).fill(0)),
                 pressureMap: Array(this.GRID_COLS).fill(0).map(() => Array(this.GRID_ROWS).fill(0)),
-                passingLanes: []
+                passingLanes: [],
+                homeState: makeDefaultTacticalState(ctx, "home"),
+                awayState: makeDefaultTacticalState(ctx, "away"),
             };
         }
 
         this.calculateCentroids(ctx);
         this.calculateInfluenceAndPressure(ctx);
         this.calculatePassingLanes(ctx);
-        
+        this.updateTacticalStates(ctx);
+        // 2.2 Space Awareness
+        ctx.tactical.spaceAwareness = SpaceAwareness.compute(ctx);
+        // 4.1 Possession chains + 2.3 Team shape
+        this.updateChainsAndShape(ctx);
+
         return [];
     }
 
+    // ── Tactical State ────────────────────────────────────
+
+    private updateTacticalStates(ctx: SimulationContext): void {
+        const possessingTeam = ctx.ball.ownerPlayerId
+            ? ([...ctx.homeTeam.players, ...ctx.awayTeam.players]
+                .find(p => p.id === ctx.ball.ownerPlayerId)?.team ?? null)
+            : null;
+
+        // Detect possession change this tick
+        const changed = possessingTeam !== null && possessingTeam !== this._lastPossessionTeam;
+        if (changed) {
+            this._ticksSinceChange = 0;
+            this._lastPossessionTeam = possessingTeam;
+        } else {
+            this._ticksSinceChange = Math.min(this._ticksSinceChange + 1, 9999);
+        }
+
+        const isSetPiece = ctx.state.phase !== "playing" && ctx.state.phase !== "kickoff";
+
+        ctx.tactical.homeState = this.buildState(ctx, "home", possessingTeam, isSetPiece);
+        ctx.tactical.awayState = this.buildState(ctx, "away", possessingTeam, isSetPiece);
+    }
+
+    private buildState(
+        ctx: SimulationContext,
+        side: TeamSide,
+        possessingTeam: TeamSide | null,
+        isSetPiece: boolean,
+    ): TeamTacticalState {
+        const { width, height } = ctx.config.fieldDimensions;
+        const isHome = side === "home";
+        const team = isHome ? ctx.homeTeam : ctx.awayTeam;
+        const outfield = team.players.filter(p => p.position !== "GK");
+
+        const centroid = isHome ? ctx.tactical.homeCentroid : ctx.tactical.awayCentroid;
+
+        // Defensive line: home attacks right → low X = own half; away attacks left → high X = own half
+        const defensiveLineX = isHome
+            ? centroid.x / width           // 0 = deepest own half, 1 = opponent half
+            : 1 - centroid.x / width;
+
+        // Team width: spread of outfield players on Y axis
+        const ys = outfield.map(p => p.pos.y);
+        const teamWidth = ys.length > 1
+            ? (Math.max(...ys) - Math.min(...ys)) / height
+            : 0;
+
+        // Pressure the team is under: nearby opponents near ball owner
+        let pressureIntensity = 0;
+        if (ctx.ball.ownerPlayerId) {
+            const owner = team.players.find(p => p.id === ctx.ball.ownerPlayerId);
+            if (owner) {
+                const nearbyOpps = ctx.spatialHash
+                    .queryRadius(owner.pos, 50)
+                    .filter(p => p.team !== side);
+                pressureIntensity = Math.min(1, nearbyOpps.length / 3);
+            }
+        } else {
+            // If no one has the ball — use compactness of opponents near ball
+            const ballPos = ctx.ball.pos;
+            const nearbyOpps = ctx.spatialHash
+                .queryRadius(ballPos, 60)
+                .filter(p => p.team !== side);
+            pressureIntensity = Math.min(1, nearbyOpps.length / 4);
+        }
+
+        // Determine phase
+        let phase: TeamTacticalPhase;
+
+        if (isSetPiece) {
+            phase = "set_piece";
+        } else if (possessingTeam === null) {
+            // Ball is loose — keep previous phase or default
+            const prev = isHome ? ctx.tactical.homeState : ctx.tactical.awayState;
+            phase = prev?.phase ?? "out_of_possession";
+        } else if (possessingTeam === side) {
+            // This team has the ball
+            if (this._ticksSinceChange <= TRANSITION_WINDOW && this._lastPossessionTeam === side) {
+                // Just won it — transition attack
+                phase = "transition_attack";
+            } else {
+                phase = "in_possession";
+            }
+        } else {
+            // Opponent has the ball
+            if (this._ticksSinceChange <= TRANSITION_WINDOW && this._lastPossessionTeam !== side) {
+                // Just lost it — sprint back
+                phase = "transition_defend";
+            } else {
+                phase = "out_of_possession";
+            }
+        }
+
+        return {
+            phase,
+            ticksSincePossessionChange: this._ticksSinceChange,
+            defensiveLineX,
+            teamWidth,
+            pressureIntensity,
+        };
+    }
+
+    // ── Existing calculations ─────────────────────────────
+
     private calculateCentroids(ctx: SimulationContext): void {
         const calculate = (players: Player[]) => {
-            const sum = players.reduce((acc, p) => ({ x: acc.x + p.pos.x, y: acc.y + p.pos.y }), { x: 0, y: 0 });
+            const sum = players.reduce(
+                (acc, p) => ({ x: acc.x + p.pos.x, y: acc.y + p.pos.y }),
+                { x: 0, y: 0 },
+            );
             const centroid = { x: sum.x / players.length, y: sum.y / players.length };
-            const avgDist = players.reduce((acc, p) => acc + distVec(p.pos, centroid), 0) / players.length;
+            const avgDist =
+                players.reduce((acc, p) => acc + distVec(p.pos, centroid), 0) / players.length;
             return { centroid, compactness: avgDist };
         };
 
@@ -58,14 +190,12 @@ export class TacticalSystem implements SimulationSystem {
                 let influence = 0;
                 let pressure = 0;
 
-                // Home team
                 for (const p of ctx.homeTeam.players) {
                     const d = distVec(p.pos, cellCenter);
                     const infl = 1000 / (d * d + 400);
                     influence += infl;
                     pressure += infl;
                 }
-                // Away team
                 for (const p of ctx.awayTeam.players) {
                     const d = distVec(p.pos, cellCenter);
                     const infl = 1000 / (d * d + 400);
@@ -86,26 +216,29 @@ export class TacticalSystem implements SimulationSystem {
             return;
         }
 
-        const owner = [...ctx.homeTeam.players, ...ctx.awayTeam.players].find(p => p.id === ownerId);
+        const owner = [...ctx.homeTeam.players, ...ctx.awayTeam.players].find(
+            p => p.id === ownerId,
+        );
         if (!owner) return;
 
-        const teammates = owner.team === "home" ? ctx.homeTeam.players : ctx.awayTeam.players;
-        const opponents = owner.team === "home" ? ctx.awayTeam.players : ctx.homeTeam.players;
-        
-        const lanes: { from: string, to: string, open: boolean }[] = [];
+        const teammates =
+            owner.team === "home" ? ctx.homeTeam.players : ctx.awayTeam.players;
+        const opponents =
+            owner.team === "home" ? ctx.awayTeam.players : ctx.homeTeam.players;
+
+        const lanes: { from: string; to: string; open: boolean }[] = [];
 
         for (const tm of teammates) {
             if (tm.id === owner.id) continue;
-            
+
             let open = true;
             for (const opp of opponents) {
                 const d = this.distToSegment(opp.pos, owner.pos, tm.pos);
-                if (d < 15) { 
+                if (d < 15) {
                     open = false;
                     break;
                 }
             }
-            
             lanes.push({ from: owner.id, to: tm.id, open });
         }
 
@@ -117,9 +250,80 @@ export class TacticalSystem implements SimulationSystem {
         if (l2 === 0) return distVec(p, v);
         let t = ((p.x - v.x) * (w.x - v.x) + (p.y - v.y) * (w.y - v.y)) / l2;
         t = Math.max(0, Math.min(1, t));
-        return distVec(p, { 
-            x: v.x + t * (w.x - v.x), 
-            y: v.y + t * (w.y - v.y) 
+        return distVec(p, {
+            x: v.x + t * (w.x - v.x),
+            y: v.y + t * (w.y - v.y),
         });
     }
+
+    // ── 4.1 Chains + 2.3 Shape ────────────────────────────
+
+    private updateChainsAndShape(ctx: SimulationContext): void {
+        const { width, height } = ctx.config.fieldDimensions;
+        const allPlayers = [...ctx.homeTeam.players, ...ctx.awayTeam.players];
+
+        const ballOwner = ctx.ball.ownerPlayerId
+            ? allPlayers.find(p => p.id === ctx.ball.ownerPlayerId) ?? null
+            : null;
+
+        // Detect pass completion: owner changed to a teammate this tick
+        const passCompleted = (
+            ballOwner !== null &&
+            this._lastBallOwner !== null &&
+            ballOwner.id !== this._lastBallOwner &&
+            ballOwner.team === (allPlayers.find(p => p.id === this._lastBallOwner)?.team ?? null)
+        );
+
+        const possessionLost = (
+            this._lastBallOwner !== null &&
+            ballOwner !== null &&
+            ballOwner.team !== (allPlayers.find(p => p.id === this._lastBallOwner)?.team ?? ballOwner.team)
+        );
+
+        // Update chain trackers
+        ctx.tactical.homeChain = this._homeChain.update(
+            "home", ctx.ball.pos, ballOwner,
+            passCompleted && ballOwner?.team === "home",
+            possessionLost && (allPlayers.find(p => p.id === this._lastBallOwner)?.team === "home"),
+            width,
+        );
+        ctx.tactical.awayChain = this._awayChain.update(
+            "away", ctx.ball.pos, ballOwner,
+            passCompleted && ballOwner?.team === "away",
+            possessionLost && (allPlayers.find(p => p.id === this._lastBallOwner)?.team === "away"),
+            width,
+        );
+
+        this._lastBallOwner = ballOwner?.id ?? this._lastBallOwner;
+
+        // Compute dynamic shape targets (2.3)
+        ctx.tactical.homeShapeTargets = TeamShape.computeTargets(
+            ctx.homeTeam,
+            ctx.ball.pos,
+            ctx.tactical.homeState,
+            ctx.tactical.homeChain ?? null,
+            width, height,
+        );
+        ctx.tactical.awayShapeTargets = TeamShape.computeTargets(
+            ctx.awayTeam,
+            ctx.ball.pos,
+            ctx.tactical.awayState,
+            ctx.tactical.awayChain ?? null,
+            width, height,
+        );
+    }
+}
+
+// ── Helpers ───────────────────────────────────────────────
+
+function makeDefaultTacticalState(ctx: SimulationContext, side: TeamSide): TeamTacticalState {
+    return {
+        phase: "out_of_possession",
+        ticksSincePossessionChange: 9999,
+        defensiveLineX: side === "home"
+            ? (ctx.tactical?.homeCentroid?.x ?? 0) / ctx.config.fieldDimensions.width
+            : 1 - ((ctx.tactical?.awayCentroid?.x ?? 0) / ctx.config.fieldDimensions.width),
+        teamWidth: 0.6,
+        pressureIntensity: 0,
+    };
 }

@@ -15,6 +15,10 @@ export class PassingSystem implements SimulationSystem {
         const allPlayers = [...homeTeam.players, ...awayTeam.players];
         const commands: Command[] = [];
 
+        // During dead-ball, don't auto-execute passes — wait for DecisionSystem to give taker a fresh decision
+        const DEAD_PHASES = new Set(["throwin", "goalkick", "corner", "freekick", "goal", "halftime", "fulltime"]);
+        if (DEAD_PHASES.has(ctx.state.phase)) return commands;
+
         for (const player of allPlayers) {
             if (player.nextDecision?.type === "pass") {
                 commands.push(...this.executePass(player, ctx));
@@ -22,14 +26,14 @@ export class PassingSystem implements SimulationSystem {
                 commands.push(...this.executeDribble(player, ctx));
             }
         }
-        
+
         return commands;
     }
 
     private executePass(player: Player, ctx: SimulationContext): Command[] {
         const { homeTeam, awayTeam, state } = ctx;
         const decision = player.nextDecision!;
-        
+
         if (!player.hasBall) return [];
 
         const targetPlayer = decision.targetPlayerId

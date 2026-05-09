@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import type { MatchState, Team, MatchEvent } from "../engine/types";
+import HighlightsPanel from "./HighlightsPanel";
 
 interface MatchHUDProps {
     homeTeam: Team;
@@ -13,8 +14,8 @@ interface MatchHUDProps {
 
 // ── Possession Bar ─────────────────────────────────────────
 const PossessionBar: React.FC<{ home: number; away: number; homeColor: string; awayColor: string }> = ({
-                                                                                                           home, away, homeColor, awayColor,
-                                                                                                       }) => (
+    home, away, homeColor, awayColor,
+}) => (
     <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11 }}>
         <span style={{ color: homeColor, fontWeight: 600, minWidth: 28 }}>{home}%</span>
         <div style={{ flex: 1, height: 6, background: awayColor, borderRadius: 3, overflow: "hidden" }}>
@@ -26,8 +27,8 @@ const PossessionBar: React.FC<{ home: number; away: number; homeColor: string; a
 
 // ── Stat Row ───────────────────────────────────────────────
 const StatRow: React.FC<{ label: string; home: number | string; away: number | string; homeColor: string; awayColor: string }> = ({
-                                                                                                                                      label, home, away, homeColor, awayColor,
-                                                                                                                                  }) => (
+    label, home, away, homeColor, awayColor,
+}) => (
     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "3px 0", borderBottom: "1px solid rgba(255,255,255,0.06)", fontSize: 11 }}>
         <span style={{ color: homeColor, fontWeight: 600, minWidth: 30 }}>{home}</span>
         <span style={{ color: "rgba(255,255,255,0.55)", fontSize: 10, flex: 1, textAlign: "center" }}>{label}</span>
@@ -37,8 +38,8 @@ const StatRow: React.FC<{ label: string; home: number | string; away: number | s
 
 // ── Event Item ─────────────────────────────────────────────
 const EventItem: React.FC<{ event: MatchEvent; homeColor: string; awayColor: string }> = ({
-                                                                                              event, homeColor, awayColor,
-                                                                                          }) => {
+    event, homeColor, awayColor,
+}) => {
     const color = event.teamId === "home" ? homeColor : event.teamId === "away" ? awayColor : "rgba(255,255,255,0.5)";
     const isGoal = event.type === "goal";
     return (
@@ -51,21 +52,24 @@ const EventItem: React.FC<{ event: MatchEvent; homeColor: string; awayColor: str
             fontSize: 11,
             lineHeight: 1.4,
         }}>
-      <span style={{ color: "rgba(255,255,255,0.45)", marginRight: 6, fontSize: 10 }}>
-        {event.minute}'{event.second.toString().padStart(2, "0")}
-      </span>
+            <span style={{ color: "rgba(255,255,255,0.45)", marginRight: 6, fontSize: 10 }}>
+                {event.minute}'{event.second.toString().padStart(2, "0")}
+            </span>
             <span style={{ color: isGoal ? "#ffdd44" : "rgba(255,255,255,0.8)", fontWeight: isGoal ? 700 : 400 }}>
-        {event.description}
-      </span>
+                {event.description}
+            </span>
         </div>
     );
 };
 
+type FeedTab = "all" | "highlights";
+
 // ── Main HUD ───────────────────────────────────────────────
 const MatchHUD: React.FC<MatchHUDProps> = ({
-                                               homeTeam, awayTeam, state, events, onStart, onPause, onReset,
-                                           }) => {
+    homeTeam, awayTeam, state, events, onStart, onPause, onReset,
+}) => {
     const eventsRef = useRef<HTMLDivElement>(null);
+    const [activeTab, setActiveTab] = useState<FeedTab>("all");
 
     // Auto-scroll event feed
     useEffect(() => {
@@ -83,6 +87,7 @@ const MatchHUD: React.FC<MatchHUDProps> = ({
         freekick: "FREE KICK",
         goalkick: "GOAL KICK",
         throwin:  "THROW IN",
+        corner:   "CORNER",
     };
 
     const minStr = String(state.minute).padStart(2, "0");
@@ -93,7 +98,11 @@ const MatchHUD: React.FC<MatchHUDProps> = ({
     const hColor    = homeTeam.color;
     const aColor    = awayTeam.color;
 
-    const recentEvents = [...events].reverse().slice(0, 30);
+    const recentEvents = [...events].reverse().slice(0, 50);
+
+    // Count highlights for badge
+    const HIGHLIGHT_TYPES = new Set(["goal", "shot", "shot_saved", "shot_missed", "corner", "freekick"]);
+    const highlightCount = events.filter(e => HIGHLIGHT_TYPES.has(e.type)).length;
 
     return (
         <div style={{
@@ -113,18 +122,21 @@ const MatchHUD: React.FC<MatchHUDProps> = ({
             }}>
                 {/* Phase badge */}
                 <div style={{ textAlign: "center", marginBottom: 8 }}>
-          <span style={{
-              display: "inline-block",
-              padding: "2px 10px",
-              borderRadius: 20,
-              fontSize: 10,
-              fontWeight: 700,
-              letterSpacing: 1,
-              background: state.phase === "goal" ? "#ffdd44" : state.phase === "fulltime" ? "#444" : "#e63946",
-              color: state.phase === "goal" ? "#000" : "#fff",
-          }}>
-            {phaseLabel[state.phase] ?? state.phase.toUpperCase()}
-          </span>
+                    <span style={{
+                        display: "inline-block",
+                        padding: "2px 10px",
+                        borderRadius: 20,
+                        fontSize: 10,
+                        fontWeight: 700,
+                        letterSpacing: 1,
+                        background: state.phase === "goal" ? "#ffdd44"
+                            : state.phase === "fulltime" ? "#444"
+                            : state.phase === "halftime" ? "#555"
+                            : "#e63946",
+                        color: state.phase === "goal" ? "#000" : "#fff",
+                    }}>
+                        {phaseLabel[state.phase] ?? state.phase.toUpperCase()}
+                    </span>
                 </div>
 
                 {/* Teams & Score */}
@@ -205,26 +217,93 @@ const MatchHUD: React.FC<MatchHUDProps> = ({
                 </div>
             </div>
 
-            {/* ── Event feed ── */}
+            {/* ── Event feed with tabs ── */}
             <div style={{
                 background: "rgba(0,0,0,0.45)",
                 border: "1px solid rgba(255,255,255,0.07)",
                 borderRadius: 8,
-                padding: "10px 12px",
+                padding: "0",
                 overflow: "hidden",
                 display: "flex",
                 flexDirection: "column",
             }}>
-                <div style={{ fontSize: 10, letterSpacing: 1, color: "rgba(255,255,255,0.4)", marginBottom: 8, textTransform: "uppercase", flexShrink: 0 }}>
-                    Match events
-                </div>
-                <div ref={eventsRef} style={{ overflowY: "auto", flex: 1, minHeight: 0 }}>
-                    {recentEvents.length === 0 && (
-                        <div style={{ color: "rgba(255,255,255,0.3)", fontSize: 11 }}>Waiting for kick off…</div>
-                    )}
-                    {recentEvents.map(evt => (
-                        <EventItem key={evt.id} event={evt} homeColor={hColor} awayColor={aColor} />
+                {/* Tab header */}
+                <div style={{
+                    display: "flex",
+                    borderBottom: "1px solid rgba(255,255,255,0.08)",
+                    flexShrink: 0,
+                }}>
+                    {([
+                        { id: "all" as FeedTab, label: "Все события" },
+                        { id: "highlights" as FeedTab, label: `⚡ Моменты`, badge: highlightCount },
+                    ] as const).map(tab => (
+                        <button
+                            key={tab.id}
+                            onClick={() => setActiveTab(tab.id)}
+                            style={{
+                                flex: 1,
+                                padding: "8px 4px",
+                                background: "none",
+                                border: "none",
+                                borderBottom: activeTab === tab.id
+                                    ? "2px solid #e63946"
+                                    : "2px solid transparent",
+                                color: activeTab === tab.id
+                                    ? "#fff"
+                                    : "rgba(255,255,255,0.4)",
+                                cursor: "pointer",
+                                fontSize: 10,
+                                fontWeight: 600,
+                                letterSpacing: 0.3,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                gap: 4,
+                                transition: "all 0.15s",
+                            }}
+                        >
+                            {tab.label}
+                            {"badge" in tab && tab.badge > 0 && (
+                                <span style={{
+                                    background: "#e63946",
+                                    color: "#fff",
+                                    borderRadius: 10,
+                                    fontSize: 9,
+                                    padding: "1px 5px",
+                                    fontWeight: 700,
+                                }}>
+                                    {tab.badge}
+                                </span>
+                            )}
+                        </button>
                     ))}
+                </div>
+
+                {/* Tab content */}
+                <div
+                    ref={eventsRef}
+                    style={{ overflowY: "auto", flex: 1, minHeight: 0, padding: "10px 12px" }}
+                >
+                    {activeTab === "all" && (
+                        <>
+                            {recentEvents.length === 0 && (
+                                <div style={{ color: "rgba(255,255,255,0.3)", fontSize: 11 }}>Waiting for kick off…</div>
+                            )}
+                            {recentEvents.map(evt => (
+                                <EventItem key={evt.id} event={evt} homeColor={hColor} awayColor={aColor} />
+                            ))}
+                        </>
+                    )}
+
+                    {activeTab === "highlights" && (
+                        <HighlightsPanel
+                            events={events}
+                            homeColor={hColor}
+                            awayColor={aColor}
+                            homeName={homeTeam.name}
+                            awayName={awayTeam.name}
+                        />
+                    )}
                 </div>
             </div>
         </div>

@@ -8,64 +8,84 @@ import type { Player } from "../types";
 let eventCounter = 5000;
 function mkEventId() { return `evt_${++eventCounter}`; }
 
+// After a successful tackle the tackler needs recovery time before acting again.
+// At 60 fps: 120 ticks = 2 s, 180 ticks = 3 s.
+const TACKLE_SUCCESS_COOLDOWN = 150; // ~2.5 s — long enough to prevent repeat spam
+const TACKLE_FAIL_COOLDOWN    = BALANCE.TACKLE_COOLDOWN; // already 50 ticks
+
 export class TackleSystem implements SimulationSystem {
     name = "TackleSystem";
 
     update(ctx: SimulationContext): Command[] {
         const { homeTeam, awayTeam, ball } = ctx;
-        const commands: Command[] = [];
-        
+
+        const DEAD_PHASES = new Set(["throwin", "goalkick", "corner", "freekick", "goal", "halftime", "fulltime"]);
+        if (DEAD_PHASES.has(ctx.state.phase)) return [];
+
         if (!ball.ownerPlayerId) return [];
 
-        const owner = [...homeTeam.players, ...awayTeam.players].find(p => p.id === ball.ownerPlayerId);
+        const allPlayers = [...homeTeam.players, ...awayTeam.players];
+        const owner = allPlayers.find(p => p.id === ball.ownerPlayerId);
         if (!owner) return [];
 
         const opponents = owner.team === "home" ? awayTeam.players : homeTeam.players;
 
         for (const opp of opponents) {
-            const dist = distVec(opp.pos, owner.pos);
-            
-            if (dist < BALANCE.TACKLE_RANGE + 8 && opp.kickCooldown === 0) {
-                commands.push(...this.executeTackle(opp, owner, ctx));
-                break; 
+            // Guard: must be close enough, no kick cooldown, AND no action cooldown
+            // (actionCooldown acts as the universal lock — set to TACKLE_SUCCESS_COOLDOWN on success)
+            if (
+                distVec(opp.pos, owner.pos) < BALANCE.TACKLE_RANGE + 8 &&
+                opp.kickCooldown === 0 &&
+                opp.actionCooldown === 0
+            ) {
+                return this.executeTackle(opp, owner, ctx);
             }
         }
-        
-        return commands;
+
+        return [];
     }
 
     private executeTackle(tackler: Player, owner: Player, ctx: SimulationContext): Command[] {
         const { rng, state } = ctx;
         const commands: Command[] = [];
-        
-        const tackleSkill = (tackler.attributes.tackling * 0.7 + tackler.attributes.strength * 0.3) / 100;
-        const retainSkill = (owner.attributes.strength * 0.6 + owner.attributes.balance * 0.4) / 100;
-        const successProb = 0.4 + (tackleSkill - retainSkill) * 0.4;
-        
+
+        const tackleSkill  = (tackler.attributes.tackling * 0.7 + tackler.attributes.strength  * 0.3) / 100;
+        const retainSkill  = (owner.attributes.strength  * 0.6 + owner.attributes.balance      * 0.4) / 100;
+        const successProb  = Math.max(0.05, Math.min(0.85, 0.4 + (tackleSkill - retainSkill) * 0.4));
+
         if (rng.next() < successProb) {
-            const awayFromOwner = normVec(subVec(tackler.pos, owner.pos));
+            // ── Successful tackle ──────────────────────────
+            const awayFromOwner  = normVec(subVec(tackler.pos, owner.pos));
             const looseDirection = normVec({
                 x: awayFromOwner.x + rng.nextFloat(-0.45, 0.45),
                 y: awayFromOwner.y + rng.nextFloat(-0.45, 0.45),
             });
-            const loosePos = addVec(tackler.pos, scaleVec(looseDirection, 10));
-            
+
             commands.push({
                 type: "UPDATE_BALL",
-                pos: loosePos,
-                vel: scaleVec(looseDirection, 1.8),
+                pos: addVec(tackler.pos, scaleVec(looseDirection, 10)),
+                vel: scaleVec(looseDirection, 2.2),   // slightly more separation
                 height: 0,
                 heightVel: 0,
-                ownerPlayerId: null,
-                lastTouchedBy: tackler.id,
+                ownerPlayerId:   null,
+                lastTouchedBy:   tackler.id,
                 lastTouchedTeam: tackler.team,
             } as UpdateBallCommand);
 
+            // Long recovery — prevents same tackler from immediately re-tackling
             commands.push({
                 type: "SET_PLAYER_DECISION",
                 playerId: tackler.id,
                 decision: null,
-                cooldown: 25
+                cooldown: TACKLE_SUCCESS_COOLDOWN,
+            } as SetPlayerDecisionCommand);
+
+            // Also freeze the previous owner briefly so they can't instantly reclaim
+            commands.push({
+                type: "SET_PLAYER_DECISION",
+                playerId: owner.id,
+                decision: null,
+                cooldown: 40,
             } as SetPlayerDecisionCommand);
 
             ctx.events.emit({
@@ -73,21 +93,23 @@ export class TackleSystem implements SimulationSystem {
                 type: "tackle",
                 minute: state.minute,
                 second: state.second,
-                teamId: tackler.team,
-                playerId: tackler.id,
+                teamId:     tackler.team,
+                playerId:   tackler.id,
                 playerName: tackler.name,
                 description: `${tackler.name} wins the ball with a tackle!`,
-                pos: { ...tackler.pos }
+                pos: { ...tackler.pos },
             });
+
         } else {
+            // ── Failed tackle ──────────────────────────────
             commands.push({
                 type: "SET_PLAYER_DECISION",
                 playerId: tackler.id,
                 decision: null,
-                cooldown: BALANCE.TACKLE_COOLDOWN
+                cooldown: TACKLE_FAIL_COOLDOWN,
             } as SetPlayerDecisionCommand);
         }
-        
+
         return commands;
     }
 }

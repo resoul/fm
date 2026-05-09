@@ -4,16 +4,16 @@
 
 export type TeamSide = "home" | "away";
 export type PlayerPosition = "GK" | "CB" | "LB" | "RB" | "CM" | "LM" | "RM" | "CAM" | "ST" | "LW" | "RW";
-export type PlayerRole = 
-    | "GK_Sweeper" | "GK_Defensive" 
-    | "CB_Stopper" | "CB_BallPlaying" 
+export type PlayerRole =
+    | "GK_Sweeper" | "GK_Defensive"
+    | "CB_Stopper" | "CB_BallPlaying"
     | "WB_Attacking" | "WB_Defensive"
     | "CM_BallWinner" | "CM_Playmaker" | "CM_BoxToBox"
     | "W_Winger" | "W_Inverted"
     | "ST_Poacher" | "ST_TargetMan" | "ST_Advanced";
 export type PlayerState = "idle" | "running" | "dribbling" | "passing" | "shooting" | "defending" | "celebrating" | "repositioning";
 export type BallState = "ground" | "air" | "rolling";
-export type MatchPhase = "kickoff" | "playing" | "goal" | "halftime" | "fulltime" | "freekick" | "goalkick" | "throwin";
+export type MatchPhase = "kickoff" | "playing" | "goal" | "halftime" | "fulltime" | "freekick" | "goalkick" | "throwin" | "corner";
 export type EventType =
     | "goal"
     | "shot"
@@ -254,6 +254,31 @@ export interface MatchEvent {
 
 export type SimulationMode = "realtime" | "fast" | "hybrid" | "replay";
 
+// ── Team Tactical State ───────────────────────────────────
+/**
+ * Describes the current collective tactical situation of a team.
+ * Updated each tick by TacticalSystem. Used by DecisionSystem to
+ * choose contextually correct off-ball behaviour.
+ */
+export type TeamTacticalPhase =
+    | "in_possession"       // Team has the ball — build up / attack
+    | "out_of_possession"   // Team lost the ball — press / defend
+    | "transition_attack"   // Just won the ball — counter opportunity
+    | "transition_defend"   // Just lost the ball — sprint back
+    | "set_piece";          // Free kick / corner / throw-in
+
+export interface TeamTacticalState {
+    phase: TeamTacticalPhase;
+    /** How many ticks ago the possession last changed (0 = this tick) */
+    ticksSincePossessionChange: number;
+    /** Distance from team centroid to own goal — proxy for defensive line height */
+    defensiveLineX: number;
+    /** Width spread of outfield players */
+    teamWidth: number;
+    /** Estimated pressure the team is under (0-1) */
+    pressureIntensity: number;
+}
+
 export type SimulationEvent = MatchEvent;
 
 export interface MatchSimulationConfig extends Partial<EngineConfig> {
@@ -350,7 +375,18 @@ export interface AIDecision {
     targetPlayerId?: string;
     force?: number;
     xG?: number;
+    /** Set by OffBallSystem to tag which run type produced this decision */
+    offBallRunType?: OffBallRunType;
 }
+
+// ── Off-ball run types (2.1) ──────────────────────────────
+export type OffBallRunType =
+    | "support_run"
+    | "overlap_run"
+    | "underlap_run"
+    | "third_man_run"
+    | "defensive_recovery"
+    | "hold_shape";
 
 export interface Zone {
     x: number;

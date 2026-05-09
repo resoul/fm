@@ -4,6 +4,7 @@ import { CommandResolver } from "../core/CommandResolver";
 import {
     DecisionSystem, MovementSystem, ShootingSystem, PassingSystem,
     GoalkeeperSystem, TackleSystem, PhysicsSystem, RefereeSystem, TacticalSystem,
+    OffBallSystem,
 } from "../match/systems";
 
 export class MatchSimulator extends BaseSimulator {
@@ -13,9 +14,14 @@ export class MatchSimulator extends BaseSimulator {
         super(world);
         this.resolver = new CommandResolver();
 
-        // Register systems in order
+        // Register systems in order:
+        //   TacticalSystem      → computes centroids, passing lanes, SpaceAwareness
+        //   OffBallSystem       → generates off-ball runs (2.1 / 2.2) using space data
+        //   DecisionSystem      → handles ball-carrier decisions (UtilityAI)
+        //   Goalkeeper → Shoot → Pass → Tackle → Move → Physics → Referee
         this.pipeline
             .addSystem(new TacticalSystem())
+            .addSystem(new OffBallSystem())
             .addSystem(new DecisionSystem())
             .addSystem(new GoalkeeperSystem())
             .addSystem(new ShootingSystem())

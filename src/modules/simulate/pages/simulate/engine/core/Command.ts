@@ -7,7 +7,8 @@ export type CommandType =
     | "TACKLE_PLAYER"
     | "SET_PLAYER_DECISION"
     | "UPDATE_BALL"
-    | "UPDATE_MATCH_STATE";
+    | "UPDATE_MATCH_STATE"
+    | "UPDATE_PLAYER_METRICS";
 
 export interface BaseCommand {
     type: CommandType;
@@ -45,7 +46,8 @@ export type Command =
     | SetPlayerStateCommand 
     | SetPlayerDecisionCommand
     | UpdateBallCommand
-    | UpdateMatchStateCommand;
+    | UpdateMatchStateCommand
+    | UpdatePlayerMetricsCommand;
 
 export interface UpdateBallCommand extends BaseCommand {
     type: "UPDATE_BALL";
@@ -64,4 +66,19 @@ export interface UpdateMatchStateCommand extends BaseCommand {
     second?: number;
     phase?: MatchPhase;
     score?: { home: number, away: number };
+}
+
+/**
+ * Carries per-tick physics metrics that were previously mutated directly
+ * inside MovementSystem. Now applied cleanly through the resolver.
+ */
+export interface UpdatePlayerMetricsCommand extends BaseCommand {
+    type: "UPDATE_PLAYER_METRICS";
+    playerId: string;
+    /** Velocity after friction/acceleration is applied this tick */
+    vel: Vec2;
+    /** Updated fatigue 0-1 */
+    fatigue: number;
+    /** Kick cooldown ticks remaining */
+    kickCooldown: number;
 }

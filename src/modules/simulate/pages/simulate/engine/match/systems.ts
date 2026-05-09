@@ -7,3 +7,4 @@ export { RefereeSystem } from "../systems/RefereeSystem";
 export { ShootingSystem } from "../systems/ShootingSystem";
 export { TackleSystem } from "../systems/TackleSystem";
 export { TacticalSystem } from "../systems/TacticalSystem";
+export { OffBallSystem } from "../systems/OffBallSystem";
