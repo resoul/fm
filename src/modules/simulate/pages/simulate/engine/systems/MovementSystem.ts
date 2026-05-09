@@ -3,8 +3,9 @@ import type { SimulationSystem } from "../pipeline";
 import {
     PHYSICS, subVec, lenVec, scaleVec, normVec, addVec, clampVec
 } from "../physics";
-import type { FieldDimensions, Player, Vec2 } from "../types";
+import type { FieldDimensions, Player, TeamSide, Vec2 } from "../types";
 import type { Command, MovePlayerCommand, UpdatePlayerMetricsCommand } from "../core/Command";
+import { getMomentumSpeedMultiplier } from "./MomentumSystem";
 
 export class MovementSystem implements SimulationSystem {
     name = "MovementSystem";
@@ -15,7 +16,6 @@ export class MovementSystem implements SimulationSystem {
         const commands: Command[] = [];
 
         // During dead-ball phases, ignore stale nextDecision targets.
-        // Players must walk to their formation targetPos, not chase a pre-restart decision.
         const DEAD_PHASES = new Set(["throwin", "goalkick", "corner", "freekick", "goal", "halftime", "fulltime"]);
         const isDeadBall = DEAD_PHASES.has(ctx.state.phase);
 
@@ -23,8 +23,6 @@ export class MovementSystem implements SimulationSystem {
             const { width, height } = ctx.config.fieldDimensions;
 
             // Sanity guard: clamp targetPos to field bounds.
-            // Prevents players running off-screen when stale targetPos is set
-            // outside the field (e.g. from a botched restart teleport).
             if (
                 player.targetPos.x < 0 || player.targetPos.x > width ||
                 player.targetPos.y < 0 || player.targetPos.y > height
@@ -41,7 +39,10 @@ export class MovementSystem implements SimulationSystem {
                     ? player.nextDecision.target
                     : undefined;
 
-            const result = this.calculateMovement(player, dt, ctx.config.fieldDimensions, targetOverride);
+            // ── 4.2 Momentum: get speed multiplier for this player's team ──
+            const momentumMult = getMomentumSpeedMultiplier(ctx, player.team as TeamSide);
+
+            const result = this.calculateMovement(player, dt, ctx.config.fieldDimensions, targetOverride, momentumMult);
 
             if (result.moveCmd) commands.push(result.moveCmd);
             commands.push(result.metricsCmd);
@@ -52,12 +53,11 @@ export class MovementSystem implements SimulationSystem {
 
     // ── Calculations ──────────────────────────────────────
 
-    private getMaxSpeed(player: Player): number {
+    private getMaxSpeed(player: Player, momentumMult = 1.0): number {
         const base = PHYSICS.PLAYER_MAX_SPEED_BASE;
         const speedFactor = 0.6 + (player.attributes.pace / 100) * 0.4;
-        // fatigue is read from player state (written last tick by resolver)
         const fatigueFactor = 1 - player.fatigue * 0.4;
-        return base * speedFactor * fatigueFactor;
+        return base * speedFactor * fatigueFactor * momentumMult;
     }
 
     private calculateMovement(
@@ -65,12 +65,13 @@ export class MovementSystem implements SimulationSystem {
         dt: number,
         field: FieldDimensions,
         targetOverride?: Vec2,
+        momentumMult = 1.0,
     ): { moveCmd: MovePlayerCommand | null; metricsCmd: UpdatePlayerMetricsCommand } {
         const target = targetOverride ?? player.targetPos;
         const diff = subVec(target, player.pos);
         const dist = lenVec(diff);
 
-        // ── Fatigue delta (pure computation, no mutation) ──
+        // ── Fatigue delta ──
         const effort = lenVec(player.vel) / PHYSICS.PLAYER_MAX_SPEED_BASE;
         const staminaFactor = 0.4 + (player.attributes.stamina / 100) * 0.6;
         const fatigueRate = 0.0001 * effort / staminaFactor;
@@ -80,14 +81,13 @@ export class MovementSystem implements SimulationSystem {
             ? Math.min(1, player.fatigue + fatigueRate)
             : Math.max(0, player.fatigue - recoveryRate);
 
-        // ── Kick cooldown ──────────────────────────────────
+        // ── Kick cooldown ──
         const newKickCooldown = Math.max(0, player.kickCooldown - 1);
 
-        // ── Velocity update ────────────────────────────────
+        // ── Velocity update ──
         let newVel: Vec2;
 
         if (dist < 1.5) {
-            // Player is at target — apply friction to coast to stop
             const fricted = scaleVec(player.vel, PHYSICS.PLAYER_FRICTION);
             newVel = lenVec(fricted) < 0.1 ? { x: 0, y: 0 } : fricted;
 
@@ -104,7 +104,7 @@ export class MovementSystem implements SimulationSystem {
         }
 
         const maxSpd =
-            this.getMaxSpeed(player) * (player.hasBall ? PHYSICS.PLAYER_DRIBBLE_SPEED_FACTOR : 1);
+            this.getMaxSpeed(player, momentumMult) * (player.hasBall ? PHYSICS.PLAYER_DRIBBLE_SPEED_FACTOR : 1);
         const dir = normVec(diff);
         const desiredVel = scaleVec(dir, maxSpd);
 
