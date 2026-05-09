@@ -1,10 +1,9 @@
 import { SimulationContext } from "../context";
 import { SimulationSystem } from "../pipeline";
-import { BallPhysics, subVec } from "../physics";
+import { BallPhysics } from "../physics";
+import { Command, KickBallCommand, SetPlayerDecisionCommand, SetPlayerStateCommand } from "../core/Command";
 import { BALANCE } from "../balance";
-
-let eventCounter = 4000;
-function mkEventId() { return `evt_${++eventCounter}`; }
+import { Player } from "../types";
 
 export class PassingSystem implements SimulationSystem {
     name = "PassingSystem";
@@ -14,43 +13,66 @@ export class PassingSystem implements SimulationSystem {
         this.ballPhysics = new BallPhysics({ width: 720, height: 480 });
     }
 
-    update(ctx: SimulationContext): void {
+    update(ctx: SimulationContext): Command[] {
         const { homeTeam, awayTeam } = ctx;
         const allPlayers = [...homeTeam.players, ...awayTeam.players];
+        const commands: Command[] = [];
 
         for (const player of allPlayers) {
             if (player.nextDecision?.type === "pass") {
-                this.executePass(player, ctx);
-                player.nextDecision = null;
+                commands.push(...this.executePass(player, ctx));
             } else if (player.nextDecision?.type === "dribble") {
-                this.executeDribble(player, ctx);
-                player.nextDecision = null;
+                commands.push(...this.executeDribble(player, ctx));
             }
         }
+        
+        return commands;
     }
 
-    private executePass(player: any, ctx: SimulationContext): void {
-        const { ball, state } = ctx;
+    private executePass(player: Player, ctx: SimulationContext): Command[] {
+        const { state } = ctx;
         const decision = player.nextDecision!;
         
-        if (!player.hasBall) return;
+        if (!player.hasBall) return [];
 
-        const targetPos = decision.target;
-        const dir = subVec(targetPos, player.pos);
+        const targetPos = decision.target!;
         const force = BALANCE.PASS_FORCE_BASE + (player.attributes.passing / 100) * 4;
 
-        this.ballPhysics.kick(ball, dir, force, 0);
-        
-        player.hasBall = false;
-        player.kickCooldown = 15;
+        const commands: Command[] = [];
+        commands.push({
+            type: "KICK_BALL",
+            playerId: player.id,
+            targetPos: targetPos,
+            force: force
+        } as KickBallCommand);
 
+        commands.push({
+            type: "SET_PLAYER_DECISION",
+            playerId: player.id,
+            decision: null,
+            cooldown: 15
+        } as SetPlayerDecisionCommand);
+
+        // Update stats
         const tStats = player.team === "home" ? state.stats.home : state.stats.away;
         tStats.passes++;
+
+        return commands;
     }
 
-    private executeDribble(player: any, ctx: SimulationContext): void {
-        const decision = player.nextDecision!;
-        player.targetPos = decision.target;
-        player.state = "dribbling";
+    private executeDribble(player: Player, ctx: SimulationContext): Command[] {
+        return [
+            {
+                type: "SET_PLAYER_STATE",
+                playerId: player.id,
+                state: "dribbling"
+            } as SetPlayerStateCommand,
+            {
+                type: "SET_PLAYER_DECISION",
+                playerId: player.id,
+                decision: null,
+                cooldown: 5
+            } as SetPlayerDecisionCommand,
+        ];
     }
 }

@@ -290,10 +290,11 @@ export interface RenderOptions {
 }
 
 export interface AIDecision {
-    action: "pass" | "shoot" | "dribble" | "move" | "defend" | "clearance" | "reposition";
-    targetPos?: Vec2;
+    type: "pass" | "shoot" | "dribble" | "move" | "defend" | "clearance" | "reposition";
+    target?: Vec2;
     targetPlayerId?: string;
     force?: number;
+    xG?: number;
 }
 
 export interface Zone {

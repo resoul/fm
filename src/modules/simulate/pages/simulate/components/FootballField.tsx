@@ -46,8 +46,7 @@ const FootballField: React.FC<FootballFieldProps> = ({
 
         engine.onEvent(listener);
         return () => {
-            // Need to expose 'off' to engine or directly use eventBus
-            (engine as any).eventBus.off("all", listener);
+            engine.offEvent(listener);
         };
     }, [engine, onEvent]);
 
@@ -75,7 +74,7 @@ const FootballField: React.FC<FootballFieldProps> = ({
                 engine.ball,
                 engine.state,
                 renderOptions,
-                (engine as any).tacticalData,
+                engine.world.tacticalData,
             );
         }
 

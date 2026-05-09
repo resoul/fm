@@ -9,6 +9,15 @@ export interface TacticalData {
     homeCompactness: number;
     awayCompactness: number;
     influenceMap: number[][]; // 10x7 grid, >0 for home control, <0 for away
+    pressureMap: number[][];  // Total physical pressure in each zone
+    passingLanes: { from: string, to: string, open: boolean }[];
+}
+
+export interface SimulationEvents {
+    emit: (event: MatchEvent) => void;
+    on: (event: string, cb: (event: MatchEvent) => void) => void;
+    off: (event: string, cb: (event: MatchEvent) => void) => void;
+    clear: () => void;
 }
 
 /**
@@ -30,7 +39,7 @@ export interface SimulationContext {
 
     // Infrastructure
     rng: SeededRandom;
-    events: EventBus;
+    events: SimulationEvents;
     spatialHash: SpatialHash<Player>;
 
     // Delta time for this tick

@@ -3,32 +3,45 @@ import { SimulationSystem } from "../pipeline";
 import { 
     PHYSICS, scaleVec, lenVec, addVec, normVec, distVec 
 } from "../physics";
+import { Command, UpdateBallCommand } from "../core/Command";
+import { Ball, FieldDimensions, Team } from "../types";
 
 export class PhysicsSystem implements SimulationSystem {
     name = "PhysicsSystem";
 
-    update(ctx: SimulationContext): void {
-        const { ball, config } = ctx;
+    update(ctx: SimulationContext): Command[] {
+        const { ball, config, homeTeam, awayTeam } = ctx;
         const field = config.fieldDimensions;
+        
+        let newBall = { ...ball };
+        const commands: Command[] = [];
 
         // 1. Update ball free movement
-        this.updateBallPhysics(ctx);
+        this.updateBallPhysics(newBall, field);
 
         // 2. Handle ball pickup
-        this.handleBallPickup(ctx);
+        const pickup = this.handleBallPickup(newBall, homeTeam, awayTeam);
+        if (pickup) {
+            newBall = { ...newBall, ...pickup };
+        }
 
-        // 3. Handle dribbling (ball follows owner)
-        this.handleDribble(ctx);
+        // 3. Handle dribbling
+        const dribble = this.handleDribble(newBall, homeTeam, awayTeam);
+        if (dribble) {
+            newBall = { ...newBall, ...dribble };
+        }
+
+        commands.push({
+            type: "UPDATE_BALL",
+            ...newBall
+        } as UpdateBallCommand);
+
+        return commands;
     }
 
-    private updateBallPhysics(ctx: SimulationContext): void {
-        const { ball, config } = ctx;
-        const field = config.fieldDimensions;
-
-        // If owned, skip free physics
+    private updateBallPhysics(ball: Ball, field: FieldDimensions): void {
         if (ball.ownerPlayerId !== null) return;
 
-        // Apply gravity when airborne
         if (ball.height > 0) {
             ball.heightVel -= PHYSICS.BALL_GRAVITY;
             ball.height += ball.heightVel;
@@ -41,41 +54,34 @@ export class PhysicsSystem implements SimulationSystem {
                 } else {
                     ball.state = "air";
                 }
-                // Slow ground speed on bounce
                 ball.vel = scaleVec(ball.vel, 0.8);
             }
         }
 
-        // Apply friction
         const friction = ball.height > 0 ? PHYSICS.BALL_AIR_FRICTION : PHYSICS.BALL_FRICTION;
         ball.vel = scaleVec(ball.vel, friction);
 
-        // Stop micro-movement
         if (lenVec(ball.vel) < PHYSICS.BALL_MIN_SPEED) {
             ball.vel = { x: 0, y: 0 };
             ball.state = "ground";
         }
 
-        // Move ball
         ball.pos = addVec(ball.pos, ball.vel);
-
-        // Clamping to extreme limits just to keep the ball from flying to infinity
+        
         const fw = field.width;
         const fh = field.height;
         const limit = 100;
-
         if (ball.pos.x < -limit) ball.pos.x = -limit;
         if (ball.pos.x > fw + limit) ball.pos.x = fw + limit;
         if (ball.pos.y < -limit) ball.pos.y = -limit;
         if (ball.pos.y > fh + limit) ball.pos.y = fh + limit;
     }
 
-    private handleBallPickup(ctx: SimulationContext): void {
-        const { ball, homeTeam, awayTeam } = ctx;
-        if (ball.ownerPlayerId !== null) return;
+    private handleBallPickup(ball: Ball, homeTeam: Team, awayTeam: Team): Partial<Ball> | null {
+        if (ball.ownerPlayerId !== null) return null;
 
         const allPlayers = [...homeTeam.players, ...awayTeam.players];
-        let closest: any = null;
+        let closest: any = null; // Still some any here for player finding logic
         let closestDist = PHYSICS.CONTROL_RANGE;
 
         for (const p of allPlayers) {
@@ -88,29 +94,30 @@ export class PhysicsSystem implements SimulationSystem {
         }
 
         if (closest) {
-            for (const p of allPlayers) p.hasBall = false;
-            closest.hasBall = true;
-            ball.ownerPlayerId = closest.id;
-            ball.lastTouchedBy = closest.id;
-            ball.lastTouchedTeam = closest.team;
-            ball.vel = { x: 0, y: 0 };
+            return {
+                ownerPlayerId: closest.id,
+                lastTouchedBy: closest.id,
+                lastTouchedTeam: closest.team,
+                vel: { x: 0, y: 0 }
+            };
         }
+        return null;
     }
 
-    private handleDribble(ctx: SimulationContext): void {
-        const { ball, homeTeam, awayTeam } = ctx;
-        if (!ball.ownerPlayerId) return;
+    private handleDribble(ball: Ball, homeTeam: Team, awayTeam: Team): Partial<Ball> | null {
+        if (!ball.ownerPlayerId) return null;
 
         const owner = [...homeTeam.players, ...awayTeam.players].find(p => p.id === ball.ownerPlayerId);
-        if (!owner) return;
+        if (!owner) return null;
 
-        owner.hasBall = true;
         const offset = normVec(owner.vel);
         const dribOff = distVec({ x: 0, y: 0 }, owner.vel) > 0.1
             ? scaleVec(offset, PHYSICS.DRIBBLE_DISTANCE)
             : { x: 0, y: 0 };
 
-        ball.pos = addVec(owner.pos, dribOff);
-        ball.vel = { x: 0, y: 0 };
+        return {
+            pos: addVec(owner.pos, dribOff),
+            vel: { x: 0, y: 0 }
+        };
     }
 }

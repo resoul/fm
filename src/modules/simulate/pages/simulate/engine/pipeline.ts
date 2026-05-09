@@ -1,11 +1,13 @@
 import { SimulationContext } from "./context";
 
+import { Command } from "./core/Command";
+
 /**
  * Interface for a simulation system.
  */
 export interface SimulationSystem {
     name: string;
-    update(ctx: SimulationContext): void;
+    update(ctx: SimulationContext): Command[];
 }
 
 /**
@@ -23,12 +25,15 @@ export class SimulationPipeline {
     }
 
     /**
-     * Executes one simulation tick across all systems.
+     * Executes one simulation tick across all systems and collects commands.
      */
-    update(ctx: SimulationContext) {
+    update(ctx: SimulationContext): Command[] {
+        const allCommands: Command[] = [];
         for (const system of this.systems) {
-            system.update(ctx);
+            const commands = system.update(ctx);
+            allCommands.push(...commands);
         }
+        return allCommands;
     }
 
     clear() {

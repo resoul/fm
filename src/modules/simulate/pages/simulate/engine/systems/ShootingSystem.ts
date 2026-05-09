@@ -1,8 +1,9 @@
 import { SimulationContext } from "../context";
 import { SimulationSystem } from "../pipeline";
-import { BallPhysics, subVec } from "../physics";
-import { TeamSide, MatchEvent } from "../types";
+import { BallPhysics } from "../physics";
+import { Command, KickBallCommand, SetPlayerDecisionCommand } from "../core/Command";
 import { BALANCE } from "../balance";
+import { Player } from "../types";
 
 let eventCounter = 3000;
 function mkEventId() { return `evt_${++eventCounter}`; }
@@ -12,42 +13,53 @@ export class ShootingSystem implements SimulationSystem {
     private ballPhysics: BallPhysics;
 
     constructor() {
-        // We'll need a shared ballPhysics or similar, for now create local
-        this.ballPhysics = new BallPhysics({ width: 720, height: 480 }); // TODO: pass field dim
+        this.ballPhysics = new BallPhysics({ width: 720, height: 480 }); 
     }
 
-    update(ctx: SimulationContext): void {
-        const { homeTeam, awayTeam, ball, state, events } = ctx;
+    update(ctx: SimulationContext): Command[] {
+        const { homeTeam, awayTeam } = ctx;
         const allPlayers = [...homeTeam.players, ...awayTeam.players];
+        const commands: Command[] = [];
 
         for (const player of allPlayers) {
             if (player.nextDecision?.type === "shoot") {
-                this.executeShoot(player, ctx);
-                player.nextDecision = null; // Clear decision after execution
+                const shotCommands = this.executeShoot(player, ctx);
+                commands.push(...shotCommands);
             }
         }
+        
+        return commands;
     }
 
-    private executeShoot(player: any, ctx: SimulationContext): void {
-        const { ball, events, state, homeTeam, awayTeam } = ctx;
+    private executeShoot(player: Player, ctx: SimulationContext): Command[] {
+        const { state } = ctx;
         const decision = player.nextDecision!;
         
-        if (!player.hasBall) return;
+        if (!player.hasBall) return [];
 
         const force = BALANCE.SHOT_FORCE_BASE + (player.attributes.finishing / 100) * BALANCE.FINISHING_FORCE_FACTOR;
-        const target = decision.target;
-        const dir = subVec(target, player.pos);
+        const target = decision.target!;
         
-        // Apply inaccuracy based on attributes
-        const inaccuracy = 0.15 - (player.attributes.technique / 100) * 0.1;
-        const shotDir = this.ballPhysics.addInaccuracy(dir, inaccuracy, ctx.rng);
+        const commands: Command[] = [];
 
-        this.ballPhysics.kick(ball, shotDir, force, 0.1); 
-        
-        player.hasBall = false;
-        player.kickCooldown = 20;
+        // 1. Kick ball command
+        commands.push({
+            type: "KICK_BALL",
+            playerId: player.id,
+            targetPos: target,
+            force: force
+        } as KickBallCommand);
 
-        events.emit({
+        // 2. Clear decision and set cooldown
+        commands.push({
+            type: "SET_PLAYER_DECISION",
+            playerId: player.id,
+            decision: null,
+            cooldown: 20
+        } as SetPlayerDecisionCommand);
+
+        // 3. Emit event
+        ctx.events.emit({
             id: mkEventId(),
             type: "shot",
             minute: state.minute,
@@ -57,12 +69,14 @@ export class ShootingSystem implements SimulationSystem {
             playerName: player.name,
             description: `${player.name} takes a shot! (xG: ${decision.xG?.toFixed(2)})`,
             pos: { ...player.pos },
-            xG: decision.xG
+            xg: decision.xG
         });
 
-        // Update stats
+        // 4. Update stats
         const tStats = player.team === "home" ? state.stats.home : state.stats.away;
         tStats.shots++;
         tStats.xg += decision.xG || 0;
+
+        return commands;
     }
 }

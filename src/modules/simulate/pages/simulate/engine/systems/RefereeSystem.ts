@@ -1,7 +1,8 @@
 import { SimulationContext } from "../context";
 import { SimulationSystem } from "../pipeline";
-import { distVec, PHYSICS } from "../physics";
-import { TeamSide, MatchEvent, Vec2 } from "../types";
+import { distVec } from "../physics";
+import { TeamSide, Vec2, MatchPhase } from "../types";
+import { Command, UpdateMatchStateCommand, UpdateBallCommand } from "../core/Command";
 
 let eventCounter = 1000;
 function mkEventId() { return `evt_${++eventCounter}`; }
@@ -9,26 +10,36 @@ function mkEventId() { return `evt_${++eventCounter}`; }
 export class RefereeSystem implements SimulationSystem {
     name = "RefereeSystem";
 
-    update(ctx: SimulationContext): void {
+    update(ctx: SimulationContext): Command[] {
         const { state, config } = ctx;
+        const commands: Command[] = [];
 
         // 1. Update match time
         const totalGameSec = state.tick / config.fps;
-        state.minute = Math.min(90, Math.floor(totalGameSec / 60));
-        state.second = Math.floor(totalGameSec % 60);
+        const minute = Math.min(90, Math.floor(totalGameSec / 60));
+        const second = Math.floor(totalGameSec % 60);
+
+        commands.push({
+            type: "UPDATE_MATCH_STATE",
+            minute,
+            second
+        } as UpdateMatchStateCommand);
 
         // 2. Check for ball events
         if (state.phase === "playing") {
-            this.checkGoal(ctx);
-            this.checkOutOfBounds(ctx);
+            commands.push(...this.checkGoal(ctx));
+            commands.push(...this.checkOutOfBounds(ctx));
         }
 
         // 3. Update possession
         this.updatePossession(ctx);
+
+        return commands;
     }
 
-    private checkGoal(ctx: SimulationContext): void {
+    private checkGoal(ctx: SimulationContext): Command[] {
         const { ball, config, state, homeTeam, awayTeam, events } = ctx;
+        const commands: Command[] = [];
         
         const goalHalfW = config.fieldDimensions.goalWidth / 2;
         const centerY = config.fieldDimensions.height / 2;
@@ -38,46 +49,48 @@ export class RefereeSystem implements SimulationSystem {
         if (ball.pos.x < 0 && inGoalY) scored = "away";
         if (ball.pos.x > config.fieldDimensions.width && inGoalY) scored = "home";
 
-        if (scored) {
-            if (state.phase === "playing") {
-                if (scored === "home") homeTeam.score++;
-                else awayTeam.score++;
+        if (scored && state.phase === "playing") {
+            const newScore = { home: homeTeam.score, away: awayTeam.score };
+            if (scored === "home") newScore.home++;
+            else newScore.away++;
 
-                const scorerTeam = scored === "home" ? homeTeam : awayTeam;
-                const scorerPlayer = ball.lastTouchedTeam === scorerTeam.id
-                    ? scorerTeam.players.find(p => p.id === ball.lastTouchedBy)
-                    : undefined;
+            const scorerTeam = scored === "home" ? homeTeam : awayTeam;
+            const scorerPlayer = ball.lastTouchedTeam === scorerTeam.id
+                ? scorerTeam.players.find(p => p.id === ball.lastTouchedBy)
+                : undefined;
 
-                state.phase = "goal";
-                state.lastGoalTime = state.tick;
+            commands.push({
+                type: "UPDATE_MATCH_STATE",
+                phase: "goal",
+                score: newScore
+            } as UpdateMatchStateCommand);
 
-                events.emit({
-                    id: mkEventId(),
-                    type: "goal",
-                    minute: state.minute,
-                    second: state.second,
-                    teamId: scorerTeam.id,
-                    playerId: scorerPlayer?.id ?? null,
-                    playerName: scorerPlayer?.name ?? "Unknown",
-                    description: `⚽ GOAL! ${scorerPlayer?.name ?? "??"} scores for ${scorerTeam.name}! (${homeTeam.score}-${awayTeam.score})`,
-                    pos: { ...ball.pos },
-                });
-            }
+            events.emit({
+                id: mkEventId(),
+                type: "goal",
+                minute: state.minute,
+                second: state.second,
+                teamId: scorerTeam.id,
+                playerId: scorerPlayer?.id ?? null,
+                playerName: scorerPlayer?.name ?? "Unknown",
+                description: `⚽ GOAL! ${scorerPlayer?.name ?? "??"} scores for ${scorerTeam.name}! (${newScore.home}-${newScore.away})`,
+                pos: { ...ball.pos },
+            });
         }
+        return commands;
     }
 
-    private checkOutOfBounds(ctx: SimulationContext): void {
-        const { ball, config, state, events } = ctx;
+    private checkOutOfBounds(ctx: SimulationContext): Command[] {
+        const { ball, config } = ctx;
         const { width, height } = config.fieldDimensions;
 
         // Sideline Out (Throw-in)
         if (ball.pos.y < 0 || ball.pos.y > height) {
             const teamId = ball.lastTouchedTeam === "home" ? "away" : "home";
-            this.triggerRestart(ctx, "throwin", teamId, { 
+            return this.triggerRestart(ctx, "throwin", teamId, { 
                 x: Math.max(20, Math.min(width - 20, ball.pos.x)), 
                 y: ball.pos.y < 0 ? 0 : height 
             });
-            return;
         }
 
         // Goal line Out (Goal kick or Corner)
@@ -87,34 +100,26 @@ export class RefereeSystem implements SimulationSystem {
             const defendingTeam: TeamSide = isHomeEnd ? "home" : "away";
 
             if (ball.lastTouchedTeam === attackingTeam) {
-                // Goal Kick
-                this.triggerRestart(ctx, "goalkick", defendingTeam, { 
+                return this.triggerRestart(ctx, "goalkick", defendingTeam, { 
                     x: isHomeEnd ? 40 : width - 40, 
                     y: height / 2 
                 });
             } else {
-                // Corner
-                this.triggerRestart(ctx, "corner", attackingTeam, { 
+                return this.triggerRestart(ctx, "corner", attackingTeam, { 
                     x: isHomeEnd ? 0 : width, 
                     y: ball.pos.y < height / 2 ? 0 : height 
                 });
             }
         }
+        return [];
     }
 
-    private triggerRestart(ctx: SimulationContext, type: any, teamId: TeamSide, pos: Vec2): void {
-        const { ball, state, events } = ctx;
+    private triggerRestart(ctx: SimulationContext, type: MatchPhase, teamId: TeamSide, pos: Vec2): Command[] {
+        const { state, events } = ctx;
         
-        ball.pos = { ...pos };
-        ball.vel = { x: 0, y: 0 };
-        ball.height = 0;
-        ball.ownerPlayerId = null;
-        
-        // For now, we just teleport the ball and let players chase it
-        // In a fuller version, we'd set phase to "goalkick"/"throwin"
         events.emit({
             id: mkEventId(),
-            type: type,
+            type: type as any, // MatchPhase to EventType mapping is mostly 1:1 or simplified here
             minute: state.minute,
             second: state.second,
             teamId: teamId,
@@ -123,6 +128,17 @@ export class RefereeSystem implements SimulationSystem {
             description: `${type.toUpperCase()} for ${teamId}`,
             pos: { ...pos },
         });
+
+        return [{
+            type: "UPDATE_BALL",
+            pos: { ...pos },
+            vel: { x: 0, y: 0 },
+            height: 0,
+            heightVel: 0,
+            ownerPlayerId: null,
+            lastTouchedBy: null,
+            lastTouchedTeam: null
+        } as UpdateBallCommand];
     }
 
     private updatePossession(ctx: SimulationContext): void {

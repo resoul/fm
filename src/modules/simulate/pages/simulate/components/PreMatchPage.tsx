@@ -2,7 +2,7 @@ import React, { useState, useMemo } from "react";
 import type { Club, MatchLineup, MatchEvent } from "../engine/types";
 import { generateClub, buildMatchTeam, autoSelectLineup } from "../engine/teamFactory";
 import { MatchEngine, DEFAULT_FIELD } from "../engine/matchEngine";
-import { LineupBuilder } from "./LineupBuilder";
+import { TacticsSelector } from "./TacticsSelector";
 
 // ── Pre-generated clubs ───────────────────────────────────
 function createDefaultClubs(): [Club, Club] {
@@ -160,7 +160,7 @@ export const PreMatchPage: React.FC<PreMatchPageProps> = ({ onMatchReady }) => {
                         borderRadius: 12,
                         padding: "24px",
                     }}>
-                        <LineupBuilder
+                        <TacticsSelector
                             club={clubs[0]}
                             onConfirm={handleHomeConfirm}
                             label="Home Team"
@@ -176,7 +176,7 @@ export const PreMatchPage: React.FC<PreMatchPageProps> = ({ onMatchReady }) => {
                         borderRadius: 12,
                         padding: "24px",
                     }}>
-                        <LineupBuilder
+                        <TacticsSelector
                             club={clubs[1]}
                             onConfirm={handleAwayConfirm}
                             label="Away Team"

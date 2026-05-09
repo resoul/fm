@@ -2,8 +2,9 @@
 // RENDERER — Canvas 2D top-down football football renderer
 // ============================================================
 
-import type { Ball, Team, MatchState, FieldDimensions, RenderOptions, Vec2 } from "./types";
+import type { Ball, Team, MatchState, FieldDimensions, RenderOptions, Vec2, Player } from "./types";
 import { PHYSICS, distVec } from "./physics";
+import { TacticalData } from "./context";
 
 // ── Render Colors ─────────────────────────────────────────
 const COLORS = {
@@ -38,7 +39,7 @@ export class Renderer {
 
     triggerGoalFlash() { this.goalFlashTimer = 60; }
 
-    render(homeTeam: Team, awayTeam: Team, ball: Ball, state: MatchState, opts: RenderOptions, tactical?: any): void {
+    render(homeTeam: Team, awayTeam: Team, ball: Ball, state: MatchState, opts: RenderOptions, tactical?: TacticalData): void {
         const ctx = this.ctx;
         const fw = this.field.width;
         const fh = this.field.height;
@@ -99,10 +100,9 @@ export class Renderer {
         ctx.globalAlpha = 0.25;
         for (let x = 0; x < 10; x++) {
             for (let y = 0; y < 7; y++) {
-                const val = map[x][y]; // >0 for home (red-ish/blue-ish), <0 for away
+                const val = map[x][y]; 
                 if (val === 0) continue;
 
-                // Home control: Blue-ish, Away control: Red-ish (adjust as needed)
                 ctx.fillStyle = val > 0 ? `rgba(60, 100, 255, ${Math.min(0.8, val * 0.5)})` : `rgba(255, 60, 60, ${Math.min(0.8, Math.abs(val) * 0.5)})`;
                 ctx.fillRect(x * cellW, y * cellH, cellW, cellH);
             }
@@ -111,7 +111,7 @@ export class Renderer {
     }
 
     // ── Tactical Overlay ─────────────────────────────────────
-    private _drawTacticalOverlay(tactical: any, home: Team, away: Team): void {
+    private _drawTacticalOverlay(tactical: TacticalData, home: Team, away: Team): void {
         const ctx = this.ctx;
 
         // Draw Centroids
@@ -268,7 +268,7 @@ export class Renderer {
         }
     }
 
-    private _drawPlayer(player: any, teamColor: string, secColor: string, showName: boolean): void {
+    private _drawPlayer(player: Player, teamColor: string, secColor: string, showName: boolean): void {
         const ctx = this.ctx;
         const x = player.pos.x;
         const y = player.pos.y;
