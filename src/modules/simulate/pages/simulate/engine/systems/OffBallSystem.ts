@@ -252,7 +252,7 @@ export class OffBallSystem implements SimulationSystem {
             width, height,
         );
 
-        if (!target) return this.holdAnchor(player);
+        if (!target) return this.holdAnchor(player.targetPos);
         return { type: "support_run", target };
     }
 
@@ -339,7 +339,7 @@ export class OffBallSystem implements SimulationSystem {
     private thirdManRun(
         player: Player,
         ballOwner: Player,
-        opponents: Player[],
+        _opponents: Player[],
         freeSpaceMap: number[][],
         forwardDir: number,
         urgency: number,
@@ -356,13 +356,15 @@ export class OffBallSystem implements SimulationSystem {
         });
 
         if (candidates.length > 0) {
-            // Sort by: closest to goal + free space
+            // Sort by: closest to goal + free space score
             const oppGoalX = forwardDir > 0 ? width : 0;
             candidates.sort((a, b) => {
-                const scoreA = (1 - distVec(a, { x: oppGoalX, y: height / 2 }) / width)
-                    + freeSpaceMap[Math.floor((a.x / width) * 16)]?.[Math.floor((a.y / height) * 10)] ?? 0;
-                const scoreB = (1 - distVec(b, { x: oppGoalX, y: height / 2 }) / width)
-                    + freeSpaceMap[Math.floor((b.x / width) * 16)]?.[Math.floor((b.y / height) * 10)] ?? 0;
+                const col = (z: Vec2) => Math.min(15, Math.floor((z.x / width) * 16));
+                const row = (z: Vec2) => Math.min(9, Math.floor((z.y / height) * 10));
+                const spaceA = freeSpaceMap[col(a)]?.[row(a)] ?? 0;
+                const spaceB = freeSpaceMap[col(b)]?.[row(b)] ?? 0;
+                const scoreA = (1 - distVec(a, { x: oppGoalX, y: height / 2 }) / width) + spaceA;
+                const scoreB = (1 - distVec(b, { x: oppGoalX, y: height / 2 }) / width) + spaceB;
                 return scoreB - scoreA;
             });
             return { type: "third_man_run", target: candidates[0] };

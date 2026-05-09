@@ -20,6 +20,21 @@ export class MovementSystem implements SimulationSystem {
         const isDeadBall = DEAD_PHASES.has(ctx.state.phase);
 
         for (const player of allPlayers) {
+            const { width, height } = ctx.config.fieldDimensions;
+
+            // Sanity guard: clamp targetPos to field bounds.
+            // Prevents players running off-screen when stale targetPos is set
+            // outside the field (e.g. from a botched restart teleport).
+            if (
+                player.targetPos.x < 0 || player.targetPos.x > width ||
+                player.targetPos.y < 0 || player.targetPos.y > height
+            ) {
+                player.targetPos = {
+                    x: Math.max(10, Math.min(width - 10, player.targetPos.x)),
+                    y: Math.max(10, Math.min(height - 10, player.targetPos.y)),
+                };
+            }
+
             const targetOverride =
                 !isDeadBall &&
                 player.nextDecision?.target && isMovementDecision(player.nextDecision.type)

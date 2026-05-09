@@ -23,7 +23,7 @@ export class PassingSystem implements SimulationSystem {
             if (player.nextDecision?.type === "pass") {
                 commands.push(...this.executePass(player, ctx));
             } else if (player.nextDecision?.type === "dribble") {
-                commands.push(...this.executeDribble(player, ctx));
+                commands.push(...this.executeDribble(player));
             }
         }
 
@@ -36,11 +36,14 @@ export class PassingSystem implements SimulationSystem {
 
         if (!player.hasBall) return [];
 
+        const allPlayers = [...homeTeam.players, ...awayTeam.players];
         const targetPlayer = decision.targetPlayerId
-            ? [...homeTeam.players, ...awayTeam.players].find(p => p.id === decision.targetPlayerId)
+            ? allPlayers.find(p => p.id === decision.targetPlayerId)
             : null;
         const targetPos = targetPlayer?.pos ?? decision.target;
         if (!targetPos) return [];
+
+        // Pass force scales with passing attribute
         const force = BALANCE.PASS_FORCE_BASE + (player.attributes.passing / 100) * 4;
 
         const commands: Command[] = [];
@@ -51,12 +54,40 @@ export class PassingSystem implements SimulationSystem {
             force: force
         } as KickBallCommand);
 
+        // Passer cooldown: they need time to recover their position
         commands.push({
             type: "SET_PLAYER_DECISION",
             playerId: player.id,
             decision: null,
-            cooldown: 75
+            cooldown: ctx.rng.nextInt(BALANCE.ACTION_COOLDOWN_MIN, BALANCE.ACTION_COOLDOWN_MAX),
         } as SetPlayerDecisionCommand);
+
+        // ── Receiver first-touch cooldown (KEY FIX for pass spam) ──
+        // The receiver gets a cooldown immediately, representing the time
+        // needed to control the ball, look up, and evaluate options.
+        // Without this, receivers re-pass within 1-2 ticks of pickup.
+        if (targetPlayer) {
+            // Better first touch = lower control time
+            const firstTouchFactor = 1 - (targetPlayer.attributes.firstTouch / 100) * 0.4;
+            // Under pressure (nearby defenders) = higher control time
+            const nearbyDefenders = ctx.spatialHash
+                .queryRadius(targetPlayer.pos, 35)
+                .filter(p => p.team !== targetPlayer.team).length;
+            const pressureFactor = 1 + nearbyDefenders * 0.12;
+
+            const baseCooldown = ctx.rng.nextInt(
+                BALANCE.PASS_RECEIVER_CONTROL_MIN,
+                BALANCE.PASS_RECEIVER_CONTROL_MAX,
+            );
+            const receiverCooldown = Math.round(baseCooldown * firstTouchFactor * pressureFactor);
+
+            commands.push({
+                type: "SET_PLAYER_DECISION",
+                playerId: targetPlayer.id,
+                decision: null,
+                cooldown: receiverCooldown,
+            } as SetPlayerDecisionCommand);
+        }
 
         // Update stats
         const tStats = player.team === "home" ? state.stats.home : state.stats.away;
@@ -79,7 +110,7 @@ export class PassingSystem implements SimulationSystem {
         return commands;
     }
 
-    private executeDribble(player: Player, _ctx: SimulationContext): Command[] {
+    private executeDribble(player: Player): Command[] {
         return [
             {
                 type: "SET_PLAYER_STATE",

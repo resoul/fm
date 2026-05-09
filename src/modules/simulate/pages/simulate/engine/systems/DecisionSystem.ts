@@ -6,6 +6,7 @@ import type { Command } from "../core/Command";
 import { distVec, normVec } from "../physics";
 import type { AIDecision, Ball, Player, TeamTacticalState } from "../types";
 import { SpaceAwareness } from "../ai/SpaceAwareness";
+import { getZoneAssignment, isOutsideLeash } from "./ZoneSystem";
 
 /**
  * DecisionSystem handles high-level AI reasoning.
@@ -101,7 +102,7 @@ export class DecisionSystem implements SimulationSystem {
             case "transition_defend":
                 return this.transitionDefendDecision(player, ctx);
             case "set_piece":
-                return this.setPieceDecision(player, ctx);
+                return this.setPieceDecision(player);
             default:
                 return this.outOfPossessionDecision(player, ctx, allPlayers);
         }
@@ -225,7 +226,8 @@ export class DecisionSystem implements SimulationSystem {
 
     /**
      * out_of_possession: organised press toward ball + mark nearest opponent.
-     * Pressure intensity (0-1) controls how aggressively the team pushes.
+     * Now zone-aware: each player defends their assigned zone first,
+     * then presses from that anchored position.
      */
     private outOfPossessionDecision(
         player: Player,
@@ -241,13 +243,18 @@ export class DecisionSystem implements SimulationSystem {
         const opponents = allPlayers.filter(p => p.team !== player.team && p.position !== "GK");
         const ownTeam = allPlayers.filter(p => p.team === player.team && p.position !== "GK");
 
+        // Zone anchor: player's assigned zone centre (if ZoneSystem has run)
+        const zoneAsgn = getZoneAssignment(ctx, player.id);
+        const zoneAnchor = zoneAsgn?.zoneCentreWorld ?? player.targetPos;
+        const cellW = ctx.tactical.zoneData?.cellWidth ?? width / 6;
+        const cellH = ctx.tactical.zoneData?.cellHeight ?? height / 5;
+
         // Top 2 pressers go directly toward ball carrier
         const pressers = [...ownTeam]
             .sort((a, b) => distVec(a.pos, owner.pos) - distVec(b.pos, owner.pos))
             .slice(0, 2);
 
         if (pressers.some(p => p.id === player.id)) {
-            // Approach ball from a side angle so team doesn't all collide
             const pressIndex = pressers.findIndex(p => p.id === player.id);
             const sideAngle = pressIndex === 0 ? 0 : (player.team === "home" ? -0.55 : 0.55);
             return {
@@ -259,48 +266,63 @@ export class DecisionSystem implements SimulationSystem {
             };
         }
 
-        // Rest: mark nearest unmarked opponent, biased toward own goal
+        // Zone-aware: if player is outside their leash zone, recover first
+        if (zoneAsgn && ctx.tactical.zoneData &&
+            isOutsideLeash(player, zoneAsgn, cellW, cellH)) {
+            return {
+                type: "defend",
+                target: {
+                    x: clampField(zoneAnchor.x, 10, width - 10),
+                    y: clampField(zoneAnchor.y, 10, height - 10),
+                },
+            };
+        }
+
+        // Mark nearest unmarked opponent within zone reach
         const isHome = player.team === "home";
         const ownGoalX = isHome ? 0 : width;
 
-        // Find the nearest opponent not already being tracked by someone closer
         const markTarget = opponents
             .filter(opp => opp.id !== owner.id)
+            // Only mark opponents who are in or near my zone (±1.5 cells)
+            .filter(opp =>
+                Math.abs(opp.pos.x - zoneAnchor.x) < cellW * 2.5 &&
+                Math.abs(opp.pos.y - zoneAnchor.y) < cellH * 2.5
+            )
             .sort((a, b) => distVec(a.pos, player.pos) - distVec(b.pos, player.pos))[0];
 
         if (markTarget) {
-            // Mix marking position with anchor (50/50), shifted toward own goal
             const pressurePull = tacticalState.pressureIntensity * 0.3;
             return {
                 type: "defend",
                 target: {
                     x: clampField(
-                        player.targetPos.x * (0.45 - pressurePull) +
+                        zoneAnchor.x * (0.35 - pressurePull) +
                         markTarget.pos.x * 0.35 +
-                        ownGoalX * (0.2 + pressurePull),
+                        ownGoalX * (0.3 + pressurePull),
                         10, width - 10,
                     ),
                     y: clampField(
-                        player.targetPos.y * 0.5 + markTarget.pos.y * 0.5,
+                        zoneAnchor.y * 0.5 + markTarget.pos.y * 0.5,
                         10, height - 10,
                     ),
                 },
             };
         }
 
-        // Fallback: drop toward own goal
+        // Fallback: hold zone anchor, biased toward own goal
         return {
             type: "defend",
             target: {
-                x: clampField(player.targetPos.x * 0.6 + ownGoalX * 0.4, 10, width - 10),
-                y: player.targetPos.y,
+                x: clampField(zoneAnchor.x * 0.6 + ownGoalX * 0.4, 10, width - 10),
+                y: clampField(zoneAnchor.y, 10, height - 10),
             },
         };
     }
 
     /**
      * transition_defend: hard sprint back to own half.
-     * No marking — just get goal-side as fast as possible.
+     * Now zone-aware: recover to zone anchor, not just formation targetPos.
      */
     private transitionDefendDecision(
         player: Player,
@@ -309,18 +331,21 @@ export class DecisionSystem implements SimulationSystem {
         const { width, height } = ctx.config.fieldDimensions;
         const isHome = player.team === "home";
 
-        // Sprint to a position between ball and own goal
+        const zoneAsgn = getZoneAssignment(ctx, player.id);
+        const anchor = zoneAsgn?.zoneCentreWorld ?? player.targetPos;
+
+        // Sprint to zone anchor, biased heavily between ball and own goal
         const ownGoalX = isHome ? width * 0.18 : width * 0.82;
         const ballX = ctx.ball.pos.x;
         const recoveryX = isHome
-            ? Math.min(player.targetPos.x, (ballX + ownGoalX) / 2)
-            : Math.max(player.targetPos.x, (ballX + ownGoalX) / 2);
+            ? Math.min(anchor.x, (ballX + ownGoalX) / 2)
+            : Math.max(anchor.x, (ballX + ownGoalX) / 2);
 
         return {
             type: "defend",
             target: {
                 x: clampField(recoveryX, 15, width - 15),
-                y: clampField(player.targetPos.y, 15, height - 15),
+                y: clampField(anchor.y, 15, height - 15),
             },
         };
     }
@@ -328,10 +353,8 @@ export class DecisionSystem implements SimulationSystem {
     /**
      * set_piece: hold formation anchor tightly.
      */
-    private setPieceDecision(
-        player: Player,
-        ctx: SimulationContext,
-    ): AIDecision {
+    private setPieceDecision(player: Player): AIDecision
+    {
         return {
             type: "reposition",
             target: { ...player.targetPos },

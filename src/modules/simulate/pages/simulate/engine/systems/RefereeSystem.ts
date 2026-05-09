@@ -56,7 +56,7 @@ export class RefereeSystem implements SimulationSystem {
         if (state.phase === "goal") {
             this._goalDelayTick++;
             if (this._goalDelayTick >= GOAL_DELAY_TICKS) {
-                commands.push(...this.doKickoff(ctx, minute, second));
+                commands.push(...this.doKickoff(ctx));
             }
             return commands;
         }
@@ -65,16 +65,16 @@ export class RefereeSystem implements SimulationSystem {
         if (state.phase === "halftime") {
             this._goalDelayTick++;
             if (this._goalDelayTick >= GOAL_DELAY_TICKS * 2) {
-                commands.push(...this.doKickoff(ctx, minute, second));
+                commands.push(...this.doKickoff(ctx));
             }
             return commands;
         }
 
         // 5. Dead-ball restart waiting
+        // (goal and halftime are already handled above with early returns,
+        //  so the type-narrowed phase here can never be those values)
         if (
             DEAD_BALL_PHASES.includes(state.phase) &&
-            state.phase !== "goal" &&
-            state.phase !== "halftime" &&
             state.phase !== "fulltime" &&
             state.phase !== "kickoff"
         ) {
@@ -129,7 +129,7 @@ export class RefereeSystem implements SimulationSystem {
 
     // ── Kickoff after goal or halftime ────────────────────
 
-    private doKickoff(ctx: SimulationContext, minute: number, second: number): Command[] {
+    private doKickoff(ctx: SimulationContext): Command[] {
         this._goalDelayTick = 0;
         const { config } = ctx;
         const fw = config.fieldDimensions.width;

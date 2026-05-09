@@ -6,6 +6,7 @@ import {
     GoalkeeperSystem, TackleSystem, PhysicsSystem, RefereeSystem, TacticalSystem,
     OffBallSystem,
 } from "../match/systems";
+import { ZoneSystem } from "../systems/ZoneSystem";
 
 export class MatchSimulator extends BaseSimulator {
     private resolver: CommandResolver;
@@ -21,6 +22,7 @@ export class MatchSimulator extends BaseSimulator {
         //   Goalkeeper → Shoot → Pass → Tackle → Move → Physics → Referee
         this.pipeline
             .addSystem(new TacticalSystem())
+            .addSystem(new ZoneSystem())      // ← assigns zones after tactical phase is known
             .addSystem(new OffBallSystem())
             .addSystem(new DecisionSystem())
             .addSystem(new GoalkeeperSystem())
