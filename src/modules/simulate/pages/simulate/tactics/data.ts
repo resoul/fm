@@ -1,4 +1,4 @@
-import type { PlayerProfile, PlayerPosition } from '../engine/types';
+import type { PlayerProfile } from '../engine/types';
 
 export interface Player {
     id: string;

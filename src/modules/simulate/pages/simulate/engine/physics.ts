@@ -1,4 +1,4 @@
-import type { Ball, Player, Vec2, FieldDimensions } from "./types.ts";
+import type { Ball, Player, Vec2, FieldDimensions, TeamSide } from "./types.ts";
 import { BALANCE } from "./balance";
 
 // ── Constants ─────────────────────────────────────────────
@@ -10,6 +10,12 @@ export const PHYSICS = {
     BALL_MIN_SPEED: 0.05,
     BALL_RADIUS: 6,
     PLAYER_RADIUS: 9,
+    PLAYER_MAX_SPEED_BASE: BALANCE.PLAYER_MAX_SPEED_BASE,
+    PLAYER_ACCELERATION: BALANCE.PLAYER_ACCELERATION,
+    PLAYER_DRIBBLE_SPEED_FACTOR: BALANCE.PLAYER_DRIBBLE_SPEED_FACTOR,
+    PLAYER_FRICTION: BALANCE.PLAYER_FRICTION,
+    CONTROL_RANGE: BALANCE.CONTROL_RANGE,
+    DRIBBLE_DISTANCE: 12,
 } as const;
 
 // ── Vec2 helpers ──────────────────────────────────────────
@@ -38,7 +44,11 @@ export function clampVec(v: Vec2, maxLen: number): Vec2 {
 
 // ── Ball Physics ──────────────────────────────────────────
 export class BallPhysics {
-    constructor(private field: FieldDimensions) {}
+    private field: FieldDimensions;
+
+    constructor(field: FieldDimensions) {
+        this.field = field;
+    }
 
     update(ball: Ball): void {
         // If owned, skip free physics
@@ -91,10 +101,6 @@ export class BallPhysics {
 
         // Goal line handling — goals scored in MatchEngine
         // Clamp x loosely so ball doesn't escape far
-        const goalHalf = this.field.goalWidth / 2;
-        const goalLeft = fh / 2 - goalHalf;
-        const goalRight = fh / 2 + goalHalf;
-
         if (ball.pos.x < -this.field.goalDepth) {
             ball.pos.x = -this.field.goalDepth;
             ball.vel.x = Math.abs(ball.vel.x) * 0.3;
@@ -156,7 +162,7 @@ export class BallPhysics {
 export class PlayerPhysics {
     getMaxSpeed(player: Player): number {
         const base = BALANCE.PLAYER_MAX_SPEED_BASE;
-        const speedFactor = 0.6 + (player.attributes.speed / 100) * 0.4;
+        const speedFactor = 0.6 + (player.attributes.pace / 100) * 0.4;
         const fatigueFactor = 1 - player.fatigue * 0.35;
         return base * speedFactor * fatigueFactor;
     }
@@ -167,7 +173,7 @@ export class PlayerPhysics {
         const dist = lenVec(diff);
 
         if (dist < 1.5) {
-            player.vel = scaleVec(player.vel, PHYSICS.PLAYER_FRICTION);
+            player.vel = scaleVec(player.vel, BALANCE.PLAYER_FRICTION);
             if (lenVec(player.vel) < 0.1) player.vel = { x: 0, y: 0 };
             return;
         }

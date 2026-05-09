@@ -1,6 +1,6 @@
 import { BaseSimulator } from "./BaseSimulator";
 import { SimulationWorld } from "../core/SimulationWorld";
-import { StateSnapshot } from "../replayManager";
+import type { StateSnapshot } from "../replay";
 
 export class ReplaySimulator extends BaseSimulator {
     private snapshots: StateSnapshot[] = [];

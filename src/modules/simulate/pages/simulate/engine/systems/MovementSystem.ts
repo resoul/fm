@@ -1,10 +1,10 @@
-import { SimulationContext } from "../context";
-import { SimulationSystem } from "../pipeline";
+import type { SimulationContext } from "../context";
+import type { SimulationSystem } from "../pipeline";
 import { 
     PHYSICS, subVec, lenVec, scaleVec, normVec, addVec, clampVec 
 } from "../physics";
-import { Player } from "../types";
-import { Command, MovePlayerCommand } from "../core/Command";
+import type { FieldDimensions, Player } from "../types";
+import type { Command, MovePlayerCommand } from "../core/Command";
 
 export class MovementSystem implements SimulationSystem {
     name = "MovementSystem";
@@ -15,13 +15,15 @@ export class MovementSystem implements SimulationSystem {
         const commands: Command[] = [];
 
         for (const player of allPlayers) {
-            const moveCmd = this.calculateMovement(player, dt, ctx.config.fieldDimensions);
+            const targetOverride = player.nextDecision?.target && isMovementDecision(player.nextDecision.type)
+                ? player.nextDecision.target
+                : undefined;
+            const moveCmd = this.calculateMovement(player, dt, ctx.config.fieldDimensions, targetOverride);
             if (moveCmd) commands.push(moveCmd);
             
             // Still mutating fatigue and cooldowns for now as they are internal metrics
             this.updateFatigue(player);
             if (player.kickCooldown > 0) player.kickCooldown--;
-            if (player.actionCooldown > 0) player.actionCooldown--;
         }
         
         return commands;
@@ -34,8 +36,9 @@ export class MovementSystem implements SimulationSystem {
         return base * speedFactor * fatigueFactor;
     }
 
-    private calculateMovement(player: Player, dt: number, field: any): MovePlayerCommand | null {
-        const diff = subVec(player.targetPos, player.pos);
+    private calculateMovement(player: Player, dt: number, field: FieldDimensions, targetOverride?: Player["targetPos"]): MovePlayerCommand | null {
+        const target = targetOverride ?? player.targetPos;
+        const diff = subVec(target, player.pos);
         const dist = lenVec(diff);
 
         if (dist < 1.5) {
@@ -86,4 +89,8 @@ export class MovementSystem implements SimulationSystem {
             player.fatigue = Math.max(0, player.fatigue - recoveryRate);
         }
     }
+}
+
+function isMovementDecision(type: string): boolean {
+    return type === "move" || type === "defend" || type === "dribble" || type === "reposition";
 }

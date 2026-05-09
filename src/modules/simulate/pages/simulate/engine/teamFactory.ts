@@ -266,6 +266,7 @@ export function buildMatchTeam(club: Club, lineup: MatchLineup, field: FieldDime
             fatigue:    profile ? (1 - profile.fitness / 100) * 0.3 : 0,
             actionCooldown: 0,
             kickCooldown:   0,
+            nextDecision:    null,
             targetPlayerId: null,
             passTarget:     null,
             profileId:      profileId,

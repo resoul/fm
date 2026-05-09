@@ -1,8 +1,8 @@
-import { SimulationContext } from "../context";
-import { SimulationSystem } from "../pipeline";
+import type { SimulationContext } from "../context";
+import type { SimulationSystem } from "../pipeline";
 import { distVec } from "../physics";
-import { TeamSide, Vec2, MatchPhase } from "../types";
-import { Command, UpdateMatchStateCommand, UpdateBallCommand } from "../core/Command";
+import type { TeamSide, Vec2, MatchPhase, EventType } from "../types";
+import type { Command, UpdateMatchStateCommand, UpdateBallCommand } from "../core/Command";
 
 let eventCounter = 1000;
 function mkEventId() { return `evt_${++eventCounter}`; }
@@ -24,6 +24,30 @@ export class RefereeSystem implements SimulationSystem {
             minute,
             second
         } as UpdateMatchStateCommand);
+
+        if (state.tick >= state.totalTicks && state.phase !== "fulltime") {
+            commands.push({
+                type: "UPDATE_MATCH_STATE",
+                phase: "fulltime",
+            } as UpdateMatchStateCommand);
+
+            ctx.events.emit({
+                id: mkEventId(),
+                type: "fulltime",
+                minute,
+                second,
+                teamId: null,
+                playerId: null,
+                playerName: null,
+                description: "Full time.",
+                pos: {
+                    x: config.fieldDimensions.width / 2,
+                    y: config.fieldDimensions.height / 2,
+                },
+            });
+
+            return commands;
+        }
 
         // 2. Check for ball events
         if (state.phase === "playing") {
@@ -114,12 +138,12 @@ export class RefereeSystem implements SimulationSystem {
         return [];
     }
 
-    private triggerRestart(ctx: SimulationContext, type: MatchPhase, teamId: TeamSide, pos: Vec2): Command[] {
+    private triggerRestart(ctx: SimulationContext, type: MatchPhase | "corner", teamId: TeamSide, pos: Vec2): Command[] {
         const { state, events } = ctx;
         
         events.emit({
             id: mkEventId(),
-            type: type as any, // MatchPhase to EventType mapping is mostly 1:1 or simplified here
+            type: restartEventType(type),
             minute: state.minute,
             second: state.second,
             teamId: teamId,
@@ -161,4 +185,12 @@ export class RefereeSystem implements SimulationSystem {
             state.stats.away.possession = 100 - state.stats.home.possession;
         }
     }
+}
+
+function restartEventType(phase: MatchPhase | "corner"): EventType {
+    if (phase === "corner") return "corner";
+    if (phase === "freekick") return "freekick";
+    if (phase === "throwin") return "throwin";
+    if (phase === "goalkick") return "goalkick";
+    return "freekick";
 }

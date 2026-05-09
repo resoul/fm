@@ -1,20 +1,14 @@
-import { SimulationContext } from "../context";
-import { SimulationSystem } from "../pipeline";
-import { BallPhysics } from "../physics";
-import { Command, KickBallCommand, SetPlayerDecisionCommand } from "../core/Command";
+import type { SimulationContext } from "../context";
+import type { SimulationSystem } from "../pipeline";
+import type { Command, KickBallCommand, SetPlayerDecisionCommand } from "../core/Command";
 import { BALANCE } from "../balance";
-import { Player } from "../types";
+import type { Player } from "../types";
 
 let eventCounter = 3000;
 function mkEventId() { return `evt_${++eventCounter}`; }
 
 export class ShootingSystem implements SimulationSystem {
     name = "ShootingSystem";
-    private ballPhysics: BallPhysics;
-
-    constructor() {
-        this.ballPhysics = new BallPhysics({ width: 720, height: 480 }); 
-    }
 
     update(ctx: SimulationContext): Command[] {
         const { homeTeam, awayTeam } = ctx;

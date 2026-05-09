@@ -1,9 +1,9 @@
 import type { SimulationContext } from "../context";
 import type { SimulationSystem } from "../pipeline";
-import { distVec } from "../physics";
+import { addVec, distVec, normVec, scaleVec, subVec } from "../physics";
 import { BALANCE } from "../balance";
-import { Command, SetPlayerDecisionCommand, KickBallCommand } from "../core/Command";
-import { Player } from "../types";
+import type { Command, SetPlayerDecisionCommand, UpdateBallCommand } from "../core/Command";
+import type { Player } from "../types";
 
 let eventCounter = 5000;
 function mkEventId() { return `evt_${++eventCounter}`; }
@@ -25,7 +25,7 @@ export class TackleSystem implements SimulationSystem {
         for (const opp of opponents) {
             const dist = distVec(opp.pos, owner.pos);
             
-            if (dist < BALANCE.TACKLE_RANGE && opp.kickCooldown === 0) {
+            if (dist < BALANCE.TACKLE_RANGE + 8 && opp.kickCooldown === 0) {
                 commands.push(...this.executeTackle(opp, owner, ctx));
                 break; 
             }
@@ -43,15 +43,23 @@ export class TackleSystem implements SimulationSystem {
         const successProb = 0.4 + (tackleSkill - retainSkill) * 0.4;
         
         if (rng.next() < successProb) {
-            // Tackle success - emit loose ball command via KICK_BALL with low force
-            const dir = { x: rng.nextFloat(-1, 1), y: rng.nextFloat(-1, 1) };
+            const awayFromOwner = normVec(subVec(tackler.pos, owner.pos));
+            const looseDirection = normVec({
+                x: awayFromOwner.x + rng.nextFloat(-0.45, 0.45),
+                y: awayFromOwner.y + rng.nextFloat(-0.45, 0.45),
+            });
+            const loosePos = addVec(tackler.pos, scaleVec(looseDirection, 10));
             
             commands.push({
-                type: "KICK_BALL",
-                playerId: tackler.id,
-                targetPos: { x: tackler.pos.x + dir.x * 50, y: tackler.pos.y + dir.y * 50 },
-                force: 0.5
-            } as KickBallCommand);
+                type: "UPDATE_BALL",
+                pos: loosePos,
+                vel: scaleVec(looseDirection, 1.8),
+                height: 0,
+                heightVel: 0,
+                ownerPlayerId: null,
+                lastTouchedBy: tackler.id,
+                lastTouchedTeam: tackler.team,
+            } as UpdateBallCommand);
 
             commands.push({
                 type: "SET_PLAYER_DECISION",

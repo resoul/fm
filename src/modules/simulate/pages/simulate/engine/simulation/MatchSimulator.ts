@@ -1,15 +1,10 @@
 import { BaseSimulator } from "./BaseSimulator";
 import { SimulationWorld } from "../core/SimulationWorld";
 import { CommandResolver } from "../core/CommandResolver";
-import { DecisionSystem } from "../systems/DecisionSystem";
-import { MovementSystem } from "../systems/MovementSystem";
-import { ShootingSystem } from "../systems/ShootingSystem";
-import { PassingSystem } from "../systems/PassingSystem";
-import { GoalkeeperSystem } from "../systems/GoalkeeperSystem";
-import { TackleSystem } from "../systems/TackleSystem";
-import { PhysicsSystem } from "../systems/PhysicsSystem";
-import { RefereeSystem } from "../systems/RefereeSystem";
-import { TacticalSystem } from "../systems/TacticalSystem";
+import {
+    DecisionSystem, MovementSystem, ShootingSystem, PassingSystem,
+    GoalkeeperSystem, TackleSystem, PhysicsSystem, RefereeSystem, TacticalSystem,
+} from "../match/systems";
 
 export class MatchSimulator extends BaseSimulator {
     private resolver: CommandResolver;

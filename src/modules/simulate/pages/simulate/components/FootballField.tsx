@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useCallback } from "react";
 import { MatchEngine } from "../engine/matchEngine";
-import { Renderer } from "../engine/renderer";
+import { Renderer } from "../engine/rendering";
 import type { RenderOptions, MatchEvent } from "../engine/types";
 
 interface FootballFieldProps {

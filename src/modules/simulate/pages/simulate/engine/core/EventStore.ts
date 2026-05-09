@@ -11,6 +11,10 @@ export class EventStore {
         return [...this.events];
     }
 
+    replace(events: MatchEvent[]) {
+        this.events = [...events];
+    }
+
     clear() {
         this.events = [];
     }

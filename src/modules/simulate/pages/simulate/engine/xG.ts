@@ -1,4 +1,4 @@
-import { Player, Ball, FieldDimensions, Vec2 } from "./types";
+import type { Player, Ball, FieldDimensions, Vec2 } from "./types";
 import { distVec, normVec, subVec } from "./physics";
 import { BALANCE } from "./balance";
 
@@ -8,7 +8,7 @@ import { BALANCE } from "./balance";
  */
 export function calculateXG(
     player: Player,
-    ball: Ball,
+    _ball: Ball,
     field: FieldDimensions,
     defenders: Player[],
     goalkeeper: Player | undefined

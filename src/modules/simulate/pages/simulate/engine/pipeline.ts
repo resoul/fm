@@ -1,6 +1,6 @@
-import { SimulationContext } from "./context";
+import type { SimulationContext } from "./context";
 
-import { Command } from "./core/Command";
+import type { Command } from "./core/Command";
 
 /**
  * Interface for a simulation system.

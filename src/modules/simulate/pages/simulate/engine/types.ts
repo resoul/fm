@@ -27,6 +27,8 @@ export type EventType =
     | "offside"
     | "corner"
     | "freekick"
+    | "goalkick"
+    | "throwin"
     | "kickoff"
     | "halftime"
     | "fulltime";
@@ -250,6 +252,14 @@ export interface MatchEvent {
     xg?: number;
 }
 
+export type SimulationMode = "realtime" | "fast" | "hybrid" | "replay";
+
+export type SimulationEvent = MatchEvent;
+
+export interface MatchSimulationConfig extends Partial<EngineConfig> {
+    seed?: number;
+}
+
 export interface FieldDimensions {
     width: number;
     height: number;
@@ -280,6 +290,51 @@ export interface EngineConfig {
     simSpeed: number;
     matchDuration: number;
     fieldDimensions: FieldDimensions;
+    seed: number;
+}
+
+export interface MatchSimulationState {
+    readonly homeTeam: Readonly<Team>;
+    readonly awayTeam: Readonly<Team>;
+    readonly ball: Readonly<Ball>;
+    readonly state: Readonly<MatchState>;
+    readonly mode: SimulationMode;
+}
+
+export interface PlayerSnapshot {
+    readonly id: string;
+    readonly pos: Readonly<Vec2>;
+    readonly vel: Readonly<Vec2>;
+    readonly targetPos: Readonly<Vec2>;
+    readonly state: PlayerState;
+    readonly hasBall: boolean;
+    readonly fatigue: number;
+    readonly actionCooldown: number;
+    readonly kickCooldown: number;
+    readonly nextDecision: AIDecision | null;
+    readonly targetPlayerId: string | null;
+    readonly passTarget: string | null;
+}
+
+export interface TeamSnapshot {
+    readonly id: TeamSide;
+    readonly name: string;
+    readonly color: string;
+    readonly secondaryColor: string;
+    readonly score: number;
+    readonly formation: string;
+    readonly stats: Readonly<TeamStats>;
+    readonly players: readonly PlayerSnapshot[];
+}
+
+export interface MatchSimulationSnapshot {
+    readonly tick: number;
+    readonly mode: SimulationMode;
+    readonly homeTeam: TeamSnapshot;
+    readonly awayTeam: TeamSnapshot;
+    readonly ball: Readonly<Ball>;
+    readonly state: Readonly<MatchState>;
+    readonly events: readonly SimulationEvent[];
 }
 
 export interface RenderOptions {

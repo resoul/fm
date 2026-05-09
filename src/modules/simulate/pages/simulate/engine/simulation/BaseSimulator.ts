@@ -1,12 +1,11 @@
 import { SimulationWorld } from "../core/SimulationWorld";
 import { TickRunner } from "../core/TickRunner";
 import { SimulationPipeline } from "../pipeline";
-import { SimulationContext } from "../context";
+import type { SimulationContext } from "../context";
 import { SpatialHash } from "../spatialHash";
 import { SeededRandom } from "../seededRandom";
 import { EventBus } from "../eventBus";
 import type { Player, MatchEvent } from "../types";
-import { EventStore } from "../core/EventStore";
 
 export abstract class BaseSimulator {
     protected world: SimulationWorld;
@@ -15,16 +14,14 @@ export abstract class BaseSimulator {
     protected spatialHash: SpatialHash<Player>;
     protected rng: SeededRandom;
     protected eventBus: EventBus;
-    protected eventStore: EventStore;
 
     constructor(world: SimulationWorld) {
         this.world = world;
         this.runner = new TickRunner(() => this.step());
         this.pipeline = new SimulationPipeline();
         this.spatialHash = new SpatialHash<Player>(40);
-        this.rng = new SeededRandom(12345);
+        this.rng = new SeededRandom(world.config.seed);
         this.eventBus = new EventBus();
-        this.eventStore = new EventStore();
     }
 
     abstract step(): void;
@@ -32,6 +29,9 @@ export abstract class BaseSimulator {
     start() { this.runner.start(); }
     pause() { this.runner.pause(); }
     tick() { this.runner.tick(); }
+
+    get isRunning() { return this.runner.isRunning; }
+    get isPaused() { return this.runner.isPaused; }
 
     onEvent(cb: (event: MatchEvent) => void) {
         this.eventBus.on("all", cb);
@@ -42,8 +42,8 @@ export abstract class BaseSimulator {
     }
 
     protected emit(event: MatchEvent) {
-        this.world.state.events.push(event);
-        this.eventStore.push(event);
+        this.world.eventStore.push(event);
+        this.world.state.events = this.world.eventStore.getAll();
         this.eventBus.emit(event);
     }
 

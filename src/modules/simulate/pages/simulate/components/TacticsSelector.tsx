@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { Pitch } from '../tactics/components/pitch';
 import { PlayerList } from '../tactics/components/player-list';
 import { useTactics } from '../tactics/use-tactics';
@@ -6,8 +6,7 @@ import { FORMATIONS } from '../tactics/formations';
 import { GHOST_SLOTS, SNAP_RADIUS } from '../tactics/ghost-grid';
 import { ChevronDown, RefreshCcw, Wand2, Trash2 } from 'lucide-react';
 import { setPlayerDragImage } from '../tactics/components/drag-image';
-import { ScrollArea } from "@/components/scroll-area";
-import type { Club, MatchLineup, PlayerProfile } from '../engine/types';
+import type { Club, MatchLineup } from '../engine/types';
 import { profileToPlayer, type Player } from '../tactics/data';
 
 interface TacticsSelectorProps {

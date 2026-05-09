@@ -1,8 +1,9 @@
 import React, { useState, useMemo } from "react";
-import type { Club, MatchLineup, MatchEvent } from "../engine/types";
-import { generateClub, buildMatchTeam, autoSelectLineup } from "../engine/teamFactory";
+import type { Club, MatchLineup, MatchEvent, PlayerProfile } from "../engine/types";
+import { generateClub, buildMatchTeam } from "../engine/teamFactory";
 import { MatchEngine, DEFAULT_FIELD } from "../engine/matchEngine";
 import { TacticsSelector } from "./TacticsSelector";
+import { SeededRandom } from "../engine/seededRandom";
 
 // ── Pre-generated clubs ───────────────────────────────────
 function createDefaultClubs(): [Club, Club] {
@@ -87,23 +88,7 @@ export const PreMatchPage: React.FC<PreMatchPageProps> = ({ onMatchReady }) => {
 
     const handleQuickSim = () => {
         if (!homeLineup || !awayLineup) return;
-        const homeTeam = buildMatchTeam(clubs[0], homeLineup, DEFAULT_FIELD, "home");
-        const awayTeam = buildMatchTeam(clubs[1], awayLineup, DEFAULT_FIELD, "away");
-        const engine = new MatchEngine(homeTeam, awayTeam);
-        
-        // Fast simulation loop
-        engine.start();
-        while (engine.state.phase !== "fulltime") {
-            engine.tick();
-            // Safety break
-            if (engine.state.tick > 200000) break;
-        }
-
-        setQuickResult({
-            homeScore: engine.homeTeam.score,
-            awayScore: engine.awayTeam.score,
-            events: engine.events.filter(e => e.type === "goal"),
-        });
+        setQuickResult(simulateInstantResult(clubs[0], clubs[1], homeLineup, awayLineup));
         setStep(4);
     };
 
@@ -252,6 +237,158 @@ export const PreMatchPage: React.FC<PreMatchPageProps> = ({ onMatchReady }) => {
 // ── Match Preview screen ──────────────────────────────────
 import { overallRating } from "../engine/types";
 
+interface QuickResult {
+    homeScore: number;
+    awayScore: number;
+    events: MatchEvent[];
+}
+
+interface TeamQuickProfile {
+    club: Club;
+    lineup: MatchLineup;
+    players: PlayerProfile[];
+    attack: number;
+    creation: number;
+    defense: number;
+    keeper: number;
+}
+
+function simulateInstantResult(
+    homeClub: Club,
+    awayClub: Club,
+    homeLineup: MatchLineup,
+    awayLineup: MatchLineup,
+): QuickResult {
+    const seed = hashSeed(`${homeLineup.startingXI.join("|")}::${awayLineup.startingXI.join("|")}::${Date.now()}`);
+    const rng = new SeededRandom(seed);
+    const home = buildQuickProfile(homeClub, homeLineup);
+    const away = buildQuickProfile(awayClub, awayLineup);
+
+    const homeXg = expectedGoals(home, away, 0.18);
+    const awayXg = expectedGoals(away, home, -0.04);
+    let homeScore = samplePoisson(homeXg, rng);
+    let awayScore = samplePoisson(awayXg, rng);
+
+    if (homeScore === 0 && awayScore === 0 && homeXg + awayXg > 2.1) {
+        if (rng.next() < homeXg / (homeXg + awayXg)) homeScore = 1;
+        else awayScore = 1;
+    }
+
+    const events = [
+        ...createGoalEvents(home, homeScore, rng),
+        ...createGoalEvents(away, awayScore, rng),
+    ].sort((a, b) => a.minute - b.minute || a.second - b.second);
+
+    return { homeScore, awayScore, events };
+}
+
+function buildQuickProfile(club: Club, lineup: MatchLineup): TeamQuickProfile {
+    const players = lineup.startingXI
+        .map(id => club.squad.find(player => player.id === id))
+        .filter((player): player is PlayerProfile => Boolean(player));
+
+    const outfield = players.filter(player => player.primaryPosition !== "GK");
+    const keeper = players.find(player => player.primaryPosition === "GK");
+
+    return {
+        club,
+        lineup,
+        players,
+        attack: average(outfield.map(player =>
+            weightedRating(player, ["finishing", "longShots", "dribbling", "offTheBall", "pace", "composure"]),
+        )),
+        creation: average(outfield.map(player =>
+            weightedRating(player, ["passing", "vision", "technique", "decisions", "teamwork", "firstTouch"]),
+        )),
+        defense: average(outfield.map(player =>
+            weightedRating(player, ["tackling", "marking", "positioning", "strength", "concentration", "workRate"]),
+        )),
+        keeper: keeper
+            ? weightedRating(keeper, ["reflexes", "handling", "oneOnOnes", "aerialReach", "positioning", "communication"])
+            : 55,
+    };
+}
+
+function expectedGoals(team: TeamQuickProfile, opponent: TeamQuickProfile, homeAdvantage: number): number {
+    const attackEdge = (team.attack - opponent.defense) * 0.028;
+    const creationEdge = (team.creation - opponent.defense) * 0.018;
+    const keeperEdge = (70 - opponent.keeper) * 0.012;
+    const base = 1.18 + homeAdvantage;
+    return Math.max(0.25, Math.min(3.4, base + attackEdge + creationEdge + keeperEdge));
+}
+
+function weightedRating(player: PlayerProfile, keys: (keyof PlayerProfile["attributes"])[]): number {
+    return average(keys.map(key => player.attributes[key]));
+}
+
+function average(values: number[]): number {
+    if (values.length === 0) return 0;
+    return values.reduce((sum, value) => sum + value, 0) / values.length;
+}
+
+function samplePoisson(lambda: number, rng: SeededRandom): number {
+    const limit = Math.exp(-lambda);
+    let product = 1;
+    let count = 0;
+
+    do {
+        count++;
+        product *= rng.next();
+    } while (product > limit);
+
+    return Math.min(7, count - 1);
+}
+
+function createGoalEvents(team: TeamQuickProfile, goals: number, rng: SeededRandom): MatchEvent[] {
+    const scorers = team.players
+        .filter(player => player.primaryPosition !== "GK")
+        .sort((a, b) => scorerWeight(b) - scorerWeight(a));
+
+    return Array.from({ length: goals }, (_, index) => {
+        const scorer = pickScorer(scorers, rng);
+        const minute = Math.min(90, Math.max(1, Math.round(((index + rng.next()) / Math.max(1, goals)) * 88)));
+        return {
+            id: `quick_goal_${team.club.id}_${index}_${minute}`,
+            type: "goal",
+            minute,
+            second: rng.nextInt(0, 59),
+            teamId: team.club.id === "home_club" ? "home" : "away",
+            playerId: scorer?.id ?? null,
+            playerName: scorer?.name ?? null,
+            description: `Goal for ${team.club.name}${scorer ? ` by ${scorer.name}` : ""}.`,
+            pos: { x: DEFAULT_FIELD.width / 2, y: DEFAULT_FIELD.height / 2 },
+        };
+    });
+}
+
+function scorerWeight(player: PlayerProfile): number {
+    return player.attributes.finishing * 0.38
+        + player.attributes.offTheBall * 0.22
+        + player.attributes.composure * 0.18
+        + player.attributes.longShots * 0.12
+        + player.attributes.heading * 0.1;
+}
+
+function pickScorer(players: PlayerProfile[], rng: SeededRandom): PlayerProfile | undefined {
+    if (players.length === 0) return undefined;
+    const total = players.reduce((sum, player) => sum + scorerWeight(player), 0);
+    let roll = rng.nextFloat(0, total);
+    for (const player of players) {
+        roll -= scorerWeight(player);
+        if (roll <= 0) return player;
+    }
+    return players[players.length - 1];
+}
+
+function hashSeed(value: string): number {
+    let hash = 2166136261;
+    for (let i = 0; i < value.length; i++) {
+        hash ^= value.charCodeAt(i);
+        hash = Math.imul(hash, 16777619);
+    }
+    return hash >>> 0;
+}
+
 const MatchPreview: React.FC<{
     homeClub: Club;
     awayClub: Club;
@@ -263,18 +400,22 @@ const MatchPreview: React.FC<{
 }> = ({ homeClub, awayClub, homeLineup, awayLineup, onBack, onKickoff, onQuickSim }) => {
     const homeOVR = useMemo(() => {
         const profiles = homeLineup.startingXI.map(id => homeClub.squad.find(p => p.id === id));
-        const valid    = profiles.filter(Boolean) as any[];
+        const valid    = profiles.filter((player): player is PlayerProfile => Boolean(player));
         return valid.length ? Math.round(valid.reduce((s, p) => s + overallRating(p.attributes), 0) / valid.length) : 0;
     }, [homeClub, homeLineup]);
 
     const awayOVR = useMemo(() => {
         const profiles = awayLineup.startingXI.map(id => awayClub.squad.find(p => p.id === id));
-        const valid    = profiles.filter(Boolean) as any[];
+        const valid    = profiles.filter((player): player is PlayerProfile => Boolean(player));
         return valid.length ? Math.round(valid.reduce((s, p) => s + overallRating(p.attributes), 0) / valid.length) : 0;
     }, [awayClub, awayLineup]);
 
-    const homePlayers = homeLineup.startingXI.map(id => homeClub.squad.find(p => p.id === id)).filter(Boolean) as any[];
-    const awayPlayers = awayLineup.startingXI.map(id => awayClub.squad.find(p => p.id === id)).filter(Boolean) as any[];
+    const homePlayers = homeLineup.startingXI
+        .map(id => homeClub.squad.find(p => p.id === id))
+        .filter((player): player is PlayerProfile => Boolean(player));
+    const awayPlayers = awayLineup.startingXI
+        .map(id => awayClub.squad.find(p => p.id === id))
+        .filter((player): player is PlayerProfile => Boolean(player));
 
     return (
         <div>
@@ -341,7 +482,7 @@ const MatchPreview: React.FC<{
                     <div style={{ fontSize: 10, letterSpacing: 1.5, color: homeClub.color, fontWeight: 700, textTransform: "uppercase", marginBottom: 10 }}>
                         {homeClub.name} Starting XI
                     </div>
-                    {homePlayers.map((p: any, i: number) => (
+                    {homePlayers.map((p, i) => (
                         <div key={p.id} style={{ display: "flex", gap: 8, alignItems: "center", padding: "4px 0", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
                             <span style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", width: 16 }}>{i + 1}</span>
                             <span style={{ fontSize: 9, color: "rgba(255,255,255,0.5)", width: 24 }}>{p.number}</span>
@@ -362,7 +503,7 @@ const MatchPreview: React.FC<{
                     <div style={{ fontSize: 10, letterSpacing: 1.5, color: awayClub.color, fontWeight: 700, textTransform: "uppercase", marginBottom: 10 }}>
                         {awayClub.name} Starting XI
                     </div>
-                    {awayPlayers.map((p: any, i: number) => (
+                    {awayPlayers.map((p, i) => (
                         <div key={p.id} style={{ display: "flex", gap: 8, alignItems: "center", padding: "4px 0", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
                             <span style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", width: 16 }}>{i + 1}</span>
                             <span style={{ fontSize: 9, color: "rgba(255,255,255,0.5)", width: 24 }}>{p.number}</span>

@@ -1,6 +1,5 @@
-import { Player, Ball, Team, MatchState, EngineConfig, Vec2 } from "./types";
+import type { Player, Ball, Team, MatchState, EngineConfig, Vec2, MatchEvent } from "./types";
 import { SeededRandom } from "./seededRandom";
-import { EventBus } from "./eventBus";
 import { SpatialHash } from "./spatialHash";
 
 export interface TacticalData {

@@ -1,13 +1,13 @@
 import type {
     Ball, Team, MatchState, MatchEvent, EngineConfig,
-    FieldDimensions, TeamSide,
+    FieldDimensions, TeamSide, MatchSimulationState, MatchSimulationSnapshot,
+    SimulationMode, MatchSimulationConfig, SimulationEvent,
 } from "./types";
 import { resetFormationPositions } from "./teamFactory";
 import { SimulationWorld } from "./core/SimulationWorld";
 import { MatchSimulator } from "./simulation/MatchSimulator";
 import { FastSimulator } from "./simulation/FastSimulator";
 import { HybridSimulator } from "./simulation/HybridSimulator";
-import { ReplaySimulator } from "./simulation/ReplaySimulator";
 import { BaseSimulator } from "./simulation/BaseSimulator";
 
 export const DEFAULT_FIELD: FieldDimensions = {
@@ -26,6 +26,7 @@ export const DEFAULT_CONFIG: EngineConfig = {
     simSpeed: 1.0,
     matchDuration: 5400,
     fieldDimensions: DEFAULT_FIELD,
+    seed: 12345,
 };
 
 export class MatchEngine {
@@ -37,11 +38,12 @@ export class MatchEngine {
     private fastSimulator: FastSimulator;
     private hybridSimulator: HybridSimulator;
     private activeSimulator: BaseSimulator;
+    private activeMode: SimulationMode = "realtime";
 
     private _initialHomeTeam: Team;
     private _initialAwayTeam: Team;
 
-    constructor(homeTeam: Team, awayTeam: Team, config: Partial<EngineConfig> = {}) {
+    constructor(homeTeam: Team, awayTeam: Team, config: MatchSimulationConfig = {}) {
         this.config = { ...DEFAULT_CONFIG, ...config };
         this.field = this.config.fieldDimensions;
 
@@ -66,16 +68,66 @@ export class MatchEngine {
     get awayTeam() { return this.world.awayTeam; }
     get ball() { return this.world.ball; }
     get state() { return this.world.state; }
-    get events() { return this.world.state.events; }
+    get events() { return this.world.eventStore.getAll(); }
 
-    start() { this.activeSimulator.start(); }
-    pause() { this.activeSimulator.pause(); }
-    tick() { this.activeSimulator.tick(); }
+    start() {
+        if (this.world.state.phase === "kickoff") {
+            this.world.state.phase = "playing";
+        }
+        this.world.state.isRunning = true;
+        this.world.state.isPaused = false;
+        this.activeSimulator.start();
+    }
 
-    setMode(mode: "realtime" | "fast" | "hybrid") {
+    pause() {
+        this.activeSimulator.pause();
+        this.world.state.isPaused = this.activeSimulator.isPaused;
+        this.world.state.isRunning = this.activeSimulator.isRunning;
+    }
+
+    tick() {
+        this.activeSimulator.tick();
+        this.world.state.isPaused = this.activeSimulator.isPaused;
+        this.world.state.isRunning = this.activeSimulator.isRunning;
+    }
+
+    setMode(mode: Exclude<SimulationMode, "replay">) {
         if (mode === "realtime") this.activeSimulator = this.simulator;
         if (mode === "fast") this.activeSimulator = this.fastSimulator;
         if (mode === "hybrid") this.activeSimulator = this.hybridSimulator;
+        this.activeMode = mode;
+    }
+
+    getMode(): SimulationMode {
+        return this.activeMode;
+    }
+
+    getState(): MatchSimulationState {
+        return {
+            homeTeam: this.world.homeTeam,
+            awayTeam: this.world.awayTeam,
+            ball: this.world.ball,
+            state: this.world.state,
+            mode: this.activeMode,
+        };
+    }
+
+    getEvents(): SimulationEvent[] {
+        return this.world.eventStore.getAll();
+    }
+
+    getAuthoritativeEvents(): SimulationEvent[] {
+        return this.world.eventStore.getAuthoritativeEvents();
+    }
+
+    getSnapshot(): MatchSimulationSnapshot {
+        return this.world.createSnapshot(this.activeMode);
+    }
+
+    restoreSnapshot(snapshot: MatchSimulationSnapshot) {
+        this.pause();
+        this.world.applySnapshot(snapshot);
+        this.activeMode = snapshot.mode;
     }
 
     onEvent(cb: (event: MatchEvent) => void) {
@@ -93,6 +145,11 @@ export class MatchEngine {
         this.world.awayTeam.score = 0;
         this.world.ball = this._createBall();
         this.world.state = this._createInitialState();
+        this.world.eventStore.clear();
+        this.simulator = new MatchSimulator(this.world);
+        this.fastSimulator = new FastSimulator(this.world);
+        this.hybridSimulator = new HybridSimulator(this.world);
+        this.setMode(this.activeMode === "replay" ? "realtime" : this.activeMode);
         this._placeBallForKickoff("home");
     }
 

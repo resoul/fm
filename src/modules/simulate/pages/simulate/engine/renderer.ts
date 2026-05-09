@@ -4,7 +4,7 @@
 
 import type { Ball, Team, MatchState, FieldDimensions, RenderOptions, Vec2, Player } from "./types";
 import { PHYSICS, distVec } from "./physics";
-import { TacticalData } from "./context";
+import type { TacticalData } from "./context";
 
 // ── Render Colors ─────────────────────────────────────────
 const COLORS = {
@@ -32,14 +32,25 @@ export class Renderer {
     private ctx: CanvasRenderingContext2D;
     private playerAnimStates: Map<string, PlayerAnimState> = new Map();
     private goalFlashTimer = 0;
+    private canvas: HTMLCanvasElement;
+    private field: FieldDimensions;
 
-    constructor(private canvas: HTMLCanvasElement, private field: FieldDimensions) {
+    constructor(canvas: HTMLCanvasElement, field: FieldDimensions) {
+        this.canvas = canvas;
+        this.field = field;
         this.ctx = canvas.getContext("2d")!;
     }
 
     triggerGoalFlash() { this.goalFlashTimer = 60; }
 
-    render(homeTeam: Team, awayTeam: Team, ball: Ball, state: MatchState, opts: RenderOptions, tactical?: TacticalData): void {
+    render(
+        homeTeam: Readonly<Team>,
+        awayTeam: Readonly<Team>,
+        ball: Readonly<Ball>,
+        _state: Readonly<MatchState>,
+        opts: RenderOptions,
+        tactical?: TacticalData,
+    ): void {
         const ctx = this.ctx;
         const fw = this.field.width;
         const fh = this.field.height;
@@ -210,12 +221,6 @@ export class Renderer {
         ctx.arc(spotX, cx, 3, 0, Math.PI * 2);
         ctx.fillStyle = COLORS.lineWhite;
         ctx.fill();
-
-        ctx.beginPath();
-        const arcStartAngle = side === "left" ? 0.35 : Math.PI + 0.35;
-        const arcEndAngle   = side === "left" ? Math.PI - 0.35 : Math.PI * 2 - 0.35;
-        ctx.arc(spotX, cx, 55, arcStartAngle, arcEndAngle);
-        ctx.stroke();
     }
 
     private _drawCornerArcs(): void {
@@ -371,7 +376,7 @@ export class Renderer {
         ctx.stroke();
     }
 
-    private _drawPossessionIndicator(homeTeam: Team, awayTeam: Team, ball: Ball): void {
+    private _drawPossessionIndicator(homeTeam: Readonly<Team>, awayTeam: Readonly<Team>, _ball: Readonly<Ball>): void {
         const owner = [...homeTeam.players, ...awayTeam.players].find(p => p.hasBall);
         if (!owner) return;
         const ctx = this.ctx;

@@ -1,9 +1,7 @@
 import { BaseSimulator } from "./BaseSimulator";
 import { SimulationWorld } from "../core/SimulationWorld";
 import { CommandResolver } from "../core/CommandResolver";
-import { DecisionSystem } from "../systems/DecisionSystem";
-import { PhysicsSystem } from "../systems/PhysicsSystem";
-import { RefereeSystem } from "../systems/RefereeSystem";
+import { DecisionSystem, PhysicsSystem, RefereeSystem } from "../match/systems";
 
 export class FastSimulator extends BaseSimulator {
     private resolver: CommandResolver;

@@ -3,7 +3,12 @@ import type { Command } from "./Command";
 
 export class CommandResolver {
     resolve(world: SimulationWorld, commands: Command[]) {
-        for (const cmd of commands) {
+        const orderedCommands = [
+            ...commands.filter(cmd => cmd.type !== "KICK_BALL"),
+            ...commands.filter(cmd => cmd.type === "KICK_BALL"),
+        ];
+
+        for (const cmd of orderedCommands) {
             switch (cmd.type) {
                 case "MOVE_PLAYER": {
                     const player = this.findPlayer(world, cmd.playerId);
@@ -11,13 +16,25 @@ export class CommandResolver {
                     break;
                 }
                 case "KICK_BALL": {
-                    // Logic to update ball velocity based on kick
-                    // (Simplification for now)
+                    const player = this.findPlayer(world, cmd.playerId);
+                    const origin = player?.pos ?? world.ball.pos;
+                    const dx = cmd.targetPos.x - origin.x;
+                    const dy = cmd.targetPos.y - origin.y;
+                    const len = Math.hypot(dx, dy) || 1;
+
+                    this.clearBallOwnership(world);
+                    if (player) {
+                        player.kickCooldown = 28;
+                    }
+
+                    world.ball.pos = { ...origin };
                     world.ball.vel = {
-                        x: (cmd.targetPos.x - world.ball.pos.x) * cmd.force,
-                        y: (cmd.targetPos.y - world.ball.pos.y) * cmd.force
+                        x: (dx / len) * cmd.force,
+                        y: (dy / len) * cmd.force
                     };
                     world.ball.ownerPlayerId = null;
+                    world.ball.lastTouchedBy = cmd.playerId;
+                    world.ball.lastTouchedTeam = player?.team ?? world.ball.lastTouchedTeam;
                     break;
                 }
                 case "SET_PLAYER_DECISION": {
@@ -34,6 +51,7 @@ export class CommandResolver {
                     break;
                 }
                 case "UPDATE_BALL": {
+                    this.clearBallOwnership(world);
                     world.ball.pos = { ...cmd.pos };
                     world.ball.vel = { ...cmd.vel };
                     world.ball.height = cmd.height;
@@ -41,6 +59,10 @@ export class CommandResolver {
                     world.ball.ownerPlayerId = cmd.ownerPlayerId;
                     world.ball.lastTouchedBy = cmd.lastTouchedBy;
                     world.ball.lastTouchedTeam = cmd.lastTouchedTeam;
+                    if (cmd.ownerPlayerId) {
+                        const owner = this.findPlayer(world, cmd.ownerPlayerId);
+                        if (owner) owner.hasBall = true;
+                    }
                     break;
                 }
                 case "UPDATE_MATCH_STATE": {
@@ -62,5 +84,11 @@ export class CommandResolver {
             world.homeTeam.players.find(p => p.id === id) ||
             world.awayTeam.players.find(p => p.id === id)
         );
+    }
+
+    private clearBallOwnership(world: SimulationWorld) {
+        for (const player of [...world.homeTeam.players, ...world.awayTeam.players]) {
+            player.hasBall = false;
+        }
     }
 }

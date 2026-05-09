@@ -1,10 +1,10 @@
-import { Player, Ball, MatchState, Vec2 } from "./types";
+import type { Player, Ball, PlayerState, Vec2 } from "./types";
 
 export interface StateSnapshot {
     tick: number;
     ball: { pos: Vec2; height: number };
-    homePlayers: { id: string; pos: Vec2; state: string }[];
-    awayPlayers: { id: string; pos: Vec2; state: string }[];
+    homePlayers: { id: string; pos: Vec2; state: PlayerState }[];
+    awayPlayers: { id: string; pos: Vec2; state: PlayerState }[];
 }
 
 /**

@@ -1,8 +1,8 @@
-import { SimulationContext } from "../context";
-import { SimulationSystem } from "../pipeline";
+import type { SimulationContext } from "../context";
+import type { SimulationSystem } from "../pipeline";
 import { distVec, normVec, subVec } from "../physics";
-import { Player, Vec2 } from "../types";
-import { Command, KickBallCommand, SetPlayerDecisionCommand, SetPlayerStateCommand, MovePlayerCommand } from "../core/Command";
+import type { Player, Vec2 } from "../types";
+import type { Command, KickBallCommand, SetPlayerDecisionCommand, SetPlayerStateCommand } from "../core/Command";
 
 export class GoalkeeperSystem implements SimulationSystem {
     name = "GoalkeeperSystem";

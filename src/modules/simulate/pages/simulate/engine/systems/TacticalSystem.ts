@@ -1,8 +1,8 @@
 import type { SimulationContext } from "../context";
 import type { SimulationSystem } from "../pipeline";
-import { distVec, subVec, lenVec } from "../physics";
-import { Command } from "../core/Command";
-import { Player, Vec2 } from "../types";
+import { distVec } from "../physics";
+import type { Command } from "../core/Command";
+import type { Player, Vec2 } from "../types";
 
 export class TacticalSystem implements SimulationSystem {
     name = "TacticalSystem";
@@ -98,9 +98,6 @@ export class TacticalSystem implements SimulationSystem {
             if (tm.id === owner.id) continue;
             
             let open = true;
-            const laneVec = subVec(tm.pos, owner.pos);
-            const laneLen = lenVec(laneVec);
-            
             for (const opp of opponents) {
                 const d = this.distToSegment(opp.pos, owner.pos, tm.pos);
                 if (d < 15) { 

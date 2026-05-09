@@ -48,6 +48,6 @@ export class HybridSimulator extends BaseSimulator {
         const lastEvent = state.events[state.events.length - 1];
         const isNewGoal = lastEvent?.type === "goal" && state.tick - lastEvent.minute * 60 * 60 < 100;
 
-        return isNewGoal || (inPenaltyArea && this.world.rng.next() < 0.01);
+        return isNewGoal || (inPenaltyArea && this.rng.next() < 0.01);
     }
 }

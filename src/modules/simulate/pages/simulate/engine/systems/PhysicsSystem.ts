@@ -1,10 +1,10 @@
-import { SimulationContext } from "../context";
-import { SimulationSystem } from "../pipeline";
+import type { SimulationContext } from "../context";
+import type { SimulationSystem } from "../pipeline";
 import { 
     PHYSICS, scaleVec, lenVec, addVec, normVec, distVec 
 } from "../physics";
-import { Command, UpdateBallCommand } from "../core/Command";
-import { Ball, FieldDimensions, Team } from "../types";
+import type { Command, UpdateBallCommand } from "../core/Command";
+import type { Ball, FieldDimensions, Player, Team } from "../types";
 
 export class PhysicsSystem implements SimulationSystem {
     name = "PhysicsSystem";
@@ -81,11 +81,13 @@ export class PhysicsSystem implements SimulationSystem {
         if (ball.ownerPlayerId !== null) return null;
 
         const allPlayers = [...homeTeam.players, ...awayTeam.players];
-        let closest: any = null; // Still some any here for player finding logic
-        let closestDist = PHYSICS.CONTROL_RANGE;
+        let closest: Player | null = null;
+        let closestDist: number = PHYSICS.CONTROL_RANGE;
 
+        const ballSpeed = lenVec(ball.vel);
         for (const p of allPlayers) {
-            if (p.kickCooldown > 8) continue;
+            if (p.kickCooldown > 12) continue;
+            if (ball.lastTouchedBy === p.id && ballSpeed > 1.2) continue;
             const d = distVec(p.pos, ball.pos);
             if (d < closestDist) { 
                 closestDist = d; 

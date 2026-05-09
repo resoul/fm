@@ -1,9 +1,8 @@
-import { Vec2 } from "./types";
+import type { Vec2 } from "./types";
 
 export interface SpatialEntity {
     id: string;
     pos: Vec2;
-    [key: string]: any;
 }
 
 /**

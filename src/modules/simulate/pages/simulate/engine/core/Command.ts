@@ -1,4 +1,4 @@
-import type { Vec2, PlayerState, AIDecision, MatchPhase } from "../types";
+import type { Vec2, PlayerState, AIDecision, MatchPhase, TeamSide } from "../types";
 
 export type CommandType = 
     | "MOVE_PLAYER" 
@@ -55,7 +55,7 @@ export interface UpdateBallCommand extends BaseCommand {
     heightVel: number;
     ownerPlayerId: string | null;
     lastTouchedBy: string | null;
-    lastTouchedTeam: string | null;
+    lastTouchedTeam: TeamSide | null;
 }
 
 export interface UpdateMatchStateCommand extends BaseCommand {
