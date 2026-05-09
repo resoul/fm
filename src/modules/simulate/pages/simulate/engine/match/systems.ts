@@ -8,3 +8,4 @@ export { ShootingSystem } from "../systems/ShootingSystem";
 export { TackleSystem } from "../systems/TackleSystem";
 export { TacticalSystem } from "../systems/TacticalSystem";
 export { OffBallSystem } from "../systems/OffBallSystem";
+export { MomentumSystem } from "../systems/MomentumSystem";
