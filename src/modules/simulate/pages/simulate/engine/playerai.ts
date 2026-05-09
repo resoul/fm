@@ -5,47 +5,31 @@
 import type { Player, Ball, Team, FieldDimensions, AIDecision, Vec2 } from "./types";
 import {
     distVec, normVec, subVec, addVec, scaleVec,
-    lerpVec, rng, rngRange, rngBool, rngInt,
-    PHYSICS, vec2,
+    rng, rngRange, rngInt,
 } from "./physics.ts";
 
 // ── AI Constants ──────────────────────────────────────────
 const AI = {
-    SHOOT_RANGE: 160,           // max distance to attempt shot
-    SHOOT_RANGE_GK: 280,        // GK shoot range (clearance)
-    PASS_RANGE: 220,            // max pass distance
-    PASS_MIN_RANGE: 30,         // min pass distance
-    TACKLE_RANGE: 16,           // range to attempt tackle
-    PRESSURE_RANGE: 40,         // when defender presses carrier
-    SUPPORT_DISTANCE: 80,       // ideal teammate spacing
+    SHOOT_RANGE: 120,           // FIX: was 160 — too easy to shoot from far
+    SHOOT_RANGE_GK: 280,
+    PASS_RANGE: 220,
+    PASS_MIN_RANGE: 30,
+    TACKLE_RANGE: 16,
+    PRESSURE_RANGE: 40,
+    SUPPORT_DISTANCE: 80,
     OFFSIDE_MARGIN: 14,
-    GOAL_CHANCE_BASE: 0.55,     // base prob to shoot if in range
-    PASS_CHANCE_BASE: 0.62,
-    DECISION_INTERVAL_MIN: 18,  // frames between AI decisions
-    DECISION_INTERVAL_MAX: 35,
-    FREE_ZONE_SAMPLES: 8,       // rays to test for free zones
+    GOAL_CHANCE_BASE: 0.30,     // FIX: was 0.55 — way too high, caused score spam
+    PASS_CHANCE_BASE: 0.65,     // FIX: slightly higher pass preference
+    // FIX: longer decision intervals — at 60fps, 18 frames = 0.3s which was too fast
+    // Now 45-90 frames = 0.75–1.5 real seconds between decisions
+    DECISION_INTERVAL_MIN: 45,
+    DECISION_INTERVAL_MAX: 90,
+    FREE_ZONE_SAMPLES: 8,
+    // FIX: GK save range — goalkeeper now actively blocks shots near goal line
+    GK_SAVE_RANGE: 100,
+    GK_LINE_X_MARGIN: 30,       // how far GK stays from goal line
 } as const;
 
-// ── Helper: find player by id ─────────────────────────────
-function findPlayer(teams: [Team, Team], id: string): Player | undefined {
-    for (const team of teams) {
-        const p = team.players.find(pl => pl.id === id);
-        if (p) return p;
-    }
-}
-
-// ── Helper: nearest enemy ─────────────────────────────────
-function nearestEnemy(player: Player, enemies: Player[]): Player | null {
-    let best: Player | null = null;
-    let bestDist = Infinity;
-    for (const e of enemies) {
-        const d = distVec(player.pos, e.pos);
-        if (d < bestDist) { bestDist = d; best = e; }
-    }
-    return best;
-}
-
-// ── Helper: is player in shooting position ────────────────
 function isInShootingPosition(
     player: Player,
     field: FieldDimensions,
@@ -54,7 +38,10 @@ function isInShootingPosition(
     const goalX = attackingRight ? field.width : 0;
     const dist = Math.abs(player.pos.x - goalX);
     const maxRange = player.position === "GK" ? AI.SHOOT_RANGE_GK : AI.SHOOT_RANGE;
-    return dist < maxRange;
+    // FIX: also check lateral angle — don't shoot from wide angles far from center
+    const lateralOffset = Math.abs(player.pos.y - field.height / 2);
+    const maxLateral = AI.SHOOT_RANGE * 0.85;
+    return dist < maxRange && lateralOffset < maxLateral;
 }
 
 // ── Helper: best pass target ─────────────────────────────
@@ -74,12 +61,10 @@ function findBestPassTarget(
         const dist = distVec(player.pos, tm.pos);
         if (dist < AI.PASS_MIN_RANGE || dist > AI.PASS_RANGE) continue;
 
-        // Score = forward progress toward goal - pressure on receiver
         const forward = attackingRight
             ? (tm.pos.x - player.pos.x) / field.width
             : (player.pos.x - tm.pos.x) / field.width;
 
-        // How open is receiver?
         let minEnemyDist = Infinity;
         for (const e of enemies) {
             const ed = distVec(tm.pos, e.pos);
@@ -87,7 +72,6 @@ function findBestPassTarget(
         }
         const openness = Math.min(minEnemyDist / 80, 1);
 
-        // Prefer passes toward goal
         const goalDist = Math.abs(tm.pos.x - goalX);
         const goalProximity = 1 - goalDist / field.width;
 
@@ -105,7 +89,6 @@ function findFreeZone(
     field: FieldDimensions,
     attackingRight: boolean
 ): Vec2 {
-    const goalX = attackingRight ? field.width : 0;
     let bestPos = player.targetPos;
     let bestScore = -Infinity;
 
@@ -119,7 +102,6 @@ function findFreeZone(
             y: Math.max(20, Math.min(field.height - 20, player.pos.y + Math.sin(angle) * spread)),
         };
 
-        // Score the candidate position
         let minEnemyDist = Infinity;
         for (const e of enemies) {
             const d = distVec(candidate, e.pos);
@@ -153,7 +135,6 @@ function getDefensivePosition(
     attackingRight: boolean
 ): Vec2 {
     const slots = getFormationSlot(player, field, attackingRight);
-    // Shift toward ball when defending
     const toBall = subVec(ball.pos, slots);
     const shift = Math.min(distVec(slots, ball.pos) * 0.35, 60);
     return addVec(slots, scaleVec(normVec(toBall), shift));
@@ -161,7 +142,6 @@ function getDefensivePosition(
 
 // ── Approximate formation home position ───────────────────
 function getFormationSlot(player: Player, field: FieldDimensions, attackingRight: boolean): Vec2 {
-    // Use player's initial target as formation anchor
     return { ...player.targetPos };
 }
 
@@ -187,24 +167,42 @@ function goalkeeperAI(
         };
     }
 
-    // Ball coming toward goal → intercept
-    if (ballDist < 120) {
-        const interceptY = Math.max(
-            goalCenterY - field.goalWidth / 2 + 10,
-            Math.min(goalCenterY + field.goalWidth / 2 - 10, ball.pos.y)
-        );
-        return {
-            action: "move",
-            targetPos: { x: goalX + (attackingRight ? 18 : -18), y: interceptY },
-        };
+    // FIX: GK actively dives toward ball when it's close and heading toward goal
+    // This is the core save mechanic — GK intercepts ball trajectory
+    if (ballDist < AI.GK_SAVE_RANGE) {
+        // Predict where ball will be in ~10 frames and move there
+        const predictedX = ball.pos.x + ball.vel.x * 10;
+        const predictedY = ball.pos.y + ball.vel.y * 10;
+
+        // Only intercept if ball is moving toward our goal
+        const ballMovingTowardGoal = attackingRight
+            ? ball.vel.x < -0.5
+            : ball.vel.x > 0.5;
+
+        if (ballMovingTowardGoal || ballDist < 50) {
+            // Clamp interception point to goal width + small margin
+            const interceptY = Math.max(
+                goalCenterY - field.goalWidth / 2 - 10,
+                Math.min(goalCenterY + field.goalWidth / 2 + 10, predictedY)
+            );
+            // FIX: GK stays close to goal line but not on it
+            const gkX = goalX + (attackingRight ? AI.GK_LINE_X_MARGIN : -AI.GK_LINE_X_MARGIN);
+            return {
+                action: "move",
+                targetPos: { x: gkX, y: interceptY },
+            };
+        }
     }
 
-    // Default: position between ball and goal
+    // Default: position between ball and goal center, limited range
     const guardX = goalX + (attackingRight ? 22 : -22);
-    const guardY = goalCenterY + (ball.pos.y - goalCenterY) * 0.4;
+    const guardY = goalCenterY + (ball.pos.y - goalCenterY) * 0.45;
     return {
         action: "move",
-        targetPos: { x: guardX, y: Math.max(goalCenterY - 40, Math.min(goalCenterY + 40, guardY)) },
+        targetPos: {
+            x: guardX,
+            y: Math.max(goalCenterY - 50, Math.min(goalCenterY + 50, guardY))
+        },
     };
 }
 
@@ -226,14 +224,19 @@ function withBallAI(
         if (target) return { action: "pass", targetPlayerId: target.id };
     }
 
-    // Shooting opportunity
+    // FIX: shooting — lower base chance, requires closer position and less pressure
     if (inShooting) {
-        const shootProb = AI.GOAL_CHANCE_BASE * (player.attributes.shooting / 80);
-        if (pressureLevel === 0 && rng() < shootProb + 0.15) {
+        const distToGoal = Math.abs(player.pos.x - (attackingRight ? field.width : 0));
+        // Closer = higher probability, further = very low chance
+        const distanceFactor = 1 - (distToGoal / AI.SHOOT_RANGE);
+        const shootProb = AI.GOAL_CHANCE_BASE * distanceFactor * (player.attributes.shooting / 80);
+
+        if (pressureLevel === 0 && rng() < shootProb + 0.1) {
             return { action: "shoot" };
-        } else if (rng() < shootProb - pressureLevel * 0.15) {
+        } else if (pressureLevel === 1 && rng() < shootProb * 0.5) {
             return { action: "shoot" };
         }
+        // Under pressure of 2+ → don't shoot, handled above
     }
 
     // Try to pass
@@ -279,7 +282,6 @@ function withoutBallAI(
             const defPos = getDefensivePosition(player, ball, field, attackingRight);
             const distToCarrier = distVec(player.pos, ballOwnerEnemy.pos);
 
-            // Close enough to tackle
             if (distToCarrier < AI.PRESSURE_RANGE * 1.8 && (isDef || rng() < 0.5)) {
                 if (distToCarrier < AI.TACKLE_RANGE * 1.5) {
                     return { action: "defend", targetPlayerId: ballOwnerEnemy.id };
@@ -292,7 +294,6 @@ function withoutBallAI(
 
     // Attacking: find free zone or make run
     if (ballOwnerTeam) {
-        // Only forward players make runs
         const isForward = ["ST", "LW", "RW", "CAM"].includes(player.position);
         if (isForward || rng() < 0.3) {
             const freeZone = findFreeZone(player, enemies, teammates, field, attackingRight);
@@ -317,7 +318,7 @@ export function updatePlayerAI(
     enemyTeam: Team,
     field: FieldDimensions,
 ): AIDecision | null {
-    // Cooldown: only decide every N frames
+    // FIX: longer cooldown — was 18-35 frames (0.3-0.6s), now 45-90 frames (0.75-1.5s)
     if (player.actionCooldown > 0) {
         player.actionCooldown--;
         return null;

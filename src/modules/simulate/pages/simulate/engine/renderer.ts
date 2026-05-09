@@ -1,8 +1,8 @@
 // ============================================================
-// RENDERER — Canvas 2D top-down football field renderer
+// RENDERER — Canvas 2D top-down football football renderer
 // ============================================================
 
-import type { Ball, Team, MatchState, FieldDimensions, RenderOptions } from "./types";
+import type { Ball, Team, MatchState, FieldDimensions, RenderOptions, Vec2 } from "./types";
 import { PHYSICS, distVec } from "./physics";
 
 // ── Render Colors ─────────────────────────────────────────
@@ -38,7 +38,7 @@ export class Renderer {
 
     triggerGoalFlash() { this.goalFlashTimer = 60; }
 
-    render(homeTeam: Team, awayTeam: Team, ball: Ball, state: MatchState, opts: RenderOptions): void {
+    render(homeTeam: Team, awayTeam: Team, ball: Ball, state: MatchState, opts: RenderOptions, tactical?: any): void {
         const ctx = this.ctx;
         const fw = this.field.width;
         const fh = this.field.height;
@@ -52,6 +52,12 @@ export class Renderer {
         ctx.scale(scaleX, scaleY);
 
         this._drawField();
+
+        // Debug: Influence Map
+        if (opts.showHeatmap && tactical?.influenceMap) {
+            this._drawInfluenceMap(tactical.influenceMap);
+        }
+
         this._drawGoals();
 
         // Goal flash
@@ -59,6 +65,11 @@ export class Renderer {
             ctx.fillStyle = COLORS.goalFlash;
             ctx.fillRect(0, 0, fw, fh);
             this.goalFlashTimer--;
+        }
+
+        // Debug: Tactical Overlay (Centroids & Shape)
+        if (opts.showHeatmap && tactical) {
+            this._drawTacticalOverlay(tactical, homeTeam, awayTeam);
         }
 
         // Draw players
@@ -79,6 +90,61 @@ export class Renderer {
         ctx.restore();
     }
 
+    // ── Influence Map ───────────────────────────────────────
+    private _drawInfluenceMap(map: number[][]): void {
+        const ctx = this.ctx;
+        const cellW = this.field.width / 10;
+        const cellH = this.field.height / 7;
+
+        ctx.globalAlpha = 0.25;
+        for (let x = 0; x < 10; x++) {
+            for (let y = 0; y < 7; y++) {
+                const val = map[x][y]; // >0 for home (red-ish/blue-ish), <0 for away
+                if (val === 0) continue;
+
+                // Home control: Blue-ish, Away control: Red-ish (adjust as needed)
+                ctx.fillStyle = val > 0 ? `rgba(60, 100, 255, ${Math.min(0.8, val * 0.5)})` : `rgba(255, 60, 60, ${Math.min(0.8, Math.abs(val) * 0.5)})`;
+                ctx.fillRect(x * cellW, y * cellH, cellW, cellH);
+            }
+        }
+        ctx.globalAlpha = 1.0;
+    }
+
+    // ── Tactical Overlay ─────────────────────────────────────
+    private _drawTacticalOverlay(tactical: any, home: Team, away: Team): void {
+        const ctx = this.ctx;
+
+        // Draw Centroids
+        this._drawCentroid(tactical.homeCentroid, home.color);
+        this._drawCentroid(tactical.awayCentroid, away.color);
+
+        // Draw Team "Shell" (Bounding circles or hulls)
+        ctx.setLineDash([5, 5]);
+        ctx.lineWidth = 1;
+        
+        ctx.strokeStyle = home.color;
+        ctx.beginPath();
+        ctx.arc(tactical.homeCentroid.x, tactical.homeCentroid.y, tactical.homeCompactness, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.strokeStyle = away.color;
+        ctx.beginPath();
+        ctx.arc(tactical.awayCentroid.x, tactical.awayCentroid.y, tactical.awayCompactness, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.setLineDash([]);
+    }
+
+    private _drawCentroid(pos: Vec2, color: string): void {
+        const ctx = this.ctx;
+        ctx.beginPath();
+        ctx.moveTo(pos.x - 10, pos.y); ctx.lineTo(pos.x + 10, pos.y);
+        ctx.moveTo(pos.x, pos.y - 10); ctx.lineTo(pos.x, pos.y + 10);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+    }
+
     // ── Field ───────────────────────────────────────────────
     private _drawField(): void {
         const ctx = this.ctx;
@@ -86,11 +152,9 @@ export class Renderer {
         const fh = this.field.height;
         const stripeW = 60;
 
-        // Base green
         ctx.fillStyle = COLORS.fieldGreen;
         ctx.fillRect(0, 0, fw, fh);
 
-        // Alternating stripes
         for (let x = 0; x < fw; x += stripeW * 2) {
             ctx.fillStyle = COLORS.fieldStripe2;
             ctx.fillRect(x, 0, stripeW, fh);
@@ -99,22 +163,17 @@ export class Renderer {
         ctx.strokeStyle = COLORS.lineWhite;
         ctx.lineWidth = 1.5;
         ctx.lineCap = "round";
-
-        // Outline
         ctx.strokeRect(2, 2, fw - 4, fh - 4);
 
-        // Halfway line
         ctx.beginPath();
         ctx.moveTo(fw / 2, 2);
         ctx.lineTo(fw / 2, fh - 2);
         ctx.stroke();
 
-        // Center circle
         ctx.beginPath();
         ctx.arc(fw / 2, fh / 2, this.field.centerCircleRadius, 0, Math.PI * 2);
         ctx.stroke();
 
-        // Center dot
         ctx.beginPath();
         ctx.arc(fw / 2, fh / 2, 3, 0, Math.PI * 2);
         ctx.fillStyle = COLORS.lineWhite;
@@ -140,21 +199,18 @@ export class Renderer {
         ctx.lineWidth = 1.5;
         ctx.strokeRect(x, y, pw, ph);
 
-        // Small box (6-yard box)
         const sbw = 40;
         const sbh = this.field.goalWidth + 30;
         const sx = side === "left" ? 0 : fw - sbw;
         const sy = cx - sbh / 2;
         ctx.strokeRect(sx, sy, sbw, sbh);
 
-        // Penalty spot
         const spotX = side === "left" ? 80 : fw - 80;
         ctx.beginPath();
         ctx.arc(spotX, cx, 3, 0, Math.PI * 2);
         ctx.fillStyle = COLORS.lineWhite;
         ctx.fill();
 
-        // Penalty arc
         ctx.beginPath();
         const arcStartAngle = side === "left" ? 0.35 : Math.PI + 0.35;
         const arcEndAngle   = side === "left" ? Math.PI - 0.35 : Math.PI * 2 - 0.35;
@@ -184,7 +240,6 @@ export class Renderer {
         }
     }
 
-    // ── Goals ───────────────────────────────────────────────
     private _drawGoals(): void {
         const ctx = this.ctx;
         const fw = this.field.width;
@@ -193,15 +248,11 @@ export class Renderer {
         const gd = this.field.goalDepth;
         const cx = fh / 2;
 
-        // Left goal
         ctx.strokeStyle = COLORS.goalPost;
         ctx.lineWidth = 3;
         ctx.strokeRect(-gd, cx - gw / 2, gd, gw);
-
-        // Right goal
         ctx.strokeRect(fw, cx - gw / 2, gd, gw);
 
-        // Net lines
         ctx.strokeStyle = COLORS.goalNet;
         ctx.lineWidth = 0.5;
         const netSpacing = 10;
@@ -217,31 +268,25 @@ export class Renderer {
         }
     }
 
-    // ── Player ──────────────────────────────────────────────
     private _drawPlayer(player: any, teamColor: string, secColor: string, showName: boolean): void {
         const ctx = this.ctx;
         const x = player.pos.x;
         const y = player.pos.y;
         const r = PHYSICS.PLAYER_RADIUS;
 
-        // Init anim state
         if (!this.playerAnimStates.has(player.id)) {
             this.playerAnimStates.set(player.id, { legPhase: 0, prevX: x, prevY: y });
         }
         const anim = this.playerAnimStates.get(player.id)!;
-
-        // Update leg animation
         const speed = distVec(player.pos, { x: anim.prevX, y: anim.prevY });
         anim.legPhase += speed * 0.25;
         anim.prevX = x; anim.prevY = y;
 
-        // Shadow
         ctx.beginPath();
         ctx.ellipse(x, y + r - 1, r * 0.8, r * 0.35, 0, 0, Math.PI * 2);
         ctx.fillStyle = COLORS.shadow;
         ctx.fill();
 
-        // Body circle
         ctx.beginPath();
         ctx.arc(x, y, r, 0, Math.PI * 2);
         ctx.fillStyle = teamColor;
@@ -250,14 +295,12 @@ export class Renderer {
         ctx.lineWidth = 1;
         ctx.stroke();
 
-        // Jersey number
         ctx.fillStyle = secColor;
         ctx.font = `bold ${r < 8 ? 6 : 7}px monospace`;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillText(String(player.number), x, y);
 
-        // Ball possession indicator
         if (player.hasBall) {
             ctx.beginPath();
             ctx.arc(x, y, r + 3, 0, Math.PI * 2);
@@ -266,7 +309,6 @@ export class Renderer {
             ctx.stroke();
         }
 
-        // Player name
         if (showName) {
             ctx.fillStyle = "rgba(255,255,255,0.9)";
             ctx.font = "6px Arial";
@@ -276,7 +318,6 @@ export class Renderer {
             ctx.fillText(shortName, x, y + r + 3);
         }
 
-        // State indicator dot
         const stateColors: Record<string, string> = {
             defending:    "#ff4444",
             passing:      "#44aaff",
@@ -292,30 +333,25 @@ export class Renderer {
         }
     }
 
-    // ── Ball ─────────────────────────────────────────────────
     private _drawBall(ball: Ball): void {
         const ctx = this.ctx;
         const x = ball.pos.x;
         const y = ball.pos.y;
         const r = PHYSICS.BALL_RADIUS;
 
-        // Height visual: offset shadow further for airborne ball
         const shadowOffset = 2 + ball.height * 0.08;
-        const visualY = y - ball.height * 0.3; // visual lift
+        const visualY = y - ball.height * 0.3;
 
-        // Shadow
         ctx.beginPath();
         ctx.ellipse(x, y + shadowOffset, r * 0.9, r * 0.4, 0, 0, Math.PI * 2);
         ctx.fillStyle = "rgba(0,0,0,0.4)";
         ctx.fill();
 
-        // Ball
         ctx.beginPath();
         ctx.arc(x, visualY, r + ball.height * 0.04, 0, Math.PI * 2);
         ctx.fillStyle = COLORS.ballMain;
         ctx.fill();
 
-        // Pentagon panels
         const panels = 5;
         const panelR = r * 0.45;
         for (let i = 0; i < panels; i++) {
@@ -328,7 +364,6 @@ export class Renderer {
             ctx.fill();
         }
 
-        // Outline
         ctx.beginPath();
         ctx.arc(x, visualY, r + ball.height * 0.04, 0, Math.PI * 2);
         ctx.strokeStyle = "rgba(0,0,0,0.6)";
@@ -336,14 +371,11 @@ export class Renderer {
         ctx.stroke();
     }
 
-    // ── Possession indicator ──────────────────────────────
     private _drawPossessionIndicator(homeTeam: Team, awayTeam: Team, ball: Ball): void {
         const owner = [...homeTeam.players, ...awayTeam.players].find(p => p.hasBall);
         if (!owner) return;
-
         const ctx = this.ctx;
         const color = owner.team === "home" ? homeTeam.color : awayTeam.color;
-
         ctx.beginPath();
         ctx.arc(owner.pos.x, owner.pos.y - PHYSICS.PLAYER_RADIUS - 10, 4, 0, Math.PI * 2);
         ctx.fillStyle = color;

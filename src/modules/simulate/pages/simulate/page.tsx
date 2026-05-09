@@ -3,16 +3,27 @@ import { ScrollArea } from '@/components/scroll-area';
 import { MatchEngine } from "./engine/matchEngine";
 import FootballField from "./components/FootballField";
 import MatchHUD from "./components/MatchHUD";
+import PreMatchPage from "./components/PreMatchPage";
 import type { MatchEvent, RenderOptions } from "./engine/types";
 
+// ── App flow: "prematch" → "playing" ─────────────────────
+type AppScreen = "prematch" | "playing";
+
 export function SimulatePage() {
-    const engineRef = useRef<MatchEngine>(new MatchEngine());
-    const engine = engineRef.current;
+    const [screen, setScreen]     = useState<AppScreen>("prematch");
+    const engineRef               = useRef<MatchEngine | null>(null);
 
     // Force re-render on tick/events
-    const [tick, setTick] = useState(0);
-    const [events, setEvents] = useState<MatchEvent[]>([]);
+    const [tick, setTick]         = useState(0);
+    const [events, setEvents]     = useState<MatchEvent[]>([]);
     const [showNames, setShowNames] = useState(true);
+
+    const handleMatchReady = useCallback((engine: MatchEngine) => {
+        engineRef.current = engine;
+        setTick(0);
+        setEvents([]);
+        setScreen("playing");
+    }, []);
 
     const handleTick = useCallback(() => {
         setTick(t => t + 1);
@@ -23,24 +34,27 @@ export function SimulatePage() {
     }, []);
 
     const handleStart = useCallback(() => {
+        const engine = engineRef.current;
+        if (!engine) return;
         if (!engine.state.isRunning) {
             engine.start();
         } else {
             engine.pause();
         }
         setTick(t => t + 1);
-    }, [engine]);
+    }, []);
 
     const handlePause = useCallback(() => {
-        engine.pause();
+        engineRef.current?.pause();
         setTick(t => t + 1);
-    }, [engine]);
+    }, []);
 
     const handleReset = useCallback(() => {
-        engine.reset();
+        // Go back to prematch setup
+        setScreen("prematch");
         setEvents([]);
         setTick(0);
-    }, [engine]);
+    }, []);
 
     const renderOptions: RenderOptions = useMemo(() => ({
         showNames,
@@ -48,6 +62,20 @@ export function SimulatePage() {
         showHeatmap: false,
         showPossessionArrow: true,
     }), [showNames]);
+
+    // ── Pre-match screen ────────────────────────────────────
+    if (screen === "prematch") {
+        return <div className="h-[calc(100vh-120px)] px-2.5 pb-2.5">
+            <ScrollArea className="h-full">
+                <div className="pr-2 pb-4 space-y-3">
+                    <PreMatchPage onMatchReady={handleMatchReady} />
+                </div>
+            </ScrollArea>
+        </div>
+    }
+
+    // ── Match screen ────────────────────────────────────────
+    const engine = engineRef.current!;
 
     return (
         <div className="h-[calc(100vh-120px)] px-2.5 pb-2.5">
@@ -65,7 +93,7 @@ export function SimulatePage() {
                         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                             <span style={{ fontSize: 18 }}>⚽</span>
                             <span style={{ fontSize: 14, fontWeight: 700, letterSpacing: 1 }}>Football Simulation Engine</span>
-                            <span style={{ fontSize: 10, color: "rgba(255,255,255,0.4)", letterSpacing: 0.5 }}>v1.0</span>
+                            <span style={{ fontSize: 10, color: "rgba(255,255,255,0.4)", letterSpacing: 0.5 }}>v2.0</span>
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                             <label style={{ display: "flex", alignItems: "center", gap: 5, cursor: "pointer", fontSize: 11, color: "rgba(255,255,255,0.6)" }}>
@@ -78,8 +106,8 @@ export function SimulatePage() {
                                 Show names
                             </label>
                             <span style={{ fontSize: 10, color: "rgba(255,255,255,0.3)" }}>
-            {engine.homeTeam.formation} vs {engine.awayTeam.formation}
-          </span>
+                                {engine.homeTeam.formation} vs {engine.awayTeam.formation}
+                            </span>
                         </div>
                     </div>
 
@@ -111,12 +139,8 @@ export function SimulatePage() {
                                 color: "rgba(255,255,255,0.5)",
                                 flexWrap: "wrap",
                             }}>
-            <span>
-              <span style={{ color: engine.homeTeam.color }}>●</span> {engine.homeTeam.name} (Home · attacks →)
-            </span>
-                                <span>
-              <span style={{ color: engine.awayTeam.color }}>●</span> {engine.awayTeam.name} (Away · attacks ←)
-            </span>
+                                <span><span style={{ color: engine.homeTeam.color }}>●</span> {engine.homeTeam.name} (Home · →)</span>
+                                <span><span style={{ color: engine.awayTeam.color }}>●</span> {engine.awayTeam.name} (Away · ←)</span>
                                 <span><span style={{ color: "#ffdd44" }}>●</span> Ball carrier</span>
                                 <span><span style={{ color: "#44aaff" }}>●</span> Passing</span>
                                 <span><span style={{ color: "#ff4444" }}>●</span> Defending</span>

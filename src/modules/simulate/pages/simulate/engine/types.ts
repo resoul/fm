@@ -1,5 +1,16 @@
+// ============================================================
+// TYPES — Full type definitions including Club/Squad layer
+// ============================================================
+
 export type TeamSide = "home" | "away";
 export type PlayerPosition = "GK" | "CB" | "LB" | "RB" | "CM" | "LM" | "RM" | "CAM" | "ST" | "LW" | "RW";
+export type PlayerRole = 
+    | "GK_Sweeper" | "GK_Defensive" 
+    | "CB_Stopper" | "CB_BallPlaying" 
+    | "WB_Attacking" | "WB_Defensive"
+    | "CM_BallWinner" | "CM_Playmaker" | "CM_BoxToBox"
+    | "W_Winger" | "W_Inverted"
+    | "ST_Poacher" | "ST_TargetMan" | "ST_Advanced";
 export type PlayerState = "idle" | "running" | "dribbling" | "passing" | "shooting" | "defending" | "celebrating" | "repositioning";
 export type BallState = "ground" | "air" | "rolling";
 export type MatchPhase = "kickoff" | "playing" | "goal" | "halftime" | "fulltime" | "freekick" | "goalkick" | "throwin";
@@ -26,24 +37,146 @@ export interface Vec2 {
     y: number;
 }
 
-// ── Player Attributes ─────────────────────────────────────
+// ── Player Attributes (FM-Style) ──────────────────────────
 export interface PlayerAttributes {
-    speed: number;       // 1-100: max sprint speed
-    passing: number;     // 1-100: pass accuracy & range
-    shooting: number;    // 1-100: shot power & precision
-    stamina: number;     // 1-100: fatigue resistance
-    defense: number;     // 1-100: tackling & positioning
-    dribbling: number;   // 1-100: ball control
+    // Physical
+    acceleration: number;
+    agility: number;
+    balance: number;
+    jumpingReach: number;
+    naturalFitness: number;
+    pace: number;
+    stamina: number;
+    strength: number;
+
+    // Mental
+    aggression: number;
+    anticipation: number;
+    bravery: number;
+    composure: number;
+    concentration: number;
+    decisions: number;
+    determination: number;
+    flair: number;
+    leadership: number;
+    offTheBall: number;
+    positioning: number;
+    teamwork: number;
+    vision: number;
+    workRate: number;
+
+    // Technical
+    corners: number;
+    crossing: number;
+    dribbling: number;
+    finishing: number;
+    firstTouch: number;
+    freeKickTaking: number;
+    heading: number;
+    longShots: number;
+    longThrows: number;
+    marking: number;
+    passing: number;
+    penaltyTaking: number;
+    tackling: number;
+    technique: number;
+
+    // Goalkeeping (Mostly for GK)
+    aerialReach: number;
+    commandOfArea: number;
+    communication: number;
+    eccentricity: number;
+    handling: number;
+    kicking: number;
+    oneOnOnes: number;
+    punching: number;
+    reflexes: number;
+    rushingOut: number;
+    throwing: number;
 }
 
-// ── Player ────────────────────────────────────────────────
+// ── Overall rating helper (weighted average) ─────────────
+export function overallRating(attrs: PlayerAttributes): number {
+    // Simple average of key physical/technical for now
+    const keys: (keyof PlayerAttributes)[] = [
+        "acceleration", "pace", "stamina", "passing", "finishing", "tackling", "vision", "decisions"
+    ];
+    let sum = 0;
+    for (const k of keys) sum += attrs[k] as number;
+    return Math.round(sum / keys.length);
+}
+
+// ============================================================
+// CLUB / SQUAD LAYER — sits above the match engine
+// ============================================================
+
+/** A player in a club's squad (persistent across matches) */
+export interface PlayerProfile {
+    id: string;
+    name: string;
+    age: number;
+    nationality: string;
+    number: number;                       // preferred shirt number
+    primaryPosition: PlayerPosition;
+    alternatePositions: PlayerPosition[]; // positions player can also play
+    role: PlayerRole;
+
+    attributes: PlayerAttributes;
+    potential: PlayerAttributes;          // max attributes if fully developed
+
+    // Bio
+    height: number;                       // in cm
+    weight: number;                       // in kg
+
+    // Contract
+    wage: number;                         // weekly wage in K€
+    contractEnds: number;                 // season number
+
+    // Form & fitness — updated after each match
+    form: number;        // 0–100: recent performance streak
+    fitness: number;     // 0–100: physical freshness (100 = fully rested)
+    matchesPlayed: number;
+    goals: number;
+    assists: number;
+}
+
+/** A club with a full squad */
+export interface Club {
+    id: string;
+    name: string;
+    shortName: string;   // 3-letter abbreviation e.g. "FCH"
+    color: string;       // primary kit color (hex)
+    secondaryColor: string;
+    budget: number;      // in K€
+    reputation: number;  // 1–100, affects transfers
+    squad: PlayerProfile[];
+    defaultFormation: string;
+}
+
+/** Lineup selected before a match: 11 player IDs + formation */
+export interface MatchLineup {
+    clubId: string;
+    formation: string;
+    startingXI: string[];  // 11 PlayerProfile IDs, index = formation slot order
+}
+
+// ============================================================
+// ENGINE LAYER — runtime types used during simulation
+// ============================================================
+
+/** Runtime player inside the match engine */
 export interface Player {
     id: string;
     name: string;
     number: number;
     team: TeamSide;
     position: PlayerPosition;
-    attributes: PlayerAttributes;
+    attributes: PlayerAttributes;  // may be adjusted by fitness/form
+    role: PlayerRole;
+
+    // Bio
+    height: number;
+    weight: number;
 
     // Runtime state
     pos: Vec2;
@@ -51,16 +184,19 @@ export interface Player {
     targetPos: Vec2;
     state: PlayerState;
     hasBall: boolean;
-    fatigue: number;         // 0-1, increases over time
-    actionCooldown: number;  // frames until next AI decision
-    kickCooldown: number;    // frames until can kick again
+    fatigue: number;         // 0-1, increases over match
+    actionCooldown: number;
+    kickCooldown: number;
 
     // AI state
+    nextDecision: AIDecision | null;
     targetPlayerId: string | null;
     passTarget: string | null;
+
+    // Back-reference to source profile (optional, for post-match stats)
+    profileId?: string;
 }
 
-// ── Ball ──────────────────────────────────────────────────
 export interface Ball {
     pos: Vec2;
     vel: Vec2;
@@ -68,11 +204,10 @@ export interface Ball {
     ownerPlayerId: string | null;
     lastTouchedBy: string | null;
     lastTouchedTeam: TeamSide | null;
-    height: number;       // 0 = ground
-    heightVel: number;    // vertical velocity
+    height: number;
+    heightVel: number;
 }
 
-// ── Team ──────────────────────────────────────────────────
 export interface Team {
     id: TeamSide;
     name: string;
@@ -84,16 +219,16 @@ export interface Team {
     stats: TeamStats;
 }
 
-// ── Match Stats ───────────────────────────────────────────
 export interface TeamStats {
     shots: number;
     shotsOnTarget: number;
     passes: number;
     passAccuracy: number;
-    possession: number;    // 0-100 percentage
+    possession: number;
     tackles: number;
     fouls: number;
     corners: number;
+    xg: number;
 }
 
 export interface MatchStats {
@@ -102,7 +237,6 @@ export interface MatchStats {
     possessionTick: { home: number; away: number };
 }
 
-// ── Match Event ───────────────────────────────────────────
 export interface MatchEvent {
     id: string;
     type: EventType;
@@ -113,9 +247,9 @@ export interface MatchEvent {
     playerName: string | null;
     description: string;
     pos: Vec2;
+    xg?: number;
 }
 
-// ── Field Dimensions ──────────────────────────────────────
 export interface FieldDimensions {
     width: number;
     height: number;
@@ -127,13 +261,12 @@ export interface FieldDimensions {
     cornerArcRadius: number;
 }
 
-// ── Match State ───────────────────────────────────────────
 export interface MatchState {
     phase: MatchPhase;
     minute: number;
     second: number;
     tick: number;
-    totalTicks: number;   // 90min * 60s * 60fps
+    totalTicks: number;
     isRunning: boolean;
     isPaused: boolean;
     kickoffTeam: TeamSide;
@@ -142,15 +275,13 @@ export interface MatchState {
     stats: MatchStats;
 }
 
-// ── Engine Config ─────────────────────────────────────────
 export interface EngineConfig {
     fps: number;
-    simSpeed: number;    // 1.0 = realtime, 2.0 = 2x speed
-    matchDuration: number; // in seconds (real: 5400 = 90min)
+    simSpeed: number;
+    matchDuration: number;
     fieldDimensions: FieldDimensions;
 }
 
-// ── Render Options ────────────────────────────────────────
 export interface RenderOptions {
     showNames: boolean;
     showStats: boolean;
@@ -158,7 +289,6 @@ export interface RenderOptions {
     showPossessionArrow: boolean;
 }
 
-// ── AI Decision ───────────────────────────────────────────
 export interface AIDecision {
     action: "pass" | "shoot" | "dribble" | "move" | "defend" | "clearance" | "reposition";
     targetPos?: Vec2;
@@ -166,7 +296,6 @@ export interface AIDecision {
     force?: number;
 }
 
-// ── Zone ──────────────────────────────────────────────────
 export interface Zone {
     x: number;
     y: number;
