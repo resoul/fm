@@ -315,6 +315,7 @@ export type TeamTacticalPhase =
 
 export interface TeamTacticalState {
     phase: TeamTacticalPhase;
+    matchPhase: MatchPhase;
     /** How many ticks ago the possession last changed (0 = this tick) */
     ticksSincePossessionChange: number;
     /** Distance from team centroid to own goal — proxy for defensive line height */
@@ -356,6 +357,7 @@ export interface MatchState {
     isSecondHalf: boolean;
     /** True when a foul occurred inside the penalty area */
     isPenalty: boolean;
+    restartTakerId: string | null;
     events: MatchEvent[];
     stats: MatchStats;
     /** All cards issued in this match */
@@ -428,6 +430,7 @@ export interface RenderOptions {
     showPassingLanes: boolean;
     showDefensiveLine: boolean;
     showPressureHeatmap: boolean;
+    showDebugInfo: boolean;
 }
 
 export interface AIDecision {

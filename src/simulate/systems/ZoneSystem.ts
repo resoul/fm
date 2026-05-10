@@ -132,12 +132,17 @@ const ROLE_LEASH: Record<PlayerRole, LeashTemplate> = {
 
 // Phase shift in columns (positive = push toward opponent goal)
 const PHASE_COL_SHIFT: Record<string, number> = {
-    in_possession:     1,
-    transition_attack: 2,
+    in_possession:     2,
+    transition_attack: 3,
     out_of_possession: -1,
     transition_defend: -2,
     set_piece:          0,
 };
+
+const ATTACKING_ROLES = new Set<PlayerRole>([
+    "ST_Poacher", "ST_Advanced", "ST_TargetMan",
+    "W_Winger", "W_Inverted", "WB_Attacking",
+]);
 
 // ── Zone data attached to tactical ────────────────────────
 export interface ZoneAssignment {
@@ -234,7 +239,7 @@ export class ZoneSystem implements SimulationSystem {
                 const zoneCY = (activeRow + 0.5) * cellH;
 
                 // F.2: dynamic leash (role base + workRate expansion)
-                const leash = computeLeash(player);
+                const leash = computeLeash(player, tacticalState.phase);
 
                 assignments.push({
                     playerId: player.id,
@@ -254,12 +259,17 @@ export class ZoneSystem implements SimulationSystem {
 }
 
 // ── F.2: dynamic leash computation ────────────────────────
-function computeLeash(player: Player): LeashTemplate {
+function computeLeash(player: Player, phase: string): LeashTemplate {
     const base = ROLE_LEASH[player.role] ?? { cols: 2, rows: 1 };
     const workRateBonus = Math.round((player.attributes.workRate / 100) * 1.5);
+    const attackBonus = (
+        ATTACKING_ROLES.has(player.role) &&
+        (phase === "in_possession" || phase === "transition_attack")
+    ) ? 2 : 0;
+
     return {
-        cols: clamp(base.cols + workRateBonus, 1, ZONE_COLS - 1),
-        rows: clamp(base.rows,                1, ZONE_ROWS - 1),
+        cols: clamp(base.cols + workRateBonus + attackBonus, 1, ZONE_COLS - 1),
+        rows: clamp(base.rows,                               1, ZONE_ROWS - 1),
     };
 }
 

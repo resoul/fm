@@ -7,7 +7,7 @@
 //   • Нет ZoneSystem / MomentumSystem / MatchRhythmSystem / OffBallSystem
 //     (экономим ~30% CPU на тик, результат матча не меняется)
 //   • Все системы начисления статистики ЕСТЬ:
-//     PassingSystem, ShootingSystem, TackleSystem, MovementSystem,
+//     PassingSystem, AerialSystem, ShootingSystem, TackleSystem, MovementSystem,
 //     GoalkeeperSystem — ctx.playerStats заполняется полностью
 //   • После fulltime автоматически вызывает _finalise():
 //     finaliseStats → rateAllPlayers → buildPostMatchReport
@@ -20,6 +20,7 @@ import { BaseSimulator } from "./BaseSimulator";
 import { SimulationWorld } from "../core/SimulationWorld";
 import { CommandResolver } from "../core/CommandResolver";
 import {
+    AerialSystem,
     DecisionSystem,
     MovementSystem,
     ShootingSystem,
@@ -69,6 +70,7 @@ export class FastSimulator extends BaseSimulator {
             .addSystem(new GoalkeeperSystem())
             .addSystem(new ShootingSystem())
             .addSystem(new PassingSystem())
+            .addSystem(new AerialSystem())
             .addSystem(new TackleSystem())
             .addSystem(new MovementSystem())
             .addSystem(new PhysicsSystem())

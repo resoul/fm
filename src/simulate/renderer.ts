@@ -104,6 +104,10 @@ export class Renderer {
             const teamColor = player.team === "home" ? homeTeam.color : awayTeam.color;
             const secColor = player.team === "home" ? homeTeam.secondaryColor : awayTeam.secondaryColor;
             this._drawPlayer(player, teamColor, secColor, opts.showNames);
+            
+            if (opts.showDebugInfo) {
+                this._drawPlayerDebug(player, tactical);
+            }
         }
 
         // 7.2 Passing lanes (drawn over players so arrows are visible)
@@ -195,67 +199,38 @@ export class Renderer {
         const ctx = this.ctx;
         const fh = this.field.height;
 
-        // Home defensive line = X of deepest non-GK outfield player (home plays left→right)
-        const homeDefenders = home.players.filter(p => p.position !== "GK" &&
-            (p.position === "CB" || p.position === "LB" || p.position === "RB"));
-        const awayDefenders = away.players.filter(p => p.position !== "GK" &&
-            (p.position === "CB" || p.position === "LB" || p.position === "RB"));
-
-        if (homeDefenders.length > 0) {
-            const lineX = Math.max(...homeDefenders.map(p => p.pos.x));
+        // Line for HOME attackers (Red line, showing where they can't cross)
+        if (tactical.homeDefensiveLine > 0) {
             ctx.save();
-            ctx.globalAlpha = 0.6;
-            ctx.strokeStyle = home.color;
+            ctx.strokeStyle = "rgba(255, 100, 100, 0.6)"; // Reddish for Home's limit
             ctx.lineWidth = 1.5;
-            ctx.setLineDash([8, 4]);
+            ctx.setLineDash([10, 5]);
             ctx.beginPath();
-            ctx.moveTo(lineX, 0);
-            ctx.lineTo(lineX, fh);
+            ctx.moveTo(tactical.homeDefensiveLine, 0);
+            ctx.lineTo(tactical.homeDefensiveLine, fh);
             ctx.stroke();
-            // Label
-            ctx.globalAlpha = 0.8;
-            ctx.fillStyle = home.color;
+            
+            ctx.fillStyle = "rgba(255, 100, 100, 0.9)";
             ctx.font = "bold 9px monospace";
-            ctx.fillText("DEF LINE", lineX + 3, 12);
-            ctx.setLineDash([]);
+            ctx.fillText("OFFSIDE LINE", tactical.homeDefensiveLine + 4, 15);
             ctx.restore();
         }
 
-        if (awayDefenders.length > 0) {
-            const lineX = Math.min(...awayDefenders.map(p => p.pos.x));
+        // Line for AWAY attackers (Blue line)
+        if (tactical.awayDefensiveLine > 0) {
             ctx.save();
-            ctx.globalAlpha = 0.6;
-            ctx.strokeStyle = away.color;
+            ctx.strokeStyle = "rgba(100, 150, 255, 0.6)"; // Bluish for Away's limit
             ctx.lineWidth = 1.5;
-            ctx.setLineDash([8, 4]);
+            ctx.setLineDash([10, 5]);
             ctx.beginPath();
-            ctx.moveTo(lineX, 0);
-            ctx.lineTo(lineX, fh);
+            ctx.moveTo(tactical.awayDefensiveLine, 0);
+            ctx.lineTo(tactical.awayDefensiveLine, fh);
             ctx.stroke();
-            ctx.globalAlpha = 0.8;
-            ctx.fillStyle = away.color;
-            ctx.font = "bold 9px monospace";
+            
             ctx.textAlign = "right";
-            ctx.fillText("DEF LINE", lineX - 3, 12);
-            ctx.textAlign = "left";
-            ctx.setLineDash([]);
-            ctx.restore();
-        }
-
-        // Press line from tactical state
-        const homePressX = tactical.homeState?.defensiveLineX;
-        const awayPressX = tactical.awayState?.defensiveLineX;
-        if (homePressX && homePressX > 0) {
-            ctx.save();
-            ctx.globalAlpha = 0.3;
-            ctx.strokeStyle = home.color;
-            ctx.lineWidth = 1;
-            ctx.setLineDash([3, 8]);
-            ctx.beginPath();
-            ctx.moveTo(homePressX, 0);
-            ctx.lineTo(homePressX, fh);
-            ctx.stroke();
-            ctx.setLineDash([]);
+            ctx.fillStyle = "rgba(100, 150, 255, 0.9)";
+            ctx.font = "bold 9px monospace";
+            ctx.fillText("OFFSIDE LINE", tactical.awayDefensiveLine - 4, 15);
             ctx.restore();
         }
     }
@@ -505,6 +480,65 @@ export class Renderer {
         for (let x = fw; x <= fw + gd; x += netSpacing) {
             ctx.beginPath(); ctx.moveTo(x, cx - gw / 2); ctx.lineTo(x, cx + gw / 2); ctx.stroke();
         }
+    }
+
+    private _drawPlayerDebug(player: Player, tactical?: TacticalData): void {
+        const ctx = this.ctx;
+        const x = player.pos.x;
+        const y = player.pos.y;
+
+        // 1. Target Line (where they want to go)
+        if (player.targetPos) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(player.targetPos.x, player.targetPos.y);
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.4)";
+            ctx.setLineDash([2, 2]);
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+            
+            // Tiny cross at target
+            ctx.beginPath();
+            ctx.moveTo(player.targetPos.x - 2, player.targetPos.y - 2);
+            ctx.lineTo(player.targetPos.x + 2, player.targetPos.y + 2);
+            ctx.moveTo(player.targetPos.x + 2, player.targetPos.y - 2);
+            ctx.lineTo(player.targetPos.x - 2, player.targetPos.y + 2);
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        // 2. Zone Anchor (their tactical home)
+        const zoneData = (tactical as any)?.zoneData;
+        if (zoneData) {
+            const assignment = zoneData.assignments.find((a: any) => a.playerId === player.id);
+            if (assignment) {
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(assignment.zoneCentreWorld.x, assignment.zoneCentreWorld.y, 2, 0, Math.PI * 2);
+                ctx.fillStyle = player.team === "home" ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.3)";
+                ctx.fill();
+                
+                // Line to anchor
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(assignment.zoneCentreWorld.x, assignment.zoneCentreWorld.y);
+                ctx.strokeStyle = "rgba(255,255,255,0.15)";
+                ctx.lineWidth = 0.5;
+                ctx.stroke();
+                ctx.restore();
+            }
+        }
+
+        // 3. State Label
+        ctx.save();
+        ctx.fillStyle = "white";
+        ctx.font = "bold 5px monospace";
+        ctx.textAlign = "center";
+        const decisionType = player.nextDecision?.type?.toUpperCase() ?? "IDLE";
+        const runType = player.nextDecision?.offBallRunType ? ` [${player.nextDecision.offBallRunType}]` : "";
+        ctx.fillText(`${decisionType}${runType}`, x, y - 12);
+        ctx.restore();
     }
 
     private _drawPlayer(player: Player, teamColor: string, secColor: string, showName: boolean): void {

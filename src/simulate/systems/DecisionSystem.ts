@@ -61,9 +61,9 @@ export class DecisionSystem implements SimulationSystem {
         const commands: Command[] = [];
 
         // During dead-ball phases, skip all AI decisions to prevent taker from drifting
-        const DEAD_PHASES = new Set(["throwin", "goalkick", "corner", "freekick", "goal", "halftime", "fulltime"]);
-        if (DEAD_PHASES.has(ctx.state.phase)) return commands;
-
+        const DEAD_PHASES = new Set(["throwin", "goalkick", "corner", "freekick", "goal", "halftime", "fulltime", "kickoff", "offside"]);
+        const isDeadPhase = DEAD_PHASES.has(ctx.state.phase);
+        const restartTakerId = ctx.state.restartTakerId;
         const tick = ctx.state.tick;
 
         for (const player of allPlayers) {
@@ -79,7 +79,11 @@ export class DecisionSystem implements SimulationSystem {
                 continue;
             }
 
-            if (player.position === "GK") continue;
+            // Skip all AI during dead ball EXCEPT for the player taking the restart OR anyone who has the ball
+            if (isDeadPhase && player.id !== restartTakerId && !player.hasBall) continue;
+
+            // Skip GK unless they have the ball or are taking a restart
+            if (player.position === "GK" && !player.hasBall && player.id !== restartTakerId) continue;
 
             const tacticalState = player.team === "home"
                 ? ctx.tactical.homeState
@@ -126,43 +130,27 @@ export class DecisionSystem implements SimulationSystem {
                 player.intent = null;
             }
 
-            // ── Off-ball routing (unchanged logic, gates same as before) ──
-            if (!player.hasBall) {
-                if (!ctx.ball.ownerPlayerId) {
-                    const phase = tacticalState.phase;
-                    if (
-                        phase === "in_possession" ||
-                        phase === "transition_attack" ||
-                        phase === "transition_defend" ||
-                        phase === "set_piece"
-                    ) {
-                        continue;
-                    }
-                } else {
-                    const phase = tacticalState.phase;
-                    if (
-                        phase === "in_possession" ||
-                        phase === "transition_attack" ||
-                        phase === "transition_defend" ||
-                        phase === "set_piece"
-                    ) {
-                        continue;
-                    }
-                }
-            }
+            // D.1: Process decisions for everyone without an active intent
 
             const decision = player.hasBall
                 ? UtilityAI.getBestDecision(player, ctx)
                 : this.getOffBallDecision(player, ctx, tacticalState, allPlayers);
 
-            const cooldown = ctx.rng.nextInt(
-                BALANCE.ACTION_COOLDOWN_MIN,
-                BALANCE.ACTION_COOLDOWN_MAX,
-            );
+            const isMovement = decision && (decision.type === "dribble" || decision.type === "move" || decision.type === "reposition");
+            const cooldown = isMovement 
+                ? ctx.rng.nextInt(2, 5) // Very frequent adjustments for movement
+                : ctx.rng.nextInt(
+                    BALANCE.ACTION_COOLDOWN_MIN,
+                    BALANCE.ACTION_COOLDOWN_MAX,
+                );
 
             // ── B.1 Form new intent ───────────────────────────────────
             if (decision) {
-                const { commitTicks, reevalTicks } = computeIntentTimings(player.attributes.decisions);
+                // ── A.6 Concentration decay: late-game players commit slower ─
+                const minuteFactor = Math.max(0, (ctx.state.minute - 70) / 20);
+                const concentrationPenalty = minuteFactor * (1 - (player.attributes.concentration ?? 50) / 100) * 0.2;
+                const effectiveDecisions = Math.max(0, player.attributes.decisions * (1 - concentrationPenalty));
+                const { commitTicks, reevalTicks } = computeIntentTimings(effectiveDecisions);
                 const newIntent: PlayerIntent = {
                     type: decision.type,
                     target: decision.target ? { ...decision.target } : undefined,
@@ -277,14 +265,20 @@ export class DecisionSystem implements SimulationSystem {
             const lateralBias = player.pos.y < height / 2 ? -0.25 : 0.25;
             const bias = normVec({ x: forwardDir * 0.75, y: lateralBias });
 
+            const teammates = allPlayers.filter(p => p.team === player.team && p.id !== player.id);
             const spaceTarget = SpaceAwareness.findBestRunTarget(
                 player.pos, bias,
                 30, 110,
-                opponents, freeSpaceMap,
+                opponents, teammates, player.targetPos, freeSpaceMap,
                 width, height,
             );
 
             if (spaceTarget) {
+                // Offside clamp: don't make a standard run behind the line
+                const line = isHome ? ctx.tactical.homeDefensiveLine : ctx.tactical.awayDefensiveLine;
+                if (isHome) spaceTarget.x = Math.min(spaceTarget.x, line - 5);
+                else spaceTarget.x = Math.max(spaceTarget.x, line + 5);
+
                 return { type: "move", target: spaceTarget };
             }
         }
@@ -298,7 +292,12 @@ export class DecisionSystem implements SimulationSystem {
         }
         const targetX = clampField(player.targetPos.x + forwardBias, 24, width - 24);
         const targetY = clampField(player.targetPos.y + lateralShift, 20, height - 20);
-        return { type: "move", target: { x: targetX, y: targetY } };
+        
+        // Offside fallback clamp
+        const line = isHome ? ctx.tactical.homeDefensiveLine : ctx.tactical.awayDefensiveLine;
+        const clampedX = isHome ? Math.min(targetX, line - 5) : Math.max(targetX, line + 5);
+        
+        return { type: "move", target: { x: clampedX, y: targetY } };
     }
 
     /**
@@ -345,14 +344,19 @@ export class DecisionSystem implements SimulationSystem {
 
             // No dangerous zone — find best open space using freeSpaceMap
             const bias = normVec({ x: forwardDir * (0.7 + urgency * 0.3), y: 0 });
+            const teammates = allPlayers.filter(p => p.team === player.team && p.id !== player.id);
             const spaceTarget = SpaceAwareness.findBestRunTarget(
                 player.pos, bias,
                 40, 150,
-                opponents, freeSpaceMap,
+                opponents, teammates, player.targetPos, freeSpaceMap,
                 width, height,
             );
             if (spaceTarget) {
-                return { type: "move", target: spaceTarget };
+                // Offside clamp for transition
+                const line = isHome ? ctx.tactical.homeDefensiveLine : ctx.tactical.awayDefensiveLine;
+                // In transition we can be slightly more aggressive (right on the line)
+                const clampedX = isHome ? Math.min(spaceTarget.x, line - 2) : Math.max(spaceTarget.x, line + 2);
+                return { type: "move", target: { ...spaceTarget, x: clampedX } };
             }
         }
 
@@ -392,19 +396,32 @@ export class DecisionSystem implements SimulationSystem {
         const cellW = ctx.tactical.zoneData?.cellWidth ?? width / 6;
         const cellH = ctx.tactical.zoneData?.cellHeight ?? height / 5;
 
-        // Top 2 pressers go directly toward ball carrier
+        // ── A.2 Press wave: pressCount scales with workRate + gegenpress style ──
+        const inst = player.team === "home"
+            ? ctx.tactical.homeInstructions
+            : ctx.tactical.awayInstructions;
+        const avgWorkRate = ownTeam.reduce((s, p) => s + p.attributes.workRate, 0) / (ownTeam.length || 1);
+        const pressCount = 2
+            + (avgWorkRate > 70 ? 1 : 0)
+            + (inst?.style === "gegenpress" ? 1 : 0);
+
+        // ── A.2 Press start distance scales with individual aggression ─────────
+        const pressStartDist = 60 + (player.attributes.aggression / 100) * 40;
+
         const pressers = [...ownTeam]
             .sort((a, b) => distVec(a.pos, owner.pos) - distVec(b.pos, owner.pos))
-            .slice(0, 2);
+            .slice(0, pressCount);
 
-        if (pressers.some(p => p.id === player.id)) {
+        const distToOwner = distVec(player.pos, owner.pos);
+
+        if (pressers.some(p => p.id === player.id) && distToOwner <= pressStartDist) {
             const pressIndex = pressers.findIndex(p => p.id === player.id);
             const sideAngle = pressIndex === 0 ? 0 : (player.team === "home" ? -0.55 : 0.55);
 
             // ── C.1 pressingActions ───────────────────────────────────────────
             // Count as a pressing action only when close enough to be applying
             // real pressure (within 2× tackle range + a chase buffer)
-            const pressDist = distVec(player.pos, owner.pos);
+            const pressDist = distToOwner;
             if (pressDist < 80) {
                 const pStat = ctx.playerStats?.get(player.id);
                 if (pStat) pStat.pressingActions++;
@@ -446,17 +463,33 @@ export class DecisionSystem implements SimulationSystem {
 
         if (markTarget) {
             const pressurePull = tacticalState.pressureIntensity * 0.3;
+
+            // ── A.3 Anticipation → intercept bias ─────────────────────────────
+            // High anticipation: player moves toward where the pass is going,
+            // not just where the opponent is now.
+            const interceptBias = player.attributes.anticipation / 100;
+            // Predicted pass target: midpoint between markTarget and nearest own teammate
+            const nearestOwnMate = ownTeam
+                .filter(p => p.id !== player.id)
+                .sort((a, b) => distVec(a.pos, markTarget.pos) - distVec(b.pos, markTarget.pos))[0];
+            const predictedPassTarget = nearestOwnMate
+                ? { x: (markTarget.pos.x + nearestOwnMate.pos.x) / 2, y: (markTarget.pos.y + nearestOwnMate.pos.y) / 2 }
+                : markTarget.pos;
+
+            const markX = markTarget.pos.x * (1 - interceptBias) + predictedPassTarget.x * interceptBias;
+            const markY = markTarget.pos.y * (1 - interceptBias) + predictedPassTarget.y * interceptBias;
+
             return {
                 type: "defend",
                 target: {
                     x: clampField(
-                        zoneAnchor.x * (0.35 - pressurePull) +
-                        markTarget.pos.x * 0.35 +
-                        ownGoalX * (0.3 + pressurePull),
+                        zoneAnchor.x * (0.70 - pressurePull) +
+                        markX * 0.20 +
+                        ownGoalX * (0.10 + pressurePull),
                         10, width - 10,
                     ),
                     y: clampField(
-                        zoneAnchor.y * 0.5 + markTarget.pos.y * 0.5,
+                        zoneAnchor.y * 0.85 + markY * 0.15,
                         10, height - 10,
                     ),
                 },
@@ -467,7 +500,7 @@ export class DecisionSystem implements SimulationSystem {
         return {
             type: "defend",
             target: {
-                x: clampField(zoneAnchor.x * 0.6 + ownGoalX * 0.4, 10, width - 10),
+                x: clampField(zoneAnchor.x * 0.85 + ownGoalX * 0.15, 10, width - 10),
                 y: clampField(zoneAnchor.y, 10, height - 10),
             },
         };

@@ -206,6 +206,8 @@ export class SpaceAwareness {
         minDist: number,
         maxDist: number,
         opponents: Player[],
+        teammates: Player[],
+        formationTarget: Vec2,
         freeSpaceMap: number[][],
         fieldWidth: number,
         fieldHeight: number,
@@ -235,11 +237,29 @@ export class SpaceAwareness {
                 let opponentPenalty = 0;
                 for (const opp of opponents) {
                     const od = distVec(opp.pos, cell);
-                    if (od < 30) opponentPenalty += (30 - od) / 30;
+                    if (od < 35) opponentPenalty += (35 - od) / 35;
+                }
+
+                // NEW: Penalise cells close to teammates to prevent swarming
+                let teammatePenalty = 0;
+                for (const tm of teammates) {
+                    const td = distVec(tm.pos, cell);
+                    // Higher radius for teammate repulsion to ensure spreading
+                    if (td < 55) teammatePenalty += (55 - td) / 55;
                 }
 
                 const spaceScore = freeSpaceMap[col][row];
-                const score = spaceScore * 0.55 + alignment * 0.35 - opponentPenalty * 0.2;
+                
+                // NEW: Formation discipline: penalise targets too far from the tactical anchor
+                const distToAnchor = distVec(cell, formationTarget);
+                const formationPenalty = Math.max(0, (distToAnchor - 60) / 150); // Small leash buffer
+                
+                const score = 
+                    spaceScore * 0.45 + 
+                    alignment * 0.25 - 
+                    opponentPenalty * 0.20 - 
+                    teammatePenalty * 0.45 -
+                    formationPenalty * 0.35; // Don't wander too far from your job
 
                 if (score > bestScore) {
                     bestScore = score;

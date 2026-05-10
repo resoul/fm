@@ -191,7 +191,12 @@ export class PassAction implements AIAction {
 
         for (const p of candidates.length ? candidates : teammates) {
             const distance = distVec(player.pos, p.pos);
-            if (distance < 35 || distance > 230) continue;
+            const isRestart = ctx.state.phase === "goalkick" || ctx.state.phase === "kickoff";
+            
+            // Relax distance constraints for restarts
+            const minDist = isRestart ? 10 : 35;
+            const maxDist = isRestart ? 500 : 230;
+            if (distance < minDist || distance > maxDist) continue;
 
             const forward = isHome
                 ? (p.pos.x - player.pos.x) / width
@@ -209,7 +214,7 @@ export class PassAction implements AIAction {
 
             // Defensive line penalty: penalise through-balls behind the line
             // when no one has made a run (risky if receiver will be offside)
-            const defLinePenalty = this.defensiveLinePenalty(p, isHome, defensiveLine);
+            const defLinePenalty = this.defensiveLinePenalty(p, isHome, ctx.tactical);
 
             // 4.1 Chain-based forward bias: in progression/final_third/chance_creation,
             // amplify the "forward" component so the AI attacks more directly
@@ -227,7 +232,7 @@ export class PassAction implements AIAction {
             const roleProfile = getRoleProfile(ctx, player.id);
             const roleBias = roleProfile ? roleProfile.forwardPassBias : 1.0;
 
-            const score =
+            let score =
                 forward * (0.35 + chainForwardBonus) * roleBias +
                 centrality * 0.12 +
                 supportDistance * 0.22 +
@@ -236,6 +241,23 @@ export class PassAction implements AIAction {
                 returnPassPenalty +
                 pressurePenalty +
                 defLinePenalty;
+
+            // Specialized Restart logic: prefer short if safe, else long
+            if (isRestart) {
+                const isShort = distance < 80;
+                const receiverPressure = ctx.spatialHash
+                    .queryRadius(p.pos, 50)
+                    .filter(opp => opp.team !== player.team).length;
+                
+                if (isShort) {
+                    // Bonus for short pass if receiver is open
+                    if (receiverPressure === 0) score += 0.50;
+                    else score -= 0.80; // Penalty if defenders are nearby
+                } else {
+                    // Long kick is a solid fallback
+                    score += 0.15;
+                }
+            }
 
             if (score > bestScore) {
                 bestScore = score;
@@ -276,11 +298,13 @@ export class PassAction implements AIAction {
     private defensiveLinePenalty(
         receiver: Player,
         isHome: boolean,
-        defensiveLine: { home: number; away: number } | undefined,
+        tactical: import("../context").TacticalData,
     ): number {
-        if (!defensiveLine) return 0;
-        if (isHome && receiver.pos.x > defensiveLine.away + 20) return -0.20;
-        if (!isHome && receiver.pos.x < defensiveLine.home - 20) return -0.20;
+        // Penalty for playing a through-ball beyond the opponent defensive line
+        // when the receiver is behind it (likely offside / very risky).
+        const line = isHome ? tactical.homeDefensiveLine : tactical.awayDefensiveLine;
+        if (isHome && receiver.pos.x > line - 10) return -0.40; // High penalty near/past the line
+        if (!isHome && receiver.pos.x < line + 10) return -0.40;
         return 0;
     }
 
@@ -456,11 +480,20 @@ export class UtilityAI {
     ];
 
     static getBestDecision(player: Player, ctx: SimulationContext): AIDecision | null {
+        const SET_PIECES = new Set(["throwin", "goalkick", "corner", "freekick", "kickoff", "offside"]);
+        const isSetPiece = SET_PIECES.has(ctx.state.phase) && player.id === ctx.state.restartTakerId;
+
         let bestAction: AIAction | null = null;
         let highestScore = -1;
 
         for (const action of this.actions) {
-            const score = action.score(player, ctx);
+            let score = action.score(player, ctx);
+            
+            // Give PassAction a huge boost during set-pieces to prefer it over dribbling
+            if (isSetPiece && action.name === "pass" && score > 0) {
+                score += 2.0;
+            }
+
             if (score > highestScore && score > 0) {
                 highestScore = score;
                 bestAction = action;

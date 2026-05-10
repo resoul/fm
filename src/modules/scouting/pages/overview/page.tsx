@@ -102,7 +102,7 @@ type Range<F extends number, T extends number> =
     Exclude<Enumerate<T>, Enumerate<F>> | T;
 
 type AttributeNumber = Range<1, 20>;
-type Role = "player";
+type Role = "player" | "coach";
 
 interface TechnicalAttributes {
     crossing: AttributeNumber,
@@ -195,9 +195,84 @@ interface AbilityAttributes {
     morale: number,
 }
 
+interface StaffAttributes {
+    manager: AttributeNumber,
+    assistantManager: AttributeNumber,
+    coach: AttributeNumber,
+    physio: AttributeNumber,
+    scout: AttributeNumber,
+    goalkeeperCoach: AttributeNumber,
+    fitness: AttributeNumber,
+    pieceCoach: AttributeNumber,
+    dOf: AttributeNumber,
+    headOfYouthDev: AttributeNumber,
+    loadManager: AttributeNumber,
+    dataAnalyst: AttributeNumber,
+    sportsScientist: AttributeNumber,
+    technicalDirector: AttributeNumber,
+}
+
+interface CoachingAttributes {
+    attacking: AttributeNumber,
+    defending: AttributeNumber,
+    fitness: AttributeNumber,
+    goalkeeping: AttributeNumber,
+    possession: AttributeNumber,
+    tactical: AttributeNumber,
+    technical: AttributeNumber,
+    setPieces: AttributeNumber,
+    youngsters: AttributeNumber,
+}
+
+interface MedicalAttributes {
+    physiotherapy: AttributeNumber,
+    sportsScience: AttributeNumber,
+}
+
+interface StaffMentalAttributes {
+    adaptability: AttributeNumber,
+    authority: AttributeNumber,
+    determination: AttributeNumber,
+    motivating: AttributeNumber,
+    peopleMgmt: AttributeNumber,
+}
+
+interface KnowledgeAttributes {
+    judgeAbility: AttributeNumber,
+    judgePotential: AttributeNumber,
+    judgeStaff: AttributeNumber,
+    negotiating: AttributeNumber,
+    tactical: AttributeNumber,
+    dataAnalysis: AttributeNumber,
+}
+
+interface TacticalStyleAttributes {
+    attacking: AttributeNumber,
+    defLine: AttributeNumber,
+    directness: AttributeNumber,
+    flexibility: AttributeNumber,
+    tempo: AttributeNumber,
+    width: AttributeNumber,
+    triggerPress: AttributeNumber,
+    rotation: AttributeNumber,
+    hardness: AttributeNumber,
+    dirtiness: AttributeNumber,
+    versatility: AttributeNumber,
+}
+
+interface BoardAttributes {
+    buyingPlayers: AttributeNumber,
+    business: AttributeNumber,
+    interference: AttributeNumber,
+    mindGames: AttributeNumber,
+    patience: AttributeNumber,
+    resources: AttributeNumber,
+}
+
 interface Person {
     name: string,
     role: Role,
+    // Player Attrs
     ability: AbilityAttributes,
     reputation: ReputationAttributes,
     personality: PersonalityAttributes,
@@ -208,6 +283,14 @@ interface Person {
     technical: TechnicalAttributes,
     mental: MentalAttributes,
     physical: PhysicalAttributes,
+    // Staff Attrs
+    staff: StaffAttributes,
+    coach: CoachingAttributes,
+    medical: MedicalAttributes,
+    staffMental: StaffMentalAttributes,
+    knowledge: KnowledgeAttributes,
+    tacticalStyle: TacticalStyleAttributes,
+    board: BoardAttributes,
 }
 
 console.log({} as Person);

@@ -8,7 +8,7 @@ import type { Command } from "../core/Command";
 import type { Player, TeamSide, TeamTacticalPhase, TeamTacticalState, Vec2 } from "../types";
 
 // How many ticks counts as "immediate transition" (≈1 second at 60fps)
-const TRANSITION_WINDOW = 60;
+const TRANSITION_WINDOW = 150;
 
 export class TacticalSystem implements SimulationSystem {
     name = "TacticalSystem";
@@ -39,10 +39,13 @@ export class TacticalSystem implements SimulationSystem {
                 passingLanes: [],
                 homeState: makeDefaultTacticalState(ctx, "home"),
                 awayState: makeDefaultTacticalState(ctx, "away"),
+                homeDefensiveLine: 0,
+                awayDefensiveLine: ctx.config.fieldDimensions.width,
             };
         }
 
         this.calculateCentroids(ctx);
+        this.calculateOffsideLines(ctx);
         this.calculateInfluenceAndPressure(ctx);
         this.calculatePassingLanes(ctx);
         this.updateTacticalStates(ctx);
@@ -73,15 +76,14 @@ export class TacticalSystem implements SimulationSystem {
 
         const isSetPiece = ctx.state.phase !== "playing" && ctx.state.phase !== "kickoff";
 
-        ctx.tactical.homeState = this.buildState(ctx, "home", possessingTeam, isSetPiece);
-        ctx.tactical.awayState = this.buildState(ctx, "away", possessingTeam, isSetPiece);
+        ctx.tactical.homeState = this.buildState(ctx, "home", possessingTeam);
+        ctx.tactical.awayState = this.buildState(ctx, "away", possessingTeam);
     }
 
     private buildState(
         ctx: SimulationContext,
         side: TeamSide,
         possessingTeam: TeamSide | null,
-        isSetPiece: boolean,
     ): TeamTacticalState {
         const { width, height } = ctx.config.fieldDimensions;
         const isHome = side === "home";
@@ -120,10 +122,11 @@ export class TacticalSystem implements SimulationSystem {
             pressureIntensity = Math.min(1, nearbyOpps.length / 4);
         }
 
-        // Determine phase
+        const DEAD_PHASES = new Set(["throwin", "goalkick", "corner", "freekick", "goal", "halftime", "fulltime", "offside"]);
+        const isDeadBall = DEAD_PHASES.has(ctx.state.phase);
         let phase: TeamTacticalPhase;
 
-        if (isSetPiece) {
+        if (isDeadBall) {
             phase = "set_piece";
         } else if (possessingTeam === null) {
             // Ball is loose — keep previous phase or default
@@ -149,6 +152,7 @@ export class TacticalSystem implements SimulationSystem {
 
         return {
             phase,
+            matchPhase: ctx.state.phase,
             ticksSincePossessionChange: this._ticksSinceChange,
             defensiveLineX,
             teamWidth,
@@ -177,6 +181,35 @@ export class TacticalSystem implements SimulationSystem {
         ctx.tactical.homeCompactness = home.compactness;
         ctx.tactical.awayCentroid = away.centroid;
         ctx.tactical.awayCompactness = away.compactness;
+    }
+
+    private calculateOffsideLines(ctx: SimulationContext): void {
+        const { width } = ctx.config.fieldDimensions;
+        const halfW = width / 2;
+
+        const getLine = (players: Player[], attackDir: 1 | -1): number => {
+            // Sort players by proximity to their own goal
+            // Home goal is at 0, Away goal is at width
+            const sorted = [...players].sort((a, b) => {
+                return attackDir === 1 
+                    ? b.pos.x - a.pos.x // Away team: b.x - a.x (closest to width first)
+                    : a.pos.x - b.pos.x // Home team: a.x - b.x (closest to 0 first)
+            });
+
+            // Offside line is the second player from the goal
+            const secondDefender = sorted[1] ?? sorted[0];
+            const lineX = secondDefender.pos.x;
+
+            // Offside only exists in the opponent's half
+            return attackDir === 1 
+                ? Math.max(halfW, lineX) 
+                : Math.min(halfW, lineX);
+        };
+
+        // homeDefensiveLine is the line for Home attackers (determined by Away defenders)
+        ctx.tactical.homeDefensiveLine = getLine(ctx.awayTeam.players, 1);
+        // awayDefensiveLine is the line for Away attackers (determined by Home defenders)
+        ctx.tactical.awayDefensiveLine = getLine(ctx.homeTeam.players, -1);
     }
 
     private calculateInfluenceAndPressure(ctx: SimulationContext): void {
@@ -332,6 +365,7 @@ export class TacticalSystem implements SimulationSystem {
 function makeDefaultTacticalState(ctx: SimulationContext, side: TeamSide): TeamTacticalState {
     return {
         phase: "out_of_possession",
+        matchPhase: ctx.state.phase,
         ticksSincePossessionChange: 9999,
         defensiveLineX: side === "home"
             ? (ctx.tactical?.homeCentroid?.x ?? 0) / ctx.config.fieldDimensions.width

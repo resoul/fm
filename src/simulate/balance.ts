@@ -36,8 +36,8 @@
  */
 export const BALANCE = {
     // Movement
-    PLAYER_MAX_SPEED_BASE: 5.8,
-    PLAYER_ACCELERATION: 0.35,
+    PLAYER_MAX_SPEED_BASE: 2.1,  // Was 5.8: now crossing field takes ~10-12s
+    PLAYER_ACCELERATION: 0.18,   // Was 0.35: more weight to movement
     PLAYER_DRIBBLE_SPEED_FACTOR: 0.75,
     PLAYER_FRICTION: 0.82,
 
@@ -53,6 +53,9 @@ export const BALANCE = {
     SHOT_FORCE_BASE: 12,
 
     // ── Timing (at 60fps: 60 ticks = 1 second) ──────────
+    // Accelerate time: 1 minute match time = 6 seconds real time (at 60fps)
+    // 6 seconds = 360 ticks. So minute = totalTicks / 360.
+    TICKS_PER_MATCH_MINUTE: 360,
     GOAL_PAUSE_TICKS: 300,     // 5 seconds
 
     // Passer decision cooldown: how long before PASSER can act again

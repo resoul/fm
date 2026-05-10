@@ -25,6 +25,7 @@ export function SimulatePage() {
     const [showPassingLanes, setShowPassingLanes] = useState(false);
     const [showDefensiveLine, setShowDefensiveLine] = useState(false);
     const [showHeatmap, setShowHeatmap] = useState(false);
+    const [showDebugInfo, setShowDebugInfo] = useState(true);
 
     const handleMatchReady = useCallback((engine: MatchEngine) => {
         engineRef.current = engine;
@@ -105,7 +106,8 @@ export function SimulatePage() {
         showPassingLanes,
         showDefensiveLine,
         showPressureHeatmap: false,
-    }), [showNames, showHeatmap, showZones, showPassingLanes, showDefensiveLine]);
+        showDebugInfo,
+    }), [showNames, showHeatmap, showZones, showPassingLanes, showDefensiveLine, showDebugInfo]);
 
     // ── Pre-match screen ────────────────────────────────────
     if (screen === "prematch") {
@@ -165,12 +167,13 @@ export function SimulatePage() {
                                 Names
                             </label>
                             {/* 7.2 Tactical Overlay toggles */}
-                            {(["Zones", "Lanes", "Def. Line", "Heatmap"] as const).map((label, i) => {
+                            {(["Zones", "Lanes", "Def. Line", "Heatmap", "Debug"] as const).map((label, i) => {
                                 const [val, setter] = [
                                     [showZones, setShowZones],
                                     [showPassingLanes, setShowPassingLanes],
                                     [showDefensiveLine, setShowDefensiveLine],
                                     [showHeatmap, setShowHeatmap],
+                                    [showDebugInfo, setShowDebugInfo],
                                 ][i] as [boolean, (v: boolean) => void];
                                 return (
                                     <label key={label} style={{ display: "flex", alignItems: "center", gap: 4, cursor: "pointer", fontSize: 10, color: val ? "rgba(180,220,255,0.9)" : "rgba(255,255,255,0.4)" }}>

@@ -25,6 +25,9 @@ export interface TacticalData {
     /** Dynamic shape targets per player (2.3) */
     homeShapeTargets?: ShapeTarget[];
     awayShapeTargets?: ShapeTarget[];
+    /** Offside lines (X coordinates of last-but-one defender) */
+    homeDefensiveLine: number;
+    awayDefensiveLine: number;
 }
 
 export interface SimulationEvents {

@@ -1,7 +1,7 @@
 import type { SimulationContext } from "../context";
 import type { SimulationSystem } from "../pipeline";
-import { 
-    PHYSICS, scaleVec, lenVec, addVec, normVec, distVec 
+import {
+    PHYSICS, scaleVec, lenVec, addVec, normVec, distVec
 } from "../physics";
 import type { Command, UpdateBallCommand } from "../core/Command";
 import type { Ball, FieldDimensions, Player, Team } from "../types";
@@ -12,7 +12,7 @@ export class PhysicsSystem implements SimulationSystem {
     update(ctx: SimulationContext): Command[] {
         const { ball, config, homeTeam, awayTeam } = ctx;
         const field = config.fieldDimensions;
-        
+
         let newBall = { ...ball };
         const commands: Command[] = [];
 
@@ -76,7 +76,7 @@ export class PhysicsSystem implements SimulationSystem {
         }
 
         ball.pos = addVec(ball.pos, ball.vel);
-        
+
         const fw = field.width;
         const fh = field.height;
         const limit = 100;
@@ -89,6 +89,10 @@ export class PhysicsSystem implements SimulationSystem {
     private handleBallPickup(ball: Ball, homeTeam: Team, awayTeam: Team): Partial<Ball> | null {
         if (ball.ownerPlayerId !== null) return null;
 
+        // ── A.4 Aerial duel: AerialSystem has sole authority over high balls ──
+        // Skip flat pickup when ball is in the air — AerialSystem resolves it.
+        if (ball.height > 20) return null;
+
         const allPlayers = [...homeTeam.players, ...awayTeam.players];
         let closest: Player | null = null;
         let closestDist: number = PHYSICS.CONTROL_RANGE;
@@ -98,9 +102,9 @@ export class PhysicsSystem implements SimulationSystem {
             if (p.kickCooldown > 12) continue;
             if (ball.lastTouchedBy === p.id && ballSpeed > 1.2) continue;
             const d = distVec(p.pos, ball.pos);
-            if (d < closestDist) { 
-                closestDist = d; 
-                closest = p; 
+            if (d < closestDist) {
+                closestDist = d;
+                closest = p;
             }
         }
 

@@ -53,8 +53,14 @@ function computePassError(
     const dist = Math.sqrt(dx * dx + dy * dy);
     const distanceFactor = 1 + (dist / BALANCE.PASS_ERROR_DISTANCE_NORM) * BALANCE.PASS_ERROR_DISTANCE_SCALE;
 
+    // ── A.6 Concentration decay after 70th minute ────────────────────────────
+    // As the game progresses past 70', players with low concentration make
+    // more mistakes. minuteFactor: 0 before 70', ramps to 1 at 90'.
+    const minuteFactor = Math.max(0, (ctx.state.minute - 70) / 20);
+    const concentrationPenalty = minuteFactor * (1 - (player.attributes.concentration ?? 50) / 100) * 0.2;
+
     // Combined accuracy 0..1 (1 = max error)
-    const rawInaccuracy = (1 - passingSkill) + pressurePenalty + fatiguePenalty;
+    const rawInaccuracy = (1 - passingSkill) + pressurePenalty + fatiguePenalty + concentrationPenalty;
     const inaccuracy = Math.min(rawInaccuracy, 1);
 
     // Max error radius in world units (px)
@@ -125,6 +131,45 @@ export class PassingSystem implements SimulationSystem {
         // Pass force scales with passing attribute
         const force = BALANCE.PASS_FORCE_BASE + (player.attributes.passing / 100) * 4;
 
+        // ── Offside Check ────────────────────────────────────────────────────
+        const isOffside = targetPlayer && (
+            player.team === "home" 
+                ? targetPlayer.pos.x > ctx.tactical.homeDefensiveLine + 2 // 2px grace buffer
+                : targetPlayer.pos.x < ctx.tactical.awayDefensiveLine - 2
+        );
+
+        if (isOffside) {
+            ctx.events.emit({
+                id: mkEventId(),
+                type: "offside",
+                minute: state.minute,
+                second: state.second,
+                teamId: player.team,
+                playerId: targetPlayer!.id,
+                playerName: targetPlayer!.name,
+                description: `OFFSIDE! ${targetPlayer!.name} was behind the line.`,
+                pos: { ...targetPlayer!.pos },
+            });
+            
+            return [
+                { type: "UPDATE_MATCH_STATE", phase: "offside" } as UpdateMatchStateCommand,
+                { 
+                    type: "UPDATE_BALL", 
+                    pos: { ...targetPlayer!.pos }, 
+                    vel: { x: 0, y: 0 },
+                    ownerPlayerId: null,
+                    lastTouchedBy: player.id,
+                    lastTouchedTeam: player.team
+                } as UpdateBallCommand,
+                {
+                    type: "SET_PLAYER_DECISION",
+                    playerId: player.id,
+                    decision: null,
+                    cooldown: 40,
+                } as SetPlayerDecisionCommand
+            ];
+        }
+
         const commands: Command[] = [];
         commands.push({
             type: "KICK_BALL",
@@ -145,29 +190,56 @@ export class PassingSystem implements SimulationSystem {
         // Wild passes skip the receiver cooldown — the ball isn't going to them cleanly.
         // Poor passes still set a cooldown but longer (harder to control).
         if (targetPlayer && !isWildPass) {
-            const firstTouchFactor = 1 - (targetPlayer.attributes.firstTouch / 100) * 0.4;
             const nearbyDefenders = ctx.spatialHash
                 .queryRadius(targetPlayer.pos, 35)
                 .filter(p => p.team !== targetPlayer.team).length;
             const pressureFactor = 1 + nearbyDefenders * 0.12;
 
-            // Poor passes are harder to control
-            const poorPassFactor = isPoorPass ? 1.3 : 1.0;
+            // ── A.5 firstTouch fail → loose ball ─────────────────────────────
+            // Low firstTouch players have a chance to spill the ball entirely.
+            // Chance is zero at firstTouch=50+, rises to 0.5 at firstTouch=0.
+            const failChance = Math.max(0, (50 - targetPlayer.attributes.firstTouch) / 100);
+            if (ctx.rng.next() < failChance) {
+                // Ball spills: kick it to a random spot 10–20px away from receiver
+                const spillAngle = ctx.rng.next() * Math.PI * 2;
+                const spillDist = 10 + ctx.rng.next() * 10;
+                commands.push({
+                    type: "KICK_BALL",
+                    playerId: targetPlayer.id,
+                    targetPos: {
+                        x: targetPlayer.pos.x + Math.cos(spillAngle) * spillDist,
+                        y: targetPlayer.pos.y + Math.sin(spillAngle) * spillDist,
+                    },
+                    force: 1.5,
+                } as import("../core/Command").KickBallCommand);
+                // Long cooldown for the stumbling receiver
+                commands.push({
+                    type: "SET_PLAYER_DECISION",
+                    playerId: targetPlayer.id,
+                    decision: null,
+                    cooldown: ctx.rng.nextInt(20, 35),
+                } as SetPlayerDecisionCommand);
+            } else {
+                const firstTouchFactor = 1 - (targetPlayer.attributes.firstTouch / 100) * 0.4;
 
-            const baseCooldown = ctx.rng.nextInt(
-                BALANCE.PASS_RECEIVER_CONTROL_MIN,
-                BALANCE.PASS_RECEIVER_CONTROL_MAX,
-            );
-            const receiverCooldown = Math.round(
-                baseCooldown * firstTouchFactor * pressureFactor * poorPassFactor
-            );
+                // Poor passes are harder to control
+                const poorPassFactor = isPoorPass ? 1.3 : 1.0;
 
-            commands.push({
-                type: "SET_PLAYER_DECISION",
-                playerId: targetPlayer.id,
-                decision: null,
-                cooldown: receiverCooldown,
-            } as SetPlayerDecisionCommand);
+                const baseCooldown = ctx.rng.nextInt(
+                    BALANCE.PASS_RECEIVER_CONTROL_MIN,
+                    BALANCE.PASS_RECEIVER_CONTROL_MAX,
+                );
+                const receiverCooldown = Math.round(
+                    baseCooldown * firstTouchFactor * pressureFactor * poorPassFactor
+                );
+
+                commands.push({
+                    type: "SET_PLAYER_DECISION",
+                    playerId: targetPlayer.id,
+                    decision: null,
+                    cooldown: receiverCooldown,
+                } as SetPlayerDecisionCommand);
+            }
         }
 
         // Update stats

@@ -18,7 +18,7 @@ function mkEventId() { return `evt_${++eventCounter}`; }
 // Dead-ball phases where we wait for restart
 const DEAD_BALL_PHASES: MatchPhase[] = [
     "throwin", "goalkick", "corner", "freekick",
-    "goal", "halftime", "fulltime", "kickoff",
+    "goal", "halftime", "fulltime", "kickoff", "offside",
 ];
 
 // Ticks to wait after goal before kickoff (2s at 60fps)
@@ -35,15 +35,18 @@ export class RefereeSystem implements SimulationSystem {
     private _deadBallTicks = 0;
     // Ticks in goal/halftime delay
     private _goalDelayTick = 0;
+    // Position where the restart was assigned
+    private _restartPos: Vec2 | null = null;
 
     update(ctx: SimulationContext): Command[] {
         const { state, config } = ctx;
         const commands: Command[] = [];
 
         // 1. Always update match time
-        const totalGameSec = state.tick / config.fps;
-        const minute = Math.min(90, Math.floor(totalGameSec / 60));
-        const second = Math.floor(totalGameSec % 60);
+        // Accelerate time: 1 minute match time = 6 seconds real time (at 60fps)
+        const TICKS_PER_MINUTE = 360;
+        const minute = Math.min(90, Math.floor(state.tick / TICKS_PER_MINUTE));
+        const second = Math.floor((state.tick % TICKS_PER_MINUTE) / (TICKS_PER_MINUTE / 60));
         commands.push({ type: "UPDATE_MATCH_STATE", minute, second } as UpdateMatchStateCommand);
 
         // 2. Full time
@@ -88,8 +91,7 @@ export class RefereeSystem implements SimulationSystem {
         //  so the type-narrowed phase here can never be those values)
         if (
             DEAD_BALL_PHASES.includes(state.phase) &&
-            state.phase !== "fulltime" &&
-            state.phase !== "kickoff"
+            state.phase !== "fulltime"
         ) {
             this._deadBallTicks++;
 
@@ -101,6 +103,7 @@ export class RefereeSystem implements SimulationSystem {
             if (resume.length > 0) {
                 this._deadBallTicks = 0;
                 this._restartTakerId = null;
+                this._restartPos = null;
                 return [...commands, ...resume];
             }
 
@@ -108,8 +111,16 @@ export class RefereeSystem implements SimulationSystem {
             if (this._deadBallTicks > RESTART_TIMEOUT_TICKS) {
                 this._deadBallTicks = 0;
                 this._restartTakerId = null;
-                commands.push({ type: "UPDATE_MATCH_STATE", phase: "playing" } as UpdateMatchStateCommand);
+                this._restartPos = null;
+                commands.push({ type: "UPDATE_MATCH_STATE", phase: "playing", restartTakerId: null } as UpdateMatchStateCommand);
             }
+
+            // Offside handling: convert to a freekick for the opponent
+            if (state.phase === "offside") {
+                const restartTeam: TeamSide = ctx.ball.lastTouchedTeam === "home" ? "away" : "home";
+                return this.triggerRestart(ctx, "freekick", restartTeam, { ...ctx.ball.pos });
+            }
+
             return commands;
         }
 
@@ -118,7 +129,7 @@ export class RefereeSystem implements SimulationSystem {
             // Half-time check
             const halfTick = Math.floor(state.totalTicks / 2);
             if (state.tick >= halfTick && state.tick < halfTick + 2) {
-                commands.push({ type: "UPDATE_MATCH_STATE", phase: "halftime" } as UpdateMatchStateCommand);
+                commands.push({ type: "UPDATE_MATCH_STATE", phase: "halftime", restartTakerId: null } as UpdateMatchStateCommand);
                 ctx.events.emit({
                     id: mkEventId(), type: "fulltime",
                     minute: 45, second: 0,
@@ -336,6 +347,7 @@ export class RefereeSystem implements SimulationSystem {
         const taker = this.findRestartTaker(allPlayers, teamId, pos, type, ball.lastTouchedBy);
 
         this._restartTakerId = taker?.id ?? null;
+        this._restartPos = { ...pos };
         this._deadBallTicks = 0;
 
         events.emit({
@@ -352,7 +364,11 @@ export class RefereeSystem implements SimulationSystem {
         const commands: Command[] = [
             // Wipe all stale decisions
             { type: "CLEAR_ALL_DECISIONS" } as ClearAllDecisionsCommand,
-            { type: "UPDATE_MATCH_STATE", phase: type } as UpdateMatchStateCommand,
+            { 
+                type: "UPDATE_MATCH_STATE", 
+                phase: type,
+                restartTakerId: taker?.id ?? null
+            } as UpdateMatchStateCommand,
             {
                 type: "UPDATE_BALL",
                 pos: { ...pos },
@@ -430,19 +446,24 @@ export class RefereeSystem implements SimulationSystem {
 
         // No taker assigned → resume immediately
         if (!takerId) {
-            return [{ type: "UPDATE_MATCH_STATE", phase: "playing" } as UpdateMatchStateCommand];
+            return [{ type: "UPDATE_MATCH_STATE", phase: "playing", restartTakerId: null } as UpdateMatchStateCommand];
         }
 
         const ballSpeed = Math.hypot(ball.vel.x, ball.vel.y);
 
         // A) Ball flying free (no owner) at decent speed
         if (ball.ownerPlayerId === null && ballSpeed > 1.0) {
-            return [{ type: "UPDATE_MATCH_STATE", phase: "playing" } as UpdateMatchStateCommand];
+            return [{ type: "UPDATE_MATCH_STATE", phase: "playing", restartTakerId: null } as UpdateMatchStateCommand];
         }
 
         // B) Different player has the ball
         if (ball.ownerPlayerId !== null && ball.ownerPlayerId !== takerId) {
-            return [{ type: "UPDATE_MATCH_STATE", phase: "playing" } as UpdateMatchStateCommand];
+            return [{ type: "UPDATE_MATCH_STATE", phase: "playing", restartTakerId: null } as UpdateMatchStateCommand];
+        }
+
+        // C) Taker moved significantly with the ball
+        if (this._restartPos && distVec(ball.pos, this._restartPos) > 12) {
+            return [{ type: "UPDATE_MATCH_STATE", phase: "playing", restartTakerId: null } as UpdateMatchStateCommand];
         }
 
         // Still waiting

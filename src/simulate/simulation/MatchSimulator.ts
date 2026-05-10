@@ -2,7 +2,7 @@ import { BaseSimulator } from "./BaseSimulator";
 import { SimulationWorld } from "../core/SimulationWorld";
 import { CommandResolver } from "../core/CommandResolver";
 import {
-    DecisionSystem, MovementSystem, ShootingSystem, PassingSystem,
+    DecisionSystem, MovementSystem, ShootingSystem, PassingSystem, AerialSystem,
     GoalkeeperSystem, TackleSystem, PhysicsSystem, RefereeSystem, TacticalSystem,
     OffBallSystem, RestartIntelligenceSystem,
 } from "../match/systems";
@@ -71,6 +71,7 @@ export class MatchSimulator extends BaseSimulator {
             .addSystem(new GoalkeeperSystem())
             .addSystem(new ShootingSystem())
             .addSystem(new PassingSystem())
+            .addSystem(new AerialSystem())
             .addSystem(new TackleSystem())
             .addSystem(new MovementSystem())
             .addSystem(new PhysicsSystem())

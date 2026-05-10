@@ -102,6 +102,22 @@ const SHAPE_PRESETS: Record<string, ShapeParams> = {
         depthScale: 1.20,
         lineShift: 0.10,
     },
+    // Goal Kick: Spread wide and deep to receive
+    goal_kick_receiver: {
+        ballTrackingX: 0.05,
+        ballTrackingY: 0.10,
+        widthScale: 1.50,  // Very wide
+        depthScale: 0.60,  // Short depth
+        lineShift: -0.25,  // Deep own half
+    },
+    // Goal Kick: Press high to block short options
+    goal_kick_press: {
+        ballTrackingX: 0.10,
+        ballTrackingY: 0.15,
+        widthScale: 0.85,
+        depthScale: 0.80,
+        lineShift: 0.20,   // High up the pitch
+    },
 };
 
 // ── Score / fatigue context ───────────────────────────────
@@ -212,6 +228,11 @@ export class TeamShape {
         }
 
         if (phase === "set_piece") {
+            if (state.matchPhase === "goalkick") {
+                // If it's our goalkick, spread wide. If opponent's, press high.
+                const ballOwner = chain !== null; // If we have a chain, we are the ones with the ball
+                return ballOwner ? SHAPE_PRESETS.goal_kick_receiver : SHAPE_PRESETS.goal_kick_press;
+            }
             return SHAPE_PRESETS.compact_defense;
         }
 

@@ -146,22 +146,6 @@ export class OffBallSystem implements SimulationSystem {
                 }
             }
 
-            // ── Post-restart repositioning phase ─────────
-            // After a dead-ball restart (kickoff / set piece), give players
-            // a short window to reposition to their zone before any dynamic
-            // run logic fires. This prevents immediate shape collapse after goals.
-            if (
-                tacticalState.ticksSincePossessionChange < 20 &&
-                (ctx.state.phase === "playing") &&
-                zoneData
-            ) {
-                const za = getZoneAssignment(ctx, player.id);
-                if (za) {
-                    this._commits.delete(player.id);
-                    commands.push(makeHoldShapeCommand(player, za.zoneCentreWorld));
-                    continue;
-                }
-            }
 
             // ── Check if player is committed to a run ────
             const existing = this._commits.get(player.id);
@@ -227,7 +211,7 @@ export class OffBallSystem implements SimulationSystem {
 
         // ── 2. No ball owner nearby → support to open zone ─
         if (!ballOwner) {
-            return this.supportRun(player, opponents, freeSpaceMap, forwardDir, ctx);
+            return this.supportRun(player, teammates, opponents, freeSpaceMap, forwardDir, shapeAnchor, ctx);
         }
 
         const distToBall = distVec(player.pos, ballOwner.pos);
@@ -249,10 +233,10 @@ export class OffBallSystem implements SimulationSystem {
                 return this.thirdManRun(player, ballOwner, opponents, freeSpaceMap, forwardDir, urgency * runBias, ctx);
             }
             if (OVERLAP_ROLES.has(player.role) && (rp?.overlapsEnabled ?? false)) {
-                return this.overlapRun(player, ballOwner, opponents, freeSpaceMap, forwardDir, ctx);
+                return this.overlapRun(player, ballOwner, teammates, opponents, freeSpaceMap, forwardDir, shapeAnchor, ctx);
             }
             // Others: sprint into space in forward direction
-            return this.supportRun(player, opponents, freeSpaceMap, forwardDir, ctx);
+            return this.supportRun(player, teammates, opponents, freeSpaceMap, forwardDir, shapeAnchor, ctx);
         }
 
         // ── 4. in_possession → role-based ────────────────
@@ -267,7 +251,7 @@ export class OffBallSystem implements SimulationSystem {
             t => distVec(t.pos, ballOwner.pos) < 50,
         ).length;
         if (nearBallTeammates >= 2 && distToBall < 60) {
-            return this.supportRun(player, opponents, freeSpaceMap, forwardDir, ctx);
+            return this.supportRun(player, teammates, opponents, freeSpaceMap, forwardDir, shapeAnchor, ctx);
         }
 
         // Chain-aware urgency: more urgent in chance_creation
@@ -288,17 +272,17 @@ export class OffBallSystem implements SimulationSystem {
             return this.thirdManRun(player, ballOwner, opponents, freeSpaceMap, forwardDir, chainUrgency * (0.7 + tempoBoost * 0.3), ctx);
         }
         if (OVERLAP_ROLES.has(player.role) && overlapsAllowed) {
-            return this.overlapRun(player, ballOwner, opponents, freeSpaceMap, forwardDir, ctx);
+            return this.overlapRun(player, ballOwner, teammates, opponents, freeSpaceMap, forwardDir, shapeAnchor, ctx);
         }
         if (UNDERLAP_ROLES.has(player.role) && forwardBias > 0.5) {
-            return this.underlapRun(player, ballOwner, opponents, freeSpaceMap, forwardDir, ctx);
+            return this.underlapRun(player, ballOwner, teammates, opponents, freeSpaceMap, forwardDir, shapeAnchor, ctx);
         }
         // Defensive/holding roles stay compact: support run only if very close
         if (forwardBias < 0.25) {
             return this.holdAnchor(shapeAnchor);
         }
         // Default: weighted support run
-        return this.supportRun(player, opponents, freeSpaceMap, forwardDir, ctx);
+        return this.supportRun(player, teammates, opponents, freeSpaceMap, forwardDir, shapeAnchor, ctx);
     }
 
     // ── Run implementations ───────────────────────────────
@@ -309,9 +293,11 @@ export class OffBallSystem implements SimulationSystem {
      */
     private supportRun(
         player: Player,
+        teammates: Player[],
         opponents: Player[],
         freeSpaceMap: number[][],
         forwardDir: number,
+        formationTarget: Vec2,
         ctx: SimulationContext,
     ): { type: OffBallRunType; target: Vec2 } | null {
         const { width, height } = ctx.config.fieldDimensions;
@@ -322,7 +308,7 @@ export class OffBallSystem implements SimulationSystem {
         const target = SpaceAwareness.findBestRunTarget(
             player.pos, bias,
             25, 90,
-            opponents, freeSpaceMap,
+            opponents, teammates, formationTarget, freeSpaceMap,
             width, height,
         );
 
@@ -343,9 +329,11 @@ export class OffBallSystem implements SimulationSystem {
     private overlapRun(
         player: Player,
         ballOwner: Player,
+        teammates: Player[],
         opponents: Player[],
         freeSpaceMap: number[][],
         forwardDir: number,
+        formationTarget: Vec2,
         ctx: SimulationContext,
     ): { type: OffBallRunType; target: Vec2 } | null {
         const { width, height } = ctx.config.fieldDimensions;
@@ -370,7 +358,8 @@ export class OffBallSystem implements SimulationSystem {
                 y: candidate.y,
             };
             if (SpaceAwareness.spaceScore(deeper, opponents) < 0.35) {
-                return this.supportRun(player, opponents, freeSpaceMap, forwardDir, ctx);
+                // Fallback to support run with all context
+                return this.supportRun(player, teammates, opponents, freeSpaceMap, forwardDir, formationTarget, ctx);
             }
             return { type: "overlap_run", target: deeper };
         }
@@ -385,9 +374,11 @@ export class OffBallSystem implements SimulationSystem {
     private underlapRun(
         player: Player,
         ballOwner: Player,
+        teammates: Player[],
         opponents: Player[],
         freeSpaceMap: number[][],
         forwardDir: number,
+        formationTarget: Vec2,
         ctx: SimulationContext,
     ): { type: OffBallRunType; target: Vec2 } | null {
         const { width, height } = ctx.config.fieldDimensions;
@@ -405,7 +396,7 @@ export class OffBallSystem implements SimulationSystem {
         };
 
         if (SpaceAwareness.spaceScore(candidate, opponents) < 0.3) {
-            return this.supportRun(player, opponents, freeSpaceMap, forwardDir, ctx);
+            return this.supportRun(player, teammates, opponents, freeSpaceMap, forwardDir, formationTarget, ctx);
         }
 
         return { type: "underlap_run", target: candidate };
