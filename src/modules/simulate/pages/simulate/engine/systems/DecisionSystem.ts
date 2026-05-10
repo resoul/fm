@@ -4,14 +4,47 @@ import { UtilityAI } from "../ai";
 import { BALANCE } from "../balance";
 import type { Command } from "../core/Command";
 import { distVec, normVec } from "../physics";
-import type { AIDecision, Ball, Player, TeamTacticalState } from "../types";
+import type { AIDecision, Ball, Player, PlayerIntent, TeamTacticalState } from "../types";
 import { SpaceAwareness } from "../ai/SpaceAwareness";
 import { getZoneAssignment, isOutsideLeash } from "./ZoneSystem";
+
+// ── Intent timing constants ───────────────────────────────
+//
+// High decisions (80+) → commitTick = ~10 ticks, reevaluate = ~21 ticks
+// Low  decisions (40-) → commitTick = ~15 ticks, reevaluate = ~33 ticks
+//
+// Formula: linear interpolation across the 0-100 decisions range.
+// These are intentionally tight so hesitation is perceptible but not
+// game-breaking.  Tune in balance.ts if needed.
+
+function computeIntentTimings(decisions: number): { commitTicks: number; reevalTicks: number } {
+    // decisions in 0-100 range; clamp for safety
+    const d = Math.max(0, Math.min(100, decisions));
+    const commitTicks = Math.round(15 - d * 0.05);       // 10–15 ticks
+    const reevalTicks  = Math.round(33 - d * 0.12);      // 21–33 ticks
+    return { commitTicks, reevalTicks };
+}
 
 /**
  * DecisionSystem handles high-level AI reasoning.
  *
- * Off-ball behaviour is now driven by TeamTacticalState (computed by TacticalSystem):
+ * B.1 Intent Architecture:
+ *   Before forming a new decision the system checks player.intent:
+ *
+ *   - If tick < intent.commitTick  → player is locked, skip re-evaluation.
+ *     The existing nextDecision is kept. This creates the "opinionated" lag
+ *     where players react a fraction of a second after the situation changes.
+ *
+ *   - If tick < intent.reevaluateAt → the player may update their *target*
+ *     (e.g. track a moving teammate) but will not switch action type.
+ *
+ *   - If intent.confidence < 0.15 → the player hesitates: intent is cleared
+ *     but no new decision is formed this tick (the cooldown absorbs it).
+ *
+ *   commitTick and reevaluateAt are scaled by the `decisions` attribute:
+ *   high-decisions players commit sooner and re-evaluate faster.
+ *
+ * Off-ball behaviour is driven by TeamTacticalState (computed by TacticalSystem):
  *
  *   in_possession     → spread wide, create passing options, push forward
  *   transition_attack → sprint into space immediately after winning ball
@@ -31,9 +64,15 @@ export class DecisionSystem implements SimulationSystem {
         const DEAD_PHASES = new Set(["throwin", "goalkick", "corner", "freekick", "goal", "halftime", "fulltime"]);
         if (DEAD_PHASES.has(ctx.state.phase)) return commands;
 
+        const tick = ctx.state.tick;
+
         for (const player of allPlayers) {
             if (player.actionCooldown > 0) {
                 player.actionCooldown--;
+                // ── Intent: degrade confidence while cooling down ──────
+                if (player.intent) {
+                    player.intent.confidence = Math.max(0, player.intent.confidence - 0.02);
+                }
                 continue;
             }
 
@@ -43,16 +82,50 @@ export class DecisionSystem implements SimulationSystem {
                 ? ctx.tactical.homeState
                 : ctx.tactical.awayState;
 
-            // Off-ball players: OffBallSystem already produced a typed run decision.
-            // DecisionSystem only handles ball-carrier logic (UtilityAI).
-            // Exception: out_of_possession pressing/marking still comes from here
-            // because OffBallSystem skips that phase (it defers to DecisionSystem).
+            // ── B.1 Intent lock check ─────────────────────────────────
+            if (player.intent) {
+                const intent = player.intent;
+
+                // Hard lock: decision committed, cannot override until commitTick
+                if (tick < intent.commitTick) {
+                    // Still degrade confidence if context has shifted badly
+                    this.updateIntentConfidence(player, intent, ctx);
+                    continue;
+                }
+
+                // Low confidence: hesitate — clear intent, but don't form a new one yet
+                if (intent.confidence < 0.15) {
+                    player.intent = null;
+                    // Small extra cooldown simulates the moment of indecision
+                    commands.push({
+                        type: "SET_PLAYER_DECISION",
+                        playerId: player.id,
+                        decision: null,
+                        cooldown: Math.round(ctx.rng.nextInt(8, 18) * (1 - player.attributes.decisions / 100 * 0.5)),
+                    });
+                    continue;
+                }
+
+                // Soft window: intent type is locked but target may drift (e.g. tracking a run)
+                if (tick < intent.reevaluateAt) {
+                    this.updateIntentConfidence(player, intent, ctx);
+                    // If the intent has a moving target (pass to a teammate), refresh target pos
+                    if (intent.targetPlayerId) {
+                        const targetPlayer = allPlayers.find(p => p.id === intent.targetPlayerId);
+                        if (targetPlayer) {
+                            intent.target = { ...targetPlayer.pos };
+                        }
+                    }
+                    continue;
+                }
+
+                // Past reevaluateAt: clear intent, fall through to fresh decision
+                player.intent = null;
+            }
+
+            // ── Off-ball routing (unchanged logic, gates same as before) ──
             if (!player.hasBall) {
-                // If ball is loose — OffBallSystem already sent chasers; here we
-                // handle the non-chasers (reposition). Skip normal phase routing.
                 if (!ctx.ball.ownerPlayerId) {
-                    // Already handled in OffBallSystem for closest 5.
-                    // For the rest: let looseBallDecision produce a soft reposition.
                     const phase = tacticalState.phase;
                     if (
                         phase === "in_possession" ||
@@ -60,12 +133,8 @@ export class DecisionSystem implements SimulationSystem {
                         phase === "transition_defend" ||
                         phase === "set_piece"
                     ) {
-                        // These are normally OffBallSystem territory,
-                        // but OffBallSystem already did a `continue` for non-chasers.
-                        // Do nothing here — avoid double-commanding.
                         continue;
                     }
-                    // out_of_possession: fall through to getOffBallDecision → looseBallDecision
                 } else {
                     const phase = tacticalState.phase;
                     if (
@@ -74,10 +143,8 @@ export class DecisionSystem implements SimulationSystem {
                         phase === "transition_defend" ||
                         phase === "set_piece"
                     ) {
-                        // OffBallSystem handled these — skip to avoid overwriting
                         continue;
                     }
-                    // out_of_possession: fall through to existing pressing/marking logic
                 }
             }
 
@@ -85,21 +152,74 @@ export class DecisionSystem implements SimulationSystem {
                 ? UtilityAI.getBestDecision(player, ctx)
                 : this.getOffBallDecision(player, ctx, tacticalState, allPlayers);
 
+            const cooldown = ctx.rng.nextInt(
+                BALANCE.ACTION_COOLDOWN_MIN,
+                BALANCE.ACTION_COOLDOWN_MAX,
+            );
+
+            // ── B.1 Form new intent ───────────────────────────────────
+            if (decision) {
+                const { commitTicks, reevalTicks } = computeIntentTimings(player.attributes.decisions);
+                const newIntent: PlayerIntent = {
+                    type: decision.type,
+                    target: decision.target ? { ...decision.target } : undefined,
+                    targetPlayerId: decision.targetPlayerId,
+                    confidence: 1.0,
+                    commitTick: tick + commitTicks,
+                    reevaluateAt: tick + reevalTicks,
+                    formedAtTick: tick,
+                };
+                player.intent = newIntent;
+            }
+
             commands.push({
                 type: "SET_PLAYER_DECISION",
                 playerId: player.id,
                 decision,
-                cooldown: ctx.rng.nextInt(
-                    BALANCE.ACTION_COOLDOWN_MIN,
-                    BALANCE.ACTION_COOLDOWN_MAX,
-                ),
+                cooldown,
             });
         }
 
         return commands;
     }
 
-    // ── Off-ball dispatch ─────────────────────────────────
+    // ── Intent confidence degradation ─────────────────────
+    //
+    // Confidence drops when the situation has materially changed since
+    // the intent was formed.  We check two lightweight proxies:
+    //   1. Ball moved far (possession changed / ball travelled)
+    //   2. A defender appeared nearby since formedAtTick
+    //
+    // This avoids expensive per-tick diff but still catches major shifts.
+
+    private updateIntentConfidence(
+        player: Player,
+        intent: PlayerIntent,
+        ctx: SimulationContext,
+    ): void {
+        // If player won the ball unexpectedly → intent is stale, drop confidence fast
+        if (player.hasBall && intent.type !== "shoot" && intent.type !== "pass" && intent.type !== "dribble") {
+            intent.confidence = Math.max(0, intent.confidence - 0.25);
+            return;
+        }
+
+        // If player lost the ball while intending to shoot/pass → stale
+        if (!player.hasBall && (intent.type === "shoot" || intent.type === "pass")) {
+            intent.confidence = Math.max(0, intent.confidence - 0.4);
+            return;
+        }
+
+        // Nearby defenders change: count pressure
+        const nearbyOpponents = ctx.spatialHash
+            .queryRadius(player.pos, 50)
+            .filter(p => p.team !== player.team).length;
+
+        // Each nearby defender erodes confidence slightly
+        intent.confidence = Math.max(0, intent.confidence - nearbyOpponents * 0.03);
+
+        // Natural decay
+        intent.confidence = Math.max(0, intent.confidence - 0.008);
+    }
 
     private getOffBallDecision(
         player: Player,

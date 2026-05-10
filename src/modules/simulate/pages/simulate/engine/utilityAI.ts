@@ -3,6 +3,7 @@ import type { SimulationContext } from "./context";
 import { distVec } from "./physics";
 import { calculateXG } from "./xG";
 import { getRoleProfile, getTeamInstructions } from "./systems/TacticalInstructionsSystem";
+import { computeEffectiveAttribute } from "./coach/FormFatigueModel";
 
 /**
  * AIAction — a discrete behaviour a player can perform.
@@ -40,6 +41,31 @@ export class ShootAction implements AIAction {
             .queryRadius(player.pos, 50)
             .filter(p => p.team !== player.team);
         score *= Math.pow(0.8, nearbyDefenders.length);
+
+        // ── B.2 Attribute mappings — ShootAction ──────────────
+        // finishing → confidence boosts shooting desirability
+        score += (player.attributes.finishing / 100) * 0.12;
+
+        // composure → reduces panic penalty under defensive pressure
+        const shootPressure = nearbyDefenders.length;
+        const effectiveComposure = computeEffectiveAttribute(player.fatigue, player.attributes.composure, "mental");
+        const composureFactor = 1 - (shootPressure * (1 - effectiveComposure / 100) * 0.15);
+        score *= Math.max(0.3, composureFactor);
+
+        // positioning → reward for being in the right zone
+        score += (player.attributes.positioning / 100) * 0.08;
+
+        // bravery → willingness to shoot with defenders nearby
+        if (nearbyDefenders.length >= 2) {
+            score *= (0.35 + (player.attributes.bravery / 100) * 0.65);
+        }
+
+        // longShots → gate long-range shooting by attribute
+        if (dist > 100) {
+            const lsCap = player.attributes.longShots / 100;
+            score *= lsCap < 0.5 ? 0.3 : (0.3 + lsCap * 0.85);
+        }
+        // ───────────────────────────────────────────────────────
 
         // Attacking transition phase boosts shooting urgency slightly
         const tacticalState = player.team === "home"
@@ -116,6 +142,30 @@ export class PassAction implements AIAction {
             if (chain.urgentMode) score += 0.12;                    // combinations near goal
         }
 
+        // ── B.2 Attribute mappings — PassAction ───────────────
+        // vision → gates long passes (hard cutoff, soft penalty)
+        const openTargets = (player.team === "home" ? ctx.homeTeam : ctx.awayTeam).players.filter(
+            p => p.id !== player.id && distVec(player.pos, p.pos) > 35,
+        );
+        const hasFarTarget = openTargets.some(p => distVec(player.pos, p.pos) > 150);
+        if (hasFarTarget) {
+            if (player.attributes.vision < 55) score *= 0.2;        // nearly blind to long options
+            else if (player.attributes.vision < 70) score *= 0.55;  // limited long vision
+        }
+
+        // passing → overall passing quality confidence
+        const passingQuality = player.attributes.passing / 100;
+        score *= (0.55 + passingQuality * 0.45);
+
+        // composure → reduces panic-passing under pressure
+        const passPressure = ctx.spatialHash
+            .queryRadius(player.pos, 46)
+            .filter(p => p.team !== player.team).length;
+        const effectivePassComposure = computeEffectiveAttribute(player.fatigue, player.attributes.composure, "mental");
+        const panicFactor = 1 - (passPressure * (1 - effectivePassComposure / 100) * 0.12);
+        score *= Math.max(0.4, panicFactor);
+        // ───────────────────────────────────────────────────────
+
         return score;
     }
 
@@ -168,9 +218,9 @@ export class PassAction implements AIAction {
                 : ctx.tactical.awayChain;
             const chainForwardBonus = chain
                 ? (chain.phase === "final_third" || chain.phase === "chance_creation" ? 0.18
-                 : chain.phase === "progression" ? 0.10
-                 : chain.phase === "transition" ? 0.14
-                 : 0)
+                    : chain.phase === "progression" ? 0.10
+                        : chain.phase === "transition" ? 0.14
+                            : 0)
                 : 0;
 
             // 3.2 Role profile: forwardPassBias scales the forward component
@@ -294,7 +344,23 @@ export class DribbleAction implements AIAction {
 
         // Under pressure: dribbling is risky, prefer pass
         // No pressure: comfortable carry forward
-        return pressure > 0 ? 0.18 : 0.36;
+        // ── B.2 Attribute mappings — DribbleAction ──────────
+        // dribbling + agility → core dribble capability
+        const dribbleCap = (player.attributes.dribbling + player.attributes.agility) / 200;
+        const baseScore = pressure > 0 ? 0.18 : 0.36;
+        let dribScore = baseScore * (0.4 + dribbleCap * 0.6);
+
+        // flair → occasional brave carry regardless of pressure
+        if (player.attributes.flair > 70 && ctx.rng.nextFloat(0, 1) < 0.12) {
+            dribScore *= 1.25;
+        }
+
+        // pace → high-pace players more confident carrying into space
+        if (pressure === 0) {
+            dribScore *= (0.8 + player.attributes.pace / 100 * 0.2);
+        }
+        // ───────────────────────────────────────────────────────
+        return dribScore;
     }
 
     getDecision(player: Player, ctx: SimulationContext): AIDecision {

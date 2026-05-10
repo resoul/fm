@@ -166,6 +166,36 @@ export interface MatchLineup {
 // ENGINE LAYER — runtime types used during simulation
 // ============================================================
 
+// ── Intent Architecture (B.1) ─────────────────────────────
+/**
+ * PlayerIntent captures the player's committed decision with temporal locking.
+ *
+ * commitTick:    the tick until which the decision is "locked in" — the player
+ *               cannot switch action before this, simulating reaction lag.
+ *               Controlled by `decisions` attribute: high decisions = short lock.
+ *
+ * reevaluateAt:  the tick at which a full UtilityAI re-evaluation is triggered.
+ *               Between commits, the player may only update target positions,
+ *               not switch action type.
+ *
+ * confidence:   degrades each tick the situation changes significantly (e.g.
+ *               target moves far away, defender appears). At 0 the player
+ *               hesitates before forming a new intent.
+ */
+export interface PlayerIntent {
+    type: AIDecision["type"];
+    target?: Vec2;
+    targetPlayerId?: string;
+    /** 0–1: decreases when situation diverges from when intent was formed */
+    confidence: number;
+    /** Tick at which this intent becomes locked (cannot switch before) */
+    commitTick: number;
+    /** Tick at which a new UtilityAI evaluation is triggered */
+    reevaluateAt: number;
+    /** Tick when the intent was originally formed */
+    formedAtTick: number;
+}
+
 /** Runtime player inside the match engine */
 export interface Player {
     id: string;
@@ -194,6 +224,13 @@ export interface Player {
     nextDecision: AIDecision | null;
     targetPlayerId: string | null;
     passTarget: string | null;
+
+    /**
+     * Intent architecture (B.1): committed decision with temporal locking.
+     * DecisionSystem checks this before forming a new decision.
+     * null = player has no active intent (will evaluate immediately).
+     */
+    intent: PlayerIntent | null;
 
     // Back-reference to source profile (optional, for post-match stats)
     profileId?: string;
@@ -339,6 +376,8 @@ export interface PlayerSnapshot {
     readonly nextDecision: AIDecision | null;
     readonly targetPlayerId: string | null;
     readonly passTarget: string | null;
+    /** B.1: serialised intent for replay / debug inspection */
+    readonly intent: PlayerIntent | null;
 }
 
 export interface TeamSnapshot {

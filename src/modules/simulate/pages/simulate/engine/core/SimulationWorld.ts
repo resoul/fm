@@ -99,6 +99,11 @@ function snapshotPlayer(player: Team["players"][number]): PlayerSnapshot {
         nextDecision: player.nextDecision ? { ...player.nextDecision } : null,
         targetPlayerId: player.targetPlayerId,
         passTarget: player.passTarget,
+        // B.1: preserve intent across snapshot/restore for replay correctness
+        intent: player.intent ? {
+            ...player.intent,
+            target: player.intent.target ? { ...player.intent.target } : undefined,
+        } : null,
     };
 }
 
@@ -121,5 +126,10 @@ function applyTeamSnapshot(team: Team, snapshot: TeamSnapshot): void {
         player.nextDecision = playerSnapshot.nextDecision ? { ...playerSnapshot.nextDecision } : null;
         player.targetPlayerId = playerSnapshot.targetPlayerId;
         player.passTarget = playerSnapshot.passTarget;
+        // B.1: restore intent from snapshot (needed for ReplaySimulator correctness)
+        player.intent = playerSnapshot.intent ? {
+            ...playerSnapshot.intent,
+            target: playerSnapshot.intent.target ? { ...playerSnapshot.intent.target } : undefined,
+        } : null;
     }
 }

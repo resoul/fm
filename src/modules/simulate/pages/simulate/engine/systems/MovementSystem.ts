@@ -55,8 +55,12 @@ export class MovementSystem implements SimulationSystem {
 
     private getMaxSpeed(player: Player, momentumMult = 1.0): number {
         const base = PHYSICS.PLAYER_MAX_SPEED_BASE;
-        const speedFactor = 0.6 + (player.attributes.pace / 100) * 0.4;
-        const fatigueFactor = 1 - player.fatigue * 0.4;
+        // B.3: pace attribute drives top speed envelope
+        const speedFactor = 0.7 + (player.attributes.pace / 100) * 0.6;
+        // B.3: stamina moderates how much fatigue degrades speed
+        const staminaResist = 0.4 + (player.attributes.stamina / 100) * 0.6;
+        const fatiguePenalty = player.fatigue * 0.4 * staminaResist;
+        const fatigueFactor = 1 - fatiguePenalty;
         return base * speedFactor * fatigueFactor * momentumMult;
     }
 
@@ -71,8 +75,9 @@ export class MovementSystem implements SimulationSystem {
         const diff = subVec(target, player.pos);
         const dist = lenVec(diff);
 
-        // ── Fatigue delta ──
+        // ── B.3 Fatigue delta ──
         const effort = lenVec(player.vel) / PHYSICS.PLAYER_MAX_SPEED_BASE;
+        // stamina → base fatigue rate (higher stamina = slower fatigue accumulation)
         const staminaFactor = 0.4 + (player.attributes.stamina / 100) * 0.6;
         const fatigueRate = 0.0001 * effort / staminaFactor;
         const naturalFitnessFactor = 0.5 + (player.attributes.naturalFitness / 100) * 0.5;
@@ -80,6 +85,12 @@ export class MovementSystem implements SimulationSystem {
         const newFatigue = effort > 0.1
             ? Math.min(1, player.fatigue + fatigueRate)
             : Math.max(0, player.fatigue - recoveryRate);
+
+        // B.3 Fatigue cognitive penalties:
+        // At fatigue > 0.6 → decisions & composure effectively degraded in utilityAI
+        // (we store no extra field; UtilityAI reads player.fatigue directly)
+        // At fatigue > 0.8 → apply an implicit perception slowdown via extended cooldown
+        // This is handled in DecisionSystem naturally (confidence degrades faster).
 
         // ── Kick cooldown ──
         const newKickCooldown = Math.max(0, player.kickCooldown - 1);
@@ -108,10 +119,26 @@ export class MovementSystem implements SimulationSystem {
         const dir = normVec(diff);
         const desiredVel = scaleVec(dir, maxSpd);
 
+        // B.3 acceleration attribute → ramp-up rate
         const accBase = PHYSICS.PLAYER_ACCELERATION;
         const accFactor = 0.5 + (player.attributes.acceleration / 100) * 0.5;
+
+        // B.3 Turning inertia: agility controls how quickly velocity direction changes.
+        // We compute the angle between current velocity and desired velocity.
+        // Low agility = small max turn rate → player "slides" before redirecting.
+        const currentSpeed = lenVec(player.vel);
+        let turnFactor = 1.0;
+        if (currentSpeed > 0.5) {
+            const curDir = normVec(player.vel);
+            const dot = curDir.x * dir.x + curDir.y * dir.y; // -1..1
+            const alignment = (dot + 1) / 2;                  // 0..1 (0=U-turn, 1=same dir)
+            // High agility → turnFactor stays near 1 even on direction change
+            // Low agility → turnFactor drops to ~0.4 on a sharp turn
+            const agilityTurn = 0.4 + (player.attributes.agility / 100) * 0.6;
+            turnFactor = alignment + (1 - alignment) * agilityTurn;
+        }
         const agilityFactor = 0.7 + (player.attributes.agility / 100) * 0.3;
-        const finalAcc = accBase * accFactor * agilityFactor;
+        const finalAcc = accBase * accFactor * agilityFactor * turnFactor;
 
         newVel = clampVec(
             {

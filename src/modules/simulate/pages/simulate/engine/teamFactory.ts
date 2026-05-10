@@ -269,6 +269,7 @@ export function buildMatchTeam(club: Club, lineup: MatchLineup, field: FieldDime
             nextDecision:    null,
             targetPlayerId: null,
             passTarget:     null,
+            intent:         null,
             profileId:      profileId,
         };
         return player;
