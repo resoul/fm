@@ -3,6 +3,7 @@ import type { SimulationSystem } from "../pipeline";
 import type { Command, KickBallCommand, SetPlayerDecisionCommand } from "../core/Command";
 import { BALANCE } from "../balance";
 import type { Player, Vec2 } from "../types";
+import { commentaryShot } from "./CommentarySystem";
 
 let eventCounter = 3000;
 function mkEventId() { return `evt_${++eventCounter}`; }
@@ -134,11 +135,20 @@ export class ShootingSystem implements SimulationSystem {
         } as SetPlayerDecisionCommand);
 
         // 3. Emit event with quality-aware description
-        const shotQuality = isWild
-            ? "blazes it wide!"
-            : isTame
-                ? "shoots straight at the keeper."
-                : `takes a shot! (xG: ${decision.xG?.toFixed(2)})`;
+        const rhythmMods = (ctx.tactical as any)?.rhythmModifiers;
+        const scoreDiff = player.team === "home"
+            ? ctx.homeTeam.score - ctx.awayTeam.score
+            : ctx.awayTeam.score - ctx.homeTeam.score;
+        const shotDescription = commentaryShot({
+            minute: state.minute,
+            xg: decision.xG,
+            playerName: player.name,
+            isOnTarget: !isWild,
+            scoreDiff,
+            rhythmState: player.team === "home"
+                ? rhythmMods?.home?.state
+                : rhythmMods?.away?.state,
+        });
 
         ctx.events.emit({
             id: mkEventId(),
@@ -148,7 +158,7 @@ export class ShootingSystem implements SimulationSystem {
             teamId: player.team,
             playerId: player.id,
             playerName: player.name,
-            description: `${player.name} ${shotQuality}`,
+            description: shotDescription,
             pos: { ...player.pos },
             xg: decision.xG
         });

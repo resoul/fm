@@ -2,6 +2,7 @@ import type { SimulationContext } from "../context";
 import type { SimulationSystem } from "../pipeline";
 import { distVec } from "../physics";
 import type { TeamSide, Vec2, MatchPhase, EventType, Player } from "../types";
+import { commentaryGoal } from "./CommentarySystem";
 import type {
     Command, UpdateMatchStateCommand, UpdateBallCommand,
     TeleportPlayerCommand, SetPlayerTargetCommand,
@@ -228,13 +229,23 @@ export class RefereeSystem implements SimulationSystem {
                 lastTouchedTeam: ball.lastTouchedTeam,
             } as UpdateBallCommand);
 
+            const scoreDiff = scorerTeam.id === "home"
+                ? newScore.home - newScore.away
+                : newScore.away - newScore.home;
+            const goalDesc = commentaryGoal({
+                minute: state.minute,
+                playerName: scorerPlayer?.name,
+                xg: 0.3, // approximation; real xG would need to be passed through
+                scoreDiff,
+            });
+
             events.emit({
                 id: mkEventId(), type: "goal",
                 minute: state.minute, second: state.second,
                 teamId: scorerTeam.id,
                 playerId: scorerPlayer?.id ?? null,
                 playerName: scorerPlayer?.name ?? "Unknown",
-                description: `⚽ GOAL! ${scorerPlayer?.name ?? "??"} scores for ${scorerTeam.name}! (${newScore.home}-${newScore.away})`,
+                description: goalDesc + ` (${newScore.home}-${newScore.away})`,
                 pos: { ...ball.pos },
             });
         }

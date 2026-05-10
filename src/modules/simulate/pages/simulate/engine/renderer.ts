@@ -70,6 +70,11 @@ export class Renderer {
             this._drawInfluenceMap(tactical.influenceMap);
         }
 
+        // 7.2 Pressure Heatmap (alternative to influence)
+        if (opts.showPressureHeatmap && tactical?.pressureMap) {
+            this._drawPressureHeatmap(tactical.pressureMap);
+        }
+
         this._drawGoals();
 
         // Goal flash
@@ -79,9 +84,19 @@ export class Renderer {
             this.goalFlashTimer--;
         }
 
+        // 7.2 Zone grid
+        if (opts.showZones) {
+            this._drawZoneGrid(homeTeam, awayTeam);
+        }
+
         // Debug: Tactical Overlay (Centroids & Shape)
         if (opts.showHeatmap && tactical) {
             this._drawTacticalOverlay(tactical, homeTeam, awayTeam);
+        }
+
+        // 7.2 Defensive lines
+        if (opts.showDefensiveLine && tactical) {
+            this._drawDefensiveLines(homeTeam, awayTeam, tactical);
         }
 
         // Draw players
@@ -89,6 +104,11 @@ export class Renderer {
             const teamColor = player.team === "home" ? homeTeam.color : awayTeam.color;
             const secColor = player.team === "home" ? homeTeam.secondaryColor : awayTeam.secondaryColor;
             this._drawPlayer(player, teamColor, secColor, opts.showNames);
+        }
+
+        // 7.2 Passing lanes (drawn over players so arrows are visible)
+        if (opts.showPassingLanes && tactical?.passingLanes) {
+            this._drawPassingLanes(tactical.passingLanes, homeTeam, awayTeam);
         }
 
         // Draw ball
@@ -100,6 +120,220 @@ export class Renderer {
         }
 
         ctx.restore();
+    }
+
+    // ── 7.2 Zone Grid ───────────────────────────────────────
+    private _drawZoneGrid(home: Readonly<Team>, away: Readonly<Team>): void {
+        const ctx = this.ctx;
+        const fw = this.field.width;
+        const fh = this.field.height;
+        const COLS = 6;
+        const ROWS = 5;
+        const cellW = fw / COLS;
+        const cellH = fh / ROWS;
+
+        ctx.save();
+        ctx.globalAlpha = 0.08;
+
+        // Fill zone dominance by counting players per zone
+        const homeCounts = Array(COLS).fill(0).map(() => Array(ROWS).fill(0));
+        const awayCounts = Array(COLS).fill(0).map(() => Array(ROWS).fill(0));
+
+        for (const p of home.players) {
+            const col = Math.floor((p.pos.x / fw) * COLS);
+            const row = Math.floor((p.pos.y / fh) * ROWS);
+            if (col >= 0 && col < COLS && row >= 0 && row < ROWS)
+                homeCounts[col][row]++;
+        }
+        for (const p of away.players) {
+            const col = Math.floor((p.pos.x / fw) * COLS);
+            const row = Math.floor((p.pos.y / fh) * ROWS);
+            if (col >= 0 && col < COLS && row >= 0 && row < ROWS)
+                awayCounts[col][row]++;
+        }
+
+        for (let c = 0; c < COLS; c++) {
+            for (let r = 0; r < ROWS; r++) {
+                const h = homeCounts[c][r];
+                const a = awayCounts[c][r];
+                if (h > a) {
+                    ctx.fillStyle = home.color;
+                    ctx.globalAlpha = 0.06 + h * 0.04;
+                } else if (a > h) {
+                    ctx.fillStyle = away.color;
+                    ctx.globalAlpha = 0.06 + a * 0.04;
+                } else {
+                    continue;
+                }
+                ctx.fillRect(c * cellW, r * cellH, cellW, cellH);
+            }
+        }
+
+        // Grid lines
+        ctx.globalAlpha = 0.12;
+        ctx.strokeStyle = "rgba(255,255,255,0.4)";
+        ctx.lineWidth = 0.5;
+        ctx.setLineDash([4, 6]);
+        for (let c = 1; c < COLS; c++) {
+            ctx.beginPath();
+            ctx.moveTo(c * cellW, 0);
+            ctx.lineTo(c * cellW, fh);
+            ctx.stroke();
+        }
+        for (let r = 1; r < ROWS; r++) {
+            ctx.beginPath();
+            ctx.moveTo(0, r * cellH);
+            ctx.lineTo(fw, r * cellH);
+            ctx.stroke();
+        }
+        ctx.setLineDash([]);
+        ctx.restore();
+    }
+
+    // ── 7.2 Defensive Lines ─────────────────────────────────
+    private _drawDefensiveLines(home: Readonly<Team>, away: Readonly<Team>, tactical: TacticalData): void {
+        const ctx = this.ctx;
+        const fh = this.field.height;
+
+        // Home defensive line = X of deepest non-GK outfield player (home plays left→right)
+        const homeDefenders = home.players.filter(p => p.position !== "GK" &&
+            (p.position === "CB" || p.position === "LB" || p.position === "RB"));
+        const awayDefenders = away.players.filter(p => p.position !== "GK" &&
+            (p.position === "CB" || p.position === "LB" || p.position === "RB"));
+
+        if (homeDefenders.length > 0) {
+            const lineX = Math.max(...homeDefenders.map(p => p.pos.x));
+            ctx.save();
+            ctx.globalAlpha = 0.6;
+            ctx.strokeStyle = home.color;
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([8, 4]);
+            ctx.beginPath();
+            ctx.moveTo(lineX, 0);
+            ctx.lineTo(lineX, fh);
+            ctx.stroke();
+            // Label
+            ctx.globalAlpha = 0.8;
+            ctx.fillStyle = home.color;
+            ctx.font = "bold 9px monospace";
+            ctx.fillText("DEF LINE", lineX + 3, 12);
+            ctx.setLineDash([]);
+            ctx.restore();
+        }
+
+        if (awayDefenders.length > 0) {
+            const lineX = Math.min(...awayDefenders.map(p => p.pos.x));
+            ctx.save();
+            ctx.globalAlpha = 0.6;
+            ctx.strokeStyle = away.color;
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([8, 4]);
+            ctx.beginPath();
+            ctx.moveTo(lineX, 0);
+            ctx.lineTo(lineX, fh);
+            ctx.stroke();
+            ctx.globalAlpha = 0.8;
+            ctx.fillStyle = away.color;
+            ctx.font = "bold 9px monospace";
+            ctx.textAlign = "right";
+            ctx.fillText("DEF LINE", lineX - 3, 12);
+            ctx.textAlign = "left";
+            ctx.setLineDash([]);
+            ctx.restore();
+        }
+
+        // Press line from tactical state
+        const homePressX = tactical.homeState?.defensiveLineX;
+        const awayPressX = tactical.awayState?.defensiveLineX;
+        if (homePressX && homePressX > 0) {
+            ctx.save();
+            ctx.globalAlpha = 0.3;
+            ctx.strokeStyle = home.color;
+            ctx.lineWidth = 1;
+            ctx.setLineDash([3, 8]);
+            ctx.beginPath();
+            ctx.moveTo(homePressX, 0);
+            ctx.lineTo(homePressX, fh);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            ctx.restore();
+        }
+    }
+
+    // ── 7.2 Passing Lanes ────────────────────────────────────
+    private _drawPassingLanes(
+        lanes: { from: string; to: string; open: boolean }[],
+        home: Readonly<Team>,
+        away: Readonly<Team>,
+    ): void {
+        const ctx = this.ctx;
+        const allPlayers = [...home.players, ...away.players];
+        const playerById = new Map(allPlayers.map(p => [p.id, p]));
+
+        // Only draw open lanes for ball carrier and their options
+        const ballCarrier = allPlayers.find(p => p.hasBall);
+        if (!ballCarrier) return;
+
+        const relevantLanes = lanes.filter(l =>
+            (l.from === ballCarrier.id) && l.open
+        ).slice(0, 5); // max 5 lanes
+
+        for (const lane of relevantLanes) {
+            const from = playerById.get(lane.from);
+            const to = playerById.get(lane.to);
+            if (!from || !to) continue;
+
+            ctx.save();
+            ctx.globalAlpha = 0.5;
+            ctx.strokeStyle = lane.open ? "rgba(120,220,120,0.7)" : "rgba(220,80,80,0.4)";
+            ctx.lineWidth = 1.2;
+            ctx.setLineDash([5, 4]);
+            ctx.beginPath();
+            ctx.moveTo(from.pos.x, from.pos.y);
+            ctx.lineTo(to.pos.x, to.pos.y);
+            ctx.stroke();
+
+            // Arrow head
+            if (lane.open) {
+                const dx = to.pos.x - from.pos.x;
+                const dy = to.pos.y - from.pos.y;
+                const len = Math.sqrt(dx * dx + dy * dy);
+                if (len > 0) {
+                    const ux = dx / len;
+                    const uy = dy / len;
+                    const arrX = to.pos.x - ux * 14;
+                    const arrY = to.pos.y - uy * 14;
+                    ctx.setLineDash([]);
+                    ctx.fillStyle = "rgba(120,220,120,0.6)";
+                    ctx.beginPath();
+                    ctx.moveTo(to.pos.x, to.pos.y);
+                    ctx.lineTo(arrX - uy * 5, arrY + ux * 5);
+                    ctx.lineTo(arrX + uy * 5, arrY - ux * 5);
+                    ctx.fill();
+                }
+            }
+            ctx.setLineDash([]);
+            ctx.restore();
+        }
+    }
+
+    // ── 7.2 Pressure Heatmap ────────────────────────────────
+    private _drawPressureHeatmap(map: number[][]): void {
+        const ctx = this.ctx;
+        const cellW = this.field.width / 10;
+        const cellH = this.field.height / 7;
+
+        ctx.globalAlpha = 0.2;
+        for (let x = 0; x < 10; x++) {
+            for (let y = 0; y < 7; y++) {
+                const val = (map[x] && map[x][y]) ? map[x][y] : 0;
+                if (val <= 0) continue;
+                const intensity = Math.min(1, val / 3);
+                ctx.fillStyle = `rgba(255, 80, 30, ${intensity})`;
+                ctx.fillRect(x * cellW, y * cellH, cellW, cellH);
+            }
+        }
+        ctx.globalAlpha = 1.0;
     }
 
     // ── Influence Map ───────────────────────────────────────

@@ -367,6 +367,11 @@ export interface RenderOptions {
     showStats: boolean;
     showHeatmap: boolean;
     showPossessionArrow: boolean;
+    // 7.2 Tactical Overlays
+    showZones: boolean;
+    showPassingLanes: boolean;
+    showDefensiveLine: boolean;
+    showPressureHeatmap: boolean;
 }
 
 export interface AIDecision {

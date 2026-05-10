@@ -48,17 +48,37 @@ export class DecisionSystem implements SimulationSystem {
             // Exception: out_of_possession pressing/marking still comes from here
             // because OffBallSystem skips that phase (it defers to DecisionSystem).
             if (!player.hasBall) {
-                const phase = tacticalState.phase;
-                if (
-                    phase === "in_possession" ||
-                    phase === "transition_attack" ||
-                    phase === "transition_defend" ||
-                    phase === "set_piece"
-                ) {
-                    // OffBallSystem handled these — skip to avoid overwriting
-                    continue;
+                // If ball is loose — OffBallSystem already sent chasers; here we
+                // handle the non-chasers (reposition). Skip normal phase routing.
+                if (!ctx.ball.ownerPlayerId) {
+                    // Already handled in OffBallSystem for closest 5.
+                    // For the rest: let looseBallDecision produce a soft reposition.
+                    const phase = tacticalState.phase;
+                    if (
+                        phase === "in_possession" ||
+                        phase === "transition_attack" ||
+                        phase === "transition_defend" ||
+                        phase === "set_piece"
+                    ) {
+                        // These are normally OffBallSystem territory,
+                        // but OffBallSystem already did a `continue` for non-chasers.
+                        // Do nothing here — avoid double-commanding.
+                        continue;
+                    }
+                    // out_of_possession: fall through to getOffBallDecision → looseBallDecision
+                } else {
+                    const phase = tacticalState.phase;
+                    if (
+                        phase === "in_possession" ||
+                        phase === "transition_attack" ||
+                        phase === "transition_defend" ||
+                        phase === "set_piece"
+                    ) {
+                        // OffBallSystem handled these — skip to avoid overwriting
+                        continue;
+                    }
+                    // out_of_possession: fall through to existing pressing/marking logic
                 }
-                // out_of_possession: fall through to existing pressing/marking logic
             }
 
             const decision = player.hasBall

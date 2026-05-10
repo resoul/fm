@@ -10,6 +10,8 @@ interface MatchHUDProps {
     onStart: () => void;
     onPause: () => void;
     onReset: () => void;
+    onJumpToTick?: (tick: number) => void;
+    canReplay?: boolean;
 }
 
 // ── Possession Bar ─────────────────────────────────────────
@@ -67,6 +69,7 @@ type FeedTab = "all" | "highlights";
 // ── Main HUD ───────────────────────────────────────────────
 const MatchHUD: React.FC<MatchHUDProps> = ({
     homeTeam, awayTeam, state, events, onStart, onPause, onReset,
+    onJumpToTick, canReplay = false,
 }) => {
     const eventsRef = useRef<HTMLDivElement>(null);
     const [activeTab, setActiveTab] = useState<FeedTab>("all");
@@ -301,6 +304,8 @@ const MatchHUD: React.FC<MatchHUDProps> = ({
                             homeColor={hColor}
                             awayColor={aColor}
                             homeName={homeTeam.name}
+                            onJumpToTick={onJumpToTick}
+                            canReplay={canReplay}
                         />
                     )}
                 </div>

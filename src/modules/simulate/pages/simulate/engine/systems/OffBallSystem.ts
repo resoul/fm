@@ -99,6 +99,19 @@ export class OffBallSystem implements SimulationSystem {
                 ? ctx.tactical.homeState
                 : ctx.tactical.awayState;
 
+            // ── LOOSE BALL: override everything — closest players chase immediately ──
+            if (!ctx.ball.ownerPlayerId) {
+                const chasers = allPlayers
+                    .filter(p => p.position !== "GK")
+                    .sort((a, b) => distVec(a.pos, ctx.ball.pos) - distVec(b.pos, ctx.ball.pos))
+                    .slice(0, 5);
+                if (chasers.some(c => c.id === player.id)) {
+                    this._commits.delete(player.id); // cancel any committed run
+                    commands.push(makeMoveCommand(player, { ...ctx.ball.pos }, tacticalState));
+                }
+                continue; // non-chasers: DecisionSystem handles reposition
+            }
+
             // Resolve the dynamic shape anchor for this player (2.3)
             const shapeTargets = player.team === "home"
                 ? ctx.tactical.homeShapeTargets

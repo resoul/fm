@@ -9,6 +9,7 @@ import {
 import { ZoneSystem } from "../systems/ZoneSystem";
 import { MomentumSystem } from "../systems/MomentumSystem";
 import { TacticalInstructionsSystem } from "../systems/TacticalInstructionsSystem";
+import { MatchRhythmSystem } from "../systems/MatchRhythmSystem";
 
 export class MatchSimulator extends BaseSimulator {
     private resolver: CommandResolver;
@@ -21,6 +22,7 @@ export class MatchSimulator extends BaseSimulator {
             .addSystem(new TacticalSystem())
             .addSystem(new ZoneSystem())
             .addSystem(new MomentumSystem())
+            .addSystem(new MatchRhythmSystem())
             .addSystem(new TacticalInstructionsSystem())
             .addSystem(new RestartIntelligenceSystem())
             .addSystem(new OffBallSystem())

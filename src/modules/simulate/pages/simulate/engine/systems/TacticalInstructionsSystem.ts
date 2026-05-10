@@ -204,6 +204,14 @@ export class TacticalInstructionsSystem implements SimulationSystem {
 
         ctx.tactical.homeInstructions = this.buildInstructions(this._homeStyle, homeScore, awayScore, minute);
         ctx.tactical.awayInstructions = this.buildInstructions(this._awayStyle, awayScore, homeScore, minute);
+
+        // 4.3 Apply MatchRhythmSystem modifiers (runs before this in pipeline)
+        const rhythmMods = (ctx.tactical as any)?.rhythmModifiers;
+        if (rhythmMods) {
+            this._applyRhythmModifiers(ctx.tactical.homeInstructions, rhythmMods.home);
+            this._applyRhythmModifiers(ctx.tactical.awayInstructions, rhythmMods.away);
+        }
+
         ctx.tactical.roleProfiles = this.buildRoleProfiles(
             ctx,
             ctx.tactical.homeInstructions,
@@ -211,6 +219,19 @@ export class TacticalInstructionsSystem implements SimulationSystem {
         );
 
         return [];
+    }
+
+    private _applyRhythmModifiers(inst: TacticalInstructions, mod: { tempoDelta: number; directnessDelta: number; pressLineDelta: number; timeWasteFactor: number } | undefined): void {
+        if (!mod) return;
+        const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
+        inst.tempoBias = clamp(inst.tempoBias + mod.tempoDelta, 0, 1);
+        inst.directnessFactor = clamp(inst.directnessFactor + mod.directnessDelta, 0, 1);
+        inst.pressLineFactor = clamp(inst.pressLineFactor + mod.pressLineDelta, 0, 2);
+        // Time-waste: push tempo very low and directness very low
+        if (mod.timeWasteFactor > 0) {
+            inst.tempoBias = clamp(inst.tempoBias - mod.timeWasteFactor * 0.3, 0, 1);
+            inst.directnessFactor = clamp(inst.directnessFactor - mod.timeWasteFactor * 0.25, 0, 1);
+        }
     }
 
     // ── Instructions builder ──────────────────────────────────────────────────

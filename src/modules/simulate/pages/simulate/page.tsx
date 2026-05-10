@@ -18,6 +18,12 @@ export function SimulatePage() {
     const [events, setEvents]     = useState<MatchEvent[]>([]);
     const [showNames, setShowNames] = useState(true);
 
+    // 7.2 Tactical overlay toggles
+    const [showZones, setShowZones] = useState(false);
+    const [showPassingLanes, setShowPassingLanes] = useState(false);
+    const [showDefensiveLine, setShowDefensiveLine] = useState(false);
+    const [showHeatmap, setShowHeatmap] = useState(false);
+
     const handleMatchReady = useCallback((engine: MatchEngine) => {
         engineRef.current = engine;
         setTick(0);
@@ -50,18 +56,41 @@ export function SimulatePage() {
     }, []);
 
     const handleReset = useCallback(() => {
-        // Go back to prematch setup
         setScreen("prematch");
         setEvents([]);
         setTick(0);
     }, []);
 
+    // 7.1 Jump-to-moment: pause + fast-forward to target tick
+    const handleJumpToTick = useCallback((targetTick: number) => {
+        const engine = engineRef.current;
+        if (!engine) return;
+        // Pause first
+        engine.pause();
+        // Fast-forward to the target tick by stepping (capped to prevent hang)
+        const currentTick = engine.state.tick;
+        if (targetTick <= currentTick) {
+            // Can't go back without full restart — just highlight
+            setTick(t => t + 1);
+            return;
+        }
+        const steps = Math.min(targetTick - currentTick, 3600); // max 60s of sim
+        for (let i = 0; i < steps; i++) {
+            engine.tick();
+        }
+        setTick(t => t + 1);
+    }, []);
+
     const renderOptions: RenderOptions = useMemo(() => ({
         showNames,
         showStats: true,
-        showHeatmap: false,
+        showHeatmap,
         showPossessionArrow: true,
-    }), [showNames]);
+        showZones,
+        showPassingLanes,
+        showDefensiveLine,
+        showPressureHeatmap: false,
+    }), [showNames, showHeatmap, showZones, showPassingLanes, showDefensiveLine]);
 
     // ── Pre-match screen ────────────────────────────────────
     if (screen === "prematch") {
@@ -103,8 +132,28 @@ export function SimulatePage() {
                                     onChange={e => setShowNames(e.target.checked)}
                                     style={{ accentColor: "#e63946" }}
                                 />
-                                Show names
+                                Names
                             </label>
+                            {/* 7.2 Tactical Overlay toggles */}
+                            {(["Zones", "Lanes", "Def. Line", "Heatmap"] as const).map((label, i) => {
+                                const [val, setter] = [
+                                    [showZones, setShowZones],
+                                    [showPassingLanes, setShowPassingLanes],
+                                    [showDefensiveLine, setShowDefensiveLine],
+                                    [showHeatmap, setShowHeatmap],
+                                ][i] as [boolean, (v: boolean) => void];
+                                return (
+                                    <label key={label} style={{ display: "flex", alignItems: "center", gap: 4, cursor: "pointer", fontSize: 10, color: val ? "rgba(180,220,255,0.9)" : "rgba(255,255,255,0.4)" }}>
+                                        <input
+                                            type="checkbox"
+                                            checked={val}
+                                            onChange={e => setter(e.target.checked)}
+                                            style={{ accentColor: "#44aaff", width: 10, height: 10 }}
+                                        />
+                                        {label}
+                                    </label>
+                                );
+                            })}
                             <span style={{ fontSize: 10, color: "rgba(255,255,255,0.3)" }}>
                                 {engine.homeTeam.formation} vs {engine.awayTeam.formation}
                             </span>
@@ -159,6 +208,8 @@ export function SimulatePage() {
                                 onStart={handleStart}
                                 onPause={handlePause}
                                 onReset={handleReset}
+                                onJumpToTick={handleJumpToTick}
+                                canReplay={true}
                             />
                         </div>
                     </div>
