@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
-import type { Club, PlayerProfile, MatchLineup, PlayerPosition } from "../engine/types";
-import { FORMATIONS } from "../engine/teamFactory";
-import { overallRating } from "../engine/types";
+import type { Club, PlayerProfile, MatchLineup, PlayerPosition } from "@/simulate/types";
+import { FORMATIONS } from "@/simulate/teamFactory";
+import { overallRating } from "@/simulate/types";
 
 // ── Position color map ────────────────────────────────────
 const POS_COLORS: Record<string, string> = {

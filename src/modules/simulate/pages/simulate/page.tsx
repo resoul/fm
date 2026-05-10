@@ -1,10 +1,10 @@
 import { useState, useCallback, useMemo, useRef } from "react";
 import { ScrollArea } from '@/components/scroll-area';
-import { MatchEngine } from "./engine/matchEngine";
+import { MatchEngine } from "@/simulate/matchEngine";
 import FootballField from "./components/FootballField";
 import MatchHUD from "./components/MatchHUD";
 import PreMatchPage from "./components/PreMatchPage";
-import type { MatchEvent, RenderOptions } from "./engine/types";
+import type { MatchEvent, RenderOptions } from "@/simulate/types";
 
 // ── App flow: "prematch" → "playing" ─────────────────────
 type AppScreen = "prematch" | "playing";

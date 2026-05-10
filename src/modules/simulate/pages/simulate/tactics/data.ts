@@ -1,4 +1,4 @@
-import type { PlayerProfile } from '../engine/types';
+import type { PlayerProfile } from '@/simulate/types';
 
 export interface Player {
     id: string;

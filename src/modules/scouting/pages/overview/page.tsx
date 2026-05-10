@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
-import { DEFAULT_FIELD } from "../../../simulate/pages/simulate/engine/matchEngine";
-import { MatchSimulation } from "../../../simulate/pages/simulate/engine/headless";
-import { buildMatchTeam } from "../../../simulate/pages/simulate/engine/teamFactory";
-import { SeededRandom } from "../../../simulate/pages/simulate/engine/seededRandom";
+import { DEFAULT_FIELD } from "@/simulate/matchEngine";
+import { MatchSimulation } from "@/simulate/headless";
+import { buildMatchTeam } from "@/simulate/teamFactory";
+import { SeededRandom } from "@/simulate/seededRandom";
 import type {
     Club,
     MatchEvent,
@@ -12,7 +12,7 @@ import type {
     PlayerProfile,
     PlayerRole,
     TeamSide,
-} from "../../../simulate/pages/simulate/engine/types";
+} from "@/simulate/types";
 
 interface DemoResult {
     kind: "realtime-slice" | "instant-result";
@@ -90,6 +90,128 @@ const BASE_ATTRIBUTES: PlayerAttributes = {
     rushingOut: 45,
     throwing: 50,
 };
+
+type Enumerate<
+    N extends number,
+    Acc extends number[] = []
+> = Acc['length'] extends N
+    ? Acc[number]
+    : Enumerate<N, [...Acc, Acc['length']]>;
+
+type Range<F extends number, T extends number> =
+    Exclude<Enumerate<T>, Enumerate<F>> | T;
+
+type AttributeNumber = Range<1, 20>;
+type Role = "player";
+
+interface TechnicalAttributes {
+    crossing: AttributeNumber,
+    dribbling: AttributeNumber,
+    finishing: AttributeNumber,
+    firstTouch: AttributeNumber,
+    heading: AttributeNumber,
+    longShots: AttributeNumber,
+    longThrows: AttributeNumber,
+    marking: AttributeNumber,
+    passing: AttributeNumber,
+    tackling: AttributeNumber,
+    technique: AttributeNumber,
+}
+
+interface PiecesAttributes {
+    corners: AttributeNumber,
+    freeKickTaking: AttributeNumber,
+    longThrows: AttributeNumber,
+    penaltyTaking: AttributeNumber,
+}
+
+interface MentalAttributes {
+    aggression: AttributeNumber,
+    anticipation: AttributeNumber,
+    bravery: AttributeNumber,
+    composure: AttributeNumber,
+    concentration: AttributeNumber,
+    decisions: AttributeNumber,
+    determination: AttributeNumber,
+    flair: AttributeNumber,
+    leadership: AttributeNumber,
+    offTheBall: AttributeNumber,
+    positioning: AttributeNumber,
+    teamwork: AttributeNumber,
+    vision: AttributeNumber,
+    workRate: AttributeNumber,
+}
+
+interface PhysicalAttributes {
+    acceleration: AttributeNumber,
+    agility: AttributeNumber,
+    balance: AttributeNumber,
+    jumpingReach: AttributeNumber,
+    naturalFitness: AttributeNumber,
+    pace: AttributeNumber,
+    stamina: AttributeNumber,
+    strength: AttributeNumber,
+}
+
+interface HiddenAttributes {
+    currentAbility: AttributeNumber,
+    potentialAbility: AttributeNumber,
+    consistency: AttributeNumber,
+    importantMatches: AttributeNumber,
+    injuryProneness: AttributeNumber,
+    dirtiness: AttributeNumber,
+    versatility: AttributeNumber,
+}
+
+interface FootednessAttributes {
+    left: AttributeNumber,
+    right: AttributeNumber,
+}
+
+interface ConditionAttributes {
+    sharpness: number,
+    fitness: number,
+    fatigue: number,
+}
+
+interface PersonalityAttributes {
+    adaptability: AttributeNumber,
+    ambition: AttributeNumber,
+    controversy: AttributeNumber,
+    loyalty: AttributeNumber,
+    pressure: AttributeNumber,
+    professionalism: AttributeNumber,
+    sportsmanship: AttributeNumber,
+    temperament: AttributeNumber,
+}
+
+interface ReputationAttributes {
+    current: number,
+    home: number,
+    world: number,
+}
+
+interface AbilityAttributes {
+    morale: number,
+}
+
+interface Person {
+    name: string,
+    role: Role,
+    ability: AbilityAttributes,
+    reputation: ReputationAttributes,
+    personality: PersonalityAttributes,
+    hidden: HiddenAttributes,
+    condition: ConditionAttributes,
+    foot: FootednessAttributes,
+    pieces: PiecesAttributes,
+    technical: TechnicalAttributes,
+    mental: MentalAttributes,
+    physical: PhysicalAttributes,
+}
+
+console.log({} as Person);
+
 
 function attrs(overrides: Partial<PlayerAttributes> = {}): PlayerAttributes {
     return { ...BASE_ATTRIBUTES, ...overrides };

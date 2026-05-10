@@ -6,7 +6,7 @@ import { FORMATIONS } from '../tactics/formations';
 import { GHOST_SLOTS, SNAP_RADIUS } from '../tactics/ghost-grid';
 import { ChevronDown, RefreshCcw, Wand2, Trash2 } from 'lucide-react';
 import { setPlayerDragImage } from '../tactics/components/drag-image';
-import type { Club, MatchLineup } from '../engine/types';
+import type { Club, MatchLineup } from '@/simulate/types';
 import { profileToPlayer, type Player } from '../tactics/data';
 
 interface TacticsSelectorProps {
@@ -148,6 +148,16 @@ export function TacticsSelector({ club, onConfirm, label }: TacticsSelectorProps
                     <button onClick={clearPitch} className="flex items-center gap-1.5 px-3 py-1 rounded-md text-[11px] font-bold text-red-400 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 transition-colors">
                         <Trash2 size={11} /> Clear
                     </button>
+                    <button
+                        onClick={handleConfirmSelection}
+                        disabled={assignedCount !== 11}
+                        className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-[11px] font-bold transition-colors
+                    ${assignedCount === 11
+                            ? 'text-green-600 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700'
+                            : 'bg-zinc-800 text-zinc-500 cursor-not-allowed border border-white/5'}`}
+                    >
+                        {assignedCount === 11 ? 'Confirm Lineup' : `Select ${11 - assignedCount} more players`}
+                    </button>
                 </div>
             </div>
 
@@ -189,17 +199,6 @@ export function TacticsSelector({ club, onConfirm, label }: TacticsSelectorProps
                     />
                 </div>
             </div>
-
-            <button
-                onClick={handleConfirmSelection}
-                disabled={assignedCount !== 11}
-                className={`mt-4 w-full py-4 rounded-xl font-bold text-lg transition-all
-                    ${assignedCount === 11 
-                        ? 'bg-green-600 hover:bg-green-500 text-white shadow-lg shadow-green-900/20' 
-                        : 'bg-zinc-800 text-zinc-500 cursor-not-allowed border border-white/5'}`}
-            >
-                {assignedCount === 11 ? 'Confirm Lineup' : `Select ${11 - assignedCount} more players`}
-            </button>
         </div>
     );
 }

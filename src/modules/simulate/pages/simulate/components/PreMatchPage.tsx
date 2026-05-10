@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from "react";
-import type { Club, MatchLineup, MatchEvent, PlayerProfile } from "../engine/types";
-import { generateClub, buildMatchTeam } from "../engine/teamFactory";
-import { MatchEngine, DEFAULT_FIELD } from "../engine/matchEngine";
+import type { Club, MatchLineup, MatchEvent, PlayerProfile } from "@/simulate/types";
+import { generateClub, buildMatchTeam } from "@/simulate/teamFactory";
+import { MatchEngine, DEFAULT_FIELD } from "@/simulate/matchEngine";
 import { TacticsSelector } from "./TacticsSelector";
-import { SeededRandom } from "../engine/seededRandom";
+import { SeededRandom } from "@/simulate/seededRandom";
 
 // ── Pre-generated clubs ───────────────────────────────────
 function createDefaultClubs(): [Club, Club] {
@@ -102,22 +102,6 @@ export const PreMatchPage: React.FC<PreMatchPageProps> = ({ onMatchReady }) => {
         }}>
             {/* Header */}
             <div style={{ maxWidth: 900, margin: "0 auto" }}>
-                <div style={{ textAlign: "center", marginBottom: 32 }}>
-                    <div style={{ fontSize: 28, marginBottom: 6 }}>⚽</div>
-                    <h1 style={{
-                        fontSize: 22, fontWeight: 900,
-                        letterSpacing: 1, margin: "0 0 4px",
-                        background: "linear-gradient(90deg, #fff 0%, rgba(255,255,255,0.6) 100%)",
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                    }}>
-                        PRE-MATCH SETUP
-                    </h1>
-                    <p style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", margin: 0, letterSpacing: 0.5 }}>
-                        Select lineups and formation before kick-off
-                    </p>
-                </div>
-
                 {/* Step indicators */}
                 <div style={{
                     display: "flex",
@@ -235,7 +219,7 @@ export const PreMatchPage: React.FC<PreMatchPageProps> = ({ onMatchReady }) => {
 };
 
 // ── Match Preview screen ──────────────────────────────────
-import { overallRating } from "../engine/types";
+import { overallRating } from "@/simulate/types";
 
 interface QuickResult {
     homeScore: number;

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import type { MatchState, Team, MatchEvent } from "../engine/types";
+import type { MatchState, Team, MatchEvent } from "@/simulate/types";
 import HighlightsPanel from "./HighlightsPanel";
 
 interface MatchHUDProps {

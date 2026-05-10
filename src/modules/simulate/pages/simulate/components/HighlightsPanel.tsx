@@ -6,7 +6,7 @@
  */
 
 import React, { useState } from "react";
-import type { MatchEvent } from "../engine/types";
+import type { MatchEvent } from "@/simulate/types";
 
 const HIGHLIGHT_TYPES = new Set([
     "goal", "shot", "shot_saved", "shot_missed", "corner", "freekick",
