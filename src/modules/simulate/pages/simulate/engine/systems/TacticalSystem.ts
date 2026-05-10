@@ -297,12 +297,20 @@ export class TacticalSystem implements SimulationSystem {
         this._lastBallOwner = ballOwner?.id ?? this._lastBallOwner;
 
         // Compute dynamic shape targets (2.3)
+        const homeAvgFatigue = avgFatigue(ctx.homeTeam.players);
+        const awayAvgFatigue = avgFatigue(ctx.awayTeam.players);
+
         ctx.tactical.homeShapeTargets = TeamShape.computeTargets(
             ctx.homeTeam,
             ctx.ball.pos,
             ctx.tactical.homeState,
             ctx.tactical.homeChain ?? null,
             width, height,
+            {
+                goalDiff: ctx.homeTeam.score - ctx.awayTeam.score,
+                avgFatigue: homeAvgFatigue,
+                ticksSincePossessionChange: ctx.tactical.homeState.ticksSincePossessionChange,
+            },
         );
         ctx.tactical.awayShapeTargets = TeamShape.computeTargets(
             ctx.awayTeam,
@@ -310,6 +318,11 @@ export class TacticalSystem implements SimulationSystem {
             ctx.tactical.awayState,
             ctx.tactical.awayChain ?? null,
             width, height,
+            {
+                goalDiff: ctx.awayTeam.score - ctx.homeTeam.score,
+                avgFatigue: awayAvgFatigue,
+                ticksSincePossessionChange: ctx.tactical.awayState.ticksSincePossessionChange,
+            },
         );
     }
 }
@@ -326,4 +339,9 @@ function makeDefaultTacticalState(ctx: SimulationContext, side: TeamSide): TeamT
         teamWidth: 0.6,
         pressureIntensity: 0,
     };
+}
+function avgFatigue(players: import("../types").Player[]): number {
+    const outfield = players.filter(p => p.position !== "GK");
+    if (outfield.length === 0) return 0;
+    return outfield.reduce((sum, p) => sum + p.fatigue, 0) / outfield.length;
 }

@@ -19,12 +19,9 @@
  *   transition → elongated (stretched shape)
  */
 
-import type { Player, Team, Vec2, TeamSide } from "../types";
-import type { TeamTacticalState, TeamTacticalPhase } from "../types";
-import type { PossessionChain, ChainPhase } from "./PossessionChain";
-import { distVec } from "../physics";
-
-// ── Shape parameters ──────────────────────────────────────
+import type { Player, Team, Vec2 } from "../types";
+import type { TeamTacticalState } from "../types";
+import type { PossessionChain } from "./PossessionChain";
 
 export interface ShapeParams {
     /** How much the block tracks ball X: 0=stays at anchor, 1=follows ball fully */
@@ -107,6 +104,17 @@ const SHAPE_PRESETS: Record<string, ShapeParams> = {
     },
 };
 
+// ── Score / fatigue context ───────────────────────────────
+
+export interface ShapeContext {
+    /** Goal difference from THIS team's perspective (positive = winning) */
+    goalDiff: number;
+    /** Average fatigue of outfield players, 0-1 */
+    avgFatigue: number;
+    /** Ticks since last possession change (for lerp smoothing) */
+    ticksSincePossessionChange: number;
+}
+
 // ── Main class ────────────────────────────────────────────
 
 export class TeamShape {
@@ -120,6 +128,7 @@ export class TeamShape {
      * @param chain        Current possession chain (or null if out of possession)
      * @param fieldWidth   Field dimensions
      * @param fieldHeight
+     * @param shapeCtx     Score + fatigue context for dynamic adjustment
      */
     static computeTargets(
         team: Team,
@@ -128,9 +137,13 @@ export class TeamShape {
         chain: PossessionChain | null,
         fieldWidth: number,
         fieldHeight: number,
+        shapeCtx?: ShapeContext,
     ): ShapeTarget[] {
         const isHome = team.id === "home";
-        const params = this.resolveParams(tacticalState, chain);
+        const baseParams = this.resolveParams(tacticalState, chain);
+        const params = shapeCtx
+            ? this.applyContextModifiers(baseParams, shapeCtx)
+            : baseParams;
         const outfield = team.players.filter(p => p.position !== "GK");
 
         if (outfield.length === 0) return [];
@@ -217,12 +230,73 @@ export class TeamShape {
             default:                return SHAPE_PRESETS.progression;
         }
     }
-}
 
+    /**
+     * Apply score and fatigue modifiers on top of the base shape params.
+     *
+     * Score logic:
+     *   Losing by 1 → slightly wider + higher line (chasing)
+     *   Losing by 2+ → aggressively wider + much higher line
+     *   Winning by 1 → slightly narrower + lower line (protecting)
+     *   Winning by 2+ → compact low block
+     *
+     * Fatigue logic:
+     *   High avg fatigue → narrower width, lower line, less ball tracking
+     *   (tired teams naturally drop deeper and compress)
+     */
+    private static applyContextModifiers(base: ShapeParams, ctx: ShapeContext): ShapeParams
+    {
+        const { goalDiff, avgFatigue } = ctx;
+
+        // ── Score modifier ────────────────────────────────
+        // Clamped to ±2 goals for meaningful effect
+        const diff = Math.max(-2, Math.min(2, goalDiff));
+
+        let widthDelta  = 0;
+        let depthDelta  = 0;
+        let lineDelta   = 0;
+        let trackingDelta = 0;
+
+        if (diff < 0) {
+            // Losing: push forward, stretch shape to create chances
+            const urgency = Math.abs(diff) / 2; // 0.5 for -1, 1.0 for -2
+            widthDelta    =  0.12 * urgency;   // wider
+            depthDelta    =  0.08 * urgency;   // longer vertically
+            lineDelta     =  0.08 * urgency;   // higher defensive line
+            trackingDelta =  0.10 * urgency;   // track ball more aggressively
+        } else if (diff > 0) {
+            // Winning: protect lead, drop into shape
+            const comfort = Math.min(diff / 2, 1);
+            widthDelta    = -0.10 * comfort;   // narrower
+            depthDelta    = -0.06 * comfort;   // shorter / more compact
+            lineDelta     = -0.06 * comfort;   // lower defensive line
+            trackingDelta = -0.06 * comfort;   // less aggressive tracking
+        }
+
+        // ── Fatigue modifier ──────────────────────────────
+        // Tired teams (avgFatigue > 0.5) automatically drop and compress
+        const fatigueFactor = Math.max(0, avgFatigue - 0.5) * 2; // 0-1 from 50-100% fatigue
+        widthDelta    -= 0.08 * fatigueFactor;
+        lineDelta     -= 0.05 * fatigueFactor;
+        trackingDelta -= 0.06 * fatigueFactor;
+
+        return {
+            ballTrackingX: clamp(base.ballTrackingX + trackingDelta, 0.05, 0.70),
+            ballTrackingY: clamp(base.ballTrackingY + trackingDelta * 0.7, 0.05, 0.60),
+            widthScale:    clamp(base.widthScale    + widthDelta,    0.55, 1.35),
+            depthScale:    clamp(base.depthScale    + depthDelta,    0.55, 1.35),
+            lineShift:     clamp(base.lineShift     + lineDelta,    -0.15, 0.25),
+        };
+    }
+}
 // ── Utility ───────────────────────────────────────────────
 
 function centroidOf(positions: Vec2[]): Vec2 {
     if (positions.length === 0) return { x: 0, y: 0 };
     const sum = positions.reduce((acc, p) => ({ x: acc.x + p.x, y: acc.y + p.y }), { x: 0, y: 0 });
     return { x: sum.x / positions.length, y: sum.y / positions.length };
+}
+
+function clamp(v: number, min: number, max: number): number {
+    return Math.max(min, Math.min(max, v));
 }

@@ -31,15 +31,15 @@ interface HighlightsPanelProps {
     homeColor: string;
     awayColor: string;
     homeName: string;
-    awayName: string;
 }
 
 const HighlightsPanel: React.FC<HighlightsPanelProps> = ({
-    events, homeColor, awayColor, homeName, awayName,
+    events, homeColor, awayColor, homeName,
 }) => {
     const highlights = events
         .filter(e => HIGHLIGHT_TYPES.has(e.type))
-        .slice(0, 30); // last 30 highlights
+        .slice(0, 30)
+        .reverse();
 
     if (highlights.length === 0) {
         return (

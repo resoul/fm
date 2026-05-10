@@ -182,9 +182,11 @@ defensive_transition | attacking_transition | set_piece
   - PassAction: pressurePenalty — не пасовать в зоны с оппонентской dominance
   - PassAction: defensiveLinePenalty — не пасовать за линию обороны без реального забегания
 
-- [🔧 PARTIAL] **2.3 Team Shape System**
-    - Centroids и compactness есть
-    - Нет: dynamic width/depth adjustment в зависимости от фазы и счёта
+- [✅ DONE] **2.3 Team Shape System**
+  - Dynamic width/depth adjustment: score modifier (±2 goals) + fatigue modifier
+  - Проигрываем → шире, выше, aggressively track ball
+  - Ведём → narrower, lower line, protect shape
+  - Высокая усталость → автоматически compact и deep
 
 - [✅ DONE] **2.6 Restart Intelligence**
     - `RestartIntelligenceSystem` — новый файл `engine/systems/RestartIntelligenceSystem.ts`

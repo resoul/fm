@@ -98,7 +98,7 @@ const MatchHUD: React.FC<MatchHUDProps> = ({
     const hColor    = homeTeam.color;
     const aColor    = awayTeam.color;
 
-    const recentEvents = [...events].reverse().slice(0, 50);
+    const recentEvents = [...events].slice(0, 50);
 
     // Count highlights for badge
     const HIGHLIGHT_TYPES = new Set(["goal", "shot", "shot_saved", "shot_missed", "corner", "freekick"]);
@@ -301,7 +301,6 @@ const MatchHUD: React.FC<MatchHUDProps> = ({
                             homeColor={hColor}
                             awayColor={aColor}
                             homeName={homeTeam.name}
-                            awayName={awayTeam.name}
                         />
                     )}
                 </div>
