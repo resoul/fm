@@ -6,6 +6,7 @@ import type {
     Command, UpdateMatchStateCommand, UpdateBallCommand,
     TeleportPlayerCommand, SetPlayerTargetCommand,
     SetPlayerBallOwnershipCommand, ClearAllDecisionsCommand,
+    SetPlayerDecisionCommand,
 } from "../core/Command";
 import { resetFormationPositions } from "../teamFactory";
 
@@ -283,9 +284,9 @@ export class RefereeSystem implements SimulationSystem {
         teamId: TeamSide,
         pos: Vec2,
     ): Command[] {
-        const { state, events } = ctx;
+        const { state, events, ball } = ctx;
         const allPlayers = [...ctx.homeTeam.players, ...ctx.awayTeam.players];
-        const taker = this.findRestartTaker(allPlayers, teamId, pos, type);
+        const taker = this.findRestartTaker(allPlayers, teamId, pos, type, ball.lastTouchedBy);
 
         this._restartTakerId = taker?.id ?? null;
         this._deadBallTicks = 0;
@@ -332,6 +333,20 @@ export class RefereeSystem implements SimulationSystem {
                     kickCooldown: 0,
                 } as SetPlayerBallOwnershipCommand,
             );
+        }
+
+        // For throw-ins: apply a receiver cooldown to the player who kicked the ball out.
+        // This prevents them from being the immediate throw-in target, breaking the loop.
+        if (type === "throwin" && ball.lastTouchedBy) {
+            const lastToucher = allPlayers.find(p => p.id === ball.lastTouchedBy);
+            if (lastToucher) {
+                commands.push({
+                    type: "SET_PLAYER_DECISION",
+                    playerId: lastToucher.id,
+                    decision: null,
+                    cooldown: 90, // ~1.5 seconds — they can\'t receive immediately
+                } as SetPlayerDecisionCommand);
+            }
         }
 
         return commands;
@@ -394,6 +409,7 @@ export class RefereeSystem implements SimulationSystem {
         teamId: TeamSide,
         pos: Vec2,
         type: MatchPhase,
+        excludeId?: string | null,
     ): Player | undefined {
         // Goalkick → always the GK
         if (type === "goalkick") {
@@ -412,7 +428,16 @@ export class RefereeSystem implements SimulationSystem {
             )[0];
         }
 
-        // Throw-in / free-kick → nearest player to restart spot
+        // Throw-in → nearest player who did NOT kick the ball out.
+        // Excluding lastTouchedBy prevents the same player taking the throw
+        // to the one who just went out of bounds, creating an infinite loop.
+        if (type === "throwin") {
+            const candidates = eligible.filter(p => p.id !== excludeId);
+            const pool = candidates.length > 0 ? candidates : eligible;
+            return pool.sort((a, b) => distVec(a.pos, pos) - distVec(b.pos, pos))[0];
+        }
+
+        // Free-kick → nearest player to restart spot
         return eligible.sort((a, b) => distVec(a.pos, pos) - distVec(b.pos, pos))[0];
     }
 

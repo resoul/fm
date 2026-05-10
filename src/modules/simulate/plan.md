@@ -52,17 +52,17 @@ Execution
 
 ```ts
 interface TacticalProfile {
-    role: PlayerRole;
-    formationSlot: FormationSlot;
-    homeZone: Zone;
-    activeZone: Zone;
-    attackingZone: Zone;
-    defensiveZone: Zone;
-    tacticalDiscipline: number;
-    positionalFreedom: number;
-    supportBias: number;
-    pressBias: number;
-    riskBias: number;
+  role: PlayerRole;
+  formationSlot: FormationSlot;
+  homeZone: Zone;
+  activeZone: Zone;
+  attackingZone: Zone;
+  defensiveZone: Zone;
+  tacticalDiscipline: number;
+  positionalFreedom: number;
+  supportBias: number;
+  pressBias: number;
+  riskBias: number;
 }
 ```
 
@@ -90,12 +90,12 @@ interface TacticalProfile {
 
 ```ts
 interface TeamShape {
-    defensiveLineHeight: number;
-    attackingWidth: number;
-    compactness: number;
-    horizontalStretch: number;
-    verticalStretch: number;
-    pressureLine: number;
+  defensiveLineHeight: number;
+  attackingWidth: number;
+  compactness: number;
+  horizontalStretch: number;
+  verticalStretch: number;
+  pressureLine: number;
 }
 ```
 
@@ -141,6 +141,7 @@ defensive_transition | attacking_transition | set_piece
 - [✅ DONE] **Tackle спам** — TACKLE_SUCCESS_COOLDOWN = 150 тиков
 - [✅ DONE] **Goalkick бьёт вратарь**
 - [✅ DONE] **Halftime / Goal delay + корректный kickoff**
+- [✅ DONE] **Throw-in loop** — тейкер не выбирает lastTouchedBy; cooldown 90 тиков на выбившего; получатели позиционируются с INSET 40px от аутовой линии
 
 ---
 
@@ -149,89 +150,57 @@ defensive_transition | attacking_transition | set_piece
 - [✅ DONE] **1.1 Command System** — registry-based handlers, типизированные через mapped types; resolver.register() для расширения без правки core; UPDATE_PLAYER_METRICS без прямых мутаций.
 
 - [✅ DONE] **1.2 Immutable Safety**
-    - Новые команды: `TELEPORT_PLAYER`, `SET_PLAYER_TARGET`,
-      `SET_PLAYER_BALL_OWNERSHIP`, `CLEAR_ALL_DECISIONS`
-    - RefereeSystem полностью переведён на Command-паттерн:
-      нет прямых мутаций player.pos / targetPos / vel / hasBall / nextDecision
-    - Остаток: readonly snapshots, deep freeze в dev, mutation assertions
+  - Новые команды: `TELEPORT_PLAYER`, `SET_PLAYER_TARGET`, `SET_PLAYER_BALL_OWNERSHIP`, `CLEAR_ALL_DECISIONS`
+  - RefereeSystem полностью переведён на Command-паттерн
 
 - [ ] **1.3 Tick Pipeline** (формализовать порядок)
-    - Декларативный граф зависимостей с явными read/write контрактами
-    - Поймать конфликты типа "MovementSystem читает то, что RefereeSystem ещё не записал"
+  - Декларативный граф зависимостей с явными read/write контрактами
+  - Поймать конфликты типа "MovementSystem читает то, что RefereeSystem ещё не записал"
 
 - [ ] **1.4 Event Bus 2 уровня**
-    - Simulation Events (для логики): `possession_changed`, `interception`
-    - Presentation Events (для UI): `crowd_reaction`, `commentary`, `highlight`
+  - Simulation Events (для логики): `possession_changed`, `interception`
+  - Presentation Events (для UI): `crowd_reaction`, `commentary`, `highlight`
 
 ---
 
 ## 2. FOOTBALL AI
 
-- [✅ DONE] **2.4 Tactical States** — 5 фаз: `in_possession / transition_attack / out_of_possession / transition_defend / set_piece`. Обновляются каждый тик.
+- [✅ DONE] **2.4 Tactical States** — 5 фаз: `in_possession / transition_attack / out_of_possession / transition_defend / set_piece`.
 
 - [✅ DONE] **2.5 Decision Scoring (UtilityAI)** — HoldAction, PassAction с lane bonus, DribbleAction, ShootAction.
 
-- [✅ DONE] **2.1 Off-ball Intelligence**
-  - hold_shape использует ZoneSystem.isOutsideLeash() вместо фиксированного targetPos
-  - Явный "repositioning phase" (20 тиков) после рестарта
-  - defenseRecovery использует zone anchor Y для сохранения латеральной структуры
+- [✅ DONE] **2.1 Off-ball Intelligence** — hold_shape через ZoneSystem.isOutsideLeash(); repositioning phase 20 тиков; defenseRecovery с zone anchor Y.
 
-- [✅ DONE] **2.2 Space Awareness**
-  - defensiveLine: реальная X-позиция второго защитника, не фиксированный процент поля
-  - dangerousZones вычисляются относительно реальной defensive line
-  - PassAction: pressurePenalty — не пасовать в зоны с оппонентской dominance
-  - PassAction: defensiveLinePenalty — не пасовать за линию обороны без реального забегания
+- [✅ DONE] **2.2 Space Awareness** — defensiveLine из реальной позиции защитников; pressurePenalty и defensiveLinePenalty в PassAction.
 
-- [✅ DONE] **2.3 Team Shape System**
-  - Dynamic width/depth adjustment: score modifier (±2 goals) + fatigue modifier
-  - Проигрываем → шире, выше, aggressively track ball
-  - Ведём → narrower, lower line, protect shape
-  - Высокая усталость → автоматически compact и deep
+- [✅ DONE] **2.3 Team Shape System** — dynamic width/depth; score modifier + fatigue modifier.
 
-- [✅ DONE] **2.6 Restart Intelligence**
-    - `RestartIntelligenceSystem` — новый файл `engine/systems/RestartIntelligenceSystem.ts`
-    - **corner**: атакующие занимают ближний/дальний пост, пенальти, край, поздний забег; защитники зонально + GK на пост; один форвард уходит на контратаку
-    - **throwin**: 3–4 игрока создают варианты (короткий / вперёд / назад / широко); защитники давят на ближние опции
-    - **goalkick**: команда разбегается широко, ST уходит к средней линии; противник выстраивается по линии давления
-    - **freekick (атака)**: забегания в штрафную, стенка из 2–4 защитников, GK на ближний пост; **(своя половина)**: выстраиваются для получения
-    - Пересчёт раз в 30 тиков (не каждый тик — нет дёрганья)
-    - Зарегистрирован в `MatchSimulator` перед `OffBallSystem`
+- [✅ DONE] **2.6 Restart Intelligence** — corner / throwin / goalkick / freekick с тактическими позициями.
 
 ---
 
 ## 3. TACTICS SYSTEM
 
-- [ ] **3.1 Tactical Instructions**
-    - In Possession: width, tempo, overlaps, directness
-    - Out of Possession: press line, compactness, trap side
+- [✅ DONE] **3.1 Tactical Instructions** — `TacticalInstructionsSystem`: width / tempo / overlaps / directness / pressLine / compactness / trapSide. Скалярные факторы widthFactor / tempoBias / pressLineFactor / compactnessFactor / directnessFactor читаются в OffBallSystem и UtilityAI.
 
-- [ ] **3.2 Role Behaviors**
-    - Сейчас: CM, ST, LW и т.д. как базовые позиции
-    - Нужно: deep lying playmaker, mezzala, inverted winger, libero
+- [✅ DONE] **3.2 Role Behaviors** — 14 ролей с профилями: `leashOverride`, `pressTrigger`, `forwardRunBias`, `supportDropBias`, `forwardPassBias`, `overlapsEnabled`. Применяются в UtilityAI (PassAction, ShootAction, DribbleAction) и OffBallSystem (run selection).
 
-- [ ] **3.3 Tactical Identity**
-    - tiki-taka, gegenpress, low block, direct football — узнаваемый стиль
+- [✅ DONE] **3.3 Tactical Identity** — 5 стилей: `tiki_taka`, `gegenpress`, `low_block`, `direct_play`, `balanced`. Адаптируются к счёту и минуте. `matchSimulator.setTacticalStyle(side, style)`.
 
 ---
 
 ## 4. MATCH FLOW & REALISM
 
-- [🔧 PARTIAL] **4.1 Possession Chains**
-    - PossessionChain трекер есть
-    - Нет: использования данных для тактических решений (когда переходить к вертикальной игре)
+- [✅ DONE] **4.1 Possession Chains** — ChainTracker работает; данные цепочек теперь используются в UtilityAI: chainForwardBonus масштабирует forward-компонент при выборе адресата паса (+0.18 в final_third/chance_creation); бонус к score() в build_up и urgentMode.
 
-- [ ] **4.2 Momentum**
-    - После гола — confidence spike у атаки, паника у обороны, изменение давления команды
+- [✅ DONE] **4.2 Momentum** — MomentumSystem: confidence spike (+12% speed, +0.3 pressureIntensity, 90 сек) для забившей команды; shock (-5% speed, -0.25 pressureIntensity, drop defensive line, 30 сек) для пропустившей. Интегрирован в MovementSystem и TacticalSystem.
 
 - [ ] **4.3 Match Rhythm**
-    - Recycling possession, tempo shifts, намеренное замедление при ведении в счёте
+  - Recycling possession (намеренное замедление при ведении в счёте)
+  - Tempo shifts: команда ведёт → короткие пасы назад, меньше риска; проигрывает → повышение темпа автоматически
+  - Сейчас `tiki_taka` и score-адаптация в TacticalInstructions частично закрывают это — но нет явного per-tick tempo control
 
-- [✅ DONE] **4.4 Realistic Error Model**
-    - `PassingSystem`: `computePassError()` — отклонение targetPos от `passing` + pressure + fatigue + distance
-    - `ShootingSystem`: `computeShotError()` — для дальних ударов avg(`longShots`, `finishing`); радиус до 55px
-    - Лейблы событий: "wayward pass" / "loose pass" / "blazes it wide" / "straight at keeper"
-    - Wild pass (>22px): receiver cooldown не выставляется
-    - Все константы вынесены в `balance.ts` (12 новых констант `PASS_ERROR_*` / `SHOT_ERROR_*`)
+- [✅ DONE] **4.4 Realistic Error Model** — computePassError() / computeShotError(); лейблы событий; все константы в balance.ts.
 
 ---
 
@@ -248,6 +217,7 @@ defensive_transition | attacking_transition | set_piece
 ## 6. STATISTICAL ENGINE
 
 - [ ] **6.1 xG Pipeline** — shot location, body part, assist type, pressure on shooter, GK position
+  - Базовый xG.ts существует, но не учитывает body part, assist type, детальную позицию GK
 
 - [ ] **6.2 League Simulation** — fatigue accumulation между матчами, squad rotation, morale
 
@@ -257,22 +227,26 @@ defensive_transition | attacking_transition | set_piece
 
 - [✅ DONE] **Highlights Panel** — вкладка "⚡ Моменты"; фильтрует голы, удары, сейвы, угловые, свободные удары; показывает xG.
 
-- [ ] **7.1 Replay / Jump to moment** — snapshot каждые N секунд → кнопка "смотреть" телепортирует к тику
+- [ ] **7.1 Replay / Jump to moment**
+  - ReplayManager уже записывает snapshots (pos + state каждые N тиков)
+  - Нет: UI-кнопки "смотреть" в Highlights Panel, которая телепортирует к нужному тику
+  - Нет: ReplaySimulator, воспроизводящий snapshot вместо live state
 
 - [ ] **7.2 Tactical Overlays**
-    - Zone Grid overlay: показать 6×5 сетку + кто в какой зоне
-    - Нужно добавить `renderOptions.showZones` в `FootballField.tsx`
-    - passing lanes, defensive line, marking assignments, pressure heatmap toggle
+  - RenderOptions сейчас: `showNames`, `showStats`, `showHeatmap`, `showPossessionArrow`
+  - Нужно добавить в RenderOptions: `showZones`, `showPassingLanes`, `showDefensiveLine`, `showPressureHeatmap`, `showMarkingLines`
+  - Renderer уже рисует influenceMap heatmap — нужно дорисовать зоны и линии
 
 - [ ] **7.3 Commentary / Event Descriptions**
-    - Сейчас: "Müller passes to Schmidt."
-    - Нужно: "Dangerous ball over the top!", "Great recovery tackle!", "What a chance!"
+  - Сейчас: "Müller passes to Schmidt.", "blazes it wide", "straight at keeper"
+  - Нужно: контекстные фразы — "Dangerous ball over the top!", "Great recovery tackle!", "What a chance — inches wide!"
+  - Привязка к chain phase, tactical phase, momentum state
 
 ---
 
 ## 8. TOOLING
 
-- [ ] **8.1 Deterministic Tests** — same seed → same result, same goals, same possession %. Прямые мутации в RefereeSystem сейчас нарушают детерминизм.
+- [ ] **8.1 Deterministic Tests** — same seed → same result, same goals, same possession %. SeededRandom уже есть, но прямые мутации в некоторых местах могут нарушать детерминизм.
 
 - [ ] **8.2 Simulation Metrics Dashboard** — passes per possession, shots per game, PPDA, average compactness, transition speed
 
@@ -280,20 +254,25 @@ defensive_transition | attacking_transition | set_piece
 
 ## Приоритеты
 
-### 🟡 Сейчас (Football IQ)
+### 🔴 Следующие (Football IQ + UX)
 
-- [ ] **2.1** OffBallSystem: `hold_shape` использует `ZoneSystem.isOutsideLeash()`
-- [ ] **2.2** SpaceAwareness: опасные зоны, линия обороны
-- [ ] **4.1** Possession Chains: вертикальная vs горизонтальная игра
-- [ ] **4.2** Momentum: реакция команды на гол
+- [ ] **7.1** Replay / Jump to moment — инфраструктура есть (ReplayManager), нужен только UI
+- [ ] **7.2** Tactical Overlays — showZones / showPassingLanes / showDefensiveLine в RenderOptions + renderer
+- [ ] **4.3** Match Rhythm — per-tick tempo control (замедление при ведении, ускорение при отставании)
+- [ ] **7.3** Commentary — контекстные описания событий
 
-### 🟢 Потом (Realism + Meta)
+### 🟡 Потом (Depth)
 
-- [ ] **3.1** Tactical Instructions (ширина, темп, прессинг)
-- [ ] **3.3** Tactical Identity (стили игры)
+- [ ] **6.1** xG Pipeline — body part, assist type, GK position factor
 - [ ] **5.3** Collisions / shielding
-- [ ] **6.1** xG Pipeline
-- [ ] **7.1** Replay / Jump to moment
+- [ ] **8.2** Metrics Dashboard
+
+### 🟢 Долгосрочно
+
+- [ ] **1.3** Tick Pipeline формализация
+- [ ] **1.4** Event Bus 2 уровня
+- [ ] **6.2** League Simulation
+- [ ] **8.1** Deterministic Tests
 
 ---
 

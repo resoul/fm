@@ -36,6 +36,7 @@ import { distVec, normVec } from "../physics";
 import { SpaceAwareness } from "../ai/SpaceAwareness";
 import { TeamShape } from "../ai/TeamShape";
 import { getZoneAssignment, isOutsideLeash } from "./ZoneSystem";
+import { getRoleProfile, getTeamInstructions } from "./TacticalInstructionsSystem";
 
 // ── Run type ──────────────────────────────────────────────
 
@@ -222,10 +223,19 @@ export class OffBallSystem implements SimulationSystem {
         if (state.phase === "transition_attack") {
             const urgency = Math.max(0, 1 - state.ticksSincePossessionChange / 90);
 
-            if (DEPTH_ROLES.has(player.role)) {
-                return this.thirdManRun(player, ballOwner, opponents, freeSpaceMap, forwardDir, urgency, ctx);
+            // 3.2 Role profile: if role has low forwardRunBias, don't make aggressive runs
+            const rp = getRoleProfile(ctx, player.id);
+            const runBias = rp ? rp.forwardRunBias : 0.5;
+
+            if (runBias < 0.3) {
+                // Conservative role (CB_Stopper, CM_BallWinner etc.) — hold shape
+                return this.holdAnchor(shapeAnchor);
             }
-            if (OVERLAP_ROLES.has(player.role)) {
+
+            if (DEPTH_ROLES.has(player.role)) {
+                return this.thirdManRun(player, ballOwner, opponents, freeSpaceMap, forwardDir, urgency * runBias, ctx);
+            }
+            if (OVERLAP_ROLES.has(player.role) && (rp?.overlapsEnabled ?? false)) {
                 return this.overlapRun(player, ballOwner, opponents, freeSpaceMap, forwardDir, ctx);
             }
             // Others: sprint into space in forward direction
@@ -252,14 +262,27 @@ export class OffBallSystem implements SimulationSystem {
             : chain?.phase === "final_third" ? 0.6
                 : 0.5;
 
-        if (DEPTH_ROLES.has(player.role)) {
-            return this.thirdManRun(player, ballOwner, opponents, freeSpaceMap, forwardDir, chainUrgency, ctx);
+        // 3.2 Role profile: check forward run bias and overlap eligibility
+        const rpInPoss = getRoleProfile(ctx, player.id);
+        const forwardBias = rpInPoss ? rpInPoss.forwardRunBias : 0.5;
+        const overlapsAllowed = rpInPoss?.overlapsEnabled ?? false;
+
+        // 3.3 Tactical instructions: high tempo / directness → all runs are more forward
+        const instInPoss = getTeamInstructions(ctx, player.team);
+        const tempoBoost = instInPoss ? instInPoss.tempoBias : 0.5;
+
+        if (DEPTH_ROLES.has(player.role) && forwardBias > 0.4) {
+            return this.thirdManRun(player, ballOwner, opponents, freeSpaceMap, forwardDir, chainUrgency * (0.7 + tempoBoost * 0.3), ctx);
         }
-        if (OVERLAP_ROLES.has(player.role)) {
+        if (OVERLAP_ROLES.has(player.role) && overlapsAllowed) {
             return this.overlapRun(player, ballOwner, opponents, freeSpaceMap, forwardDir, ctx);
         }
-        if (UNDERLAP_ROLES.has(player.role)) {
+        if (UNDERLAP_ROLES.has(player.role) && forwardBias > 0.5) {
             return this.underlapRun(player, ballOwner, opponents, freeSpaceMap, forwardDir, ctx);
+        }
+        // Defensive/holding roles stay compact: support run only if very close
+        if (forwardBias < 0.25) {
+            return this.holdAnchor(shapeAnchor);
         }
         // Default: weighted support run
         return this.supportRun(player, opponents, freeSpaceMap, forwardDir, ctx);

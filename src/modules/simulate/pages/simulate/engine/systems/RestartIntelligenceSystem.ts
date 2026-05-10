@@ -207,44 +207,58 @@ export class RestartIntelligenceSystem implements SimulationSystem {
         fw: number, fh: number,
     ): void {
         const isTopSide = throwPos.y < fh / 2;
-        const offsetDir = isTopSide ? 1 : -1; // move receivers toward centre
+        // offsetDir pushes receivers TOWARD centre (away from sideline)
+        // Use a generous inset so nobody is standing right on the touchline
+        const offsetDir = isTopSide ? 1 : -1;
+        const INSET = 40; // minimum distance receivers should be from the touchline
 
-        // Non-taker teammates: create 2-3 short options at different distances/angles
+        // Non-taker teammates: create varied options at different distances/angles.
+        // Key rule: ALL receiver spots must be at least INSET px from sideline so
+        // a short throw doesn't immediately go out of bounds again.
         const nonTakers = takers.filter(p => p.id !== takerPlayer.id && p.position !== "GK");
-        // Sort by distance to throw spot — closest get short options, farther get wider
-        const sorted = [...nonTakers].sort((a, b) =>
-            distVec(a.pos, throwPos) - distVec(b.pos, throwPos)
-        );
+
+        // Score each non-taker: prefer players who are already infield and forward
+        const scored = nonTakers.map(p => {
+            const distFromSide = isTopSide
+                ? p.pos.y - throwPos.y   // positive = already more central
+                : throwPos.y - p.pos.y;
+            const distToThrow = distVec(p.pos, throwPos);
+            return { player: p, score: distFromSide * 0.6 - distToThrow * 0.004 };
+        }).sort((a, b) => b.score - a.score);
+
+        // Build receiver spots that are all guaranteed to be infield
+        const centralY = isTopSide
+            ? Math.max(throwPos.y + INSET, throwPos.y + 25)
+            : Math.min(throwPos.y - INSET, throwPos.y - 25);
 
         const receiverSpots: Vec2[] = [
-            // Short option — same X, slightly inward
-            { x: throwPos.x, y: throwPos.y + offsetDir * 25 },
-            // Forward option
-            { x: clamp(throwPos.x + 35, 10, fw - 10), y: throwPos.y + offsetDir * 30 },
-            // Backward option (safe pass)
-            { x: clamp(throwPos.x - 35, 10, fw - 10), y: throwPos.y + offsetDir * 20 },
-            // Wider infield option
-            { x: clamp(throwPos.x + 20, 10, fw - 10), y: throwPos.y + offsetDir * 55 },
+            // Short, very safe infield option (directly in from taker)
+            { x: clamp(throwPos.x, 15, fw - 15), y: clamp(centralY, 15, fh - 15) },
+            // Forward option — further up the pitch AND infield
+            { x: clamp(throwPos.x + 40, 15, fw - 15), y: clamp(centralY + offsetDir * 15, 15, fh - 15) },
+            // Backward safe option
+            { x: clamp(throwPos.x - 40, 15, fw - 15), y: clamp(centralY, 15, fh - 15) },
+            // Deep infield option — well away from sideline
+            { x: clamp(throwPos.x + 15, 15, fw - 15), y: clamp(throwPos.y + offsetDir * 65, 15, fh - 15) },
         ];
 
-        sorted.forEach((player, i) => {
+        scored.forEach(({ player }, i) => {
             const spot = receiverSpots[i];
-            if (spot) player.targetPos = clampToField(spot, fw, fh, 5);
-            // Players beyond spot count just hold their current shape
+            if (spot) player.targetPos = clampToField(spot, fw, fh, 15);
         });
 
-        // Defenders: 2 nearest press the receiver options, rest hold shape
-        const defSorted = [...defenders].sort((a, b) =>
+        // Defenders: press the two most dangerous (forward-most) receiver options,
+        // but don't fully commit — stay between receiver and goal
+        const defSorted = [...defenders].filter(p => p.position !== "GK").sort((a, b) =>
             distVec(a.pos, throwPos) - distVec(b.pos, throwPos)
         );
-        // Press closest receiver spots
-        defSorted.slice(0, 2).forEach((player, i) => {
-            const pressTarget = receiverSpots[i];
+        defSorted.slice(0, 3).forEach((player, i) => {
+            const pressTarget = receiverSpots[i] ?? receiverSpots[0];
             if (pressTarget) {
-                // Don't go all the way to the receiver — maintain 1 step back
+                // Stand between ball and the receiver target, not on top of them
                 player.targetPos = {
-                    x: clamp(pressTarget.x - 12, 10, fw - 10),
-                    y: clamp(pressTarget.y, 10, fh - 10),
+                    x: clamp((throwPos.x + pressTarget.x) / 2, 10, fw - 10),
+                    y: clamp((throwPos.y + pressTarget.y) / 2 + offsetDir * 8, 10, fh - 10),
                 };
             }
         });

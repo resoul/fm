@@ -10,3 +10,5 @@ export { TacticalSystem } from "../systems/TacticalSystem";
 export { OffBallSystem } from "../systems/OffBallSystem";
 export { MomentumSystem } from "../systems/MomentumSystem";
 export { RestartIntelligenceSystem } from "../systems/RestartIntelligenceSystem";
+export { TacticalInstructionsSystem } from "../systems/TacticalInstructionsSystem";
+export type { TacticalStyle, TacticalInstructions, RoleBehaviourProfile } from "../systems/TacticalInstructionsSystem";

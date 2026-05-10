@@ -2,6 +2,7 @@ import type { Player, AIDecision, Vec2 } from "./types";
 import type { SimulationContext } from "./context";
 import { distVec } from "./physics";
 import { calculateXG } from "./xG";
+import { getRoleProfile, getTeamInstructions } from "./systems/TacticalInstructionsSystem";
 
 /**
  * AIAction — a discrete behaviour a player can perform.
@@ -46,6 +47,15 @@ export class ShootAction implements AIAction {
             : ctx.tactical.awayState;
         if (tacticalState.phase === "transition_attack") {
             score *= 1.15;
+        }
+
+        // 3.3 Tactical identity: gegenpress values fast transitions → shoot sooner
+        const inst = getTeamInstructions(ctx, player.team);
+        if (inst) {
+            if (inst.style === "gegenpress" && tacticalState.phase === "transition_attack") score *= 1.12;
+            if (inst.style === "direct_play") score *= 1.08;    // direct play = shoot more
+            if (inst.style === "tiki_taka") score *= 0.9;       // tika-taka prefers combinations
+            if (inst.style === "low_block") score *= 1.15;      // counter team: take the shot
         }
 
         return score;
@@ -96,6 +106,16 @@ export class PassAction implements AIAction {
         const openLaneToForward = this.hasOpenForwardLane(player, ctx);
         if (openLaneToForward) score += 0.18;
 
+        // 4.1 Possession chain: in build_up, pass more readily; in final_third encourage combinations
+        const chain = player.team === "home"
+            ? ctx.tactical.homeChain
+            : ctx.tactical.awayChain;
+        if (chain) {
+            if (chain.phase === "build_up") score += 0.08;          // recycle, keep possession
+            if (chain.phase === "progression") score += 0.05;       // keep moving ball forward
+            if (chain.urgentMode) score += 0.12;                    // combinations near goal
+        }
+
         return score;
     }
 
@@ -141,8 +161,24 @@ export class PassAction implements AIAction {
             // when no one has made a run (risky if receiver will be offside)
             const defLinePenalty = this.defensiveLinePenalty(p, isHome, defensiveLine);
 
+            // 4.1 Chain-based forward bias: in progression/final_third/chance_creation,
+            // amplify the "forward" component so the AI attacks more directly
+            const chain = player.team === "home"
+                ? ctx.tactical.homeChain
+                : ctx.tactical.awayChain;
+            const chainForwardBonus = chain
+                ? (chain.phase === "final_third" || chain.phase === "chance_creation" ? 0.18
+                 : chain.phase === "progression" ? 0.10
+                 : chain.phase === "transition" ? 0.14
+                 : 0)
+                : 0;
+
+            // 3.2 Role profile: forwardPassBias scales the forward component
+            const roleProfile = getRoleProfile(ctx, player.id);
+            const roleBias = roleProfile ? roleProfile.forwardPassBias : 1.0;
+
             const score =
-                forward * 0.35 +
+                forward * (0.35 + chainForwardBonus) * roleBias +
                 centrality * 0.12 +
                 supportDistance * 0.22 +
                 goalProximity * 0.18 +
@@ -243,7 +279,17 @@ export class DribbleAction implements AIAction {
 
         // In transition attack, dribbling into space is very desirable
         if (tacticalState.phase === "transition_attack") {
-            return pressure === 0 ? 0.52 : 0.24;
+            // 3.3 Gegenpress / direct play amplify counter dribbles
+            const inst2 = getTeamInstructions(ctx, player.team);
+            const style = inst2?.style;
+            const counterBoost = (style === "gegenpress" || style === "direct_play") ? 1.15 : 1.0;
+            return pressure === 0 ? 0.52 * counterBoost : 0.24;
+        }
+
+        // 3.2 Role profile: inverted wingers and WB_Attacking dribble more aggressively
+        const rp = getRoleProfile(ctx, player.id);
+        if (rp && rp.forwardRunBias > 0.7 && pressure === 0) {
+            return 0.35; // they carry the ball forward when space allows
         }
 
         // Under pressure: dribbling is risky, prefer pass
