@@ -2,7 +2,11 @@ import type { SimulationContext } from "../context";
 import type { SimulationSystem } from "../pipeline";
 import { distVec } from "../physics";
 import type { TeamSide, Vec2, MatchPhase, EventType, Player } from "../types";
-import type { Command, UpdateMatchStateCommand, UpdateBallCommand } from "../core/Command";
+import type {
+    Command, UpdateMatchStateCommand, UpdateBallCommand,
+    TeleportPlayerCommand, SetPlayerTargetCommand,
+    SetPlayerBallOwnershipCommand, ClearAllDecisionsCommand,
+} from "../core/Command";
 import { resetFormationPositions } from "../teamFactory";
 
 let eventCounter = 1000;
@@ -82,7 +86,7 @@ export class RefereeSystem implements SimulationSystem {
 
             // Keep taker locked to the restart position every tick
             // (prevents MovementSystem from dragging them away)
-            this.lockTakerToRestartPos(ctx);
+            commands.push(...this.lockTakerToRestartPos(ctx));
 
             const resume = this.checkRestartTaken(ctx);
             if (resume.length > 0) {
@@ -144,25 +148,15 @@ export class RefereeSystem implements SimulationSystem {
         resetFormationPositions(ctx.homeTeam, config.fieldDimensions);
         resetFormationPositions(ctx.awayTeam, config.fieldDimensions);
 
-        // Clear all stale decisions
-        for (const p of [...ctx.homeTeam.players, ...ctx.awayTeam.players]) {
-            p.nextDecision = null;
-            p.hasBall = false;
-        }
-
         const team = kickoffTeam === "home" ? ctx.homeTeam : ctx.awayTeam;
         const striker = team.players.find(p => p.position === "ST") ?? team.players[9];
+        const strikerPos: Vec2 = striker
+            ? { x: fw / 2 + (kickoffTeam === "home" ? -10 : 10), y: fh / 2 }
+            : { x: fw / 2, y: fh / 2 };
 
-        if (striker) {
-            striker.pos = { x: fw / 2 + (kickoffTeam === "home" ? -10 : 10), y: fh / 2 };
-            striker.targetPos = { ...striker.pos };
-            striker.vel = { x: 0, y: 0 };
-            striker.hasBall = true;
-            striker.kickCooldown = 0;
-            striker.actionCooldown = 0;
-        }
-
-        return [
+        const commands: Command[] = [
+            // Wipe all stale decisions before kickoff
+            { type: "CLEAR_ALL_DECISIONS" } as ClearAllDecisionsCommand,
             { type: "UPDATE_MATCH_STATE", phase: "playing" } as UpdateMatchStateCommand,
             {
                 type: "UPDATE_BALL",
@@ -174,6 +168,26 @@ export class RefereeSystem implements SimulationSystem {
                 lastTouchedTeam: kickoffTeam,
             } as UpdateBallCommand,
         ];
+
+        if (striker) {
+            commands.push(
+                {
+                    type: "TELEPORT_PLAYER",
+                    playerId: striker.id,
+                    pos: strikerPos,
+                    targetPos: strikerPos,
+                } as TeleportPlayerCommand,
+                {
+                    type: "SET_PLAYER_BALL_OWNERSHIP",
+                    playerId: striker.id,
+                    hasBall: true,
+                    kickCooldown: 0,
+                    actionCooldown: 0,
+                } as SetPlayerBallOwnershipCommand,
+            );
+        }
+
+        return commands;
     }
 
     // ── Goal ──────────────────────────────────────────────
@@ -287,23 +301,9 @@ export class RefereeSystem implements SimulationSystem {
             pos: { ...pos },
         });
 
-        // Clear ALL players' nextDecision so stale targets don't override targetPos in MovementSystem
-        for (const p of allPlayers) {
-            p.nextDecision = null;
-            p.hasBall = false;
-        }
-
-        // Teleport taker and lock their targetPos
-        if (taker) {
-            taker.pos = { ...pos };
-            taker.targetPos = { ...pos };
-            taker.vel = { x: 0, y: 0 };
-            taker.hasBall = true;
-            taker.actionCooldown = 20;
-            taker.kickCooldown = 0;
-        }
-
-        return [
+        const commands: Command[] = [
+            // Wipe all stale decisions
+            { type: "CLEAR_ALL_DECISIONS" } as ClearAllDecisionsCommand,
             { type: "UPDATE_MATCH_STATE", phase: type } as UpdateMatchStateCommand,
             {
                 type: "UPDATE_BALL",
@@ -315,22 +315,43 @@ export class RefereeSystem implements SimulationSystem {
                 lastTouchedTeam: teamId,
             } as UpdateBallCommand,
         ];
+
+        if (taker) {
+            commands.push(
+                {
+                    type: "TELEPORT_PLAYER",
+                    playerId: taker.id,
+                    pos: { ...pos },
+                    targetPos: { ...pos },
+                } as TeleportPlayerCommand,
+                {
+                    type: "SET_PLAYER_BALL_OWNERSHIP",
+                    playerId: taker.id,
+                    hasBall: true,
+                    actionCooldown: 20,
+                    kickCooldown: 0,
+                } as SetPlayerBallOwnershipCommand,
+            );
+        }
+
+        return commands;
     }
 
     /**
      * Called every tick while in dead-ball phase.
-     * Keep the taker pinned to restart position so MovementSystem can't drag them away.
+     * Returns a SET_PLAYER_TARGET command to pin the taker to the ball position,
+     * so MovementSystem cannot drag them away.
      */
-    private lockTakerToRestartPos(ctx: SimulationContext): void {
-        if (!this._restartTakerId) return;
-        const taker = findPlayer(ctx, this._restartTakerId);
-        if (!taker || !ctx.ball.ownerPlayerId) return;
+    private lockTakerToRestartPos(ctx: SimulationContext): Command[] {
+        if (!this._restartTakerId) return [];
+        // Only lock if taker still has the ball
+        if (ctx.ball.ownerPlayerId !== this._restartTakerId) return [];
 
-        // Only lock if taker still has ball
-        if (ctx.ball.ownerPlayerId === this._restartTakerId) {
-            // Keep targetPos pointing at current ball position so Movement doesn't drift them
-            taker.targetPos = { ...ctx.ball.pos };
-        }
+        return [{
+            type: "SET_PLAYER_TARGET",
+            playerId: this._restartTakerId,
+            targetPos: { ...ctx.ball.pos },
+        } as SetPlayerTargetCommand];
     }
 
     /**
@@ -415,13 +436,6 @@ export class RefereeSystem implements SimulationSystem {
             state.stats.away.possession = 100 - state.stats.home.possession;
         }
     }
-}
-
-function findPlayer(ctx: SimulationContext, id: string): Player | undefined {
-    return (
-        ctx.homeTeam.players.find(p => p.id === id) ||
-        ctx.awayTeam.players.find(p => p.id === id)
-    );
 }
 
 function restartEventType(phase: MatchPhase): EventType {

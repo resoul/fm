@@ -1,14 +1,18 @@
 import type { Vec2, PlayerState, AIDecision, MatchPhase, TeamSide } from "../types";
 
-export type CommandType = 
-    | "MOVE_PLAYER" 
-    | "KICK_BALL" 
-    | "SET_PLAYER_STATE" 
+export type CommandType =
+    | "MOVE_PLAYER"
+    | "KICK_BALL"
+    | "SET_PLAYER_STATE"
     | "TACKLE_PLAYER"
     | "SET_PLAYER_DECISION"
     | "UPDATE_BALL"
     | "UPDATE_MATCH_STATE"
-    | "UPDATE_PLAYER_METRICS";
+    | "UPDATE_PLAYER_METRICS"
+    | "TELEPORT_PLAYER"
+    | "SET_PLAYER_TARGET"
+    | "SET_PLAYER_BALL_OWNERSHIP"
+    | "CLEAR_ALL_DECISIONS";
 
 export interface BaseCommand {
     type: CommandType;
@@ -40,14 +44,18 @@ export interface SetPlayerDecisionCommand extends BaseCommand {
     cooldown: number;
 }
 
-export type Command = 
-    | MovePlayerCommand 
-    | KickBallCommand 
-    | SetPlayerStateCommand 
+export type Command =
+    | MovePlayerCommand
+    | KickBallCommand
+    | SetPlayerStateCommand
     | SetPlayerDecisionCommand
     | UpdateBallCommand
     | UpdateMatchStateCommand
-    | UpdatePlayerMetricsCommand;
+    | UpdatePlayerMetricsCommand
+    | TeleportPlayerCommand
+    | SetPlayerTargetCommand
+    | SetPlayerBallOwnershipCommand
+    | ClearAllDecisionsCommand;
 
 export interface UpdateBallCommand extends BaseCommand {
     type: "UPDATE_BALL";
@@ -81,4 +89,46 @@ export interface UpdatePlayerMetricsCommand extends BaseCommand {
     fatigue: number;
     /** Kick cooldown ticks remaining */
     kickCooldown: number;
+}
+
+/**
+ * Instantly teleports a player to a position (for restarts, kickoffs).
+ * Sets pos, vel (zeroed), and optionally targetPos.
+ */
+export interface TeleportPlayerCommand extends BaseCommand {
+    type: "TELEPORT_PLAYER";
+    playerId: string;
+    pos: Vec2;
+    /** If omitted, targetPos is also set to pos */
+    targetPos?: Vec2;
+}
+
+/**
+ * Sets only the targetPos of a player (movement destination).
+ * Used to lock the restart taker in place every tick without touching pos.
+ */
+export interface SetPlayerTargetCommand extends BaseCommand {
+    type: "SET_PLAYER_TARGET";
+    playerId: string;
+    targetPos: Vec2;
+}
+
+/**
+ * Sets hasBall, actionCooldown and kickCooldown on a player.
+ * Used when assigning a restart taker.
+ */
+export interface SetPlayerBallOwnershipCommand extends BaseCommand {
+    type: "SET_PLAYER_BALL_OWNERSHIP";
+    playerId: string;
+    hasBall: boolean;
+    actionCooldown?: number;
+    kickCooldown?: number;
+}
+
+/**
+ * Clears nextDecision and hasBall for ALL players on both teams.
+ * Emitted on goal / kickoff to wipe stale AI intentions.
+ */
+export interface ClearAllDecisionsCommand extends BaseCommand {
+    type: "CLEAR_ALL_DECISIONS";
 }

@@ -35,6 +35,7 @@ import type { Player, Vec2, PlayerRole, TeamTacticalState } from "../types";
 import { distVec, normVec } from "../physics";
 import { SpaceAwareness } from "../ai/SpaceAwareness";
 import { TeamShape } from "../ai/TeamShape";
+import { getZoneAssignment, isOutsideLeash } from "./ZoneSystem";
 
 // ── Run type ──────────────────────────────────────────────
 
@@ -116,6 +117,38 @@ export class OffBallSystem implements SimulationSystem {
                 continue;
             }
 
+            // ── Zone leash check ─────────────────────────
+            // If ZoneSystem has run this tick, check whether the player has
+            // wandered outside their leash. If so, override everything with
+            // hold_shape pointing at their zone centre. This prevents shape
+            // collapse when players chase the ball too aggressively.
+            const zoneData = ctx.tactical.zoneData;
+            if (zoneData) {
+                const za = getZoneAssignment(ctx, player.id);
+                if (za && isOutsideLeash(player, za, zoneData.cellWidth, zoneData.cellHeight)) {
+                    this._commits.delete(player.id);
+                    commands.push(makeHoldShapeCommand(player, za.zoneCentreWorld));
+                    continue;
+                }
+            }
+
+            // ── Post-restart repositioning phase ─────────
+            // After a dead-ball restart (kickoff / set piece), give players
+            // a short window to reposition to their zone before any dynamic
+            // run logic fires. This prevents immediate shape collapse after goals.
+            if (
+                tacticalState.ticksSincePossessionChange < 20 &&
+                (ctx.state.phase === "playing") &&
+                zoneData
+            ) {
+                const za = getZoneAssignment(ctx, player.id);
+                if (za) {
+                    this._commits.delete(player.id);
+                    commands.push(makeHoldShapeCommand(player, za.zoneCentreWorld));
+                    continue;
+                }
+            }
+
             // ── Check if player is committed to a run ────
             const existing = this._commits.get(player.id);
             if (existing && existing.ticksLeft > 0) {
@@ -170,7 +203,12 @@ export class OffBallSystem implements SimulationSystem {
 
         // ── 1. transition_defend → recovery ──────────────
         if (state.phase === "transition_defend") {
-            return defenseRecovery(player, ctx.ball.pos, ownGoalX, width, height);
+            const zoneData = ctx.tactical.zoneData;
+            const za = zoneData ? getZoneAssignment(ctx, player.id) : null;
+            return defenseRecovery(
+                player, ctx.ball.pos, ownGoalX, width, height,
+                za?.zoneCentreWorld.y,
+            );
         }
 
         // ── 2. No ball owner nearby → support to open zone ─
@@ -252,7 +290,13 @@ export class OffBallSystem implements SimulationSystem {
             width, height,
         );
 
-        if (!target) return this.holdAnchor(player.targetPos);
+        if (!target) {
+            // Prefer zone centre if ZoneSystem has data, else fall back to formation targetPos
+            const zoneData = ctx.tactical.zoneData;
+            const za = zoneData ? getZoneAssignment(ctx, player.id) : null;
+            const anchor = za ? za.zoneCentreWorld : player.targetPos;
+            return this.holdAnchor(anchor);
+        }
         return { type: "support_run", target };
     }
 
@@ -396,13 +440,16 @@ function defenseRecovery(
     ownGoalX: number,
     width: number,
     height: number,
+    zoneAnchorY?: number,
 ): { type: OffBallRunType; target: Vec2 } {
     const recoveryX = (ballPos.x + ownGoalX) * 0.5;
+    // Use zone anchor Y if available — keeps lateral shape during recovery
+    const recoveryY = zoneAnchorY ?? player.targetPos.y;
     return {
         type: "defensive_recovery",
         target: {
             x: Math.max(15, Math.min(width - 15, recoveryX)),
-            y: Math.max(15, Math.min(height - 15, player.targetPos.y)),
+            y: Math.max(15, Math.min(height - 15, recoveryY)),
         },
     };
 }

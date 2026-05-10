@@ -148,10 +148,12 @@ defensive_transition | attacking_transition | set_piece
 
 - [✅ DONE] **1.1 Command System** — registry-based handlers, типизированные через mapped types; resolver.register() для расширения без правки core; UPDATE_PLAYER_METRICS без прямых мутаций.
 
-- [ ] **1.2 Immutable Safety**
-    - readonly snapshots, deep freeze в dev режиме, mutation assertions
-    - → **Сейчас RefereeSystem мутирует player.pos напрямую** (taker.pos, taker.targetPos) — нарушает паттерн команд
-    - Нужно: команды `TELEPORT_PLAYER` / `SET_PLAYER_TARGET`
+- [✅ DONE] **1.2 Immutable Safety**
+    - Новые команды: `TELEPORT_PLAYER`, `SET_PLAYER_TARGET`,
+      `SET_PLAYER_BALL_OWNERSHIP`, `CLEAR_ALL_DECISIONS`
+    - RefereeSystem полностью переведён на Command-паттерн:
+      нет прямых мутаций player.pos / targetPos / vel / hasBall / nextDecision
+    - Остаток: readonly snapshots, deep freeze в dev, mutation assertions
 
 - [ ] **1.3 Tick Pipeline** (формализовать порядок)
     - Декларативный граф зависимостей с явными read/write контрактами
@@ -169,14 +171,16 @@ defensive_transition | attacking_transition | set_piece
 
 - [✅ DONE] **2.5 Decision Scoring (UtilityAI)** — HoldAction, PassAction с lane bonus, DribbleAction, ShootAction.
 
-- [🔧 PARTIAL] **2.1 Off-ball Intelligence**
-    - OffBallSystem: support_run, overlap_run, underlap_run, third_man_run, defensive_recovery, hold_shape.
-    - Нужно: `hold_shape` должен использовать `ZoneSystem.isOutsideLeash()` вместо фиксированного targetPos
-    - Нужно: явный "repositioning phase" после рестарта
+- [✅ DONE] **2.1 Off-ball Intelligence**
+  - hold_shape использует ZoneSystem.isOutsideLeash() вместо фиксированного targetPos
+  - Явный "repositioning phase" (20 тиков) после рестарта
+  - defenseRecovery использует zone anchor Y для сохранения латеральной структуры
 
-- [🔧 PARTIAL] **2.2 Space Awareness**
-    - `SpaceAwareness.compute()` есть, используется в OffBallSystem
-    - Нужно: pressure zones, dangerous zones (зоны перед воротами), учёт defensive line при выборе передачи
+- [✅ DONE] **2.2 Space Awareness**
+  - defensiveLine: реальная X-позиция второго защитника, не фиксированный процент поля
+  - dangerousZones вычисляются относительно реальной defensive line
+  - PassAction: pressurePenalty — не пасовать в зоны с оппонентской dominance
+  - PassAction: defensiveLinePenalty — не пасовать за линию обороны без реального забегания
 
 - [🔧 PARTIAL] **2.3 Team Shape System**
     - Centroids и compactness есть
@@ -274,11 +278,7 @@ defensive_transition | attacking_transition | set_piece
 
 ## Приоритеты
 
-### 🔴 Сейчас
-
-- [ ] **1.2 Immutable Safety** — убрать прямые мутации из RefereeSystem → `TELEPORT_PLAYER` / `SET_PLAYER_TARGET`. Скрытый источник будущих багов и нарушение детерминизма.
-
-### 🟡 После (Football IQ)
+### 🟡 Сейчас (Football IQ)
 
 - [ ] **2.1** OffBallSystem: `hold_shape` использует `ZoneSystem.isOutsideLeash()`
 - [ ] **2.2** SpaceAwareness: опасные зоны, линия обороны

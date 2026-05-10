@@ -79,8 +79,8 @@ export class PassAction implements AIAction {
 
         const teammates = (player.team === "home" ? ctx.homeTeam : ctx.awayTeam).players.filter(
             p => p.id !== player.id &&
-                 distVec(player.pos, p.pos) > 35 &&
-                 distVec(player.pos, p.pos) < 230,
+                distVec(player.pos, p.pos) > 35 &&
+                distVec(player.pos, p.pos) < 230,
         );
 
         if (teammates.length === 0) return 0;
@@ -108,6 +108,11 @@ export class PassAction implements AIAction {
         const goalX = player.team === "home" ? width : 0;
         const isHome = player.team === "home";
 
+        // Pull spatial data once for penalty calculations
+        const spaceData = ctx.tactical.spaceAwareness;
+        const pressureZones = spaceData?.pressureZones ?? [];
+        const defensiveLine = spaceData?.defensiveLine;
+
         const candidates = teammates.filter(
             p => p.id !== ctx.ball.lastTouchedBy || teammates.length <= 2,
         );
@@ -129,13 +134,22 @@ export class PassAction implements AIAction {
             // Passing lane quality bonus: prefer open lanes
             const laneBonus = this.laneScore(player.id, p.id, ctx);
 
+            // Pressure zone penalty: penalise passing into opponent-dominated zones
+            const pressurePenalty = this.pressurePenalty(p.pos, pressureZones, player.team);
+
+            // Defensive line penalty: penalise through-balls behind the line
+            // when no one has made a run (risky if receiver will be offside)
+            const defLinePenalty = this.defensiveLinePenalty(p, isHome, defensiveLine);
+
             const score =
                 forward * 0.35 +
                 centrality * 0.12 +
                 supportDistance * 0.22 +
                 goalProximity * 0.18 +
                 laneBonus * 0.13 +
-                returnPassPenalty;
+                returnPassPenalty +
+                pressurePenalty +
+                defLinePenalty;
 
             if (score > bestScore) {
                 bestScore = score;
@@ -144,6 +158,44 @@ export class PassAction implements AIAction {
         }
 
         return { type: "pass", target: bestTarget.pos, targetPlayerId: bestTarget.id };
+    }
+
+    /**
+     * Penalty for passing into a zone dominated by the opponent.
+     * Returns 0 to -0.35.
+     */
+    private pressurePenalty(
+        targetPos: Vec2,
+        pressureZones: import("./ai/SpaceAwareness").PressureZone[],
+        team: string,
+    ): number {
+        const opponentSide = team === "home" ? "away" : "home";
+        let maxPressure = 0;
+        for (const zone of pressureZones) {
+            if (zone.dominatedBy !== opponentSide) continue;
+            const d = distVec(targetPos, zone.pos);
+            if (d < 50) {
+                const proximity = 1 - d / 50;
+                maxPressure = Math.max(maxPressure, zone.intensity * proximity);
+            }
+        }
+        return -maxPressure * 0.35;
+    }
+
+    /**
+     * Penalty for playing a through-ball beyond the opponent defensive line
+     * when the receiver is behind it (likely offside / very risky).
+     * Returns 0 to -0.25.
+     */
+    private defensiveLinePenalty(
+        receiver: Player,
+        isHome: boolean,
+        defensiveLine: { home: number; away: number } | undefined,
+    ): number {
+        if (!defensiveLine) return 0;
+        if (isHome && receiver.pos.x > defensiveLine.away + 20) return -0.20;
+        if (!isHome && receiver.pos.x < defensiveLine.home - 20) return -0.20;
+        return 0;
     }
 
     /** Returns true if there's at least one open lane to a teammate ahead of the ball */
@@ -257,8 +309,6 @@ export class HoldAction implements AIAction {
 
     getDecision(player: Player, ctx: SimulationContext): AIDecision {
         const { width, height } = ctx.config.fieldDimensions;
-        const isHome = player.team === "home";
-
         // Shield: drift slightly sideways to body-block nearest defender
         const defenders = ctx.spatialHash
             .queryRadius(player.pos, 46)

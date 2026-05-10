@@ -44,6 +44,13 @@ export interface SpaceAwarenessData {
     pressureZones: PressureZone[];
     /** Grid-cell positions that lead toward the opponent goal (useful for through-ball targets) */
     dangerousZones: Vec2[];
+    /**
+     * Defensive line X for each team — the X position of the second-deepest
+     * outfield defender (last man). Runners behind this line are in behind.
+     * home: home team's defensive line X (low X = deep)
+     * away: away team's defensive line X (high X = deep)
+     */
+    defensiveLine: { home: number; away: number };
 }
 
 // ── Main class ────────────────────────────────────────────
@@ -125,9 +132,35 @@ export class SpaceAwareness {
             }
         }
 
+        // ── Defensive line ────────────────────────────────
+        // The defensive line is the X position of the second-deepest
+        // outfield defender (last man / offside trap line).
+        // For home: smallest X among outfield defenders (own goal = x=0).
+        // For away: largest X among outfield defenders (own goal = x=width).
+        const homeDefenders = ctx.homeTeam.players.filter(
+            p => p.position !== "GK" && (p.position === "CB" || p.position === "LB" || p.position === "RB"),
+        );
+        const awayDefenders = ctx.awayTeam.players.filter(
+            p => p.position !== "GK" && (p.position === "CB" || p.position === "LB" || p.position === "RB"),
+        );
+
+        // Sort home defenders ascending by X (closest to own goal first)
+        const homeDefLineX = homeDefenders.length >= 2
+            ? [...homeDefenders].sort((a, b) => a.pos.x - b.pos.x)[1].pos.x  // second deepest
+            : homeDefenders[0]?.pos.x ?? width * 0.25;
+
+        // Sort away defenders descending by X (closest to own goal first)
+        const awayDefLineX = awayDefenders.length >= 2
+            ? [...awayDefenders].sort((a, b) => b.pos.x - a.pos.x)[1].pos.x
+            : awayDefenders[0]?.pos.x ?? width * 0.75;
+
+        const defensiveLine = { home: homeDefLineX, away: awayDefLineX };
+
         // ── Dangerous zones ───────────────────────────────
-        // Cells in the attacking third that are free (free space > 0.6)
-        // — potential targets for through balls / runs behind.
+        // Cells that are:
+        //   1. Beyond the opponent's defensive line (in behind)
+        //   2. Free (free space > 0.55)
+        //   3. Within a useful lateral band (not too wide)
         const dangerousZones: Vec2[] = [];
         const centerY = height / 2;
 
@@ -136,22 +169,23 @@ export class SpaceAwareness {
                 const cellX = (col + 0.5) * colStep;
                 const cellY = (row + 0.5) * rowStep;
 
-                // Only consider attacking thirds
-                const isHomeDangerous = cellX > width * 0.65;
-                const isAwayDangerous = cellX < width * 0.35;
+                // For home team attacking: behind away's defensive line
+                const isHomeDangerous = cellX > awayDefLineX - 15;
+                // For away team attacking: behind home's defensive line
+                const isAwayDangerous = cellX < homeDefLineX + 15;
 
                 if (!isHomeDangerous && !isAwayDangerous) continue;
-                if (freeSpaceMap[col][row] < 0.6) continue;
+                if (freeSpaceMap[col][row] < 0.55) continue;
 
-                // Prefer central areas (within 35% of field height from centre)
+                // Prefer areas within penalty box width and not too close to touchline
                 const lateralDist = Math.abs(cellY - centerY) / (height / 2);
-                if (lateralDist > 0.7) continue;
+                if (lateralDist > 0.72) continue;
 
                 dangerousZones.push({ x: cellX, y: cellY });
             }
         }
 
-        return { freeSpaceMap, pressureZones, dangerousZones };
+        return { freeSpaceMap, pressureZones, dangerousZones, defensiveLine };
     }
 
     // ── Static helpers ────────────────────────────────────

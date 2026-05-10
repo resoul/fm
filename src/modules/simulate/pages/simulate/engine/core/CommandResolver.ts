@@ -4,6 +4,8 @@ import type {
     MovePlayerCommand, KickBallCommand, SetPlayerDecisionCommand,
     SetPlayerStateCommand, UpdateBallCommand, UpdateMatchStateCommand,
     UpdatePlayerMetricsCommand,
+    TeleportPlayerCommand, SetPlayerTargetCommand,
+    SetPlayerBallOwnershipCommand, ClearAllDecisionsCommand,
 } from "./Command";
 
 // Handler signature: takes world + the specific command subtype
@@ -95,6 +97,38 @@ export class CommandResolver {
                 player.vel = { ...cmd.vel };
                 player.fatigue = cmd.fatigue;
                 player.kickCooldown = cmd.kickCooldown;
+            }
+        },
+
+        TELEPORT_PLAYER: (world, cmd: TeleportPlayerCommand) => {
+            const player = this.findPlayer(world, cmd.playerId);
+            if (player) {
+                player.pos = { ...cmd.pos };
+                player.vel = { x: 0, y: 0 };
+                player.targetPos = cmd.targetPos ? { ...cmd.targetPos } : { ...cmd.pos };
+            }
+        },
+
+        SET_PLAYER_TARGET: (world, cmd: SetPlayerTargetCommand) => {
+            const player = this.findPlayer(world, cmd.playerId);
+            if (player) {
+                player.targetPos = { ...cmd.targetPos };
+            }
+        },
+
+        SET_PLAYER_BALL_OWNERSHIP: (world, cmd: SetPlayerBallOwnershipCommand) => {
+            const player = this.findPlayer(world, cmd.playerId);
+            if (player) {
+                player.hasBall = cmd.hasBall;
+                if (cmd.actionCooldown !== undefined) player.actionCooldown = cmd.actionCooldown;
+                if (cmd.kickCooldown !== undefined) player.kickCooldown = cmd.kickCooldown;
+            }
+        },
+
+        CLEAR_ALL_DECISIONS: (world, _cmd: ClearAllDecisionsCommand) => {
+            for (const p of [...world.homeTeam.players, ...world.awayTeam.players]) {
+                p.nextDecision = null;
+                p.hasBall = false;
             }
         },
     };
