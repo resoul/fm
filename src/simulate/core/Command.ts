@@ -74,6 +74,8 @@ export interface UpdateMatchStateCommand extends BaseCommand {
     second?: number;
     phase?: MatchPhase;
     score?: { home: number, away: number };
+    isSecondHalf?: boolean;
+    isPenalty?: boolean;
 }
 
 /**

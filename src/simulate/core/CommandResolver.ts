@@ -85,6 +85,8 @@ export class CommandResolver {
             if (cmd.minute !== undefined) world.state.minute = cmd.minute;
             if (cmd.second !== undefined) world.state.second = cmd.second;
             if (cmd.phase !== undefined) world.state.phase = cmd.phase;
+            if (cmd.isSecondHalf !== undefined) world.state.isSecondHalf = cmd.isSecondHalf;
+            if (cmd.isPenalty !== undefined) world.state.isPenalty = cmd.isPenalty;
             if (cmd.score) {
                 world.homeTeam.score = cmd.score.home;
                 world.awayTeam.score = cmd.score.away;

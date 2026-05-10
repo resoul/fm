@@ -5,12 +5,14 @@ import FootballField from "./components/FootballField";
 import MatchHUD from "./components/MatchHUD";
 import PreMatchPage from "./components/PreMatchPage";
 import type { MatchEvent, RenderOptions } from "@/simulate/types";
+import PostMatchReportUI from "./components/PostMatchReportUI";
+import type { PostMatchReport } from "@/simulate/stats/PostMatchReport";
 
-// ── App flow: "prematch" → "playing" ─────────────────────
-type AppScreen = "prematch" | "playing";
+type AppScreen = "prematch" | "playing" | "report";
 
 export function SimulatePage() {
     const [screen, setScreen]     = useState<AppScreen>("prematch");
+    const [report, setReport] = useState<PostMatchReport | null>(null);
     const engineRef               = useRef<MatchEngine | null>(null);
 
     // Force re-render on tick/events
@@ -33,6 +35,18 @@ export function SimulatePage() {
 
     const handleTick = useCallback(() => {
         setTick(t => t + 1);
+        const engine = engineRef.current;
+        if (!engine) return;
+        if (engine.state.phase === "fulltime") {
+            // MatchSimulator вешает _finalise() сам на первый fulltime tick.
+            // Даём один кадр чтобы report точно был готов.
+            const sim = (engine as any).activeSimulator;
+            const r: PostMatchReport | null = sim?.getPostMatchReport?.() ?? null;
+            if (r) {
+                setReport(r);
+                setScreen("report");
+            }
+        }
     }, []);
 
     const handleEvent = useCallback((evt: MatchEvent) => {
@@ -55,12 +69,6 @@ export function SimulatePage() {
         setTick(t => t + 1);
     }, []);
 
-    const handleReset = useCallback(() => {
-        setScreen("prematch");
-        setEvents([]);
-        setTick(0);
-    }, []);
-
     // 7.1 Jump-to-moment: pause + fast-forward to target tick
     const handleJumpToTick = useCallback((targetTick: number) => {
         const engine = engineRef.current;
@@ -79,6 +87,13 @@ export function SimulatePage() {
             engine.tick();
         }
         setTick(t => t + 1);
+    }, []);
+
+    const handleReset = useCallback(() => {
+        setScreen("prematch");
+        setEvents([]);
+        setTick(0);
+        setReport(null);
     }, []);
 
     const renderOptions: RenderOptions = useMemo(() => ({
@@ -105,6 +120,21 @@ export function SimulatePage() {
 
     // ── Match screen ────────────────────────────────────────
     const engine = engineRef.current!;
+
+    if (screen === "report" && report) {
+        return (
+            <div className="h-[calc(100vh-120px)] px-2.5 pb-2.5">
+                <ScrollArea className="h-full">
+                    <div className="pr-2 pb-4 space-y-3">
+                        <PostMatchReportUI
+                            report={report}
+                            onNewMatch={handleReset}
+                        />
+                    </div>
+                </ScrollArea>
+            </div>
+        );
+    }
 
     return (
         <div className="h-[calc(100vh-120px)] px-2.5 pb-2.5">

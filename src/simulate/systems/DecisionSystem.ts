@@ -67,6 +67,9 @@ export class DecisionSystem implements SimulationSystem {
         const tick = ctx.state.tick;
 
         for (const player of allPlayers) {
+            // D.4: Expelled players never receive decisions
+            if (player.isExpelled) continue;
+
             if (player.actionCooldown > 0) {
                 player.actionCooldown--;
                 // ── Intent: degrade confidence while cooling down ──────

@@ -14,9 +14,13 @@ import { MatchAnalyzer } from "../coach/MatchAnalyzer";
 import { CoachSystem } from "../coach/CoachSystem";
 import { SubstitutionSystem } from "../coach/SubstitutionSystem";
 import { COACH_ARCHETYPES } from "../coach/CoachProfile";
+import { finaliseStats } from "../stats/PlayerMatchStats";
+import { rateAllPlayers } from "../stats/PlayerRating";
+import { buildPostMatchReport, type PostMatchReport } from "../stats/PostMatchReport";
 
 export class MatchSimulator extends BaseSimulator {
     private resolver: CommandResolver;
+    private _postMatchReport: PostMatchReport | null = null;
 
     // ── Coach layer ────────────────────────────────────────
     readonly analyzer:       MatchAnalyzer;
@@ -79,6 +83,10 @@ export class MatchSimulator extends BaseSimulator {
         const ctx = this.createContext();
         const commands = this.pipeline.update(ctx);
         this.resolver.resolve(this.world, commands);
+
+        if (this.world.state.phase === "fulltime" && !this._postMatchReport) {
+            this._finalise();
+        }
     }
 
     // ── Public API ────────────────────────────────────────
@@ -106,5 +114,34 @@ export class MatchSimulator extends BaseSimulator {
     /** Observations collected by MatchAnalyzer this match */
     getObservations(): ReturnType<typeof this.analyzer.getObservations> {
         return this.analyzer.getObservations();
+    }
+
+    private _finalise(): void {
+        // Считаем passAccuracy и прочие derived fields
+        for (const stats of this.playerStats.values()) {
+            finaliseStats(stats);
+        }
+
+        // Рейтинги — GK получает goalsConceded от противника
+        rateAllPlayers(
+            this.playerStats,
+            this.world.homeTeam.players,
+            this.world.awayTeam.players,
+            this.world.awayTeam.score,  // голы пропущенные home GK
+            this.world.homeTeam.score,  // голы пропущенные away GK
+        );
+
+        this._postMatchReport = buildPostMatchReport({
+            homeTeam:     this.world.homeTeam,
+            awayTeam:     this.world.awayTeam,
+            state:        this.world.state,
+            playerStats:  this.playerStats,
+            observations: this.analyzer.getObservations(),
+        });
+    }
+
+    /** Возвращает готовый отчёт после fulltime, до этого — null */
+    getPostMatchReport(): PostMatchReport | null {
+        return this._postMatchReport;
     }
 }

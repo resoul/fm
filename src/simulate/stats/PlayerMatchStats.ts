@@ -74,6 +74,10 @@ export interface PlayerMatchStats {
     /** Internal sample count for rolling average */
     _posSamples: number;
 
+    // ── Discipline ────────────────────────────────────────
+    yellowCards: number;
+    redCards: number;
+
     // ── Rating ────────────────────────────────────────────
     /** 0–10, populated by PlayerRating after fulltime */
     rating: number;
@@ -117,6 +121,8 @@ export function createPlayerMatchStats(playerId: string): PlayerMatchStats {
         avgPosX: 0,
         avgPosY: 0,
         _posSamples: 0,
+        yellowCards: 0,
+        redCards: 0,
         rating: 0,
     };
 }

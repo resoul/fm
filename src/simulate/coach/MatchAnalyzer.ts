@@ -132,10 +132,6 @@ export class MatchAnalyzer {
         const oppPoss  = ctx.state.stats.possessionTick[oppSide];
         const totalPoss = curPoss + oppPoss;
 
-        const curPasses  = (side === "home" ? ctx.homeTeam : ctx.awayTeam).stats.passes;
-        const prevPasses = prev.passes;
-        const windowPasses = Math.max(1, curPasses - prevPasses);
-
         // Pass completion in window (approximate — uses current accuracy as proxy)
         const teamStats = (side === "home" ? ctx.homeTeam : ctx.awayTeam).stats;
         const passAccuracy = teamStats.passAccuracy / 100;

@@ -104,6 +104,8 @@ function snapshotPlayer(player: Team["players"][number]): PlayerSnapshot {
             ...player.intent,
             target: player.intent.target ? { ...player.intent.target } : undefined,
         } : null,
+        slotIdx: player.slotIdx,
+        isExpelled: player.isExpelled,
     };
 }
 
@@ -131,5 +133,7 @@ function applyTeamSnapshot(team: Team, snapshot: TeamSnapshot): void {
             ...playerSnapshot.intent,
             target: playerSnapshot.intent.target ? { ...playerSnapshot.intent.target } : undefined,
         } : null;
+        player.slotIdx = playerSnapshot.slotIdx;
+        player.isExpelled = playerSnapshot.isExpelled;
     }
 }

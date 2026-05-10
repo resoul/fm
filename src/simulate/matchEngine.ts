@@ -177,6 +177,9 @@ export class MatchEngine {
             isPaused: false,
             kickoffTeam: "home",
             lastGoalTime: -999,
+            isSecondHalf: false,
+            isPenalty: false,
+            cards: [],
             events: [],
             stats: {
                 home: emptyTeamStats(),

@@ -31,9 +31,21 @@ export type EventType =
     | "throwin"
     | "kickoff"
     | "halftime"
-    | "fulltime";
+    | "fulltime"
+    | "yellow_card"
+    | "red_card"
+    | "penalty";
 
-// ── Vec2 ──────────────────────────────────────────────────
+// ── PlayerCard ────────────────────────────────────────────
+export interface PlayerCard {
+    playerId: string;
+    playerName: string;
+    type: "yellow" | "red";
+    minute: number;
+    reason: string;
+}
+
+
 export interface Vec2 {
     x: number;
     y: number;
@@ -210,6 +222,13 @@ export interface Player {
     actionCooldown: number;
     kickCooldown: number;
 
+    // Formation slot (0-based index within the formation, e.g. slot 0 = GK)
+    // Used by ZoneSystem to read FORMATION_ZONES[formation][slotIdx]
+    slotIdx: number;
+
+    // Discipline: expelled player never receives decisions
+    isExpelled: boolean;
+
     // AI state
     nextDecision: AIDecision | null;
     targetPlayerId: string | null;
@@ -333,8 +352,14 @@ export interface MatchState {
     isPaused: boolean;
     kickoffTeam: TeamSide;
     lastGoalTime: number;
+    /** True after halftime kickoff — used by ZoneSystem to flip sides */
+    isSecondHalf: boolean;
+    /** True when a foul occurred inside the penalty area */
+    isPenalty: boolean;
     events: MatchEvent[];
     stats: MatchStats;
+    /** All cards issued in this match */
+    cards: PlayerCard[];
 }
 
 export interface EngineConfig {
@@ -368,6 +393,8 @@ export interface PlayerSnapshot {
     readonly passTarget: string | null;
     /** B.1: serialised intent for replay / debug inspection */
     readonly intent: PlayerIntent | null;
+    readonly slotIdx: number;
+    readonly isExpelled: boolean;
 }
 
 export interface TeamSnapshot {

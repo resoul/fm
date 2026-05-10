@@ -157,14 +157,8 @@ export class RefereeSystem implements SimulationSystem {
         resetFormationPositions(ctx.homeTeam, config.fieldDimensions);
         resetFormationPositions(ctx.awayTeam, config.fieldDimensions);
 
-        const team = kickoffTeam === "home" ? ctx.homeTeam : ctx.awayTeam;
-        const striker = team.players.find(p => p.position === "ST") ?? team.players[9];
-        const strikerPos: Vec2 = striker
-            ? { x: fw / 2 + (kickoffTeam === "home" ? -10 : 10), y: fh / 2 }
-            : { x: fw / 2, y: fh / 2 };
-
+        // Declare commands early — used in both the halftime block and below
         const commands: Command[] = [
-            // Wipe all stale decisions before kickoff
             { type: "CLEAR_ALL_DECISIONS" } as ClearAllDecisionsCommand,
             { type: "UPDATE_MATCH_STATE", phase: "playing" } as UpdateMatchStateCommand,
             {
@@ -172,11 +166,35 @@ export class RefereeSystem implements SimulationSystem {
                 pos: { x: fw / 2, y: fh / 2 },
                 vel: { x: 0, y: 0 },
                 height: 0, heightVel: 0,
-                ownerPlayerId: striker?.id ?? null,
-                lastTouchedBy: striker?.id ?? null,
+                ownerPlayerId: null,
+                lastTouchedBy: null,
                 lastTouchedTeam: kickoffTeam,
             } as UpdateBallCommand,
         ];
+
+        // F.0: after halftime teams swap sides — mirror all targetPos
+        if (ctx.state.phase === "halftime") {
+            for (const team of [ctx.homeTeam, ctx.awayTeam]) {
+                for (const player of team.players) {
+                    player.targetPos = { x: fw - player.targetPos.x, y: player.targetPos.y };
+                }
+            }
+            // Mark second half so ZoneSystem can flip its orientation
+            commands.push({ type: "UPDATE_MATCH_STATE", isSecondHalf: true } as UpdateMatchStateCommand);
+        }
+
+        const team = kickoffTeam === "home" ? ctx.homeTeam : ctx.awayTeam;
+        const striker = team.players.find(p => p.position === "ST") ?? team.players[9];
+        const strikerPos: Vec2 = striker
+            ? { x: fw / 2 + (kickoffTeam === "home" ? -10 : 10), y: fh / 2 }
+            : { x: fw / 2, y: fh / 2 };
+
+        // Patch ball owner now that we know who the striker is
+        const ballCmd = commands.find(c => c.type === "UPDATE_BALL") as UpdateBallCommand | undefined;
+        if (ballCmd) {
+            ballCmd.ownerPlayerId   = striker?.id ?? null;
+            ballCmd.lastTouchedBy   = striker?.id ?? null;
+        }
 
         if (striker) {
             commands.push(

@@ -1,3 +1,4 @@
+export { ZoneSystem } from "../systems/ZoneSystem";
 export { DecisionSystem } from "../systems/DecisionSystem";
 export { GoalkeeperSystem } from "../systems/GoalkeeperSystem";
 export { MovementSystem } from "../systems/MovementSystem";
