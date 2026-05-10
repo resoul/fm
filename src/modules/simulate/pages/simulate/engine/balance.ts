@@ -19,6 +19,20 @@
  *   receiver control:    45-80  ticks (0.75-1.3s)
  *   ─────────────────────────────────────────────
  *   total per pass:      150-260 ticks (~2.5-4.3s) ✓
+ *
+ * ── ERROR MODEL (4.4) ─────────────────────────────────────
+ * Passes and shots are now inexact. The actual kick target is offset
+ * by a random vector whose magnitude depends on:
+ *   - skill attribute (passing / finishing / longShots)
+ *   - nearby defenders (pressure)
+ *   - player fatigue
+ *   - distance (longer = larger absolute error window)
+ *
+ * Tuning guide:
+ *   PASS_ERROR_MAX_RADIUS    — increase for sloppier passes overall
+ *   PASS_ERROR_PRESSURE_*    — increase to punish playing under pressure
+ *   SHOT_ERROR_MAX_RADIUS    — increase for more off-target shots
+ *   *_WILD_THRESHOLD         — raise the bar for "wild" label in events
  */
 export const BALANCE = {
     // Movement
@@ -65,4 +79,43 @@ export const BALANCE = {
 
     // Out-of-possession: players beyond their leash get speed boost
     ZONE_RECOVERY_SPEED_BOOST: 1.25,
+
+    // ── Error Model — Passing (4.4) ───────────────────────
+    //
+    // Max positional offset (px) for a completely inaccurate pass (skill=0,
+    // under full pressure, exhausted). Real passes by good players land ~3-8px
+    // off target; bad players under pressure can miss by 20-35px.
+    PASS_ERROR_MAX_RADIUS: 35,
+
+    // How much each nearby defender adds to the inaccuracy (0..1 scale)
+    PASS_ERROR_PRESSURE_FACTOR: 0.12,
+
+    // How much full fatigue adds to inaccuracy
+    PASS_ERROR_FATIGUE_FACTOR: 0.15,
+
+    // Distance normalisation: at this distance the error radius is doubled
+    PASS_ERROR_DISTANCE_NORM: 200,
+    // How aggressively distance scales error (0 = no scaling, 1 = linear)
+    PASS_ERROR_DISTANCE_SCALE: 0.5,
+
+    // Thresholds for labelling a pass as poor or wild in event descriptions
+    // (in world units / px)
+    PASS_ERROR_POOR_THRESHOLD: 10,  // "loose pass" label
+    PASS_ERROR_WILD_THRESHOLD: 22,  // "wayward pass" label — receiver cooldown skipped
+
+    // ── Error Model — Shooting (4.4) ──────────────────────
+    //
+    // Larger than pass error: a shot aimed at the top-left corner can
+    // realistically sail just wide or just over.
+    SHOT_ERROR_MAX_RADIUS: 55,
+
+    SHOT_ERROR_PRESSURE_FACTOR: 0.15,
+    SHOT_ERROR_FATIGUE_FACTOR: 0.12,
+
+    // Long shots (outside ~60px from goal) receive extra error
+    SHOT_ERROR_LONG_SHOT_FACTOR: 1.4,
+
+    // Thresholds for labelling shot quality in event descriptions
+    SHOT_ERROR_TAME_THRESHOLD: 12,  // "straight at keeper"
+    SHOT_ERROR_WILD_THRESHOLD: 30,  // "blazes it wide"
 } as const;

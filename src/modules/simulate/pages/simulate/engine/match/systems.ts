@@ -9,3 +9,4 @@ export { TackleSystem } from "../systems/TackleSystem";
 export { TacticalSystem } from "../systems/TacticalSystem";
 export { OffBallSystem } from "../systems/OffBallSystem";
 export { MomentumSystem } from "../systems/MomentumSystem";
+export { RestartIntelligenceSystem } from "../systems/RestartIntelligenceSystem";
