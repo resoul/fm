@@ -4,6 +4,7 @@ import { SpatialHash } from "./spatialHash";
 import type { SpaceAwarenessData } from "./ai/SpaceAwareness";
 import type { PossessionChain } from "./ai/PossessionChain";
 import type { ShapeTarget } from "./ai/TeamShape";
+import type { PlayerMatchStats } from "./stats/PlayerMatchStats";
 
 export interface TacticalData {
     homeCentroid: Vec2;
@@ -57,4 +58,12 @@ export interface SimulationContext {
 
     // Delta time for this tick
     dt: number;
+
+    /**
+     * C.1 Per-player match statistics.
+     * Initialised at match start (initPlayerStats), mutated in-place
+     * by PassingSystem, ShootingSystem, TackleSystem, MovementSystem,
+     * RefereeSystem.  Finalised at fulltime for PostMatchReport.
+     */
+    playerStats: Map<string, PlayerMatchStats>;
 }

@@ -176,7 +176,7 @@ export const PreMatchPage: React.FC<PreMatchPageProps> = ({ onMatchReady }) => {
                         textAlign: "center",
                     }}>
                         <h2 style={{ fontSize: 18, fontWeight: 900, marginBottom: 24, letterSpacing: 1 }}>FINAL RESULT</h2>
-                        
+
                         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 32, marginBottom: 32 }}>
                             <div style={{ textAlign: "right" }}>
                                 <div style={{ fontSize: 24, fontWeight: 900, color: clubs[0].color }}>{clubs[0].name}</div>
@@ -385,13 +385,13 @@ const MatchPreview: React.FC<{
     const homeOVR = useMemo(() => {
         const profiles = homeLineup.startingXI.map(id => homeClub.squad.find(p => p.id === id));
         const valid    = profiles.filter((player): player is PlayerProfile => Boolean(player));
-        return valid.length ? Math.round(valid.reduce((s, p) => s + overallRating(p.attributes), 0) / valid.length) : 0;
+        return valid.length ? Math.round(valid.reduce((s, p) => s + overallRating(p.person), 0) / valid.length) : 0;
     }, [homeClub, homeLineup]);
 
     const awayOVR = useMemo(() => {
         const profiles = awayLineup.startingXI.map(id => awayClub.squad.find(p => p.id === id));
         const valid    = profiles.filter((player): player is PlayerProfile => Boolean(player));
-        return valid.length ? Math.round(valid.reduce((s, p) => s + overallRating(p.attributes), 0) / valid.length) : 0;
+        return valid.length ? Math.round(valid.reduce((s, p) => s + overallRating(p.person), 0) / valid.length) : 0;
     }, [awayClub, awayLineup]);
 
     const homePlayers = homeLineup.startingXI
@@ -472,7 +472,7 @@ const MatchPreview: React.FC<{
                             <span style={{ fontSize: 9, color: "rgba(255,255,255,0.5)", width: 24 }}>{p.number}</span>
                             <span style={{ fontSize: 11, color: "#fff", flex: 1 }}>{p.name}</span>
                             <span style={{ fontSize: 9, color: "rgba(255,255,255,0.4)", width: 28 }}>{p.primaryPosition}</span>
-                            <span style={{ fontSize: 10, fontWeight: 700, color: homeClub.color }}>{overallRating(p.attributes)}</span>
+                            <span style={{ fontSize: 10, fontWeight: 700, color: homeClub.color }}>{overallRating(p.person)}</span>
                         </div>
                     ))}
                 </div>
@@ -493,7 +493,7 @@ const MatchPreview: React.FC<{
                             <span style={{ fontSize: 9, color: "rgba(255,255,255,0.5)", width: 24 }}>{p.number}</span>
                             <span style={{ fontSize: 11, color: "#fff", flex: 1 }}>{p.name}</span>
                             <span style={{ fontSize: 9, color: "rgba(255,255,255,0.4)", width: 28 }}>{p.primaryPosition}</span>
-                            <span style={{ fontSize: 10, fontWeight: 700, color: awayClub.color }}>{overallRating(p.attributes)}</span>
+                            <span style={{ fontSize: 10, fontWeight: 700, color: awayClub.color }}>{overallRating(p.person)}</span>
                         </div>
                     ))}
                 </div>

@@ -6,6 +6,7 @@ import {
 import type { FieldDimensions, Player, TeamSide, Vec2 } from "../types";
 import type { Command, MovePlayerCommand, UpdatePlayerMetricsCommand } from "../core/Command";
 import { getMomentumSpeedMultiplier } from "./MomentumSystem";
+import { recordPositionSample, HEATMAP_SAMPLE_INTERVAL } from "../stats/PlayerMatchStats";
 
 export class MovementSystem implements SimulationSystem {
     name = "MovementSystem";
@@ -46,6 +47,43 @@ export class MovementSystem implements SimulationSystem {
 
             if (result.moveCmd) commands.push(result.moveCmd);
             commands.push(result.metricsCmd);
+
+            // ── C.1 PlayerMatchStats ──────────────────────────────────────────
+            const pStats = ctx.playerStats?.get(player.id);
+            if (pStats) {
+                // Distance covered: magnitude of velocity * dt
+                const speed = Math.sqrt(player.vel.x ** 2 + player.vel.y ** 2);
+                pStats.distanceCovered += speed * dt;
+
+                // Heatmap + avgPos: sample every HEATMAP_SAMPLE_INTERVAL ticks
+                if (ctx.state.tick % HEATMAP_SAMPLE_INTERVAL === 0) {
+                    recordPositionSample(
+                        pStats,
+                        player.pos.x, player.pos.y,
+                        ctx.config.fieldDimensions.width,
+                        ctx.config.fieldDimensions.height,
+                    );
+                    // minutesPlayed: increment by sample interval / ticks-per-minute
+                    // 1 minute = config.fps * 60 ticks
+                    pStats.minutesPlayed = Math.floor(ctx.state.tick / (ctx.config.fps * 60));
+                }
+
+                // Touch: player just received the ball (hasBall became true this tick)
+                if (player.hasBall && player.id === ctx.ball.ownerPlayerId) {
+                    // Only count if ball ownership was just claimed (cooldown just cleared)
+                    // We use actionCooldown as a proxy: first tick of possession
+                    if (player.actionCooldown === 0 && player.kickCooldown === 0) {
+                        pStats.touches++;
+                    }
+                }
+
+                // Progressive carry: player has ball and moved ≥ 10px toward opponent goal
+                if (player.hasBall && result.moveCmd) {
+                    const dxCarry = result.moveCmd.pos.x - player.pos.x;
+                    const forwardDir = player.team === "home" ? dxCarry : -dxCarry;
+                    if (forwardDir >= 10) pStats.progressiveCarries++;
+                }
+            }
         }
 
         return commands;

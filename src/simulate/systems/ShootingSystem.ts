@@ -168,6 +168,26 @@ export class ShootingSystem implements SimulationSystem {
         tStats.shots++;
         tStats.xg += decision.xG || 0;
 
+        // ── C.1 PlayerMatchStats ──────────────────────────────────────────────
+        const pStats = ctx.playerStats?.get(player.id);
+        if (pStats) {
+            pStats.shots++;
+            pStats.xG += decision.xG ?? 0;
+            // Shot on target: ball headed towards goal (not wild)
+            if (!isWild) pStats.shotsOnTarget++;
+        }
+        // xA for the last passer: who passed to this shooter?
+        const lastPasserId = ctx.ball.lastTouchedBy;
+        if (lastPasserId && lastPasserId !== player.id) {
+            const passerStats = ctx.playerStats?.get(lastPasserId);
+            if (passerStats) {
+                passerStats.chancesCreated++;
+                const shotXG = decision.xG ?? 0;
+                if (shotXG >= 0.1) passerStats.keyPasses++;
+                passerStats.xA += shotXG;
+            }
+        }
+
         return commands;
     }
 }

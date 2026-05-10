@@ -22,6 +22,15 @@ export class PhysicsSystem implements SimulationSystem {
         // 2. Handle ball pickup
         const pickup = this.handleBallPickup(newBall, homeTeam, awayTeam);
         if (pickup) {
+            // ── C.1 Interception: ball was loose and picked up by opponent team ──
+            if (
+                pickup.ownerPlayerId &&
+                newBall.lastTouchedTeam !== null &&
+                pickup.lastTouchedTeam !== newBall.lastTouchedTeam
+            ) {
+                const iStats = ctx.playerStats?.get(pickup.ownerPlayerId);
+                if (iStats) iStats.interceptions++;
+            }
             newBall = { ...newBall, ...pickup };
         }
 

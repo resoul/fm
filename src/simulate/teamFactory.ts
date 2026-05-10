@@ -3,11 +3,60 @@ import type {
     FieldDimensions, Club, PlayerProfile, MatchLineup, PlayerRole,
 } from "./types";
 import { SeededRandom } from "./seededRandom";
+import { createPerson, defaultTacticalStyle } from "./person";
+import type { Person } from "./person";
 
 const sharedRNG = new SeededRandom(Date.now());
 const rngInt = (min: number, max: number) => sharedRNG.nextInt(min, max);
 const rng = () => sharedRNG.next();
 const rngRange = (min: number, max: number) => sharedRNG.nextFloat(min, max);
+
+// ── flattenPersonAttrs ────────────────────────────────────
+/**
+ * Проецирует Person в плоский PlayerAttributes для движка.
+ * Вратарские атрибуты берутся из person.goalkeeper если есть,
+ * иначе заполняются единицами.
+ */
+export function flattenPersonAttrs(person: Person): PlayerAttributes {
+    const t  = person.technical;
+    const m  = person.mental;
+    const ph = person.physical;
+    const p  = person.pieces;
+    const gk = person.goalkeeper;
+    return {
+        // Physical
+        acceleration: ph.acceleration, agility: ph.agility, balance: ph.balance,
+        jumpingReach: ph.jumpingReach, naturalFitness: ph.naturalFitness,
+        pace: ph.pace, stamina: ph.stamina, strength: ph.strength,
+        // Mental
+        aggression: m.aggression, anticipation: m.anticipation, bravery: m.bravery,
+        composure: m.composure, concentration: m.concentration, decisions: m.decisions,
+        determination: m.determination, flair: m.flair, leadership: m.leadership,
+        offTheBall: m.offTheBall, positioning: m.positioning, teamwork: m.teamwork,
+        vision: m.vision, workRate: m.workRate,
+        // Technical
+        corners: p.corners, crossing: t.crossing, dribbling: t.dribbling,
+        finishing: t.finishing, firstTouch: t.firstTouch,
+        freeKickTaking: p.freeKickTaking, heading: t.heading,
+        longShots: t.longShots, longThrows: t.longThrows, marking: t.marking,
+        passing: t.passing, penaltyTaking: p.penaltyTaking,
+        tackling: t.tackling, technique: t.technique,
+        // Goalkeeping
+        aerialReach:   gk?.aerialReach   ?? 1,
+        commandOfArea: gk?.commandOfArea ?? 1,
+        communication: gk?.communication ?? 1,
+        eccentricity:  gk?.eccentricity  ?? 1,
+        handling:      gk?.handling      ?? 1,
+        kicking:       gk?.kicking       ?? 1,
+        oneOnOnes:     gk?.oneOnOnes     ?? 1,
+        punching:      gk?.punching      ?? 1,
+        reflexes:      gk?.reflexes      ?? 1,
+        rushingOut:    gk?.rushingOut    ?? 1,
+        throwing:      gk?.throwing      ?? 1,
+    };
+}
+
+
 
 // ── Formation definitions (relative positions 0–1) ────────
 type FormationSlot = { position: PlayerPosition; rx: number; ry: number };
@@ -184,20 +233,66 @@ function generatePotential(base: PlayerAttributes, age: number): PlayerAttribute
 }
 
 export function buildPlayerProfile(id: string, number: number, position: PlayerPosition, quality: number): PlayerProfile {
-    const age = rngInt(17, 35);
+    const age  = rngInt(17, 35);
     const attrs = generateAttributes(position, quality);
-    const bio = generateBio(position);
+    const bio  = generateBio(position);
+    const name = nextName();
+    const nat  = randomNationality();
+
+    // Строим Person из сгенерированных атрибутов
+    const isGK = position === "GK";
+    const person = createPerson({
+        id,
+        name,
+        role: "player",
+        age,
+        nationality: nat,
+        technical: {
+            crossing: attrs.crossing, dribbling: attrs.dribbling, finishing: attrs.finishing,
+            firstTouch: attrs.firstTouch, heading: attrs.heading, longShots: attrs.longShots,
+            longThrows: attrs.longThrows, marking: attrs.marking, passing: attrs.passing,
+            tackling: attrs.tackling, technique: attrs.technique,
+        },
+        mental: {
+            aggression: attrs.aggression, anticipation: attrs.anticipation, bravery: attrs.bravery,
+            composure: attrs.composure, concentration: attrs.concentration, decisions: attrs.decisions,
+            determination: attrs.determination, flair: attrs.flair, leadership: attrs.leadership,
+            offTheBall: attrs.offTheBall, positioning: attrs.positioning, teamwork: attrs.teamwork,
+            vision: attrs.vision, workRate: attrs.workRate,
+        },
+        physical: {
+            acceleration: attrs.acceleration, agility: attrs.agility, balance: attrs.balance,
+            jumpingReach: attrs.jumpingReach, naturalFitness: attrs.naturalFitness,
+            pace: attrs.pace, stamina: attrs.stamina, strength: attrs.strength,
+        },
+        pieces: {
+            corners: attrs.corners, freeKickTaking: attrs.freeKickTaking,
+            longThrows: attrs.longThrows, penaltyTaking: attrs.penaltyTaking,
+        },
+        goalkeeper: isGK ? {
+            aerialReach: attrs.aerialReach, commandOfArea: attrs.commandOfArea,
+            communication: attrs.communication, eccentricity: attrs.eccentricity,
+            handling: attrs.handling, kicking: attrs.kicking, oneOnOnes: attrs.oneOnOnes,
+            punching: attrs.punching, reflexes: attrs.reflexes,
+            rushingOut: attrs.rushingOut, throwing: attrs.throwing,
+        } : undefined,
+    });
+
+    const potentialAttrs = generatePotential(attrs, age);
+    const potentialPerson = createPerson({ ...person, id: id + "_pot" });
+
     return {
         id,
-        name: nextName(),
+        name,
         age,
-        nationality: randomNationality(),
+        nationality: nat,
         number,
         primaryPosition: position,
         alternatePositions: [],
         role: getDefaultRole(position),
+        person,
         attributes: attrs,
-        potential: generatePotential(attrs, age),
+        potential: potentialPerson,
         height: bio.height,
         weight: bio.weight,
         wage: Math.round((quality - 50) * 2 + rng() * 20) * 5,

@@ -100,6 +100,12 @@ export class TackleSystem implements SimulationSystem {
                 pos: { ...tackler.pos },
             });
 
+            // ── C.1 Successful tackle stats ───────────────
+            const tStats = ctx.playerStats?.get(tackler.id);
+            if (tStats) { tStats.tacklesWon++; tStats.duelsWon++; }
+            const oStats = ctx.playerStats?.get(owner.id);
+            if (oStats) oStats.duelsLost++;
+
         } else {
             // ── Failed tackle ──────────────────────────────
             commands.push({
@@ -108,6 +114,12 @@ export class TackleSystem implements SimulationSystem {
                 decision: null,
                 cooldown: TACKLE_FAIL_COOLDOWN,
             } as SetPlayerDecisionCommand);
+
+            // ── C.1 Failed tackle stats ───────────────────
+            const tStatsFail = ctx.playerStats?.get(tackler.id);
+            if (tStatsFail) tStatsFail.duelsLost++;
+            const oStatsFail = ctx.playerStats?.get(owner.id);
+            if (oStatsFail) oStatsFail.duelsWon++;
         }
 
         return commands;

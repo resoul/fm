@@ -24,7 +24,7 @@ const PlayerCard: React.FC<{
     slotPosition?: PlayerPosition;
     onClick: () => void;
 }> = ({ profile, isSelected, isStarting, slotPosition, onClick }) => {
-    const ovr = overallRating(profile.attributes);
+    const ovr = overallRating(profile.person);
     const posColor = POS_COLORS[profile.primaryPosition] ?? "#888";
     const fitnessColor = profile.fitness >= 80 ? "#10b981" : profile.fitness >= 60 ? "#f59e0b" : "#ef4444";
     const formColor = profile.form >= 70 ? "#10b981" : profile.form >= 45 ? "#f59e0b" : "#ef4444";
@@ -314,7 +314,7 @@ export const LineupBuilder: React.FC<LineupBuilderProps> = ({ club, onConfirm, l
         id ? (club.squad.find(p => p.id === id) ?? null) : null
     );
 
-    const totalOVR = selectedProfiles.reduce((sum, p) => sum + (p ? overallRating(p.attributes) : 0), 0);
+    const totalOVR = selectedProfiles.reduce((sum, p) => sum + (p ? overallRating(p.person) : 0), 0);
     const avgOVR   = canConfirm ? Math.round(totalOVR / 11) : 0;
 
     return (

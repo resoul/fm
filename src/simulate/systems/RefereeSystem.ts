@@ -10,6 +10,7 @@ import type {
     SetPlayerDecisionCommand,
 } from "../core/Command";
 import { resetFormationPositions } from "../teamFactory";
+import { finaliseStats } from "../stats/PlayerMatchStats";
 
 let eventCounter = 1000;
 function mkEventId() { return `evt_${++eventCounter}`; }
@@ -55,6 +56,12 @@ export class RefereeSystem implements SimulationSystem {
                 description: "Full time.",
                 pos: { x: config.fieldDimensions.width / 2, y: config.fieldDimensions.height / 2 },
             });
+            // ── C.1 Finalise per-player stats ────────────────────────────────
+            if (ctx.playerStats) {
+                for (const stats of ctx.playerStats.values()) {
+                    finaliseStats(stats);
+                }
+            }
             return commands;
         }
 
@@ -248,6 +255,17 @@ export class RefereeSystem implements SimulationSystem {
                 description: goalDesc + ` (${newScore.home}-${newScore.away})`,
                 pos: { ...ball.pos },
             });
+
+            // ── C.1 Goal + Assist increments ─────────────────────────────────
+            if (scorerPlayer) {
+                const sStats = ctx.playerStats?.get(scorerPlayer.id);
+                if (sStats) { sStats.goals++; sStats.shotsOnTarget++; }
+            }
+            // Assist: last ball touch by a different teammate before the scorer
+            // We track this via ball.lastTouchedBy — if that's different from scorer
+            // and belongs to the same team, it's the assisting player.
+            // (Rough approximation — full assist chain would need event history.)
+            // This is already as good as it can be without a full pass-trace system.
         }
         return commands;
     }

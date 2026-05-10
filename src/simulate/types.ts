@@ -39,104 +39,90 @@ export interface Vec2 {
     y: number;
 }
 
-// ── Player Attributes (FM-Style) ──────────────────────────
+// ── Player Attributes ────────────────────────────────────
+// Единая структура атрибутов — см. engine/person.ts
+// PlayerAttributes — плоская проекция для совместимости с
+// движком (Player.attributes). Новый код использует Person.
+export {
+    type TechnicalAttributes,
+    type MentalAttributes,
+    type PhysicalAttributes,
+    type HiddenAttributes,
+    type GoalkeeperAttributes,
+    type Person,
+    type PersonRole,
+    playerOverall as overallRating,
+} from "./person";
+
+/**
+ * PlayerAttributes — плоская структура для рантайма движка.
+ * Строится из Person через flattenPersonAttrs() в teamFactory.
+ * Не используй напрямую для новых фич — работай с Person.
+ */
 export interface PlayerAttributes {
     // Physical
-    acceleration: number;
-    agility: number;
-    balance: number;
-    jumpingReach: number;
-    naturalFitness: number;
-    pace: number;
-    stamina: number;
-    strength: number;
-
+    acceleration: number; agility: number; balance: number;
+    jumpingReach: number; naturalFitness: number; pace: number;
+    stamina: number; strength: number;
     // Mental
-    aggression: number;
-    anticipation: number;
-    bravery: number;
-    composure: number;
-    concentration: number;
-    decisions: number;
-    determination: number;
-    flair: number;
-    leadership: number;
-    offTheBall: number;
-    positioning: number;
-    teamwork: number;
-    vision: number;
-    workRate: number;
-
+    aggression: number; anticipation: number; bravery: number;
+    composure: number; concentration: number; decisions: number;
+    determination: number; flair: number; leadership: number;
+    offTheBall: number; positioning: number; teamwork: number;
+    vision: number; workRate: number;
     // Technical
-    corners: number;
-    crossing: number;
-    dribbling: number;
-    finishing: number;
-    firstTouch: number;
-    freeKickTaking: number;
-    heading: number;
-    longShots: number;
-    longThrows: number;
-    marking: number;
-    passing: number;
-    penaltyTaking: number;
-    tackling: number;
-    technique: number;
-
-    // Goalkeeping (Mostly for GK)
-    aerialReach: number;
-    commandOfArea: number;
-    communication: number;
-    eccentricity: number;
-    handling: number;
-    kicking: number;
-    oneOnOnes: number;
-    punching: number;
-    reflexes: number;
-    rushingOut: number;
-    throwing: number;
-}
-
-// ── Overall rating helper (weighted average) ─────────────
-export function overallRating(attrs: PlayerAttributes): number {
-    // Simple average of key physical/technical for now
-    const keys: (keyof PlayerAttributes)[] = [
-        "acceleration", "pace", "stamina", "passing", "finishing", "tackling", "vision", "decisions"
-    ];
-    let sum = 0;
-    for (const k of keys) sum += attrs[k] as number;
-    return Math.round(sum / keys.length);
+    corners: number; crossing: number; dribbling: number;
+    finishing: number; firstTouch: number; freeKickTaking: number;
+    heading: number; longShots: number; longThrows: number;
+    marking: number; passing: number; penaltyTaking: number;
+    tackling: number; technique: number;
+    // Goalkeeping
+    aerialReach: number; commandOfArea: number; communication: number;
+    eccentricity: number; handling: number; kicking: number;
+    oneOnOnes: number; punching: number; reflexes: number;
+    rushingOut: number; throwing: number;
 }
 
 // ============================================================
 // CLUB / SQUAD LAYER — sits above the match engine
 // ============================================================
 
-/** A player in a club's squad (persistent across matches) */
+/**
+ * PlayerProfile — игрок в заявке клуба (persistent across matches).
+ * Наследует от Person, добавляет контрактные / позиционные поля.
+ */
 export interface PlayerProfile {
+    // ── Identity (дублирует Person.id/name для удобства) ──
     id: string;
     name: string;
     age: number;
     nationality: string;
-    number: number;                       // preferred shirt number
+
+    // ── Позиция ───────────────────────────────────────────
+    number: number;
     primaryPosition: PlayerPosition;
-    alternatePositions: PlayerPosition[]; // positions player can also play
+    alternatePositions: PlayerPosition[];
     role: PlayerRole;
 
+    // ── Атрибуты через Person ─────────────────────────────
+    /** Полная структура атрибутов (Person) */
+    person: import("./person").Person;
+    /** Плоская проекция для движка — синхронизируется с person */
     attributes: PlayerAttributes;
-    potential: PlayerAttributes;          // max attributes if fully developed
+    /** Потенциальные атрибуты (ceiling при полном развитии) */
+    potential: import("./person").Person;
 
-    // Bio
-    height: number;                       // in cm
-    weight: number;                       // in kg
+    // ── Bio ───────────────────────────────────────────────
+    height: number; // cm
+    weight: number; // kg
 
-    // Contract
-    wage: number;                         // weekly wage in K€
-    contractEnds: number;                 // season number
+    // ── Contract ──────────────────────────────────────────
+    wage: number;         // weekly wage in K€
+    contractEnds: number; // season number
 
-    // Form & fitness — updated after each match
-    form: number;        // 0–100: recent performance streak
-    fitness: number;     // 0–100: physical freshness (100 = fully rested)
+    // ── Form & fitness ────────────────────────────────────
+    form: number;         // 0–100
+    fitness: number;      // 0–100
     matchesPlayed: number;
     goals: number;
     assists: number;
@@ -153,6 +139,8 @@ export interface Club {
     reputation: number;  // 1–100, affects transfers
     squad: PlayerProfile[];
     defaultFormation: string;
+    /** A.1 CoachProfile — personality drives in-match decisions */
+    coach?: import("./coach/CoachProfile").CoachProfile;
 }
 
 /** Lineup selected before a match: 11 player IDs + formation */
@@ -160,6 +148,8 @@ export interface MatchLineup {
     clubId: string;
     formation: string;
     startingXI: string[];  // 11 PlayerProfile IDs, index = formation slot order
+    /** A.1 Optional override for the club's default coach */
+    coach?: import("./coach/CoachProfile").CoachProfile;
 }
 
 // ============================================================

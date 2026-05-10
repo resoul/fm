@@ -174,6 +174,18 @@ export class PassingSystem implements SimulationSystem {
         const tStats = player.team === "home" ? state.stats.home : state.stats.away;
         tStats.passes++;
 
+        // ── C.1 PlayerMatchStats ──────────────────────────────────────────────
+        const pStats = ctx.playerStats?.get(player.id);
+        if (pStats) {
+            pStats.passesAttempted++;
+            // A wild pass is not "completed" — ball went too far astray
+            if (!isWildPass) pStats.passesCompleted++;
+            // Progressive pass: ball moved ≥ 20px toward opponent goal
+            const dx = intendedPos.x - player.pos.x;
+            const progressiveDir = player.team === "home" ? dx : -dx;
+            if (progressiveDir >= 20) pStats.progressivePasses++;
+        }
+
         // Event description reflects pass quality
         const qualityLabel = isWildPass
             ? "plays a wayward pass."

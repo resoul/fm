@@ -6,6 +6,8 @@ import { SpatialHash } from "../spatialHash";
 import { SeededRandom } from "../seededRandom";
 import { EventBus } from "../eventBus";
 import type { Player, MatchEvent } from "../types";
+import { initPlayerStats } from "../stats/PlayerMatchStats";
+import type { PlayerMatchStats } from "../stats/PlayerMatchStats";
 
 export abstract class BaseSimulator {
     protected world: SimulationWorld;
@@ -14,6 +16,7 @@ export abstract class BaseSimulator {
     protected spatialHash: SpatialHash<Player>;
     protected rng: SeededRandom;
     protected eventBus: EventBus;
+    protected playerStats: Map<string, PlayerMatchStats>;
 
     constructor(world: SimulationWorld) {
         this.world = world;
@@ -22,6 +25,8 @@ export abstract class BaseSimulator {
         this.spatialHash = new SpatialHash<Player>(40);
         this.rng = new SeededRandom(world.config.seed);
         this.eventBus = new EventBus();
+        // C.1: initialise per-player stats map from both squads
+        this.playerStats = initPlayerStats(world.homeTeam.players, world.awayTeam.players);
     }
 
     abstract step(): void;
@@ -63,7 +68,9 @@ export abstract class BaseSimulator {
                 awayCompactness: 0,
                 influenceMap: Array(10).fill(0).map(() => Array(7).fill(0)),
                 pressureMap: Array(10).fill(0).map(() => Array(7).fill(0)),
-                passingLanes: []
+                passingLanes: [],
+                homeState: { phase: "out_of_possession", ticksSincePossessionChange: 0, defensiveLineX: 0, teamWidth: 0, pressureIntensity: 0 },
+                awayState: { phase: "out_of_possession", ticksSincePossessionChange: 0, defensiveLineX: 0, teamWidth: 0, pressureIntensity: 0 },
             };
         }
 
@@ -82,7 +89,8 @@ export abstract class BaseSimulator {
             },
             spatialHash: this.spatialHash,
             dt: 1,
-            tactical: this.world.tacticalData
+            tactical: this.world.tacticalData!,
+            playerStats: this.playerStats,
         };
     }
 }

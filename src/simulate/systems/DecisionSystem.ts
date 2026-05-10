@@ -397,6 +397,16 @@ export class DecisionSystem implements SimulationSystem {
         if (pressers.some(p => p.id === player.id)) {
             const pressIndex = pressers.findIndex(p => p.id === player.id);
             const sideAngle = pressIndex === 0 ? 0 : (player.team === "home" ? -0.55 : 0.55);
+
+            // ── C.1 pressingActions ───────────────────────────────────────────
+            // Count as a pressing action only when close enough to be applying
+            // real pressure (within 2× tackle range + a chase buffer)
+            const pressDist = distVec(player.pos, owner.pos);
+            if (pressDist < 80) {
+                const pStat = ctx.playerStats?.get(player.id);
+                if (pStat) pStat.pressingActions++;
+            }
+
             return {
                 type: "defend",
                 target: {
