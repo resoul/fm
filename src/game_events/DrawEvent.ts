@@ -1,81 +1,50 @@
 import nextDateTime from "@/lib/date/nextDateTime";
 import type { IEvent } from "./IEvent";
 import db from "@/../db/db";
+import { Round, Stage, MatchStatusEnum, Match } from "@/../db/models";
+import DrawFactory from "@/fm/draws/DrawFactory";
 
 export default class DrawEvent implements IEvent {
 
-    async dispatch(dateTime: Date) {
-        const draws = await db.table('draw').where('date').equals(dateTime.toISOString().slice(0, 19)).toArray();
-        for (const draw of draws) {
-            await this.createSeasonSchedule(draw);
+    async dispatch(dateTime: string) {
+        const stages = await db.table<Stage>('stage').where('drawDate').equals(dateTime).toArray();
+        for (const stage of stages) {
+            await this.drawStage(stage);
         }
     }
 
-    private async createSeasonSchedule(draw: {seasonId: number}) {
-        const clubIds = (await db.table('seasonClub').where('seasonId').equals(draw.seasonId).toArray()).map(c => c.clubId || 0);
-
-        const numClubs = clubIds.length;
-        if (numClubs < 2 || numClubs % 2 !== 0) return;
-
-        const firstLegRounds = numClubs - 1;
-        const numRounds = (numClubs - 1) * 2;
-        const firstLegPairs: { homeClubId: number; awayClubId: number }[][] = [];
-
-        const rotatingClubs = [...clubIds];
-        const fixedClubId = rotatingClubs[0];
-
-        for (let round = 0; round < firstLegRounds; round++) {
-            const roundOrder = [fixedClubId, ...rotatingClubs.slice(1)];
-            const roundPairs: { homeClubId: number; awayClubId: number }[] = [];
-
-            for (let i = 0; i < numClubs / 2; i++) {
-                const leftClubId = roundOrder[i];
-                const rightClubId = roundOrder[numClubs - 1 - i];
-                const swapHomeAway = round % 2 !== 0;
-                const homeClubId = swapHomeAway ? rightClubId : leftClubId;
-                const awayClubId = swapHomeAway ? leftClubId : rightClubId;
-                roundPairs.push({ homeClubId, awayClubId });
-            }
-
-            firstLegPairs.push(roundPairs);
-
-            const lastClubId = rotatingClubs.pop();
-            if (lastClubId !== undefined) {
-                rotatingClubs.splice(1, 0, lastClubId);
-            }
-        }
+    private async drawStage(stage: Stage){
+        const draw = await DrawFactory.getDraw(stage);
 
         await db.transaction('rw', [db.table('round'), db.table('match')], async () => {
-            for (let round = 0; round < numRounds; round++) {           
-                let date = nextDateTime(new Date('2025-06-30T13:00:00'), round * 7 * 24);
-                let matches = [];
+            for (let round = 0; round < draw.numberOfRounds; round++) {           
+                let date = nextDateTime(new Date(stage.startDate), round * 7 * 24);
+                let matches: Pick<Match, 'homeClubId'|'awayClubId'|'date'|'roundId'|'stageId'|'status'>[]  = [];
                 
-                // Создаем раунд
-                let roundId = await db.table('round').add({ 
-                    name: `Round ${round + 1}`, 
-                    seasonId: draw.seasonId 
+                const season = await stage.getSeason();
+                const sD = date.toISOString().slice(0, 19);
+                const roundId = await db.table<Pick<Round, 'name'|'stageId'|'seasonId'|'startDate'|'drawDate'>>('round').add({ 
+                    name: `Round ${round + 1}`,  
+                    stageId: stage.id, 
+                    seasonId: season.id,
+                    startDate: sD,
+                    drawDate: nextDateTime(new Date(stage.startDate), round * 7 * 24 - 30 * 24).toISOString().slice(0, 19)
                 });
-
-                const isSecondLeg = round >= firstLegRounds;
-                const sourceRoundPairs = firstLegPairs[round % firstLegRounds] || [];
-
-                for (const pair of sourceRoundPairs) {
-                    const homeClubId = isSecondLeg ? pair.awayClubId : pair.homeClubId;
-                    const awayClubId = isSecondLeg ? pair.homeClubId : pair.awayClubId;
-
+         
+                
+                for (const pair of draw.drawResult[round]) {
                     matches.push({
-                        homeClubId,
-                        awayClubId,
-                        date: date.toISOString().slice(0, 19), // обрезаем для красоты
-                        roundId: roundId,
-                        status: 'scheduled',
+                        homeClubId: pair.homeClubId,
+                        awayClubId: pair.awayClubId,
+                        date: sD,
+                        roundId: Number(roundId),
+                        stageId: stage.id,
+                        status: MatchStatusEnum.created,
                     });
                 }
-                
-                // Добавляем матчи пачкой
+
                 await db.table('match').bulkAdd(matches);
             }
         });
     }
-    
 }

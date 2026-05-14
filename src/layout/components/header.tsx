@@ -15,10 +15,11 @@ import { useLayout } from "./use-layout";
 import { NavbarMenu } from './navbar-menu';
 import { useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { useDateTime, nextDateTimeAction } from "@/state/useDateTime";
 import Settings from "./menu/settings";
 import { useLiveQuery } from "dexie-react-hooks";
 import db from "@/../db/db";
+import useCurrentDate from "@/hooks/useCurrentDate";
+import { setShowTimeline } from "@/state/useEventStates";
 
 type HeaderEntityData = {
     number?: number;
@@ -32,7 +33,7 @@ export function Header() {
     const navigate = useNavigate();
     const { pathname } = useLocation();
 
-    const dateTime = useDateTime(state => state.dateTime);
+    const dateTime = useCurrentDate();
     const leagues = useLiveQuery(
         async () =>
             (await db.table('competition').toArray())
@@ -40,6 +41,14 @@ export function Header() {
                 .sort((a, b) => a.id - b.id),
         []
     );
+
+    const continueClick = () => {
+        if (!dateTime){
+            return;
+        }
+        dateTime.continue();
+        setShowTimeline(true);
+    };
 
     const leagueMatch = pathname.match(/^\/league\/(\d+)(?:\/|$)/);
     const leagueTeamMatch = pathname.match(/^\/league\/(\d+)\/team\/(\d+)(?:\/|$)/);
@@ -243,6 +252,10 @@ export function Header() {
     };
     const canBrowseEntities = isLeaguePage || isMatchesResultsPage;
 
+    if (!dateTime){
+        return <>Loading...</>
+    }
+
     return (
         <div className="flex flex-col">
             {/* Top bar */}
@@ -358,16 +371,19 @@ export function Header() {
                     {/* Date / Time */}
                     <div className="flex flex-col items-end justify-center min-w-[90px]">
                         <span className="text-xs font-semibold text-foreground leading-tight">
-                            {dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            <span className="mr-1">
+                                {new Date(dateTime.date).toLocaleString('en-US', { weekday: 'short' })}
+                            </span>
+                            {dateTime.getLocaleTime()}
                         </span>
                         <span className="text-xs text-muted-foreground leading-tight">
-                            {dateTime.toLocaleDateString()}
+                            {dateTime.getLocaleDate()}
                         </span>
                     </div>
 
                     {/* Continue button */}
                     <Button
-                        onClick={nextDateTimeAction}
+                        onClick={continueClick}
                         size="sm"
                         className={cn(
                             "ms-2 gap-1.5 font-bold tracking-wider uppercase text-xs px-4 h-9",

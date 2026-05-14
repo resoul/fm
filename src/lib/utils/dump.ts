@@ -1,15 +1,13 @@
 import db from '@/../db/db';
-import { useDateTime } from '@/state/useDateTime';
+import { CurrentDate } from '@/../db/models/CurrentDate';
 import 'dexie-export-import';
 import type { ImportProgress } from 'dexie-export-import/dist/import';
 import { saveAs } from 'file-saver';
 
 export async function save() {
-    const date = useDateTime.getState().dateTime;
     try {
-        await db.table('currentDate').clear();
-        await db.table('currentDate').put({ date });
-        console.log('Current date saved to DB:', date);
+        const date = await CurrentDate.getDateTime();
+        console.log('Current date saved to DB:', date.getLocaleDate());
         const blob = await db.export({
             prettyJson: true,
             progressCallback: (p) => {
@@ -39,10 +37,4 @@ export async function upload(file: File, setProgress?: (progress: number) => voi
         	return true;
         }
     });
-
-    const dateEntry = await db.table('currentDate').toCollection().first();
-
-    if (dateEntry) {
-        useDateTime.setState({ dateTime: dateEntry.date });
-    }
 }

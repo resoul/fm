@@ -2,29 +2,28 @@ import { addEvent } from "@/state/useEventStates";
 import type { IEvent } from "./IEvent";
 import db from "@/../db/db";
 import { simulateGoals } from "@/lib/utils/poisson";
+import { MatchStatusEnum } from "@/../db/models";
+import ManagerMatches from "@/../db/caches/ManagerMatches";
 
 const hourInMs = 60 * 60 * 1000;
 
 export default class MatcheEvent implements IEvent {
 
-    async dispatch(dateTime: Date) {
-        
+    async dispatch(dateTime: string) {
 
-        const date = new Date(dateTime.getTime() + hourInMs); 
-        const matches = await db.table('match').where('date').equals(date.toISOString().slice(0, 19)).toArray();
+        const matches = await db.table('match').where('date').equals(dateTime).toArray();
 
         if (matches.length > 0) {
-            console.log(matches);
             addEvent("Matches");
         }
 
-        const datet = new Date(dateTime.getTime() - 2 * hourInMs); 
-        const matchest = await db.table('match').where('date').equals(datet.toISOString().slice(0, 19)).toArray();
+        const datet = new Date(new Date(dateTime).getTime() - 2 * hourInMs);
+        const matchest = await db.match.where('date').equals(datet.toISOString().slice(0, 19)).toArray();
         if (matchest.length > 0) {
             await this.symulateMatch(matchest);
             addEvent("Matches");
+            ManagerMatches.setDateChanged(dateTime);
         }
-
     }
 
     async symulateMatch(matches: {id: number, homeClubId: number, awayClubId: number}[]) {
@@ -33,7 +32,7 @@ export default class MatcheEvent implements IEvent {
                 await db.table('match').update(match.id, {
                     homeGoals: simulateGoals(1.65),
                     awayGoals: simulateGoals(1.20),
-                    status: 'played',
+                    status: MatchStatusEnum.ended,
                 });
             }));
         });

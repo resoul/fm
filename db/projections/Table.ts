@@ -1,17 +1,38 @@
 import db from "@/../db/db"
-import type { Competion } from "db/models";
+import { MatchStatusEnum, Season, Stage } from "@/../db/models";
 import { Club } from "../models/Club";
+import DbError from "@/../db/errors/DbError";
 
 export default class Table {
     
-    competition: Competion;
-    type: string;
-    clubs: TableClub[];
+    stage: Stage;
+    clubs: TableClub[] = [];
+    static tables: Map<number, Promise<Table>> = new Map<number, Promise<Table>>();
 
-    constructor(competion: Competion, type: string){
-        this.competition = competion;
-        this.type = type;
-        this.clubs = [];
+    static async getInstance(stage: Stage): Promise<Table>{
+        let tablePromise = this.tables.get(stage.id);
+        
+        if (!tablePromise) {
+            const createTable = async (): Promise<Table> => {
+                const table = new Table(stage);
+                await table.initTable();
+                return table;
+            };
+
+            tablePromise = createTable();
+            this.tables.set(stage.id, tablePromise);
+        }
+
+        return tablePromise;
+    }
+
+    static deleteCache(stageId: number){
+        console.log('delete cache' + stageId);
+        this.tables.delete(stageId);
+    }
+
+    constructor(stage: Stage){
+        this.stage = stage;
     }
 
     getTable(sort: Exclude<keyof TableClub, "club"> = 'points'): TableClub[]{
@@ -32,32 +53,44 @@ export default class Table {
         return table;
     }
 
-    async initTable(){
+    sortByPosition(): TableClub[]{
+        let table = this.clubs;
+        table.sort((a, b) => {
+            if (b.points !== a.points) {
+                return b.points - a.points;
+            }
+            return b.goalDifference - a.goalDifference;
+        });
+
+        return table;
+    }
+
+    getTableClub(clubId: number): TableClub{
+        const club = this.clubs.find(c => c.club.id == clubId);
+        if (club == undefined){
+            throw new DbError(`Club with id=${clubId} not found`);
+        }
+        return club;
+    } 
+
+    async initTable(): Promise<TableClub[]>{
         
         if (this.clubs.length > 0){
             return this.clubs;
         }
 
-        const seasonId = (await this.competition.getActiveSeason()).id;
-        const [seasonClubs, rounds] = await Promise.all([
-            db.table('seasonClub').where('seasonId').equals(seasonId).toArray(),
-            db.table('round').where('seasonId').equals(seasonId).toArray()
-        ]);
-
-        const roundIds = rounds.map(r => r.id);
+        const season = await this.stage.getSeason();
+        const seasonClubs = await db.table('seasonClub').where('seasonId').equals(season.id).toArray(); //TODO don`t need
 
         const allMatches = await db.table('match')
-            .where('roundId')
-            .anyOf(roundIds)
-            .filter(m => m.status === 'played')
+            .where('stageId')
+            .anyOf(this.stage.id)
+            .filter(m => m.status === MatchStatusEnum.ended)
             .toArray();
 
         for (const sClub of seasonClubs) {
-            const club = await db.table('club').get(sClub.clubId);
-            if (!club) continue;
-
+            const club = await db.oneOrError<Club>('club', sClub.clubId);
             const row = new TableClub(club);
-
             const clubMatches = allMatches.filter(
                 m => m.homeClubId === club.id || m.awayClubId === club.id
             );
@@ -87,6 +120,11 @@ export default class Table {
             this.clubs.push(row);
         }
 
+        this.sortByPosition().forEach((tc, index) => {
+            const club = this.clubs.find(c => c.club.id === tc.club.id);
+            if (club) club.position = index + 1;
+        });
+
         return this.clubs;
     }
 }
@@ -101,6 +139,7 @@ export class TableClub{
     losses: number;
     wins: number;
     draws: number;
+    position: number;
 
     constructor(club: Club){
         this.club = club;
@@ -112,6 +151,7 @@ export class TableClub{
         this.losses = 0;
         this.wins = 0;
         this.draws = 0;
+        this.position = 0;
     }
 
 }

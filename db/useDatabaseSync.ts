@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import db from './db';
+import type { Stage } from './models';
 
 export default function useDatabaseSync() {
     const [isReady, setIsReady] = useState(false);
@@ -14,7 +15,7 @@ export default function useDatabaseSync() {
                 // 1. Проверяем ETag (хэш файла), чтобы не качать лишнее
                 // const lastTag = localStorage.getItem('db_etag');
 
-                const response = await fetch('/dump.json', {
+                const response = await fetch('/clubs.json', {
                     // headers: lastTag ? { 'If-None-Match': lastTag } : {}
                 });
 
@@ -44,6 +45,14 @@ export default function useDatabaseSync() {
                             }
                         }
                     });
+                }
+                const stage = await db.stage.get(1);
+                if (stage){
+                    for (let i = 2; i < 13; i++){
+                        const {id, ...newStage} = stage;
+                        newStage.competitionId = i;
+                        db.stage.add(newStage as Stage);
+                    }
                 }
 
                 // if (newTag) localStorage.setItem('db_etag', newTag);

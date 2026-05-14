@@ -1,0 +1,39 @@
+{
+        "name": "stage",
+        "schema": "++id, name",
+        "rowCount": 1,
+        "rows": [
+          {"id": 1, "name": "league", "competitionId": 1, "stagePosition": 0, "type": "group", "drawDate":"2025-06-29T13:00:00", "circle": 2,
+            "lastRoundTime": {"day": "sunday", "time": {"hour": 22, "minute": 0}},
+            "lastRoundsIs": 1,
+            "scheduleTimeSlot": "1 month",
+            "timeSlots" : [
+            {
+                "day": "friday",
+                "time": [{"hour":19, "minute": 30, "prime_time": 1}]
+            },
+            {
+                "day": "saturday",
+                "time": [
+                    {"hour":17, "minute": 30, "prime_time": 2},
+                    {"hour":19, "minute": 30, "prime_time": 2},
+                    {"hour":22, "minute": 0, "prime_time": 3}
+                ]
+            },
+            {
+                "day": "sunday",
+                "time": [
+                    {"hour":17, "minute": 30, "prime_time": 2},
+                    {"hour":19, "minute": 30, "prime_time": 2},
+                    {"hour":22, "minute": 0, "prime_time": 10}
+                ]
+            }],
+            "reserveSlots": [{"day": "wensday", "time": [{"hour":22, "minute": 0, "prime_time": 0}]}]
+          },
+          {"id": 2, "name": "Final", "competitionId": 14, "stagePosition": 0, "type": "cup", "drawDate":"2025-12-29T13:00:00"},
+          {"id": 3, "name": "Semi Final", "competitionId": 14, "stagePosition": 0, "type": "cup", "drawDate":"2025-11-29T13:00:00"},
+          {"id": 4, "name": "Quarter Final", "competitionId": 14, "stagePosition": 0, "type": "cup", "drawDate":"2025-10-29T13:00:00"},
+          {"id": 5, "name": "1/8", "competitionId": 14, "stagePosition": 0, "type": "cup", "drawDate":"2025-09-29T13:00:00"},
+          {"id": 6, "name": "1/16", "competitionId": 14, "stagePosition": 0, "type": "cup", "drawDate":"2025-06-29T13:00:00"}
+        ]
+      },

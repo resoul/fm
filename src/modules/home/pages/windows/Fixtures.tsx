@@ -3,29 +3,24 @@ import { SectionHeader } from '../../componets/SectionHeader';
 import { JuveBadge } from "@/modules/home/layout/juve-badge";
 import { useManager } from '@/state/useManager';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { useDateTime } from '@/state/useDateTime';
 import Schedule from '@/../db/projections/Schedule';
+import { CurrentDate } from '@/../db/models';
 
 export default function Fixtures() {
 
     const manager = useManager(state => state.manager);
-    const dateTime = useDateTime(state => state.dateTime);
 
     const schedule = useLiveQuery<Schedule>(
         async () => {
             const club = await manager.getClub();
-            if (!club){
-                return [];
-            }
+            const dateTime = await CurrentDate.getDate();
             return await club.getSchedule(dateTime);
-        }, [manager.clubId, dateTime]
+        }, [manager.clubId]
     );
 
     if (schedule == undefined) {
         return <>Loading...</>
     }
-
-    console.log(schedule);
 
     if (schedule.getFixtures().length === 0) {
         return (

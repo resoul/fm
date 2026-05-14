@@ -27,7 +27,7 @@ export default function App() {
         }
     );
 
-    if (!isDatabaseReady || manager.id == 0) {
+    if (!isDatabaseReady || !manager || manager.id == 0) {
         return <ScreenLoader />;
     }
 
