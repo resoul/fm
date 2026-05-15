@@ -57,7 +57,7 @@ export default class ScheduleEvent implements IEvent {
             // console.log(r.match.date);
             return {key: r.match.id, changes: r.match}
         });
-        console.log(m);
+        // console.log(m);
         await db.match.bulkUpdate(m);
     }
 

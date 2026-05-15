@@ -1,12 +1,16 @@
+import db from "@/../db/db";
 import AbstractDraw from "./AbstractDraw";
 
 export default class GroupDraw extends AbstractDraw{
 
-    draw(){
+    async draw(): Promise<void>{
+        const season = await this.stage.getSeason();
+        const rotatingClubs = (await db.seasonClub.where('seasonId').equals(season.id).toArray()).map(c => c.clubId);
+        this.size = rotatingClubs.length;
+        this.numberOfRounds = (this.size - 1) * this.stage.circle;
         const firstLegRounds = this.size - 1;
         const firstLegPairs: { homeClubId: number; awayClubId: number }[][] = [];
 
-        const rotatingClubs = this.clubs.map(c => c.id);
         if (this.size < 2 || this.size % 2 !== 0) rotatingClubs.push(0);
         const fixedClubId = rotatingClubs[0];
 
@@ -32,12 +36,18 @@ export default class GroupDraw extends AbstractDraw{
         }
 
         this.drawResult = [...firstLegPairs];
-        for (const x in firstLegPairs){
-            const roundResult: {homeClubId: number, awayClubId: number}[] = [];
-            firstLegPairs[x].forEach(pair => {
-                roundResult.push({homeClubId: pair.awayClubId, awayClubId: pair.homeClubId});
-            });
-            this.drawResult.push(roundResult);
+        for(let i = 0; i < this.stage.circle -1; i++){
+            for (const x in firstLegPairs){
+                const roundResult: {homeClubId: number, awayClubId: number}[] = [];
+                firstLegPairs[x].forEach(pair => {
+                    if (i % 2){
+                       roundResult.push({homeClubId: pair.homeClubId, awayClubId: pair.awayClubId});
+                    } else{
+                        roundResult.push({homeClubId: pair.awayClubId, awayClubId: pair.homeClubId});
+                    }
+                });
+                this.drawResult.push(roundResult);
+            }
         }
     }
 

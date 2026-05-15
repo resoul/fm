@@ -230,6 +230,45 @@
                 {"day": "sunday", "hour":18, "minute": 0, "prime_time": 10}
             ],
             "reserveSlots": [{"day": "wensday", "time": [{"hour":22, "minute": 0, "prime_time": 0}]}]
+          },
+          {"id":2, "name":"Final Italy Cup", "competitionId": 14, "stagePosition":0, "type":"cup", "drawDate":"2025-11-29T13:00:00", "startDate":"2026-02-05T13:00:00", 
+          "circle": 1,
+            "timeSlots" : [{"day": "sunday", "hour":18, "minute": 0, "prime_time": 10}]
+          },
+          {"id":3, "name":"Semi Final Italy Cup", "competitionId": 14, "stagePosition":1, "type":"cup", "drawDate":"2025-10-29T13:00:00", "startDate":"2026-11-05T13:00:00", 
+          "circle": 1,
+            "timeSlots" : [
+              {"day": "tuesday", "hour":18, "minute": 0, "prime_time": 10},
+              {"day": "wensday", "hour":18, "minute": 0, "prime_time": 9}
+            ]
+          },
+          {"id":4, "name":"Quarter Final Italy Cup", "competitionId": 14, "stagePosition":2, "type":"cup", "drawDate":"2025-09-29T13:00:00", "startDate":"2026-10-05T13:00:00", 
+          "circle": 1,
+            "timeSlots" : [
+              {"day": "wensday", "hour":16, "minute": 0, "prime_time": 9},
+              {"day": "wensday", "hour":18, "minute": 0, "prime_time": 10}
+            ]
+          },
+          {"id":5, "name":"Round 5 Italy Cup", "competitionId": 14, "stagePosition":3, "type":"cup", "drawDate":"2025-08-29T13:00:00", "startDate":"2026-09-05T13:00:00", 
+          "circle": 1,
+            "timeSlots" : [
+              {"day": "wensday", "hour":16, "minute": 0, "prime_time": 9},
+              {"day": "wensday", "hour":18, "minute": 0, "prime_time": 10}
+            ]
+          },
+          {"id":6, "name":"Round 4 Italy Cup", "competitionId": 14, "stagePosition":4, "type":"cup", "drawDate":"2025-07-29T13:00:00", "startDate":"2026-08-05T13:00:00", 
+          "circle": 1, "teamsFrom": [1], "teamsCount": 32,
+            "timeSlots" : [
+              {"day": "wensday", "hour":16, "minute": 0, "prime_time": 9},
+              {"day": "wensday", "hour":18, "minute": 0, "prime_time": 10}
+            ]
+          },
+          {"id":7, "name":"Round 3 Italy Cup", "competitionId": 14, "stagePosition":4, "type":"cup", "drawDate":"2025-06-29T13:00:00", "startDate":"2026-07-25T13:00:00", 
+          "circle": 1, "teamsFrom": [2,3], "teamsCount": 24,
+            "timeSlots" : [
+              {"day": "wensday", "hour":16, "minute": 0, "prime_time": 9},
+              {"day": "wensday", "hour":18, "minute": 0, "prime_time": 10}
+            ]
           }
         ]
       },
@@ -546,7 +585,8 @@
           {"id":11,"name":"2025/2026","competitionId":10,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":1},
           {"id":12,"name":"2025/2026","competitionId":11,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":1},
           {"id":13,"name":"2025/2026","competitionId":12,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":1},
-          {"id":14,"name":"2025/2026","competitionId":13,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":1}
+          {"id":14,"name":"2025/2026","competitionId":13,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":1},
+          {"id":15,"name":"2025/2026","competitionId":14,"startDate":"2025-07-01","endDate":"2026-05-31","isActive":1}
         ]
       },
       {

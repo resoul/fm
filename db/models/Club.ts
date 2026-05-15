@@ -25,4 +25,12 @@ export class Club {
 
         return schedule;
     }
+
+    static getFakeClub(): Club{
+        const club = new Club();
+        club.id = 0;
+        club.name = 'fake';
+        club.color = 'red';
+        return club;
+    }
 }

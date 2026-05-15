@@ -51,7 +51,7 @@ export default function useDatabaseSync() {
                     for (let i = 2; i < 13; i++){
                         const {id, ...newStage} = stage;
                         newStage.competitionId = i;
-                        db.stage.add(newStage as Stage);
+                        await db.stage.add(newStage as Stage);
                     }
                 }
 

@@ -27,7 +27,7 @@ export default class Table {
     }
 
     static deleteCache(stageId: number){
-        console.log('delete cache' + stageId);
+        // console.log('delete cache' + stageId);
         this.tables.delete(stageId);
     }
 
@@ -66,6 +66,9 @@ export default class Table {
     }
 
     getTableClub(clubId: number): TableClub{
+        if (clubId == 0){
+            return new TableClub(Club.getFakeClub());
+        }
         const club = this.clubs.find(c => c.club.id == clubId);
         if (club == undefined){
             throw new DbError(`Club with id=${clubId} not found`);

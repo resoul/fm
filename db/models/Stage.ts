@@ -27,6 +27,8 @@ export class Stage{
     startDate!: string;
     circle: number = 1;
     timeSlots!: TimeSlot[];
+    teamsCount!: number;
+    teamsFrom!: number[];
     
     season: Season|null = null;
 

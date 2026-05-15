@@ -36,7 +36,7 @@ export class Match{
     }
 
     static onUpdate(mods: any, primKey: number, obj: Match) {
-        console.log(obj, mods);
+        // console.log(obj, mods);
         Table.deleteCache(obj.stageId);
         ManagerMatches.deleteCache();
         return { updatedAt: Date.now() }; // Добавляем метку времени
