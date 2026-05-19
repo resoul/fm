@@ -9,9 +9,8 @@ export default class DrawEvent implements IEvent {
     async dispatch(dateTime: string) {
         const stages = await db.table<Stage>('stage').where('drawDate').equals(dateTime).toArray();
         for (const stage of stages) {
-            // if (stage.type == StageEnum.group){
-                await this.drawStage(stage);
-            // }
+            // if (stage.type == StageEnum.cup)
+            await this.drawStage(stage);
         }
     }
 
@@ -23,7 +22,7 @@ export default class DrawEvent implements IEvent {
         await db.transaction('rw', [db.round, db.match, db.competition], async () => {
             for (let round = 0; round < draw.numberOfRounds; round++) {           
                 let date = nextDateTime(new Date(stage.startDate), round * 7 * 24);
-                let matches: Pick<Match, 'homeClubId'|'awayClubId'|'date'|'roundId'|'stageId'|'status'>[]  = [];
+                let matches: Pick<Match, 'homeClubId'|'awayClubId'|'date'|'roundId'|'stageId'|'seasonId'|'status'>[]  = [];
                 
                 const sD = date.toISOString().slice(0, 19);
                 const roundId = await db.table<Pick<Round, 'name'|'stageId'|'seasonId'|'startDate'|'drawDate'>>('round').add({ 
@@ -33,7 +32,7 @@ export default class DrawEvent implements IEvent {
                     startDate: sD,
                     drawDate: nextDateTime(new Date(stage.startDate), round * 7 * 24 - 30 * 24).toISOString().slice(0, 19)
                 });
-                
+
                 for (const pair of draw.drawResult[round]) {
                     matches.push({
                         homeClubId: pair.homeClubId,
@@ -41,10 +40,11 @@ export default class DrawEvent implements IEvent {
                         date: sD,
                         roundId: Number(roundId),
                         stageId: stage.id,
+                        seasonId: season.id,
                         status: MatchStatusEnum.created,
                     });
                 }
-
+// console.log(matches);
                 await db.table('match').bulkAdd(matches);
             }
         });

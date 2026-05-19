@@ -24,7 +24,7 @@ export default class CupDraw extends AbstractDraw{
         // const pairs: { homeClubId: number, awayClubId: number }[][] = [];
         const roundPairs : { homeClubId: number, awayClubId: number }[] = [];
         for (let i = 0; i < this.size / 2; i++) {
-            roundPairs.push({ homeClubId: clubIds[i], awayClubId: clubIds[this.size - 1] });
+            roundPairs.push({ homeClubId: clubIds[i], awayClubId: clubIds[this.size - i - 1] });
         }
 
         this.drawResult.push(roundPairs);

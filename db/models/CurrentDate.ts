@@ -2,6 +2,8 @@ import db from "@/../db/db";
 import DrawEvent from "@/game_events/DrawEvent";
 import MatcheEvent from "@/game_events/MatcheEvent";
 import ScheduleEvent from "@/game_events/ScheduleEvent";
+import StartSeasonEvent from "@/game_events/StartSeasonEvent";
+import dayIndexDate from "@/lib/date/dayIndexDate";
 import { clearEvents, isHaveEvent } from "@/state/useEventStates";
 
 export class CurrentDate{
@@ -23,6 +25,11 @@ export class CurrentDate{
         return new Date(date.date);
     }
 
+    static async getDayIndex(){
+        const date = await this.getDateTime();
+        return dayIndexDate(new Date(date.date));
+    }
+
     getLocaleTime(){
         return new Date(this.date).toTimeString().slice(0, 5);
     }
@@ -38,8 +45,8 @@ export class CurrentDate{
     async continue(){
         const nextDate = new Date(this.date);
         nextDate.setHours(nextDate.getHours() + 1 - new Date().getTimezoneOffset()/60); //1 hour + gvt
-        await db.transaction('rw', [db.currentDate, db.stage, db.competition, db.round, db.match], async () =>
-            await db.table(CurrentDate.tableName).update(this.id, {date: nextDate.toISOString().slice(0, 19)}));
+        await db.transaction('rw', [db.currentDate, db.stage, db.competition, db.round, db.match, db.club, db.seasonClub], async () =>
+            await db.currentDate.update(this.id, {date: nextDate.toISOString().slice(0, 19)}));
 
         this.date = nextDate.toISOString().slice(0, 19);
         if (!isHaveEvent() && CurrentDate.i < CurrentDate.MAX_STEP){
@@ -58,9 +65,11 @@ export class CurrentDate{
     static async onUpdate(mods: any, primKey: number, obj: CurrentDate) {
         // console.log(obj, mods);
         await Promise.all([
-            await new DrawEvent().dispatch(mods.date),
-            await new MatcheEvent().dispatch(mods.date),
-            await new ScheduleEvent().dispatch(mods.date),
+            new StartSeasonEvent().dispatch(mods.date),
+            new DrawEvent().dispatch(mods.date),
+            new MatcheEvent().dispatch(mods.date),
+            new ScheduleEvent().dispatch(mods.date),
+
         ])
     }
 

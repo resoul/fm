@@ -26,9 +26,13 @@ export class Manager{
     }
 
     async getSeasons(): Promise<Season[]>{
-        const clubSeasons = await db.table("seasonClub").where('clubId').equals(this.clubId).toArray();
-        const seasonIds = clubSeasons.map(sc => sc.seasonId);
+        const seasonIds = await this.getSeasonIds();
         return await db.table("season").bulkGet(seasonIds);
+    }
+
+    async getSeasonIds(): Promise<number[]>{
+        const clubSeasons = await db.table("seasonClub").where('clubId').equals(this.clubId).toArray();
+        return clubSeasons.map(sc => sc.seasonId);
     }
 
     async getClub(): Promise<Club>{

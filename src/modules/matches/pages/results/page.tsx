@@ -1,93 +1,53 @@
 import db from '@/../db/db';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { useDateTime } from '@/state/useDateTime';
 import { useManager } from '@/state/useManager';
-import ManagerMatches from '@/../db/caches/ManagerMatches';
-import { MatchStatusEnum, type Match } from '@/../db/models/Match';
-import { CurrentDate, Stage, type Club } from '@/../db/models';
-import Table from '@/../db/projections/Table';
-
-type GameType = {
-    date: Date;
-    homeClub: Club;
-    homeClubPosition: number;
-    awayClub: Club;
-    awayClubPosition: number;
-    match: Match;
-    isManagerGame: boolean;
-};
+import { type Match } from '@/../db/models/Match';
+import { CurrentDate, Stage, StageEnum } from '@/../db/models';
+import GroupMatches from '../../components/group-matches';
+import CupMatches from '../../components/cup-matches';
 
 export function Page() {
 
     const manager = useManager(state => state.manager);
-    const tables = new Map<number, Table>();
 
-    const games = useLiveQuery<GameType[]>(
+    const stageMatches = useLiveQuery<Record<number, {stage: Stage, matches: Match[]}>>(
         async () => {
-            const dateTime = await CurrentDate.getDate();
-            const matches = await ManagerMatches.getInstance(manager).getAllTodayMatches(dateTime);
-            // const stages = await manager.getStages();
-            // const matches = db.match.where()
-
-            const games = await Promise.all(matches.map(async (match) => {
-                const [homeClub, awayClub] = await Promise.all([
-                    db.club.get(match.homeClubId),
-                    db.club.get(match.awayClubId)
-                ]);
-
-                if (!homeClub || !awayClub){
-                    throw new Error('no clubs');
+            const dayIndex = await CurrentDate.getDayIndex();
+            const seasonIds = await manager.getSeasonIds();
+            const matches = await db.match.where('[dayIndex+seasonId]').anyOf(seasonIds.map(id => [dayIndex, id])).toArray();
+            const stageMatches: Record<number, {stage: Stage, matches: Match[]}> = {};
+            const stagePromises: Record<number, Promise<Stage>> = {};
+            await Promise.all(matches.map(async m => {
+                if (!stagePromises[m.stageId]) {
+                    stagePromises[m.stageId] = m.getStage();
                 }
-
-                if (!tables.has(match.roundId)){
-                    const season = await (await match.getRound()).getSeason();
-                    const stage = await db.oneOrError<Stage>('stage', {competitionId: season.competitionId});
-                    const table = await stage.getTable();
-                    tables.set(match.roundId, table);
+                const stage = await stagePromises[m.stageId];
+                if (!Object.hasOwn(stageMatches, m.stageId)){
+                    console.log(m.stageId);
+                    stageMatches[m.stageId] = {stage: stage, matches: []};
                 }
-           
-                return {
-                    date: new Date(match.date),
-                    homeClub,
-                    homeClubPosition: tables.get(match.roundId)?.getTableClub(homeClub.id)?.position ?? 0,
-                    awayClub,
-                    awayClubPosition: tables.get(match.roundId)?.getTableClub(awayClub.id)?.position ?? 0,
-                    match: match,
-                    isManagerGame: match.homeClubId === manager?.clubId || match.awayClubId === manager?.clubId,
-                };
+                stageMatches[m.stageId].matches.push(m);
             }));
-            return games;
-        }, [manager.id]
+            return stageMatches;
+        }
     );
-    // console.log('rendering');
 
-    if (games == undefined) {
+    if (stageMatches == undefined) {
         return <>Loading...</>
     }
 
-    if (games.length === 0) {
+    if (Object.keys(stageMatches).length === 0) {
         return <>No games today</>
     }
 
+    console.log(stageMatches);
     return (
         <div>
-            {games.map(game => (
-                <div key={game.match.id}>
-                    <div className='flex gap-4'>
-                        <div className='w-8'>
-                            {`${String(game.date.getHours()).padStart(2, '0')}:${String(game.date.getMinutes()).padStart(2, '0')}`}
-                        </div>
-                        <div className='w-8'>{game.homeClubPosition}th</div>
-                        <div className={`w-40 ${game.isManagerGame && game.homeClub.id === manager?.clubId ? " text-blue-500" : ""}`}>
-                            {game.homeClub.name}
-                        </div>
-                        <div className='w-16'>{game.match.status === MatchStatusEnum.ended ? `${game.match.homeGoals} - ${game.match.awayGoals}` : 'vs'}</div>
-                        <div className={`w-40 ${game.isManagerGame && game.awayClub.id === manager?.clubId ? "bg-blue-500 text-white" : ""}`}>
-                            {game.awayClub.name}
-                        </div> 
-                        <div className='w-8'>{game.awayClubPosition}th</div>
-                    </div>
-                </div>
+            {Object.values(stageMatches).map(stageMatch => ( 
+            <div key={stageMatch.stage.id}>
+                {stageMatch.stage.type == StageEnum.group ? 
+                <GroupMatches {...stageMatch} /> : <CupMatches {...stageMatch} />}           
+            </div>
             ))}
         </div>
     )

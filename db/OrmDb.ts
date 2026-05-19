@@ -28,7 +28,7 @@ export default class OrmDb extends Dexie{
             club: '++id, name, countryId',
             seasonClub: '++id, seasonId, clubId, [seasonId+clubId]',
             round: '++id, name, seasonId, stageId, startDate, drawDate',
-            match: '++id, date, homeClubId, awayClubId, roundId, stageId', //homeGoals, awayGoals, status
+            match: '++id, date, homeClubId, awayClubId, roundId, stageId, seasonId, [dayIndex+seasonId]', //homeGoals, awayGoals, status
             stage: '++id, drawDate, competitionId',
         });
 
