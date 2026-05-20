@@ -7,7 +7,7 @@ export class Club {
     name!: string;
     color!: string | null;
 
-    async getSchedule(dateTime: Date): Promise<Schedule> {
+    async getSchedule(dateTime: Date, size: number|null = null): Promise<Schedule> {
         const schedule = new Schedule(this);
         const matches = await db.table<Match>('match').where('homeClubId').equals(this.id).and(
             match => new Date(match.date) >= dateTime
@@ -17,10 +17,13 @@ export class Club {
         ).toArray();
         const allMatches = [...matches, ...awayMatches];
         allMatches.sort((a, b) => a.date.localeCompare(b.date));
+        if (size != null){
+            allMatches.splice(size);
+        }
         await Promise.all(allMatches.map(async (match) => {
             const rivalId = match.homeClubId != this.id ? match.homeClubId : match.awayClubId;
             const rival = await db.table('club').get(rivalId);
-            schedule.addFixture(match, rival);
+            await schedule.addFixture(match, rival);
         }));
 
         return schedule;

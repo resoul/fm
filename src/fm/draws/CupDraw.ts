@@ -6,12 +6,18 @@ export default class CupDraw extends AbstractDraw{
     async draw(): Promise<void> {
         const seasonIds = (await db.season.where('competitionId').anyOf(this.stage.teamsFrom).toArray()).map(s => s.id);
         let clubIds = (await db.seasonClub.where('seasonId').anyOf(seasonIds).toArray()).map(c => c.clubId);
-        
-        if (this.stage!.teamsCount){
+        const previousStage = await this.stage.getPreviousStage();
+
+        if (previousStage){
+            const previousClubIds = (await previousStage.getMatches()).map(m => m.getWinnerId());
+            clubIds = [...clubIds, ...previousClubIds];
+        }
+
+        if (this.stage!.teamsCount ){
             if (clubIds.length > this.stage.teamsCount){
                 clubIds = clubIds.slice(0, this.stage.teamsCount);
             } else {
-                clubIds.fill(0, this.stage.teamsCount - clubIds.length);
+                clubIds.fill(0, this.stage.teamsCount);
             }
         }
 

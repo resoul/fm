@@ -62,7 +62,7 @@ export default function Fixtures() {
                                 </span>
                             </div>
                         </td>
-                        <td className="py-1 text-right text-zinc-500">Seria A</td>
+                        <td className="py-1 text-right text-zinc-500">{fixture.competition.name}</td>
                     </tr>
                 ))}
                 </tbody>

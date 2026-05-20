@@ -55,6 +55,26 @@ export class Match{
         return await db.oneOrError<Season>('season', this.seasonId);
     }
 
+    getWinnerId(): number|null{
+        if (this.status != MatchStatusEnum.ended || this.homeGoals == this.awayGoals){
+            return null;
+        }
+
+        if (this.finishMethod != FinishMethodEnum.penalties){
+            if (this.homeGoals > this.awayGoals){
+                return this.homeClubId;
+            }
+            return this.awayClubId;
+        }
+
+        if (this.homePenalty > this.awayPenalty){
+            return this.homeClubId;
+        }
+
+        return this.awayClubId;
+    }
+
+
     static onUpdate(mods: any, primKey: number, obj: Match) {
         // console.log(obj, mods);
         Table.deleteCache(obj.stageId);

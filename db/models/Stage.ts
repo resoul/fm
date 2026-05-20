@@ -3,6 +3,7 @@ import type { Competition } from "./Competition";
 import type { Season } from "./Season";
 import Table from "@/../db/projections/Table";
 import type { DayOfWeek } from "@/types/DayOfWeek";
+import type { Match } from "./Match";
 
 export const StageEnum = {
     group: 'group',
@@ -45,7 +46,15 @@ export class Stage{
         return this.season;
     }
 
-        
+    async getPreviousStage(): Promise<Stage|undefined>{
+        const stages = await db.stage.where('competitionId').equals(this.competitionId).toArray();
+        return stages.find(s => s.stagePosition == this.stagePosition + 1);
+    }
+
+    async getMatches(): Promise<Match[]>{
+        return await db.match.where('stageId').equals(this.id).toArray();
+    }
+
     async getTable(){
         return Table.getInstance(this);
     }

@@ -30,6 +30,10 @@ export default function App() {
     if (!isDatabaseReady || !manager || manager.id == 0) {
         return <ScreenLoader />;
     }
+    //for debugging
+    if (typeof window !== 'undefined') {
+        (window as any).db = db;
+    }
 
     return (
         <ThemeProvider

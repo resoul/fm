@@ -15,7 +15,7 @@ export class Season{
         return clubs.filter(c => !!c);
     }
 
-    async getCompetion(): Promise<Competition>{
+    async getCompetition(): Promise<Competition>{
         return await db.oneOrError('competition', this.competitionId);
     }
 

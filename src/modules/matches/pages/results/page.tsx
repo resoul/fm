@@ -23,7 +23,6 @@ export function Page() {
                 }
                 const stage = await stagePromises[m.stageId];
                 if (!Object.hasOwn(stageMatches, m.stageId)){
-                    console.log(m.stageId);
                     stageMatches[m.stageId] = {stage: stage, matches: []};
                 }
                 stageMatches[m.stageId].matches.push(m);
@@ -40,7 +39,6 @@ export function Page() {
         return <>No games today</>
     }
 
-    console.log(stageMatches);
     return (
         <div>
             {Object.values(stageMatches).map(stageMatch => ( 

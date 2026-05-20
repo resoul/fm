@@ -1,4 +1,4 @@
-import { Club, MatchStatusEnum, type Match, type Stage } from "@/../db/models";
+import { Club, Manager, MatchStatusEnum, type Match, type Stage } from "@/../db/models";
 import { useManager } from "@/state/useManager";
 import db from "@/../db/db";
 import { useLiveQuery } from "dexie-react-hooks";
@@ -10,8 +10,23 @@ type GameType = {
     awayClub: Club;
     awayClubPosition: number;
     match: Match;
-    isManagerGame: boolean;
 };
+
+const clubName = (club: Club, manager: Manager, match: Match) => {
+    if (club.id === manager.clubId){
+        return <div className="w-40 text-blue-500">{club.name}</div>
+    }
+
+    return (
+        <div className={`w-40 ${
+            match.status !== MatchStatusEnum.ended 
+            || club.id == match.getWinnerId()
+            || null == match.getWinnerId()
+            ? "" : " text-gray-400"}`}>
+            {club.name}
+        </div>
+    );
+}
 
 export default function GroupMatches({stage, matches}: {stage: Stage, matches: Match[]}){
     const manager = useManager(state => state.manager);
@@ -37,7 +52,6 @@ export default function GroupMatches({stage, matches}: {stage: Stage, matches: M
                     awayClub,
                     awayClubPosition: table.getTableClub(awayClub.id)?.position ?? 0,
                     match: match,
-                    isManagerGame: match.homeClubId === manager?.clubId || match.awayClubId === manager?.clubId,
                 };
             }));
             return games;
@@ -60,13 +74,9 @@ export default function GroupMatches({stage, matches}: {stage: Stage, matches: M
                             {`${String(game.date.getHours()).padStart(2, '0')}:${String(game.date.getMinutes()).padStart(2, '0')}`}
                         </div>
                         <div className='w-8'>{game.homeClubPosition}th</div>
-                        <div className={`w-40 ${game.isManagerGame && game.homeClub.id === manager?.clubId ? " text-blue-500" : ""}`}>
-                            {game.homeClub.name}
-                        </div>
+                        {clubName(game.homeClub, manager, game.match)}
                         <div className='w-16'>{game.match.status === MatchStatusEnum.ended ? `${game.match.homeGoals} - ${game.match.awayGoals}` : 'vs'}</div>
-                        <div className={`w-40 ${game.isManagerGame && game.awayClub.id === manager?.clubId ? "bg-blue-500 text-white" : ""}`}>
-                            {game.awayClub.name}
-                        </div> 
+                        {clubName(game.awayClub, manager, game.match)}
                         <div className='w-8'>{game.awayClubPosition}th</div>
                     </div>
                 </div>
