@@ -1,0 +1,54 @@
+import db from "@/../db/db";
+import AbstractDraw from "./AbstractDraw";
+
+export default class GroupDraw extends AbstractDraw{
+
+    async draw(): Promise<void>{
+        const season = await this.stage.getSeason();
+        const rotatingClubs = (await db.seasonClub.where('seasonId').equals(season.id).toArray()).map(c => c.clubId);
+        this.size = rotatingClubs.length;
+        this.numberOfRounds = (this.size - 1) * this.stage.circle;
+        const firstLegRounds = this.size - 1;
+        const firstLegPairs: { homeClubId: number; awayClubId: number }[][] = [];
+
+        if (this.size < 2 || this.size % 2 !== 0) rotatingClubs.push(0);
+        const fixedClubId = rotatingClubs[0];
+
+        for (let round = 0; round < firstLegRounds; round++) {
+            const roundOrder = [fixedClubId, ...rotatingClubs.slice(1)];
+            const roundPairs: { homeClubId: number; awayClubId: number }[] = [];
+
+            for (let i = 0; i < this.size / 2; i++) {
+                const leftClubId = roundOrder[i];
+                const rightClubId = roundOrder[this.size - 1 - i];
+                const swapHomeAway = round % 2 !== 0;
+                const homeClubId = swapHomeAway ? rightClubId : leftClubId;
+                const awayClubId = swapHomeAway ? leftClubId : rightClubId;
+                roundPairs.push({ homeClubId, awayClubId });
+            }
+
+            firstLegPairs.push(roundPairs);
+
+            const lastClubId = rotatingClubs.pop();
+            if (lastClubId !== undefined) {
+                rotatingClubs.splice(1, 0, lastClubId);
+            }
+        }
+
+        this.drawResult = [...firstLegPairs];
+        for(let i = 0; i < this.stage.circle -1; i++){
+            for (const x in firstLegPairs){
+                const roundResult: {homeClubId: number, awayClubId: number}[] = [];
+                firstLegPairs[x].forEach(pair => {
+                    if (i % 2){
+                       roundResult.push({homeClubId: pair.homeClubId, awayClubId: pair.awayClubId});
+                    } else{
+                        roundResult.push({homeClubId: pair.awayClubId, awayClubId: pair.homeClubId});
+                    }
+                });
+                this.drawResult.push(roundResult);
+            }
+        }
+    }
+
+}

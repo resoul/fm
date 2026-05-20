@@ -3,9 +3,10 @@ import db from '@/../db/db';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Competion } from '@/../db/models/Competition';
+import { Competition } from '@/../db/models/Competition';
 import type Table from 'db/projections/Table';
 import type { TableClub } from '@/../db/projections/Table';
+import type { Stage } from '@db/../db/models';
 
 export function Page() {
     const { competitionId } = useParams();
@@ -14,9 +15,10 @@ export function Page() {
     const data = useLiveQuery<{competitionName?: string, seasonName?: string, table: Table|null, error?: string}>(async () => {
 
         try {
-            const competition = await db.oneOrError<Competion>('competition', competitionId);
+            const competition = await db.oneOrError<Competition>('competition', competitionId);
             const season = await competition.getActiveSeason();
-            const table = await competition.getTable();
+            const stage = await db.oneOrError<Stage>('stage', {competitionId: competition.id});
+            const table = await stage.getTable();
             await table.initTable();
 
             return {

@@ -4,8 +4,8 @@ import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import db from '@/../db/db';
 import { useManager } from '@/state/useManager';
-import { useDateTime } from '@/state/useDateTime';
 import { Link } from 'react-router-dom';
+import { CurrentDate } from '@/../db/models';
 
 // ─── HELPERS ──────────────────────────────────────────────────────────────────
 
@@ -235,19 +235,19 @@ function StandingsTable() {
 }
 
 function MatchesResults() {
-    const dateTime = useDateTime((state) => state.dateTime);
     const seasonId = 1;
     const fixtures = useLiveQuery(
         async () => {
             const rounds = await db.table('round').where('seasonId').equals(seasonId).toArray();
             const roundIds = rounds.map((r) => r.id);
+            const dateTime = await CurrentDate.getDateTime();
             if (roundIds.length === 0) return [];
 
             const matches = await db
                 .table('match')
                 .where('roundId')
                 .anyOf(roundIds)
-                .filter((m) => new Date(m.date) >= dateTime)
+                .filter((m) => new Date(m.date) >= new Date(dateTime.date))
                 .toArray();
 
             matches.sort((a, b) => a.date.localeCompare(b.date));
@@ -269,7 +269,7 @@ function MatchesResults() {
                 })
             );
         },
-        [seasonId, dateTime]
+        [seasonId]
     );
 
     if (!fixtures) {

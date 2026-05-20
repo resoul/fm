@@ -5,6 +5,8 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { useState } from "react";
 import type Table from "@/../db/projections/Table";
 import type { TableClub } from "@/../db/projections/Table";
+import db from "@/../db/db";
+import type { Stage } from "@/../db/models";
 
 export default function LeagueTable() {
 
@@ -13,9 +15,9 @@ export default function LeagueTable() {
 
     const table = useLiveQuery<Table>(
         async () => {
-            const competition = await manager.getCompetion('league');
-            const table = await competition.getTable();
-            await table.initTable();
+            const competition = await manager.getCompetition('league');
+            const stage = await db.oneOrError<Stage>('stage', {competitionId: competition.id});
+            const table = await stage.getTable();
 
             return table;
         }, [manager.id]

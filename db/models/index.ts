@@ -2,3 +2,8 @@ export * from "./Club";
 export * from "./Competition";
 export * from "./Season"
 export * from "./Manager";
+export * from "./Match";
+export * from "./Stage";
+export * from "./SeasonClub";
+export * from "./Round";
+export * from "./CurrentDate";

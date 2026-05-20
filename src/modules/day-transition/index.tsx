@@ -1,11 +1,25 @@
-import { useDateTime } from "@/state/useDateTime";
 import Days from "./components/days";
 import Header from "./components/header";
+import { setRediretc, setShowTimeline, useEventStates } from "@/state/useEventStates";
+import { useNavigate } from "react-router-dom";
+import { useEffect, } from "react";
 
 export default function DayTransitionModule() {
-    const { processing } = useDateTime();
+    const event = useEventStates(state => state.events);
+    const redirect = useEventStates(state => state.redirect);
+    const showTimeline = useEventStates(state => state.showTimeline);
 
-    if (!processing) {
+    const navigate = useNavigate();
+    
+    useEffect(() => {
+        if (event.length && !redirect) {
+            setShowTimeline(false);
+            setRediretc(true);
+            navigate('/matches');
+        }
+    }, [event.length, navigate]);
+
+    if (!showTimeline) {
         return null;
     }
 

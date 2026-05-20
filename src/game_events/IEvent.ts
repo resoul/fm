@@ -1,3 +1,3 @@
 export interface IEvent {
-    dispatch(dateTime: Date): Promise<void>;
+    dispatch(dateTime: string): Promise<void>;
 }
