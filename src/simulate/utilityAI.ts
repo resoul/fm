@@ -1,0 +1,510 @@
+import type { Player, AIDecision, Vec2 } from "./types";
+import type { SimulationContext } from "./context";
+import { distVec } from "./physics";
+import { calculateXG } from "./xG";
+import { getRoleProfile, getTeamInstructions } from "./systems/TacticalInstructionsSystem";
+import { computeEffectiveAttribute } from "./coach/FormFatigueModel";
+
+/**
+ * AIAction — a discrete behaviour a player can perform.
+ * score() returns 0-1+ desirability; getDecision() returns the concrete plan.
+ */
+export interface AIAction {
+    name: string;
+    score(player: Player, ctx: SimulationContext): number;
+    getDecision(player: Player, ctx: SimulationContext): AIDecision;
+}
+
+// ── Shoot ─────────────────────────────────────────────────
+
+export class ShootAction implements AIAction {
+    name = "shoot";
+
+    score(player: Player, ctx: SimulationContext): number {
+        if (!player.hasBall) return 0;
+
+        const { width, height } = ctx.config.fieldDimensions;
+        const goalX = player.team === "home" ? width : 0;
+        const goalY = height / 2;
+
+        const dist = distVec(player.pos, { x: goalX, y: goalY });
+        if (dist > 170) return 0;
+
+        let score = Math.max(0, 0.65 - dist / 160);
+
+        // Bonus for central position
+        const lateralDist = Math.abs(player.pos.y - goalY);
+        score *= 1 - lateralDist / (height / 2);
+
+        // Penalty for defenders in the way
+        const nearbyDefenders = ctx.spatialHash
+            .queryRadius(player.pos, 50)
+            .filter(p => p.team !== player.team);
+        score *= Math.pow(0.8, nearbyDefenders.length);
+
+        // ── B.2 Attribute mappings — ShootAction ──────────────
+        // finishing → confidence boosts shooting desirability
+        score += (player.attributes.finishing / 100) * 0.12;
+
+        // composure → reduces panic penalty under defensive pressure
+        const shootPressure = nearbyDefenders.length;
+        const effectiveComposure = computeEffectiveAttribute(player.fatigue, player.attributes.composure, "mental");
+        const composureFactor = 1 - (shootPressure * (1 - effectiveComposure / 100) * 0.15);
+        score *= Math.max(0.3, composureFactor);
+
+        // positioning → reward for being in the right zone
+        score += (player.attributes.positioning / 100) * 0.08;
+
+        // bravery → willingness to shoot with defenders nearby
+        if (nearbyDefenders.length >= 2) {
+            score *= (0.35 + (player.attributes.bravery / 100) * 0.65);
+        }
+
+        // longShots → gate long-range shooting by attribute
+        if (dist > 100) {
+            const lsCap = player.attributes.longShots / 100;
+            score *= lsCap < 0.5 ? 0.3 : (0.3 + lsCap * 0.85);
+        }
+        // ───────────────────────────────────────────────────────
+
+        // Attacking transition phase boosts shooting urgency slightly
+        const tacticalState = player.team === "home"
+            ? ctx.tactical.homeState
+            : ctx.tactical.awayState;
+        if (tacticalState.phase === "transition_attack") {
+            score *= 1.15;
+        }
+
+        // 3.3 Tactical identity: gegenpress values fast transitions → shoot sooner
+        const inst = getTeamInstructions(ctx, player.team);
+        if (inst) {
+            if (inst.style === "gegenpress" && tacticalState.phase === "transition_attack") score *= 1.12;
+            if (inst.style === "direct_play") score *= 1.08;    // direct play = shoot more
+            if (inst.style === "tiki_taka") score *= 0.9;       // tika-taka prefers combinations
+            if (inst.style === "low_block") score *= 1.15;      // counter team: take the shot
+        }
+
+        return score;
+    }
+
+    getDecision(player: Player, ctx: SimulationContext): AIDecision {
+        const { width, height } = ctx.config.fieldDimensions;
+        const goalX = player.team === "home" ? width : 0;
+        const target: Vec2 = { x: goalX, y: height / 2 };
+
+        const allPlayers = [...ctx.homeTeam.players, ...ctx.awayTeam.players];
+        const xG = calculateXG(
+            player,
+            ctx.ball,
+            ctx.config.fieldDimensions,
+            allPlayers.filter(p => p.team !== player.team),
+            allPlayers.find(p => p.position === "GK" && p.team !== player.team),
+        );
+
+        return { type: "shoot", target, xG };
+    }
+}
+
+// ── Pass ──────────────────────────────────────────────────
+
+export class PassAction implements AIAction {
+    name = "pass";
+
+    score(player: Player, ctx: SimulationContext): number {
+        if (!player.hasBall) return 0;
+
+        const teammates = (player.team === "home" ? ctx.homeTeam : ctx.awayTeam).players.filter(
+            p => p.id !== player.id &&
+                distVec(player.pos, p.pos) > 35 &&
+                distVec(player.pos, p.pos) < 230,
+        );
+
+        if (teammates.length === 0) return 0;
+
+        const pressure = ctx.spatialHash
+            .queryRadius(player.pos, 46)
+            .filter(p => p.team !== player.team).length;
+
+        // Base score increased by pressure
+        let score = 0.22 + pressure * 0.12;
+
+        // Bonus if at least one passing lane to a forward teammate is open
+        const openLaneToForward = this.hasOpenForwardLane(player, ctx);
+        if (openLaneToForward) score += 0.18;
+
+        // 4.1 Possession chain: in build_up, pass more readily; in final_third encourage combinations
+        const chain = player.team === "home"
+            ? ctx.tactical.homeChain
+            : ctx.tactical.awayChain;
+        if (chain) {
+            if (chain.phase === "build_up") score += 0.08;          // recycle, keep possession
+            if (chain.phase === "progression") score += 0.05;       // keep moving ball forward
+            if (chain.urgentMode) score += 0.12;                    // combinations near goal
+        }
+
+        // ── B.2 Attribute mappings — PassAction ───────────────
+        // vision → gates long passes (hard cutoff, soft penalty)
+        const openTargets = (player.team === "home" ? ctx.homeTeam : ctx.awayTeam).players.filter(
+            p => p.id !== player.id && distVec(player.pos, p.pos) > 35,
+        );
+        const hasFarTarget = openTargets.some(p => distVec(player.pos, p.pos) > 150);
+        if (hasFarTarget) {
+            if (player.attributes.vision < 55) score *= 0.2;        // nearly blind to long options
+            else if (player.attributes.vision < 70) score *= 0.55;  // limited long vision
+        }
+
+        // passing → overall passing quality confidence
+        const passingQuality = player.attributes.passing / 100;
+        score *= (0.55 + passingQuality * 0.45);
+
+        // composure → reduces panic-passing under pressure
+        const passPressure = ctx.spatialHash
+            .queryRadius(player.pos, 46)
+            .filter(p => p.team !== player.team).length;
+        const effectivePassComposure = computeEffectiveAttribute(player.fatigue, player.attributes.composure, "mental");
+        const panicFactor = 1 - (passPressure * (1 - effectivePassComposure / 100) * 0.12);
+        score *= Math.max(0.4, panicFactor);
+        // ───────────────────────────────────────────────────────
+
+        return score;
+    }
+
+    getDecision(player: Player, ctx: SimulationContext): AIDecision {
+        const teammates = (player.team === "home" ? ctx.homeTeam : ctx.awayTeam).players.filter(
+            p => p.id !== player.id,
+        );
+
+        const { width, height } = ctx.config.fieldDimensions;
+        const goalX = player.team === "home" ? width : 0;
+        const isHome = player.team === "home";
+
+        // Pull spatial data once for penalty calculations
+        const spaceData = ctx.tactical.spaceAwareness;
+        const pressureZones = spaceData?.pressureZones ?? [];
+        const defensiveLine = spaceData?.defensiveLine;
+
+        const candidates = teammates.filter(
+            p => p.id !== ctx.ball.lastTouchedBy || teammates.length <= 2,
+        );
+        let bestTarget = candidates[0] ?? teammates[0];
+        let bestScore = -Infinity;
+
+        for (const p of candidates.length ? candidates : teammates) {
+            const distance = distVec(player.pos, p.pos);
+            const isRestart = ctx.state.phase === "goalkick" || ctx.state.phase === "kickoff";
+            
+            // Relax distance constraints for restarts
+            const minDist = isRestart ? 10 : 35;
+            const maxDist = isRestart ? 500 : 230;
+            if (distance < minDist || distance > maxDist) continue;
+
+            const forward = isHome
+                ? (p.pos.x - player.pos.x) / width
+                : (player.pos.x - p.pos.x) / width;
+            const centrality = 1 - Math.abs(p.pos.y - height / 2) / (height / 2);
+            const supportDistance = 1 - Math.abs(distance - 120) / 120;
+            const goalProximity = 1 - distVec(p.pos, { x: goalX, y: height / 2 }) / width;
+            const returnPassPenalty = p.id === ctx.ball.lastTouchedBy ? -0.55 : 0;
+
+            // Passing lane quality bonus: prefer open lanes
+            const laneBonus = this.laneScore(player.id, p.id, ctx);
+
+            // Pressure zone penalty: penalise passing into opponent-dominated zones
+            const pressurePenalty = this.pressurePenalty(p.pos, pressureZones, player.team);
+
+            // Defensive line penalty: penalise through-balls behind the line
+            // when no one has made a run (risky if receiver will be offside)
+            const defLinePenalty = this.defensiveLinePenalty(p, isHome, ctx.tactical);
+
+            // 4.1 Chain-based forward bias: in progression/final_third/chance_creation,
+            // amplify the "forward" component so the AI attacks more directly
+            const chain = player.team === "home"
+                ? ctx.tactical.homeChain
+                : ctx.tactical.awayChain;
+            const chainForwardBonus = chain
+                ? (chain.phase === "final_third" || chain.phase === "chance_creation" ? 0.18
+                    : chain.phase === "progression" ? 0.10
+                        : chain.phase === "transition" ? 0.14
+                            : 0)
+                : 0;
+
+            // 3.2 Role profile: forwardPassBias scales the forward component
+            const roleProfile = getRoleProfile(ctx, player.id);
+            const roleBias = roleProfile ? roleProfile.forwardPassBias : 1.0;
+
+            let score =
+                forward * (0.35 + chainForwardBonus) * roleBias +
+                centrality * 0.12 +
+                supportDistance * 0.22 +
+                goalProximity * 0.18 +
+                laneBonus * 0.13 +
+                returnPassPenalty +
+                pressurePenalty +
+                defLinePenalty;
+
+            // Specialized Restart logic: prefer short if safe, else long
+            if (isRestart) {
+                const isShort = distance < 80;
+                const receiverPressure = ctx.spatialHash
+                    .queryRadius(p.pos, 50)
+                    .filter(opp => opp.team !== player.team).length;
+                
+                if (isShort) {
+                    // Bonus for short pass if receiver is open
+                    if (receiverPressure === 0) score += 0.50;
+                    else score -= 0.80; // Penalty if defenders are nearby
+                } else {
+                    // Long kick is a solid fallback
+                    score += 0.15;
+                }
+            }
+
+            if (score > bestScore) {
+                bestScore = score;
+                bestTarget = p;
+            }
+        }
+
+        return { type: "pass", target: bestTarget.pos, targetPlayerId: bestTarget.id };
+    }
+
+    /**
+     * Penalty for passing into a zone dominated by the opponent.
+     * Returns 0 to -0.35.
+     */
+    private pressurePenalty(
+        targetPos: Vec2,
+        pressureZones: import("./ai/SpaceAwareness").PressureZone[],
+        team: string,
+    ): number {
+        const opponentSide = team === "home" ? "away" : "home";
+        let maxPressure = 0;
+        for (const zone of pressureZones) {
+            if (zone.dominatedBy !== opponentSide) continue;
+            const d = distVec(targetPos, zone.pos);
+            if (d < 50) {
+                const proximity = 1 - d / 50;
+                maxPressure = Math.max(maxPressure, zone.intensity * proximity);
+            }
+        }
+        return -maxPressure * 0.35;
+    }
+
+    /**
+     * Penalty for playing a through-ball beyond the opponent defensive line
+     * when the receiver is behind it (likely offside / very risky).
+     * Returns 0 to -0.25.
+     */
+    private defensiveLinePenalty(
+        receiver: Player,
+        isHome: boolean,
+        tactical: import("../context").TacticalData,
+    ): number {
+        // Penalty for playing a through-ball beyond the opponent defensive line
+        // when the receiver is behind it (likely offside / very risky).
+        const line = isHome ? tactical.homeDefensiveLine : tactical.awayDefensiveLine;
+        if (isHome && receiver.pos.x > line - 10) return -0.40; // High penalty near/past the line
+        if (!isHome && receiver.pos.x < line + 10) return -0.40;
+        return 0;
+    }
+
+    /** Returns true if there's at least one open lane to a teammate ahead of the ball */
+    private hasOpenForwardLane(player: Player, ctx: SimulationContext): boolean {
+        if (!ctx.tactical.passingLanes.length) return false;
+        const isHome = player.team === "home";
+        const allPlayers = [...ctx.homeTeam.players, ...ctx.awayTeam.players];
+
+        return ctx.tactical.passingLanes.some(lane => {
+            if (!lane.open || lane.from !== player.id) return false;
+            const target = allPlayers.find(p => p.id === lane.to);
+            if (!target) return false;
+            // "Forward" means closer to opponent goal
+            return isHome
+                ? target.pos.x > player.pos.x
+                : target.pos.x < player.pos.x;
+        });
+    }
+
+    /** 0 = blocked, 0.5 = unknown, 1 = open lane */
+    private laneScore(fromId: string, toId: string, ctx: SimulationContext): number {
+        const lane = ctx.tactical.passingLanes.find(
+            l => l.from === fromId && l.to === toId,
+        );
+        if (!lane) return 0.5;
+        return lane.open ? 1.0 : 0.0;
+    }
+}
+
+// ── Dribble ───────────────────────────────────────────────
+
+export class DribbleAction implements AIAction {
+    name = "dribble";
+
+    score(player: Player, ctx: SimulationContext): number {
+        if (!player.hasBall) return 0;
+
+        const pressure = ctx.spatialHash
+            .queryRadius(player.pos, 38)
+            .filter(p => p.team !== player.team).length;
+
+        const tacticalState = player.team === "home"
+            ? ctx.tactical.homeState
+            : ctx.tactical.awayState;
+
+        // In transition attack, dribbling into space is very desirable
+        if (tacticalState.phase === "transition_attack") {
+            // 3.3 Gegenpress / direct play amplify counter dribbles
+            const inst2 = getTeamInstructions(ctx, player.team);
+            const style = inst2?.style;
+            const counterBoost = (style === "gegenpress" || style === "direct_play") ? 1.15 : 1.0;
+            return pressure === 0 ? 0.52 * counterBoost : 0.24;
+        }
+
+        // 3.2 Role profile: inverted wingers and WB_Attacking dribble more aggressively
+        const rp = getRoleProfile(ctx, player.id);
+        if (rp && rp.forwardRunBias > 0.7 && pressure === 0) {
+            return 0.35; // they carry the ball forward when space allows
+        }
+
+        // Under pressure: dribbling is risky, prefer pass
+        // No pressure: comfortable carry forward
+        // ── B.2 Attribute mappings — DribbleAction ──────────
+        // dribbling + agility → core dribble capability
+        const dribbleCap = (player.attributes.dribbling + player.attributes.agility) / 200;
+        const baseScore = pressure > 0 ? 0.18 : 0.36;
+        let dribScore = baseScore * (0.4 + dribbleCap * 0.6);
+
+        // flair → occasional brave carry regardless of pressure
+        if (player.attributes.flair > 70 && ctx.rng.nextFloat(0, 1) < 0.12) {
+            dribScore *= 1.25;
+        }
+
+        // pace → high-pace players more confident carrying into space
+        if (pressure === 0) {
+            dribScore *= (0.8 + player.attributes.pace / 100 * 0.2);
+        }
+        // ───────────────────────────────────────────────────────
+        return dribScore;
+    }
+
+    getDecision(player: Player, ctx: SimulationContext): AIDecision {
+        const { width, height } = ctx.config.fieldDimensions;
+        const direction = player.team === "home" ? 1 : -1;
+
+        const tacticalState = player.team === "home"
+            ? ctx.tactical.homeState
+            : ctx.tactical.awayState;
+
+        // In transition: sprint further ahead
+        const runDepth = tacticalState.phase === "transition_attack" ? 80 : 60;
+
+        const targetX = Math.max(24, Math.min(width - 24, player.pos.x + direction * runDepth));
+        const targetY = Math.max(
+            24,
+            Math.min(height - 24, player.pos.y + ctx.rng.nextFloat(-28, 28)),
+        );
+
+        return { type: "dribble", target: { x: targetX, y: targetY } };
+    }
+}
+
+// ── Hold ──────────────────────────────────────────────────
+
+/**
+ * HoldAction: player retains the ball and shields it.
+ * Useful when under light pressure with no good pass/shot option,
+ * or when teammates are making runs (in_possession phase with low urgency).
+ */
+export class HoldAction implements AIAction {
+    name = "hold";
+
+    score(player: Player, ctx: SimulationContext): number {
+        if (!player.hasBall) return 0;
+
+        const pressure = ctx.spatialHash
+            .queryRadius(player.pos, 46)
+            .filter(p => p.team !== player.team).length;
+
+        // Only hold when under 1-2 defenders — more means too risky
+        if (pressure === 0 || pressure > 2) return 0;
+
+        const tacticalState = player.team === "home"
+            ? ctx.tactical.homeState
+            : ctx.tactical.awayState;
+
+        // Hold makes most sense when team is building up possession
+        if (tacticalState.phase !== "in_possession") return 0;
+
+        // Player must have decent composure and strength to shield effectively
+        const shieldAbility =
+            (player.attributes.composure * 0.6 + player.attributes.strength * 0.4) / 100;
+
+        // Base score: shielding ability minus pressure intensity
+        return Math.max(0, shieldAbility * 0.35 - tacticalState.pressureIntensity * 0.15);
+    }
+
+    getDecision(player: Player, ctx: SimulationContext): AIDecision {
+        const { width, height } = ctx.config.fieldDimensions;
+        // Shield: drift slightly sideways to body-block nearest defender
+        const defenders = ctx.spatialHash
+            .queryRadius(player.pos, 46)
+            .filter(p => p.team !== player.team);
+
+        if (defenders.length > 0) {
+            const nearest = defenders[0];
+            // Move slightly away from the defender while staying on field
+            const awayX = player.pos.x + (player.pos.x - nearest.pos.x) * 0.2;
+            const awayY = player.pos.y + (player.pos.y - nearest.pos.y) * 0.2;
+            return {
+                type: "move",
+                target: {
+                    x: Math.max(20, Math.min(width - 20, awayX)),
+                    y: Math.max(20, Math.min(height - 20, awayY)),
+                },
+            };
+        }
+
+        // No defenders close — just hold position
+        return { type: "move", target: { ...player.pos } };
+    }
+}
+
+// ── Registry & Orchestrator ───────────────────────────────
+
+export class UtilityAI {
+    private static actions: AIAction[] = [
+        new ShootAction(),
+        new PassAction(),
+        new DribbleAction(),
+        new HoldAction(),
+    ];
+
+    static getBestDecision(player: Player, ctx: SimulationContext): AIDecision | null {
+        const SET_PIECES = new Set(["throwin", "goalkick", "corner", "freekick", "kickoff", "offside"]);
+        const isSetPiece = SET_PIECES.has(ctx.state.phase) && player.id === ctx.state.restartTakerId;
+
+        let bestAction: AIAction | null = null;
+        let highestScore = -1;
+
+        for (const action of this.actions) {
+            let score = action.score(player, ctx);
+            
+            // Give PassAction a huge boost during set-pieces to prefer it over dribbling
+            if (isSetPiece && action.name === "pass" && score > 0) {
+                score += 2.0;
+            }
+
+            if (score > highestScore && score > 0) {
+                highestScore = score;
+                bestAction = action;
+            }
+        }
+
+        return bestAction ? bestAction.getDecision(player, ctx) : null;
+    }
+
+    /** Register a custom action — allows external extension without modifying core */
+    static registerAction(action: AIAction): void {
+        this.actions.push(action);
+    }
+}

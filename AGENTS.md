@@ -12,6 +12,7 @@ This file contains key information about the **Football Manager (FM)** project t
 - **Database:** Dexie.js (IndexedDB) — the primary storage for game data (clubs, players, matches).
 - **Routing:** React Router 7.
 - **Data Validation:** Zod (data schemas in `src/schemas`).
+- **Strict Typing:** Avoid using `any` at all costs. Always define proper interfaces or types for new code.
 
 ## 📂 Project Structure
 - `src/modules/` — core functional blocks of the game (tactics, transfers, squad, etc.). Each module is isolated.
@@ -28,3 +29,22 @@ This file contains key information about the **Football Manager (FM)** project t
 
 ---
 *Update this file when there are significant changes to the architecture or stack.*
+
+## ⚽ Simulation Engine Architecture (Modular & Stateless)
+The match engine has been refactored into a modular, command-driven architecture located in `src/modules/simulate/pages/simulate/engine/`.
+
+### Core Layers:
+1.  **SimulationWorld (`core/`):** Authority of the current state (players, ball, match metadata).
+2.  **Command Buffer (`core/Command.ts`):** Systems do not mutate the world directly. Instead, they emit `Command` objects (intents).
+3.  **CommandResolver (`core/CommandResolver.ts`):** The only place where state mutation happens, ensuring determinism.
+4.  **SimulationPipeline (`pipeline.ts`):** Orchestrates the execution of multiple `SimulationSystem` instances.
+5.  **EventStore (`core/EventStore.ts`):** Records all authoritative match events for replays and sourcing.
+
+### Simulators (`simulation/`):
+- **MatchSimulator:** Standard real-time loop.
+- **FastSimulator:** Instant match calculation.
+- **HybridSimulator:** Switches between Fast and Match modes during "highlights".
+- **ReplaySimulator:** Reconstructs match state from snapshots/events.
+
+### Systems (`systems/`):
+Pure functional modules (`Decision`, `Movement`, `Physics`, etc.) that process the context and return a list of commands.

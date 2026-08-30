@@ -1,22 +1,21 @@
-import type { Ball, Player, Vec2, FieldDimensions } from "./types.ts";
+import type { Ball, Player, Vec2, FieldDimensions, TeamSide } from "./types.ts";
+import { BALANCE } from "./balance";
 
 // ── Constants ─────────────────────────────────────────────
 export const PHYSICS = {
-    BALL_FRICTION: 0.985,        // per-frame velocity decay
-    BALL_AIR_FRICTION: 0.995,    // less friction in air
-    BALL_BOUNCE_DECAY: 0.55,     // energy lost on bounce
-    BALL_GRAVITY: 0.18,          // downward acceleration
-    BALL_MIN_SPEED: 0.05,        // stop threshold
+    BALL_FRICTION: 0.985,
+    BALL_AIR_FRICTION: 0.995,
+    BALL_BOUNCE_DECAY: 0.55,
+    BALL_GRAVITY: 0.18,
+    BALL_MIN_SPEED: 0.05,
     BALL_RADIUS: 6,
     PLAYER_RADIUS: 9,
-    PLAYER_MAX_SPEED_BASE: 4.2,  // pixels/frame at speed=100
-    PLAYER_ACCELERATION: 0.22,
-    PLAYER_DRIBBLE_SPEED_FACTOR: 0.72,
-    PLAYER_FRICTION: 0.82,       // player decel when no input
-    CONTROL_RANGE: 18,           // px: player can pick up ball
-    DRIBBLE_DISTANCE: 14,        // ball offset from player
-    KICK_MIN_FORCE: 4,
-    KICK_MAX_FORCE: 18,
+    PLAYER_MAX_SPEED_BASE: BALANCE.PLAYER_MAX_SPEED_BASE,
+    PLAYER_ACCELERATION: BALANCE.PLAYER_ACCELERATION,
+    PLAYER_DRIBBLE_SPEED_FACTOR: BALANCE.PLAYER_DRIBBLE_SPEED_FACTOR,
+    PLAYER_FRICTION: BALANCE.PLAYER_FRICTION,
+    CONTROL_RANGE: BALANCE.CONTROL_RANGE,
+    DRIBBLE_DISTANCE: 12,
 } as const;
 
 // ── Vec2 helpers ──────────────────────────────────────────
@@ -42,25 +41,14 @@ export function clampVec(v: Vec2, maxLen: number): Vec2 {
     return v;
 }
 
-// ── RNG ───────────────────────────────────────────────────
-let _seed = Date.now();
-export function rng(): number {
-    _seed = (_seed * 1664525 + 1013904223) & 0xffffffff;
-    return ((_seed >>> 0) / 0xffffffff);
-}
-export function rngRange(min: number, max: number): number {
-    return min + rng() * (max - min);
-}
-export function rngInt(min: number, max: number): number {
-    return Math.floor(rngRange(min, max + 1));
-}
-export function rngBool(probability = 0.5): boolean {
-    return rng() < probability;
-}
 
 // ── Ball Physics ──────────────────────────────────────────
 export class BallPhysics {
-    constructor(private field: FieldDimensions) {}
+    private field: FieldDimensions;
+
+    constructor(field: FieldDimensions) {
+        this.field = field;
+    }
 
     update(ball: Ball): void {
         // If owned, skip free physics
@@ -113,10 +101,6 @@ export class BallPhysics {
 
         // Goal line handling — goals scored in MatchEngine
         // Clamp x loosely so ball doesn't escape far
-        const goalHalf = this.field.goalWidth / 2;
-        const goalLeft = fh / 2 - goalHalf;
-        const goalRight = fh / 2 + goalHalf;
-
         if (ball.pos.x < -this.field.goalDepth) {
             ball.pos.x = -this.field.goalDepth;
             ball.vel.x = Math.abs(ball.vel.x) * 0.3;
@@ -143,9 +127,9 @@ export class BallPhysics {
     }
 
     /** Add random deviation to pass/shot (inaccuracy) */
-    addInaccuracy(direction: Vec2, inaccuracyAngle: number): Vec2 {
+    addInaccuracy(direction: Vec2, inaccuracyAngle: number, rng: { nextFloat: (min: number, max: number) => number }): Vec2 {
         const angle = Math.atan2(direction.y, direction.x);
-        const deviation = rngRange(-inaccuracyAngle, inaccuracyAngle);
+        const deviation = rng.nextFloat(-inaccuracyAngle, inaccuracyAngle);
         const newAngle = angle + deviation;
         return { x: Math.cos(newAngle), y: Math.sin(newAngle) };
     }
@@ -177,8 +161,8 @@ export class BallPhysics {
 // ── Player Movement Physics ───────────────────────────────
 export class PlayerPhysics {
     getMaxSpeed(player: Player): number {
-        const base = PHYSICS.PLAYER_MAX_SPEED_BASE;
-        const speedFactor = 0.6 + (player.attributes.speed / 100) * 0.4;
+        const base = BALANCE.PLAYER_MAX_SPEED_BASE;
+        const speedFactor = 0.6 + (player.attributes.pace / 100) * 0.4;
         const fatigueFactor = 1 - player.fatigue * 0.35;
         return base * speedFactor * fatigueFactor;
     }
@@ -189,16 +173,16 @@ export class PlayerPhysics {
         const dist = lenVec(diff);
 
         if (dist < 1.5) {
-            player.vel = scaleVec(player.vel, PHYSICS.PLAYER_FRICTION);
+            player.vel = scaleVec(player.vel, BALANCE.PLAYER_FRICTION);
             if (lenVec(player.vel) < 0.1) player.vel = { x: 0, y: 0 };
             return;
         }
 
-        const maxSpd = this.getMaxSpeed(player) * (player.hasBall ? PHYSICS.PLAYER_DRIBBLE_SPEED_FACTOR : 1);
+        const maxSpd = this.getMaxSpeed(player) * (player.hasBall ? BALANCE.PLAYER_DRIBBLE_SPEED_FACTOR : 1);
         const dir = normVec(diff);
         const desiredVel = scaleVec(dir, maxSpd);
         // Smooth acceleration
-        const acc = PHYSICS.PLAYER_ACCELERATION;
+        const acc = BALANCE.PLAYER_ACCELERATION;
         player.vel = {
             x: player.vel.x + (desiredVel.x - player.vel.x) * acc,
             y: player.vel.y + (desiredVel.y - player.vel.y) * acc,
@@ -209,7 +193,7 @@ export class PlayerPhysics {
 
     /** Update fatigue over time */
     updateFatigue(player: Player): void {
-        const effort = lenVec(player.vel) / PHYSICS.PLAYER_MAX_SPEED_BASE;
+        const effort = lenVec(player.vel) / BALANCE.PLAYER_MAX_SPEED_BASE;
         const staminaFactor = 0.3 + (player.attributes.stamina / 100) * 0.7;
         const fatigueRate = 0.0001 * effort / staminaFactor;
         const recoveryRate = 0.00005 * staminaFactor;
