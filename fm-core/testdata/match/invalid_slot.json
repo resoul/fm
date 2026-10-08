@@ -1,0 +1,853 @@
+{
+  "away_team": {
+    "bench": [
+      "a_12",
+      "a_13",
+      "a_14",
+      "a_15",
+      "a_16"
+    ],
+    "id": "away",
+    "name": "Away FC",
+    "players": [
+      {
+        "attributes": {
+          "acceleration": 12,
+          "decisions": 14,
+          "dribbling": 10,
+          "first_touch": 12,
+          "handling": 14,
+          "pace": 12,
+          "passing": 12,
+          "positioning": 14,
+          "reflexes": 15,
+          "shooting": 6,
+          "stamina": 14,
+          "tackling": 10
+        },
+        "id": "a_1",
+        "name": "A. Keeper",
+        "role": "GK",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 90
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 13,
+          "decisions": 13,
+          "dribbling": 12,
+          "first_touch": 13,
+          "pace": 13,
+          "passing": 13,
+          "positioning": 13,
+          "shooting": 8,
+          "stamina": 14,
+          "tackling": 13
+        },
+        "id": "a_2",
+        "name": "A. LeftBack",
+        "role": "LB",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 90
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 12,
+          "decisions": 13,
+          "dribbling": 10,
+          "first_touch": 12,
+          "pace": 12,
+          "passing": 12,
+          "positioning": 14,
+          "shooting": 7,
+          "stamina": 14,
+          "tackling": 14
+        },
+        "id": "a_3",
+        "name": "A. CenterBack Left",
+        "role": "CB",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 90
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 12,
+          "decisions": 13,
+          "dribbling": 10,
+          "first_touch": 12,
+          "pace": 12,
+          "passing": 12,
+          "positioning": 14,
+          "shooting": 7,
+          "stamina": 14,
+          "tackling": 14
+        },
+        "id": "a_4",
+        "name": "A. CenterBack Right",
+        "role": "CB",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 90
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 13,
+          "decisions": 13,
+          "dribbling": 12,
+          "first_touch": 13,
+          "pace": 13,
+          "passing": 13,
+          "positioning": 13,
+          "shooting": 8,
+          "stamina": 14,
+          "tackling": 13
+        },
+        "id": "a_5",
+        "name": "A. RightBack",
+        "role": "RB",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 90
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 14,
+          "decisions": 13,
+          "dribbling": 13,
+          "first_touch": 13,
+          "pace": 14,
+          "passing": 13,
+          "positioning": 13,
+          "shooting": 11,
+          "stamina": 14,
+          "tackling": 10
+        },
+        "id": "a_6",
+        "name": "A. LeftMid",
+        "role": "LM",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 90
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 13,
+          "decisions": 14,
+          "dribbling": 13,
+          "first_touch": 14,
+          "pace": 13,
+          "passing": 14,
+          "positioning": 14,
+          "shooting": 11,
+          "stamina": 15,
+          "tackling": 12
+        },
+        "id": "a_7",
+        "name": "A. CenterMid Left",
+        "role": "CM",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 90
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 13,
+          "decisions": 14,
+          "dribbling": 13,
+          "first_touch": 14,
+          "pace": 13,
+          "passing": 14,
+          "positioning": 14,
+          "shooting": 11,
+          "stamina": 15,
+          "tackling": 12
+        },
+        "id": "a_8",
+        "name": "A. CenterMid Right",
+        "role": "CM",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 90
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 14,
+          "decisions": 13,
+          "dribbling": 13,
+          "first_touch": 13,
+          "pace": 14,
+          "passing": 13,
+          "positioning": 13,
+          "shooting": 11,
+          "stamina": 14,
+          "tackling": 10
+        },
+        "id": "a_9",
+        "name": "A. RightMid",
+        "role": "RM",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 90
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 14,
+          "decisions": 13,
+          "dribbling": 13,
+          "first_touch": 13,
+          "pace": 14,
+          "passing": 12,
+          "positioning": 14,
+          "shooting": 14,
+          "stamina": 14,
+          "tackling": 8
+        },
+        "id": "a_10",
+        "name": "A. Striker Left",
+        "role": "ST",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 90
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 14,
+          "decisions": 13,
+          "dribbling": 13,
+          "first_touch": 13,
+          "pace": 14,
+          "passing": 12,
+          "positioning": 14,
+          "shooting": 14,
+          "stamina": 14,
+          "tackling": 8
+        },
+        "id": "a_11",
+        "name": "A. Striker Right",
+        "role": "ST",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 90
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 11,
+          "decisions": 13,
+          "dribbling": 9,
+          "first_touch": 11,
+          "handling": 13,
+          "pace": 11,
+          "passing": 11,
+          "positioning": 13,
+          "reflexes": 14,
+          "shooting": 5,
+          "stamina": 13,
+          "tackling": 9
+        },
+        "id": "a_12",
+        "name": "A. Sub Keeper",
+        "role": "GK",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 85
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 12,
+          "decisions": 12,
+          "dribbling": 10,
+          "first_touch": 12,
+          "pace": 12,
+          "passing": 11,
+          "positioning": 13,
+          "shooting": 6,
+          "stamina": 13,
+          "tackling": 13
+        },
+        "id": "a_13",
+        "name": "A. Sub Defender",
+        "role": "CB",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 85
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 12,
+          "decisions": 13,
+          "dribbling": 12,
+          "first_touch": 13,
+          "pace": 12,
+          "passing": 13,
+          "positioning": 13,
+          "shooting": 10,
+          "stamina": 14,
+          "tackling": 11
+        },
+        "id": "a_14",
+        "name": "A. Sub Midfielder",
+        "role": "CM",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 85
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 13,
+          "decisions": 12,
+          "dribbling": 13,
+          "first_touch": 13,
+          "pace": 13,
+          "passing": 12,
+          "positioning": 12,
+          "shooting": 11,
+          "stamina": 13,
+          "tackling": 8
+        },
+        "id": "a_15",
+        "name": "A. Sub Winger",
+        "role": "LW",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 85
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 13,
+          "decisions": 12,
+          "dribbling": 12,
+          "first_touch": 12,
+          "pace": 13,
+          "passing": 11,
+          "positioning": 13,
+          "shooting": 13,
+          "stamina": 13,
+          "tackling": 7
+        },
+        "id": "a_16",
+        "name": "A. Sub Striker",
+        "role": "ST",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 85
+        }
+      }
+    ],
+    "starting_lineup": [
+      {
+        "player_id": "a_1",
+        "slot": "GK"
+      },
+      {
+        "player_id": "a_2",
+        "slot": "LB"
+      },
+      {
+        "player_id": "a_3",
+        "slot": "CB_L"
+      },
+      {
+        "player_id": "a_4",
+        "slot": "CB_R"
+      },
+      {
+        "player_id": "a_5",
+        "slot": "RB"
+      },
+      {
+        "player_id": "a_6",
+        "slot": "LM"
+      },
+      {
+        "player_id": "a_7",
+        "slot": "CM_L"
+      },
+      {
+        "player_id": "a_8",
+        "slot": "CM_R"
+      },
+      {
+        "player_id": "a_9",
+        "slot": "RM"
+      },
+      {
+        "player_id": "a_10",
+        "slot": "ST_L"
+      },
+      {
+        "player_id": "a_11",
+        "slot": "ST_R"
+      }
+    ],
+    "tactics": {
+      "formation": "4-4-2",
+      "line_height": 0.5,
+      "pressing": 0.5,
+      "tempo": 0.5,
+      "width": 0.5
+    }
+  },
+  "home_team": {
+    "bench": [
+      "h_12",
+      "h_13",
+      "h_14",
+      "h_15",
+      "h_16"
+    ],
+    "id": "home",
+    "name": "Home FC",
+    "players": [
+      {
+        "attributes": {
+          "acceleration": 12,
+          "decisions": 14,
+          "dribbling": 10,
+          "first_touch": 12,
+          "handling": 14,
+          "pace": 12,
+          "passing": 12,
+          "positioning": 14,
+          "reflexes": 15,
+          "shooting": 6,
+          "stamina": 14,
+          "tackling": 10
+        },
+        "id": "h_1",
+        "name": "H. Keeper",
+        "role": "GK",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 90
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 13,
+          "decisions": 13,
+          "dribbling": 12,
+          "first_touch": 13,
+          "pace": 13,
+          "passing": 13,
+          "positioning": 13,
+          "shooting": 8,
+          "stamina": 14,
+          "tackling": 13
+        },
+        "id": "h_2",
+        "name": "H. LeftBack",
+        "role": "LB",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 90
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 12,
+          "decisions": 13,
+          "dribbling": 10,
+          "first_touch": 12,
+          "pace": 12,
+          "passing": 12,
+          "positioning": 14,
+          "shooting": 7,
+          "stamina": 14,
+          "tackling": 14
+        },
+        "id": "h_3",
+        "name": "H. CenterBack Left",
+        "role": "CB",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 90
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 12,
+          "decisions": 13,
+          "dribbling": 10,
+          "first_touch": 12,
+          "pace": 12,
+          "passing": 12,
+          "positioning": 14,
+          "shooting": 7,
+          "stamina": 14,
+          "tackling": 14
+        },
+        "id": "h_4",
+        "name": "H. CenterBack Right",
+        "role": "CB",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 90
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 13,
+          "decisions": 13,
+          "dribbling": 12,
+          "first_touch": 13,
+          "pace": 13,
+          "passing": 13,
+          "positioning": 13,
+          "shooting": 8,
+          "stamina": 14,
+          "tackling": 13
+        },
+        "id": "h_5",
+        "name": "H. RightBack",
+        "role": "RB",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 90
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 14,
+          "decisions": 13,
+          "dribbling": 13,
+          "first_touch": 13,
+          "pace": 14,
+          "passing": 13,
+          "positioning": 13,
+          "shooting": 11,
+          "stamina": 14,
+          "tackling": 10
+        },
+        "id": "h_6",
+        "name": "H. LeftMid",
+        "role": "LM",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 90
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 13,
+          "decisions": 14,
+          "dribbling": 13,
+          "first_touch": 14,
+          "pace": 13,
+          "passing": 14,
+          "positioning": 14,
+          "shooting": 11,
+          "stamina": 15,
+          "tackling": 12
+        },
+        "id": "h_7",
+        "name": "H. CenterMid Left",
+        "role": "CM",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 90
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 13,
+          "decisions": 14,
+          "dribbling": 13,
+          "first_touch": 14,
+          "pace": 13,
+          "passing": 14,
+          "positioning": 14,
+          "shooting": 11,
+          "stamina": 15,
+          "tackling": 12
+        },
+        "id": "h_8",
+        "name": "H. CenterMid Right",
+        "role": "CM",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 90
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 14,
+          "decisions": 13,
+          "dribbling": 13,
+          "first_touch": 13,
+          "pace": 14,
+          "passing": 13,
+          "positioning": 13,
+          "shooting": 11,
+          "stamina": 14,
+          "tackling": 10
+        },
+        "id": "h_9",
+        "name": "H. RightMid",
+        "role": "RM",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 90
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 14,
+          "decisions": 13,
+          "dribbling": 13,
+          "first_touch": 13,
+          "pace": 14,
+          "passing": 12,
+          "positioning": 14,
+          "shooting": 14,
+          "stamina": 14,
+          "tackling": 8
+        },
+        "id": "h_10",
+        "name": "H. Striker Left",
+        "role": "ST",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 90
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 14,
+          "decisions": 13,
+          "dribbling": 13,
+          "first_touch": 13,
+          "pace": 14,
+          "passing": 12,
+          "positioning": 14,
+          "shooting": 14,
+          "stamina": 14,
+          "tackling": 8
+        },
+        "id": "h_11",
+        "name": "H. Striker Right",
+        "role": "ST",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 90
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 11,
+          "decisions": 13,
+          "dribbling": 9,
+          "first_touch": 11,
+          "handling": 13,
+          "pace": 11,
+          "passing": 11,
+          "positioning": 13,
+          "reflexes": 14,
+          "shooting": 5,
+          "stamina": 13,
+          "tackling": 9
+        },
+        "id": "h_12",
+        "name": "H. Sub Keeper",
+        "role": "GK",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 85
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 12,
+          "decisions": 12,
+          "dribbling": 10,
+          "first_touch": 12,
+          "pace": 12,
+          "passing": 11,
+          "positioning": 13,
+          "shooting": 6,
+          "stamina": 13,
+          "tackling": 13
+        },
+        "id": "h_13",
+        "name": "H. Sub Defender",
+        "role": "CB",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 85
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 12,
+          "decisions": 13,
+          "dribbling": 12,
+          "first_touch": 13,
+          "pace": 12,
+          "passing": 13,
+          "positioning": 13,
+          "shooting": 10,
+          "stamina": 14,
+          "tackling": 11
+        },
+        "id": "h_14",
+        "name": "H. Sub Midfielder",
+        "role": "CM",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 85
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 13,
+          "decisions": 12,
+          "dribbling": 13,
+          "first_touch": 13,
+          "pace": 13,
+          "passing": 12,
+          "positioning": 12,
+          "shooting": 11,
+          "stamina": 13,
+          "tackling": 8
+        },
+        "id": "h_15",
+        "name": "H. Sub Winger",
+        "role": "LW",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 85
+        }
+      },
+      {
+        "attributes": {
+          "acceleration": 13,
+          "decisions": 12,
+          "dribbling": 12,
+          "first_touch": 12,
+          "pace": 13,
+          "passing": 11,
+          "positioning": 13,
+          "shooting": 13,
+          "stamina": 13,
+          "tackling": 7
+        },
+        "id": "h_16",
+        "name": "H. Sub Striker",
+        "role": "ST",
+        "starting_condition": {
+          "fitness": 100,
+          "initial_fatigue": 0,
+          "sharpness": 85
+        }
+      }
+    ],
+    "starting_lineup": [
+      {
+        "player_id": "h_1",
+        "slot": "GK"
+      },
+      {
+        "player_id": "h_2",
+        "slot": "QUARTERBACK"
+      },
+      {
+        "player_id": "h_3",
+        "slot": "CB_L"
+      },
+      {
+        "player_id": "h_4",
+        "slot": "CB_R"
+      },
+      {
+        "player_id": "h_5",
+        "slot": "RB"
+      },
+      {
+        "player_id": "h_6",
+        "slot": "LM"
+      },
+      {
+        "player_id": "h_7",
+        "slot": "CM_L"
+      },
+      {
+        "player_id": "h_8",
+        "slot": "CM_R"
+      },
+      {
+        "player_id": "h_9",
+        "slot": "RM"
+      },
+      {
+        "player_id": "h_10",
+        "slot": "ST_L"
+      },
+      {
+        "player_id": "h_11",
+        "slot": "ST_R"
+      }
+    ],
+    "tactics": {
+      "formation": "4-4-2",
+      "line_height": 0.5,
+      "pressing": 0.5,
+      "tempo": 0.5,
+      "width": 0.5
+    }
+  },
+  "match_id": "match-equal",
+  "pitch": {
+    "length": 105,
+    "width": 68
+  },
+  "rules_profile": "profile_a",
+  "schema_version": "v1"
+}

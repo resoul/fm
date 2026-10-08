@@ -1,0 +1,36 @@
+{
+  "schema_version": "v1",
+  "profile_name": "profile_a",
+  "pitch": {
+    "width": 68.0,
+    "length": 105.0,
+    "goal_width": 7.32,
+    "goal_depth": 2.0,
+    "goal_height": 2.44,
+    "ball_radius": 0.11,
+    "ball_mass": 0.43
+  },
+  "timing": {
+    "step_ms": 50,
+    "half_duration_ms": 2700000,
+    "added_time_mode": "none",
+    "fixed_added_time_half1_ms": 0,
+    "fixed_added_time_half2_ms": 0,
+    "max_ticks_guard": 120000
+  },
+  "rules": {
+    "substitutions_limit": 5,
+    "substitution_windows": 3,
+    "offside_enabled": false,
+    "fouls_enabled": false,
+    "cards_enabled": false,
+    "injuries_enabled": false
+  },
+  "physics": {
+    "player_min_speed_mps": 5.0,
+    "player_max_speed_mps": 10.0,
+    "player_min_accel_mps2": 2.0,
+    "player_max_accel_mps2": 6.0,
+    "ball_max_speed_mps": 35.0
+  }
+}

@@ -1,0 +1,1210 @@
+{
+  "schema_version": "v2",
+  "match_id": "fc_bayern_vs_inter_miami",
+  "rules_profile": "profile_a",
+  "pitch": {
+    "width": 68.0,
+    "length": 105.0
+  },
+  "home_team": {
+    "id": "fc_bayern",
+    "name": "FC Bayern",
+    "tactics": {
+      "formation": "4-4-2",
+      "width": 0.5,
+      "line_height": 0.5,
+      "tempo": 0.5,
+      "pressing": 0.5
+    },
+    "players": [
+      {
+        "id": "fc_bayern_8718372",
+        "name": "Manuel Neuer",
+        "role": "GK",
+        "attributes": {
+          "pace": 8,
+          "acceleration": 8,
+          "stamina": 10,
+          "passing": 15,
+          "first_touch": 14,
+          "dribbling": 10,
+          "tackling": 10,
+          "positioning": 14,
+          "decisions": 13,
+          "finishing": 10,
+          "long_shots": 10,
+          "crossing": 10,
+          "heading": 10,
+          "jumping_reach": 16,
+          "left": 10,
+          "right": 20,
+          "corners": 10,
+          "free_kick_taking": 10,
+          "penalty_taking": 10,
+          "handling": 14,
+          "reflexes": 12,
+          "one_on_ones": 16,
+          "aerial_reach": 14,
+          "command_of_area": 12,
+          "kicking": 16,
+          "throwing": 17
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_bayern_16182894",
+        "name": "Dayot Upamecano",
+        "role": "CB",
+        "attributes": {
+          "pace": 16,
+          "acceleration": 15,
+          "stamina": 13,
+          "passing": 16,
+          "first_touch": 13,
+          "dribbling": 12,
+          "tackling": 17,
+          "positioning": 16,
+          "decisions": 14,
+          "finishing": 6,
+          "long_shots": 8,
+          "crossing": 8,
+          "heading": 14,
+          "jumping_reach": 16,
+          "left": 10,
+          "right": 20,
+          "corners": 3,
+          "free_kick_taking": 3,
+          "penalty_taking": 10
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_bayern_91119700",
+        "name": "Jonathan Tah",
+        "role": "CB",
+        "attributes": {
+          "pace": 16,
+          "acceleration": 12,
+          "stamina": 13,
+          "passing": 14,
+          "first_touch": 12,
+          "dribbling": 10,
+          "tackling": 13,
+          "positioning": 16,
+          "decisions": 14,
+          "finishing": 6,
+          "long_shots": 8,
+          "crossing": 7,
+          "heading": 16,
+          "jumping_reach": 17,
+          "left": 10,
+          "right": 20,
+          "corners": 4,
+          "free_kick_taking": 4,
+          "penalty_taking": 8
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_bayern_20041862",
+        "name": "Alphonso Davies",
+        "role": "LB",
+        "attributes": {
+          "pace": 19,
+          "acceleration": 19,
+          "stamina": 15,
+          "passing": 12,
+          "first_touch": 12,
+          "dribbling": 16,
+          "tackling": 13,
+          "positioning": 10,
+          "decisions": 12,
+          "finishing": 8,
+          "long_shots": 10,
+          "crossing": 11,
+          "heading": 9,
+          "jumping_reach": 13,
+          "left": 10,
+          "right": 20,
+          "corners": 11,
+          "free_kick_taking": 11,
+          "penalty_taking": 12
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_bayern_92039023",
+        "name": "Joshua Kimmich",
+        "role": "RB",
+        "allowed_positions": [
+          "DM",
+          "CM"
+        ],
+        "attributes": {
+          "pace": 13,
+          "acceleration": 12,
+          "stamina": 18,
+          "passing": 18,
+          "first_touch": 15,
+          "dribbling": 13,
+          "tackling": 13,
+          "positioning": 13,
+          "decisions": 16,
+          "finishing": 11,
+          "long_shots": 14,
+          "crossing": 18,
+          "heading": 12,
+          "jumping_reach": 11,
+          "left": 10,
+          "right": 20,
+          "corners": 16,
+          "free_kick_taking": 15,
+          "penalty_taking": 15
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_bayern_16147659",
+        "name": "Konrad Laimer",
+        "role": "CM",
+        "allowed_positions": [
+          "RB",
+          "DM"
+        ],
+        "attributes": {
+          "pace": 15,
+          "acceleration": 14,
+          "stamina": 17,
+          "passing": 13,
+          "first_touch": 12,
+          "dribbling": 12,
+          "tackling": 17,
+          "positioning": 12,
+          "decisions": 13,
+          "finishing": 8,
+          "long_shots": 12,
+          "crossing": 12,
+          "heading": 8,
+          "jumping_reach": 10,
+          "left": 10,
+          "right": 20,
+          "corners": 8,
+          "free_kick_taking": 8,
+          "penalty_taking": 8
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_bayern_91104807",
+        "name": "Leon Goretzka",
+        "role": "CM",
+        "allowed_positions": [
+          "DM"
+        ],
+        "attributes": {
+          "pace": 14,
+          "acceleration": 12,
+          "stamina": 16,
+          "passing": 15,
+          "first_touch": 14,
+          "dribbling": 12,
+          "tackling": 14,
+          "positioning": 12,
+          "decisions": 13,
+          "finishing": 12,
+          "long_shots": 15,
+          "crossing": 11,
+          "heading": 16,
+          "jumping_reach": 16,
+          "left": 10,
+          "right": 20,
+          "corners": 10,
+          "free_kick_taking": 12,
+          "penalty_taking": 12
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_bayern_28049320",
+        "name": "Harry Kane",
+        "role": "ST",
+        "attributes": {
+          "pace": 13,
+          "acceleration": 12,
+          "stamina": 16,
+          "passing": 18,
+          "first_touch": 18,
+          "dribbling": 14,
+          "tackling": 9,
+          "positioning": 8,
+          "decisions": 18,
+          "finishing": 19,
+          "long_shots": 17,
+          "crossing": 12,
+          "heading": 17,
+          "jumping_reach": 16,
+          "left": 10,
+          "right": 20,
+          "corners": 11,
+          "free_kick_taking": 12,
+          "penalty_taking": 20
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_bayern_12087972",
+        "name": "Nicolas Jackson",
+        "role": "ST",
+        "attributes": {
+          "pace": 16,
+          "acceleration": 15,
+          "stamina": 15,
+          "passing": 12,
+          "first_touch": 13,
+          "dribbling": 15,
+          "tackling": 9,
+          "positioning": 8,
+          "decisions": 12,
+          "finishing": 13,
+          "long_shots": 12,
+          "crossing": 10,
+          "heading": 13,
+          "jumping_reach": 14,
+          "left": 10,
+          "right": 20,
+          "corners": 8,
+          "free_kick_taking": 8,
+          "penalty_taking": 13
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_bayern_76049803",
+        "name": "Luis Díaz",
+        "role": "LM",
+        "allowed_positions": [
+          "LW"
+        ],
+        "attributes": {
+          "pace": 15,
+          "acceleration": 16,
+          "stamina": 14,
+          "passing": 15,
+          "first_touch": 17,
+          "dribbling": 17,
+          "tackling": 9,
+          "positioning": 9,
+          "decisions": 13,
+          "finishing": 15,
+          "long_shots": 14,
+          "crossing": 12,
+          "heading": 13,
+          "jumping_reach": 12,
+          "left": 10,
+          "right": 20,
+          "corners": 11,
+          "free_kick_taking": 11,
+          "penalty_taking": 12
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_bayern_29221846",
+        "name": "Michael Olise",
+        "role": "RM",
+        "allowed_positions": [
+          "AM",
+          "RW"
+        ],
+        "attributes": {
+          "pace": 14,
+          "acceleration": 15,
+          "stamina": 15,
+          "passing": 18,
+          "first_touch": 18,
+          "dribbling": 18,
+          "tackling": 9,
+          "positioning": 8,
+          "decisions": 16,
+          "finishing": 15,
+          "long_shots": 17,
+          "crossing": 17,
+          "heading": 8,
+          "jumping_reach": 11,
+          "left": 10,
+          "right": 20,
+          "corners": 16,
+          "free_kick_taking": 16,
+          "penalty_taking": 15
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_bayern_91207698",
+        "name": "Jonas Urbig",
+        "role": "GK",
+        "attributes": {
+          "pace": 10,
+          "acceleration": 8,
+          "stamina": 11,
+          "passing": 14,
+          "first_touch": 13,
+          "dribbling": 10,
+          "tackling": 10,
+          "positioning": 13,
+          "decisions": 12,
+          "finishing": 10,
+          "long_shots": 10,
+          "crossing": 10,
+          "heading": 10,
+          "jumping_reach": 16,
+          "left": 10,
+          "right": 20,
+          "corners": 10,
+          "free_kick_taking": 10,
+          "penalty_taking": 10,
+          "handling": 12,
+          "reflexes": 16,
+          "one_on_ones": 15,
+          "aerial_reach": 12,
+          "command_of_area": 11,
+          "kicking": 17,
+          "throwing": 13
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_bayern_28124579",
+        "name": "Jamal Musiala",
+        "role": "AM",
+        "allowed_positions": [
+          "LW"
+        ],
+        "attributes": {
+          "pace": 15,
+          "acceleration": 15,
+          "stamina": 13,
+          "passing": 15,
+          "first_touch": 16,
+          "dribbling": 19,
+          "tackling": 11,
+          "positioning": 9,
+          "decisions": 14,
+          "finishing": 15,
+          "long_shots": 14,
+          "crossing": 9,
+          "heading": 13,
+          "jumping_reach": 12,
+          "left": 10,
+          "right": 20,
+          "corners": 8,
+          "free_kick_taking": 8,
+          "penalty_taking": 12
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_bayern_28066083",
+        "name": "Serge Gnabry",
+        "role": "AM",
+        "allowed_positions": [
+          "RW",
+          "LW"
+        ],
+        "attributes": {
+          "pace": 14,
+          "acceleration": 14,
+          "stamina": 13,
+          "passing": 14,
+          "first_touch": 14,
+          "dribbling": 15,
+          "tackling": 9,
+          "positioning": 8,
+          "decisions": 13,
+          "finishing": 15,
+          "long_shots": 15,
+          "crossing": 12,
+          "heading": 11,
+          "jumping_reach": 8,
+          "left": 10,
+          "right": 20,
+          "corners": 12,
+          "free_kick_taking": 12,
+          "penalty_taking": 12
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_bayern_89063073",
+        "name": "Kim Min-Jae",
+        "role": "CB",
+        "attributes": {
+          "pace": 14,
+          "acceleration": 14,
+          "stamina": 13,
+          "passing": 14,
+          "first_touch": 12,
+          "dribbling": 10,
+          "tackling": 16,
+          "positioning": 16,
+          "decisions": 12,
+          "finishing": 6,
+          "long_shots": 7,
+          "crossing": 7,
+          "heading": 15,
+          "jumping_reach": 16,
+          "left": 10,
+          "right": 20,
+          "corners": 3,
+          "free_kick_taking": 3,
+          "penalty_taking": 7
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_bayern_2000171034",
+        "name": "Aleksandar Pavlović",
+        "role": "DM",
+        "allowed_positions": [
+          "CM"
+        ],
+        "attributes": {
+          "pace": 12,
+          "acceleration": 11,
+          "stamina": 17,
+          "passing": 17,
+          "first_touch": 15,
+          "dribbling": 12,
+          "tackling": 12,
+          "positioning": 13,
+          "decisions": 16,
+          "finishing": 8,
+          "long_shots": 12,
+          "crossing": 13,
+          "heading": 11,
+          "jumping_reach": 13,
+          "left": 10,
+          "right": 20,
+          "corners": 13,
+          "free_kick_taking": 13,
+          "penalty_taking": 12
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      }
+    ],
+    "starting_lineup": [
+      {
+        "slot": "GK",
+        "player_id": "fc_bayern_8718372"
+      },
+      {
+        "slot": "CB_L",
+        "player_id": "fc_bayern_16182894"
+      },
+      {
+        "slot": "CB_R",
+        "player_id": "fc_bayern_91119700"
+      },
+      {
+        "slot": "LB",
+        "player_id": "fc_bayern_20041862"
+      },
+      {
+        "slot": "RB",
+        "player_id": "fc_bayern_92039023"
+      },
+      {
+        "slot": "CM_L",
+        "player_id": "fc_bayern_16147659"
+      },
+      {
+        "slot": "CM_R",
+        "player_id": "fc_bayern_91104807"
+      },
+      {
+        "slot": "ST_L",
+        "player_id": "fc_bayern_28049320"
+      },
+      {
+        "slot": "ST_R",
+        "player_id": "fc_bayern_12087972"
+      },
+      {
+        "slot": "LM",
+        "player_id": "fc_bayern_76049803"
+      },
+      {
+        "slot": "RM",
+        "player_id": "fc_bayern_29221846"
+      }
+    ],
+    "bench": [
+      "fc_bayern_91207698",
+      "fc_bayern_28124579",
+      "fc_bayern_28066083",
+      "fc_bayern_89063073",
+      "fc_bayern_2000171034"
+    ]
+  },
+  "away_team": {
+    "id": "inter_miami",
+    "name": "Inter Miami",
+    "tactics": {
+      "formation": "4-4-2",
+      "width": 0.5,
+      "line_height": 0.5,
+      "tempo": 0.5,
+      "pressing": 0.5
+    },
+    "players": [
+      {
+        "id": "inter_miami_72052878",
+        "name": "Dayne St. Clair",
+        "role": "GK",
+        "attributes": {
+          "pace": 11,
+          "acceleration": 11,
+          "stamina": 9,
+          "passing": 12,
+          "first_touch": 5,
+          "dribbling": 10,
+          "tackling": 10,
+          "positioning": 13,
+          "decisions": 11,
+          "finishing": 10,
+          "long_shots": 10,
+          "crossing": 10,
+          "heading": 10,
+          "jumping_reach": 14,
+          "left": 10,
+          "right": 20,
+          "corners": 10,
+          "free_kick_taking": 10,
+          "penalty_taking": 10,
+          "handling": 12,
+          "reflexes": 16,
+          "one_on_ones": 13,
+          "aerial_reach": 14,
+          "command_of_area": 9,
+          "kicking": 12,
+          "throwing": 10
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "inter_miami_14255865",
+        "name": "Gonzalo Luján",
+        "role": "CB",
+        "allowed_positions": [
+          "RB"
+        ],
+        "attributes": {
+          "pace": 11,
+          "acceleration": 12,
+          "stamina": 14,
+          "passing": 8,
+          "first_touch": 10,
+          "dribbling": 7,
+          "tackling": 13,
+          "positioning": 14,
+          "decisions": 13,
+          "finishing": 5,
+          "long_shots": 7,
+          "crossing": 9,
+          "heading": 14,
+          "jumping_reach": 10,
+          "left": 10,
+          "right": 20,
+          "corners": 8,
+          "free_kick_taking": 5,
+          "penalty_taking": 8
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "inter_miami_78078859",
+        "name": "Maximiliano Falcón",
+        "role": "CB",
+        "attributes": {
+          "pace": 12,
+          "acceleration": 12,
+          "stamina": 13,
+          "passing": 13,
+          "first_touch": 11,
+          "dribbling": 7,
+          "tackling": 14,
+          "positioning": 12,
+          "decisions": 11,
+          "finishing": 6,
+          "long_shots": 5,
+          "crossing": 7,
+          "heading": 13,
+          "jumping_reach": 11,
+          "left": 10,
+          "right": 20,
+          "corners": 5,
+          "free_kick_taking": 4,
+          "penalty_taking": 6
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "inter_miami_67211900",
+        "name": "Sergio Reguilón",
+        "role": "LB",
+        "attributes": {
+          "pace": 15,
+          "acceleration": 15,
+          "stamina": 15,
+          "passing": 12,
+          "first_touch": 13,
+          "dribbling": 10,
+          "tackling": 14,
+          "positioning": 13,
+          "decisions": 12,
+          "finishing": 10,
+          "long_shots": 10,
+          "crossing": 10,
+          "heading": 11,
+          "jumping_reach": 8,
+          "left": 10,
+          "right": 20,
+          "corners": 10,
+          "free_kick_taking": 9,
+          "penalty_taking": 12
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "inter_miami_14201874",
+        "name": "Facundo Mura",
+        "role": "RB",
+        "attributes": {
+          "pace": 13,
+          "acceleration": 14,
+          "stamina": 13,
+          "passing": 12,
+          "first_touch": 12,
+          "dribbling": 13,
+          "tackling": 14,
+          "positioning": 14,
+          "decisions": 13,
+          "finishing": 9,
+          "long_shots": 11,
+          "crossing": 10,
+          "heading": 9,
+          "jumping_reach": 8,
+          "left": 10,
+          "right": 20,
+          "corners": 9,
+          "free_kick_taking": 7,
+          "penalty_taking": 9
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "inter_miami_14048343",
+        "name": "Rodrigo De Paul",
+        "role": "CM",
+        "attributes": {
+          "pace": 14,
+          "acceleration": 15,
+          "stamina": 14,
+          "passing": 16,
+          "first_touch": 16,
+          "dribbling": 16,
+          "tackling": 12,
+          "positioning": 10,
+          "decisions": 14,
+          "finishing": 14,
+          "long_shots": 15,
+          "crossing": 15,
+          "heading": 8,
+          "jumping_reach": 9,
+          "left": 10,
+          "right": 20,
+          "corners": 15,
+          "free_kick_taking": 14,
+          "penalty_taking": 15
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "inter_miami_86080119",
+        "name": "Telasco Segovia",
+        "role": "CM",
+        "attributes": {
+          "pace": 13,
+          "acceleration": 13,
+          "stamina": 14,
+          "passing": 14,
+          "first_touch": 13,
+          "dribbling": 13,
+          "tackling": 13,
+          "positioning": 12,
+          "decisions": 13,
+          "finishing": 11,
+          "long_shots": 10,
+          "crossing": 12,
+          "heading": 8,
+          "jumping_reach": 8,
+          "left": 10,
+          "right": 20,
+          "corners": 13,
+          "free_kick_taking": 12,
+          "penalty_taking": 5
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "inter_miami_7458500",
+        "name": "Lionel Messi",
+        "role": "ST",
+        "allowed_positions": [
+          "AM",
+          "RW"
+        ],
+        "attributes": {
+          "pace": 10,
+          "acceleration": 13,
+          "stamina": 11,
+          "passing": 19,
+          "first_touch": 19,
+          "dribbling": 20,
+          "tackling": 7,
+          "positioning": 5,
+          "decisions": 18,
+          "finishing": 17,
+          "long_shots": 16,
+          "crossing": 16,
+          "heading": 10,
+          "jumping_reach": 6,
+          "left": 10,
+          "right": 20,
+          "corners": 15,
+          "free_kick_taking": 18,
+          "penalty_taking": 17
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "inter_miami_78000335",
+        "name": "Luis Suárez",
+        "role": "ST",
+        "attributes": {
+          "pace": 8,
+          "acceleration": 7,
+          "stamina": 8,
+          "passing": 16,
+          "first_touch": 18,
+          "dribbling": 15,
+          "tackling": 9,
+          "positioning": 8,
+          "decisions": 15,
+          "finishing": 18,
+          "long_shots": 15,
+          "crossing": 15,
+          "heading": 13,
+          "jumping_reach": 10,
+          "left": 10,
+          "right": 20,
+          "corners": 15,
+          "free_kick_taking": 16,
+          "penalty_taking": 16
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "inter_miami_2000112949",
+        "name": "Baltasar Rodríguez",
+        "role": "LM",
+        "allowed_positions": [
+          "RW",
+          "LW"
+        ],
+        "attributes": {
+          "pace": 12,
+          "acceleration": 14,
+          "stamina": 12,
+          "passing": 12,
+          "first_touch": 13,
+          "dribbling": 13,
+          "tackling": 7,
+          "positioning": 9,
+          "decisions": 10,
+          "finishing": 12,
+          "long_shots": 11,
+          "crossing": 10,
+          "heading": 6,
+          "jumping_reach": 9,
+          "left": 10,
+          "right": 20,
+          "corners": 9,
+          "free_kick_taking": 10,
+          "penalty_taking": 8
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "inter_miami_2000091490",
+        "name": "Tadeo Allende",
+        "role": "RM",
+        "allowed_positions": [
+          "RW",
+          "LW"
+        ],
+        "attributes": {
+          "pace": 14,
+          "acceleration": 13,
+          "stamina": 13,
+          "passing": 11,
+          "first_touch": 13,
+          "dribbling": 12,
+          "tackling": 7,
+          "positioning": 8,
+          "decisions": 11,
+          "finishing": 13,
+          "long_shots": 13,
+          "crossing": 9,
+          "heading": 13,
+          "jumping_reach": 13,
+          "left": 10,
+          "right": 20,
+          "corners": 5,
+          "free_kick_taking": 10,
+          "penalty_taking": 11
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "inter_miami_72052883",
+        "name": "Luis Barraza",
+        "role": "GK",
+        "attributes": {
+          "pace": 13,
+          "acceleration": 13,
+          "stamina": 3,
+          "passing": 10,
+          "first_touch": 10,
+          "dribbling": 10,
+          "tackling": 10,
+          "positioning": 14,
+          "decisions": 14,
+          "finishing": 10,
+          "long_shots": 10,
+          "crossing": 10,
+          "heading": 10,
+          "jumping_reach": 13,
+          "left": 10,
+          "right": 20,
+          "corners": 10,
+          "free_kick_taking": 10,
+          "penalty_taking": 10,
+          "handling": 10,
+          "reflexes": 14,
+          "one_on_ones": 11,
+          "aerial_reach": 13,
+          "command_of_area": 12,
+          "kicking": 11,
+          "throwing": 8
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "inter_miami_14111100",
+        "name": "Germán Berterame",
+        "role": "ST",
+        "attributes": {
+          "pace": 13,
+          "acceleration": 15,
+          "stamina": 12,
+          "passing": 11,
+          "first_touch": 13,
+          "dribbling": 14,
+          "tackling": 8,
+          "positioning": 11,
+          "decisions": 13,
+          "finishing": 14,
+          "long_shots": 13,
+          "crossing": 11,
+          "heading": 15,
+          "jumping_reach": 9,
+          "left": 10,
+          "right": 20,
+          "corners": 10,
+          "free_kick_taking": 9,
+          "penalty_taking": 16
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "inter_miami_14184169",
+        "name": "Marcelo Weigandt",
+        "role": "RB",
+        "attributes": {
+          "pace": 14,
+          "acceleration": 14,
+          "stamina": 16,
+          "passing": 12,
+          "first_touch": 11,
+          "dribbling": 8,
+          "tackling": 13,
+          "positioning": 10,
+          "decisions": 8,
+          "finishing": 6,
+          "long_shots": 10,
+          "crossing": 13,
+          "heading": 11,
+          "jumping_reach": 8,
+          "left": 10,
+          "right": 20,
+          "corners": 8,
+          "free_kick_taking": 6,
+          "penalty_taking": 9
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "inter_miami_14233588",
+        "name": "David Ayala",
+        "role": "DM",
+        "allowed_positions": [
+          "CM"
+        ],
+        "attributes": {
+          "pace": 11,
+          "acceleration": 12,
+          "stamina": 11,
+          "passing": 15,
+          "first_touch": 13,
+          "dribbling": 13,
+          "tackling": 10,
+          "positioning": 14,
+          "decisions": 13,
+          "finishing": 9,
+          "long_shots": 8,
+          "crossing": 12,
+          "heading": 8,
+          "jumping_reach": 7,
+          "left": 10,
+          "right": 20,
+          "corners": 11,
+          "free_kick_taking": 11,
+          "penalty_taking": 8
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "inter_miami_2000183235",
+        "name": "Mateo Silvetti",
+        "role": "RW",
+        "allowed_positions": [
+          "LW"
+        ],
+        "attributes": {
+          "pace": 13,
+          "acceleration": 12,
+          "stamina": 13,
+          "passing": 12,
+          "first_touch": 11,
+          "dribbling": 11,
+          "tackling": 11,
+          "positioning": 11,
+          "decisions": 12,
+          "finishing": 13,
+          "long_shots": 13,
+          "crossing": 9,
+          "heading": 12,
+          "jumping_reach": 12,
+          "left": 10,
+          "right": 20,
+          "corners": 8,
+          "free_kick_taking": 12,
+          "penalty_taking": 8
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      }
+    ],
+    "starting_lineup": [
+      {
+        "slot": "GK",
+        "player_id": "inter_miami_72052878"
+      },
+      {
+        "slot": "CB_L",
+        "player_id": "inter_miami_14255865"
+      },
+      {
+        "slot": "CB_R",
+        "player_id": "inter_miami_78078859"
+      },
+      {
+        "slot": "LB",
+        "player_id": "inter_miami_67211900"
+      },
+      {
+        "slot": "RB",
+        "player_id": "inter_miami_14201874"
+      },
+      {
+        "slot": "CM_L",
+        "player_id": "inter_miami_14048343"
+      },
+      {
+        "slot": "CM_R",
+        "player_id": "inter_miami_86080119"
+      },
+      {
+        "slot": "ST_L",
+        "player_id": "inter_miami_7458500"
+      },
+      {
+        "slot": "ST_R",
+        "player_id": "inter_miami_78000335"
+      },
+      {
+        "slot": "LM",
+        "player_id": "inter_miami_2000112949"
+      },
+      {
+        "slot": "RM",
+        "player_id": "inter_miami_2000091490"
+      }
+    ],
+    "bench": [
+      "inter_miami_72052883",
+      "inter_miami_14111100",
+      "inter_miami_14184169",
+      "inter_miami_14233588",
+      "inter_miami_2000183235"
+    ]
+  }
+}

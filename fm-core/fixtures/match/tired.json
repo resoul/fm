@@ -1,0 +1,103 @@
+{
+  "schema_version": "v1",
+  "match_id": "match-tired",
+  "rules_profile": "profile_a",
+  "pitch": {
+    "width": 68.0,
+    "length": 105.0
+  },
+  "home_team": {
+    "id": "fresh_home",
+    "name": "Fresh FC",
+    "tactics": {
+      "formation": "4-4-2",
+      "width": 0.5,
+      "line_height": 0.5,
+      "tempo": 0.5,
+      "pressing": 0.5
+    },
+    "players": [
+      {
+        "id": "fr_1", "name": "F. Keeper", "role": "GK",
+        "attributes": {"pace": 12, "acceleration": 12, "stamina": 14, "passing": 12, "first_touch": 12, "dribbling": 10, "tackling": 10, "shooting": 6, "positioning": 14, "decisions": 14, "handling": 14, "reflexes": 15},
+        "starting_condition": {"fitness": 100.0, "sharpness": 90.0, "initial_fatigue": 0.0}
+      },
+      {"id": "fr_2", "name": "F. LeftBack", "role": "LB", "attributes": {"pace": 13, "acceleration": 13, "stamina": 14, "passing": 13, "first_touch": 13, "dribbling": 12, "tackling": 13, "shooting": 8, "positioning": 13, "decisions": 13}, "starting_condition": {"fitness": 100.0, "sharpness": 90.0, "initial_fatigue": 0.0}},
+      {"id": "fr_3", "name": "F. CenterBack Left", "role": "CB", "attributes": {"pace": 12, "acceleration": 12, "stamina": 14, "passing": 12, "first_touch": 12, "dribbling": 10, "tackling": 14, "shooting": 7, "positioning": 14, "decisions": 13}, "starting_condition": {"fitness": 100.0, "sharpness": 90.0, "initial_fatigue": 0.0}},
+      {"id": "fr_4", "name": "F. CenterBack Right", "role": "CB", "attributes": {"pace": 12, "acceleration": 12, "stamina": 14, "passing": 12, "first_touch": 12, "dribbling": 10, "tackling": 14, "shooting": 7, "positioning": 14, "decisions": 13}, "starting_condition": {"fitness": 100.0, "sharpness": 90.0, "initial_fatigue": 0.0}},
+      {"id": "fr_5", "name": "F. RightBack", "role": "RB", "attributes": {"pace": 13, "acceleration": 13, "stamina": 14, "passing": 13, "first_touch": 13, "dribbling": 12, "tackling": 13, "shooting": 8, "positioning": 13, "decisions": 13}, "starting_condition": {"fitness": 100.0, "sharpness": 90.0, "initial_fatigue": 0.0}},
+      {"id": "fr_6", "name": "F. LeftMid", "role": "LM", "attributes": {"pace": 14, "acceleration": 14, "stamina": 14, "passing": 13, "first_touch": 13, "dribbling": 13, "tackling": 10, "shooting": 11, "positioning": 13, "decisions": 13}, "starting_condition": {"fitness": 100.0, "sharpness": 90.0, "initial_fatigue": 0.0}},
+      {"id": "fr_7", "name": "F. CenterMid Left", "role": "CM", "attributes": {"pace": 13, "acceleration": 13, "stamina": 15, "passing": 14, "first_touch": 14, "dribbling": 13, "tackling": 12, "shooting": 11, "positioning": 14, "decisions": 14}, "starting_condition": {"fitness": 100.0, "sharpness": 90.0, "initial_fatigue": 0.0}},
+      {"id": "fr_8", "name": "F. CenterMid Right", "role": "CM", "attributes": {"pace": 13, "acceleration": 13, "stamina": 15, "passing": 14, "first_touch": 14, "dribbling": 13, "tackling": 12, "shooting": 11, "positioning": 14, "decisions": 14}, "starting_condition": {"fitness": 100.0, "sharpness": 90.0, "initial_fatigue": 0.0}},
+      {"id": "fr_9", "name": "F. RightMid", "role": "RM", "attributes": {"pace": 14, "acceleration": 14, "stamina": 14, "passing": 13, "first_touch": 13, "dribbling": 13, "tackling": 10, "shooting": 11, "positioning": 13, "decisions": 13}, "starting_condition": {"fitness": 100.0, "sharpness": 90.0, "initial_fatigue": 0.0}},
+      {"id": "fr_10", "name": "F. Striker Left", "role": "ST", "attributes": {"pace": 14, "acceleration": 14, "stamina": 14, "passing": 12, "first_touch": 13, "dribbling": 13, "tackling": 8, "shooting": 14, "positioning": 14, "decisions": 13}, "starting_condition": {"fitness": 100.0, "sharpness": 90.0, "initial_fatigue": 0.0}},
+      {"id": "fr_11", "name": "F. Striker Right", "role": "ST", "attributes": {"pace": 14, "acceleration": 14, "stamina": 14, "passing": 12, "first_touch": 13, "dribbling": 13, "tackling": 8, "shooting": 14, "positioning": 14, "decisions": 13}, "starting_condition": {"fitness": 100.0, "sharpness": 90.0, "initial_fatigue": 0.0}},
+      {"id": "fr_12", "name": "F. Sub Keeper", "role": "GK", "attributes": {"pace": 11, "acceleration": 11, "stamina": 13, "passing": 11, "first_touch": 11, "dribbling": 9, "tackling": 9, "shooting": 5, "positioning": 13, "decisions": 13, "handling": 13, "reflexes": 14}, "starting_condition": {"fitness": 100.0, "sharpness": 85.0, "initial_fatigue": 0.0}},
+      {"id": "fr_13", "name": "F. Sub Defender", "role": "CB", "attributes": {"pace": 12, "acceleration": 12, "stamina": 13, "passing": 11, "first_touch": 12, "dribbling": 10, "tackling": 13, "shooting": 6, "positioning": 13, "decisions": 12}, "starting_condition": {"fitness": 100.0, "sharpness": 85.0, "initial_fatigue": 0.0}},
+      {"id": "fr_14", "name": "F. Sub Midfielder", "role": "CM", "attributes": {"pace": 12, "acceleration": 12, "stamina": 14, "passing": 13, "first_touch": 13, "dribbling": 12, "tackling": 11, "shooting": 10, "positioning": 13, "decisions": 13}, "starting_condition": {"fitness": 100.0, "sharpness": 85.0, "initial_fatigue": 0.0}},
+      {"id": "fr_15", "name": "F. Sub Winger", "role": "LW", "attributes": {"pace": 13, "acceleration": 13, "stamina": 13, "passing": 12, "first_touch": 13, "dribbling": 13, "tackling": 8, "shooting": 11, "positioning": 12, "decisions": 12}, "starting_condition": {"fitness": 100.0, "sharpness": 85.0, "initial_fatigue": 0.0}},
+      {"id": "fr_16", "name": "F. Sub Striker", "role": "ST", "attributes": {"pace": 13, "acceleration": 13, "stamina": 13, "passing": 11, "first_touch": 12, "dribbling": 12, "tackling": 7, "shooting": 13, "positioning": 13, "decisions": 12}, "starting_condition": {"fitness": 100.0, "sharpness": 85.0, "initial_fatigue": 0.0}}
+    ],
+    "starting_lineup": [
+      {"slot": "GK", "player_id": "fr_1"},
+      {"slot": "LB", "player_id": "fr_2"},
+      {"slot": "CB_L", "player_id": "fr_3"},
+      {"slot": "CB_R", "player_id": "fr_4"},
+      {"slot": "RB", "player_id": "fr_5"},
+      {"slot": "LM", "player_id": "fr_6"},
+      {"slot": "CM_L", "player_id": "fr_7"},
+      {"slot": "CM_R", "player_id": "fr_8"},
+      {"slot": "RM", "player_id": "fr_9"},
+      {"slot": "ST_L", "player_id": "fr_10"},
+      {"slot": "ST_R", "player_id": "fr_11"}
+    ],
+    "bench": ["fr_12", "fr_13", "fr_14", "fr_15", "fr_16"]
+  },
+  "away_team": {
+    "id": "tired_away",
+    "name": "Tired FC",
+    "tactics": {
+      "formation": "4-4-2",
+      "width": 0.5,
+      "line_height": 0.5,
+      "tempo": 0.5,
+      "pressing": 0.5
+    },
+    "players": [
+      {
+        "id": "ti_1", "name": "T. Keeper", "role": "GK",
+        "attributes": {"pace": 12, "acceleration": 12, "stamina": 14, "passing": 12, "first_touch": 12, "dribbling": 10, "tackling": 10, "shooting": 6, "positioning": 14, "decisions": 14, "handling": 14, "reflexes": 15},
+        "starting_condition": {"fitness": 70.0, "sharpness": 75.0, "initial_fatigue": 40.0}
+      },
+      {"id": "ti_2", "name": "T. LeftBack", "role": "LB", "attributes": {"pace": 13, "acceleration": 13, "stamina": 14, "passing": 13, "first_touch": 13, "dribbling": 12, "tackling": 13, "shooting": 8, "positioning": 13, "decisions": 13}, "starting_condition": {"fitness": 65.0, "sharpness": 70.0, "initial_fatigue": 45.0}},
+      {"id": "ti_3", "name": "T. CenterBack Left", "role": "CB", "attributes": {"pace": 12, "acceleration": 12, "stamina": 14, "passing": 12, "first_touch": 12, "dribbling": 10, "tackling": 14, "shooting": 7, "positioning": 14, "decisions": 13}, "starting_condition": {"fitness": 65.0, "sharpness": 70.0, "initial_fatigue": 45.0}},
+      {"id": "ti_4", "name": "T. CenterBack Right", "role": "CB", "attributes": {"pace": 12, "acceleration": 12, "stamina": 14, "passing": 12, "first_touch": 12, "dribbling": 10, "tackling": 14, "shooting": 7, "positioning": 14, "decisions": 13}, "starting_condition": {"fitness": 65.0, "sharpness": 70.0, "initial_fatigue": 45.0}},
+      {"id": "ti_5", "name": "T. RightBack", "role": "RB", "attributes": {"pace": 13, "acceleration": 13, "stamina": 14, "passing": 13, "first_touch": 13, "dribbling": 12, "tackling": 13, "shooting": 8, "positioning": 13, "decisions": 13}, "starting_condition": {"fitness": 65.0, "sharpness": 70.0, "initial_fatigue": 45.0}},
+      {"id": "ti_6", "name": "T. LeftMid", "role": "LM", "attributes": {"pace": 14, "acceleration": 14, "stamina": 14, "passing": 13, "first_touch": 13, "dribbling": 13, "tackling": 10, "shooting": 11, "positioning": 13, "decisions": 13}, "starting_condition": {"fitness": 60.0, "sharpness": 70.0, "initial_fatigue": 50.0}},
+      {"id": "ti_7", "name": "T. CenterMid Left", "role": "CM", "attributes": {"pace": 13, "acceleration": 13, "stamina": 15, "passing": 14, "first_touch": 14, "dribbling": 13, "tackling": 12, "shooting": 11, "positioning": 14, "decisions": 14}, "starting_condition": {"fitness": 60.0, "sharpness": 70.0, "initial_fatigue": 50.0}},
+      {"id": "ti_8", "name": "T. CenterMid Right", "role": "CM", "attributes": {"pace": 13, "acceleration": 13, "stamina": 15, "passing": 14, "first_touch": 14, "dribbling": 13, "tackling": 12, "shooting": 11, "positioning": 14, "decisions": 14}, "starting_condition": {"fitness": 60.0, "sharpness": 70.0, "initial_fatigue": 50.0}},
+      {"id": "ti_9", "name": "T. RightMid", "role": "RM", "attributes": {"pace": 14, "acceleration": 14, "stamina": 14, "passing": 13, "first_touch": 13, "dribbling": 13, "tackling": 10, "shooting": 11, "positioning": 13, "decisions": 13}, "starting_condition": {"fitness": 60.0, "sharpness": 70.0, "initial_fatigue": 50.0}},
+      {"id": "ti_10", "name": "T. Striker Left", "role": "ST", "attributes": {"pace": 14, "acceleration": 14, "stamina": 14, "passing": 12, "first_touch": 13, "dribbling": 13, "tackling": 8, "shooting": 14, "positioning": 14, "decisions": 13}, "starting_condition": {"fitness": 65.0, "sharpness": 70.0, "initial_fatigue": 45.0}},
+      {"id": "ti_11", "name": "T. Striker Right", "role": "ST", "attributes": {"pace": 14, "acceleration": 14, "stamina": 14, "passing": 12, "first_touch": 13, "dribbling": 13, "tackling": 8, "shooting": 14, "positioning": 14, "decisions": 13}, "starting_condition": {"fitness": 65.0, "sharpness": 70.0, "initial_fatigue": 45.0}},
+      {"id": "ti_12", "name": "T. Sub Keeper", "role": "GK", "attributes": {"pace": 11, "acceleration": 11, "stamina": 13, "passing": 11, "first_touch": 11, "dribbling": 9, "tackling": 9, "shooting": 5, "positioning": 13, "decisions": 13, "handling": 13, "reflexes": 14}, "starting_condition": {"fitness": 70.0, "sharpness": 75.0, "initial_fatigue": 40.0}},
+      {"id": "ti_13", "name": "T. Sub Defender", "role": "CB", "attributes": {"pace": 12, "acceleration": 12, "stamina": 13, "passing": 11, "first_touch": 12, "dribbling": 10, "tackling": 13, "shooting": 6, "positioning": 13, "decisions": 12}, "starting_condition": {"fitness": 65.0, "sharpness": 70.0, "initial_fatigue": 45.0}},
+      {"id": "ti_14", "name": "T. Sub Midfielder", "role": "CM", "attributes": {"pace": 12, "acceleration": 12, "stamina": 14, "passing": 13, "first_touch": 13, "dribbling": 12, "tackling": 11, "shooting": 10, "positioning": 13, "decisions": 13}, "starting_condition": {"fitness": 65.0, "sharpness": 70.0, "initial_fatigue": 45.0}},
+      {"id": "ti_15", "name": "T. Sub Winger", "role": "LW", "attributes": {"pace": 13, "acceleration": 13, "stamina": 13, "passing": 12, "first_touch": 13, "dribbling": 13, "tackling": 8, "shooting": 11, "positioning": 12, "decisions": 12}, "starting_condition": {"fitness": 65.0, "sharpness": 70.0, "initial_fatigue": 45.0}},
+      {"id": "ti_16", "name": "T. Sub Striker", "role": "ST", "attributes": {"pace": 13, "acceleration": 13, "stamina": 13, "passing": 11, "first_touch": 12, "dribbling": 12, "tackling": 7, "shooting": 13, "positioning": 13, "decisions": 12}, "starting_condition": {"fitness": 65.0, "sharpness": 70.0, "initial_fatigue": 45.0}}
+    ],
+    "starting_lineup": [
+      {"slot": "GK", "player_id": "ti_1"},
+      {"slot": "LB", "player_id": "ti_2"},
+      {"slot": "CB_L", "player_id": "ti_3"},
+      {"slot": "CB_R", "player_id": "ti_4"},
+      {"slot": "RB", "player_id": "ti_5"},
+      {"slot": "LM", "player_id": "ti_6"},
+      {"slot": "CM_L", "player_id": "ti_7"},
+      {"slot": "CM_R", "player_id": "ti_8"},
+      {"slot": "RM", "player_id": "ti_9"},
+      {"slot": "ST_L", "player_id": "ti_10"},
+      {"slot": "ST_R", "player_id": "ti_11"}
+    ],
+    "bench": ["ti_12", "ti_13", "ti_14", "ti_15", "ti_16"]
+  }
+}

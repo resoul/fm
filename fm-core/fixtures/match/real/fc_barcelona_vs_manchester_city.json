@@ -1,0 +1,1220 @@
+{
+  "schema_version": "v2",
+  "match_id": "fc_barcelona_vs_manchester_city",
+  "rules_profile": "profile_a",
+  "pitch": {
+    "width": 68.0,
+    "length": 105.0
+  },
+  "home_team": {
+    "id": "fc_barcelona",
+    "name": "FC Barcelona",
+    "tactics": {
+      "formation": "4-4-2",
+      "width": 0.5,
+      "line_height": 0.5,
+      "tempo": 0.5,
+      "pressing": 0.5
+    },
+    "players": [
+      {
+        "id": "fc_barcelona_67277675",
+        "name": "Joan García",
+        "role": "GK",
+        "attributes": {
+          "pace": 12,
+          "acceleration": 12,
+          "stamina": 13,
+          "passing": 13,
+          "first_touch": 13,
+          "dribbling": 10,
+          "tackling": 10,
+          "positioning": 15,
+          "decisions": 14,
+          "finishing": 10,
+          "long_shots": 10,
+          "crossing": 10,
+          "heading": 10,
+          "jumping_reach": 14,
+          "left": 10,
+          "right": 20,
+          "corners": 10,
+          "free_kick_taking": 10,
+          "penalty_taking": 10,
+          "handling": 15,
+          "reflexes": 18,
+          "one_on_ones": 16,
+          "aerial_reach": 14,
+          "command_of_area": 14,
+          "kicking": 14,
+          "throwing": 14
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_barcelona_28116427",
+        "name": "Eric García",
+        "role": "CB",
+        "allowed_positions": [
+          "RB",
+          "DM"
+        ],
+        "attributes": {
+          "pace": 14,
+          "acceleration": 13,
+          "stamina": 15,
+          "passing": 15,
+          "first_touch": 14,
+          "dribbling": 12,
+          "tackling": 14,
+          "positioning": 16,
+          "decisions": 15,
+          "finishing": 9,
+          "long_shots": 10,
+          "crossing": 11,
+          "heading": 14,
+          "jumping_reach": 12,
+          "left": 10,
+          "right": 20,
+          "corners": 6,
+          "free_kick_taking": 8,
+          "penalty_taking": 9
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_barcelona_2000296497",
+        "name": "Pau Cubarsí",
+        "role": "CB",
+        "attributes": {
+          "pace": 14,
+          "acceleration": 13,
+          "stamina": 13,
+          "passing": 16,
+          "first_touch": 15,
+          "dribbling": 11,
+          "tackling": 14,
+          "positioning": 15,
+          "decisions": 15,
+          "finishing": 8,
+          "long_shots": 9,
+          "crossing": 9,
+          "heading": 13,
+          "jumping_reach": 13,
+          "left": 10,
+          "right": 20,
+          "corners": 6,
+          "free_kick_taking": 7,
+          "penalty_taking": 10
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_barcelona_67296654",
+        "name": "Alejandro Balde",
+        "role": "LB",
+        "attributes": {
+          "pace": 17,
+          "acceleration": 17,
+          "stamina": 15,
+          "passing": 14,
+          "first_touch": 14,
+          "dribbling": 15,
+          "tackling": 11,
+          "positioning": 12,
+          "decisions": 11,
+          "finishing": 10,
+          "long_shots": 11,
+          "crossing": 13,
+          "heading": 7,
+          "jumping_reach": 8,
+          "left": 10,
+          "right": 20,
+          "corners": 8,
+          "free_kick_taking": 9,
+          "penalty_taking": 8
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_barcelona_48036304",
+        "name": "Jules Koundé",
+        "role": "RB",
+        "attributes": {
+          "pace": 15,
+          "acceleration": 15,
+          "stamina": 16,
+          "passing": 14,
+          "first_touch": 14,
+          "dribbling": 14,
+          "tackling": 15,
+          "positioning": 13,
+          "decisions": 13,
+          "finishing": 13,
+          "long_shots": 13,
+          "crossing": 13,
+          "heading": 13,
+          "jumping_reach": 11,
+          "left": 10,
+          "right": 20,
+          "corners": 9,
+          "free_kick_taking": 9,
+          "penalty_taking": 11
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_barcelona_67293495",
+        "name": "Pedri",
+        "role": "CM",
+        "attributes": {
+          "pace": 13,
+          "acceleration": 14,
+          "stamina": 16,
+          "passing": 18,
+          "first_touch": 18,
+          "dribbling": 18,
+          "tackling": 11,
+          "positioning": 12,
+          "decisions": 16,
+          "finishing": 12,
+          "long_shots": 12,
+          "crossing": 15,
+          "heading": 6,
+          "jumping_reach": 8,
+          "left": 10,
+          "right": 20,
+          "corners": 12,
+          "free_kick_taking": 10,
+          "penalty_taking": 11
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_barcelona_37047745",
+        "name": "Frenkie de Jong",
+        "role": "CM",
+        "allowed_positions": [
+          "DM"
+        ],
+        "attributes": {
+          "pace": 13,
+          "acceleration": 13,
+          "stamina": 15,
+          "passing": 17,
+          "first_touch": 17,
+          "dribbling": 17,
+          "tackling": 12,
+          "positioning": 14,
+          "decisions": 16,
+          "finishing": 11,
+          "long_shots": 10,
+          "crossing": 14,
+          "heading": 9,
+          "jumping_reach": 9,
+          "left": 10,
+          "right": 20,
+          "corners": 13,
+          "free_kick_taking": 13,
+          "penalty_taking": 11
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_barcelona_719601",
+        "name": "Robert Lewandowski",
+        "role": "ST",
+        "attributes": {
+          "pace": 11,
+          "acceleration": 11,
+          "stamina": 13,
+          "passing": 13,
+          "first_touch": 16,
+          "dribbling": 13,
+          "tackling": 7,
+          "positioning": 7,
+          "decisions": 17,
+          "finishing": 18,
+          "long_shots": 12,
+          "crossing": 9,
+          "heading": 17,
+          "jumping_reach": 13,
+          "left": 10,
+          "right": 20,
+          "corners": 6,
+          "free_kick_taking": 15,
+          "penalty_taking": 18
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_barcelona_89056845",
+        "name": "Ferran Torres",
+        "role": "ST",
+        "allowed_positions": [
+          "LW"
+        ],
+        "attributes": {
+          "pace": 16,
+          "acceleration": 15,
+          "stamina": 14,
+          "passing": 12,
+          "first_touch": 13,
+          "dribbling": 14,
+          "tackling": 10,
+          "positioning": 8,
+          "decisions": 14,
+          "finishing": 13,
+          "long_shots": 13,
+          "crossing": 13,
+          "heading": 13,
+          "jumping_reach": 12,
+          "left": 10,
+          "right": 20,
+          "corners": 9,
+          "free_kick_taking": 10,
+          "penalty_taking": 12
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_barcelona_19242277",
+        "name": "Raphinha",
+        "role": "LM",
+        "allowed_positions": [
+          "RW",
+          "LW"
+        ],
+        "attributes": {
+          "pace": 16,
+          "acceleration": 16,
+          "stamina": 16,
+          "passing": 15,
+          "first_touch": 15,
+          "dribbling": 15,
+          "tackling": 11,
+          "positioning": 8,
+          "decisions": 15,
+          "finishing": 14,
+          "long_shots": 14,
+          "crossing": 15,
+          "heading": 10,
+          "jumping_reach": 8,
+          "left": 10,
+          "right": 20,
+          "corners": 15,
+          "free_kick_taking": 14,
+          "penalty_taking": 14
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_barcelona_2000256231",
+        "name": "Lamine Yamal",
+        "role": "RM",
+        "allowed_positions": [
+          "RW"
+        ],
+        "attributes": {
+          "pace": 15,
+          "acceleration": 16,
+          "stamina": 13,
+          "passing": 17,
+          "first_touch": 19,
+          "dribbling": 19,
+          "tackling": 6,
+          "positioning": 7,
+          "decisions": 16,
+          "finishing": 13,
+          "long_shots": 14,
+          "crossing": 17,
+          "heading": 7,
+          "jumping_reach": 9,
+          "left": 10,
+          "right": 20,
+          "corners": 14,
+          "free_kick_taking": 13,
+          "penalty_taking": 14
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_barcelona_28009478",
+        "name": "Wojciech Szczęsny",
+        "role": "GK",
+        "attributes": {
+          "pace": 12,
+          "acceleration": 10,
+          "stamina": 12,
+          "passing": 11,
+          "first_touch": 10,
+          "dribbling": 10,
+          "tackling": 10,
+          "positioning": 14,
+          "decisions": 12,
+          "finishing": 10,
+          "long_shots": 10,
+          "crossing": 10,
+          "heading": 10,
+          "jumping_reach": 17,
+          "left": 10,
+          "right": 20,
+          "corners": 10,
+          "free_kick_taking": 10,
+          "penalty_taking": 10,
+          "handling": 16,
+          "reflexes": 17,
+          "one_on_ones": 16,
+          "aerial_reach": 15,
+          "command_of_area": 15,
+          "kicking": 16,
+          "throwing": 13
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_barcelona_24048100",
+        "name": "Dani Olmo",
+        "role": "AM",
+        "attributes": {
+          "pace": 12,
+          "acceleration": 13,
+          "stamina": 14,
+          "passing": 16,
+          "first_touch": 18,
+          "dribbling": 17,
+          "tackling": 10,
+          "positioning": 10,
+          "decisions": 14,
+          "finishing": 13,
+          "long_shots": 13,
+          "crossing": 13,
+          "heading": 9,
+          "jumping_reach": 9,
+          "left": 10,
+          "right": 20,
+          "corners": 13,
+          "free_kick_taking": 13,
+          "penalty_taking": 13
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_barcelona_2000141742",
+        "name": "Fermín",
+        "role": "CM",
+        "allowed_positions": [
+          "AM",
+          "RW",
+          "LW"
+        ],
+        "attributes": {
+          "pace": 13,
+          "acceleration": 14,
+          "stamina": 14,
+          "passing": 14,
+          "first_touch": 15,
+          "dribbling": 14,
+          "tackling": 10,
+          "positioning": 8,
+          "decisions": 14,
+          "finishing": 13,
+          "long_shots": 17,
+          "crossing": 13,
+          "heading": 11,
+          "jumping_reach": 9,
+          "left": 10,
+          "right": 20,
+          "corners": 10,
+          "free_kick_taking": 10,
+          "penalty_taking": 9
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_barcelona_28100266",
+        "name": "Marcus Rashford",
+        "role": "LW",
+        "attributes": {
+          "pace": 17,
+          "acceleration": 16,
+          "stamina": 14,
+          "passing": 14,
+          "first_touch": 14,
+          "dribbling": 15,
+          "tackling": 4,
+          "positioning": 4,
+          "decisions": 11,
+          "finishing": 15,
+          "long_shots": 13,
+          "crossing": 13,
+          "heading": 12,
+          "jumping_reach": 13,
+          "left": 10,
+          "right": 20,
+          "corners": 13,
+          "free_kick_taking": 13,
+          "penalty_taking": 16
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "fc_barcelona_2000049413",
+        "name": "Gavi",
+        "role": "DM",
+        "allowed_positions": [
+          "CM",
+          "AM"
+        ],
+        "attributes": {
+          "pace": 12,
+          "acceleration": 13,
+          "stamina": 14,
+          "passing": 15,
+          "first_touch": 14,
+          "dribbling": 14,
+          "tackling": 14,
+          "positioning": 12,
+          "decisions": 14,
+          "finishing": 11,
+          "long_shots": 11,
+          "crossing": 13,
+          "heading": 6,
+          "jumping_reach": 7,
+          "left": 10,
+          "right": 20,
+          "corners": 12,
+          "free_kick_taking": 11,
+          "penalty_taking": 9
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      }
+    ],
+    "starting_lineup": [
+      {
+        "slot": "GK",
+        "player_id": "fc_barcelona_67277675"
+      },
+      {
+        "slot": "CB_L",
+        "player_id": "fc_barcelona_28116427"
+      },
+      {
+        "slot": "CB_R",
+        "player_id": "fc_barcelona_2000296497"
+      },
+      {
+        "slot": "LB",
+        "player_id": "fc_barcelona_67296654"
+      },
+      {
+        "slot": "RB",
+        "player_id": "fc_barcelona_48036304"
+      },
+      {
+        "slot": "CM_L",
+        "player_id": "fc_barcelona_67293495"
+      },
+      {
+        "slot": "CM_R",
+        "player_id": "fc_barcelona_37047745"
+      },
+      {
+        "slot": "ST_L",
+        "player_id": "fc_barcelona_719601"
+      },
+      {
+        "slot": "ST_R",
+        "player_id": "fc_barcelona_89056845"
+      },
+      {
+        "slot": "LM",
+        "player_id": "fc_barcelona_19242277"
+      },
+      {
+        "slot": "RM",
+        "player_id": "fc_barcelona_2000256231"
+      }
+    ],
+    "bench": [
+      "fc_barcelona_28009478",
+      "fc_barcelona_24048100",
+      "fc_barcelona_2000141742",
+      "fc_barcelona_28100266",
+      "fc_barcelona_2000049413"
+    ]
+  },
+  "away_team": {
+    "id": "manchester_city",
+    "name": "Manchester City",
+    "tactics": {
+      "formation": "4-4-2",
+      "width": 0.5,
+      "line_height": 0.5,
+      "tempo": 0.5,
+      "pressing": 0.5
+    },
+    "players": [
+      {
+        "id": "manchester_city_43252073",
+        "name": "Gianluigi Donnarumma",
+        "role": "GK",
+        "attributes": {
+          "pace": 11,
+          "acceleration": 10,
+          "stamina": 15,
+          "passing": 12,
+          "first_touch": 9,
+          "dribbling": 10,
+          "tackling": 10,
+          "positioning": 16,
+          "decisions": 15,
+          "finishing": 10,
+          "long_shots": 10,
+          "crossing": 10,
+          "heading": 10,
+          "jumping_reach": 18,
+          "left": 10,
+          "right": 20,
+          "corners": 10,
+          "free_kick_taking": 10,
+          "penalty_taking": 10,
+          "handling": 16,
+          "reflexes": 18,
+          "one_on_ones": 17,
+          "aerial_reach": 15,
+          "command_of_area": 15,
+          "kicking": 14,
+          "throwing": 13
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "manchester_city_55070299",
+        "name": "Rúben Dias",
+        "role": "CB",
+        "attributes": {
+          "pace": 13,
+          "acceleration": 13,
+          "stamina": 18,
+          "passing": 13,
+          "first_touch": 13,
+          "dribbling": 12,
+          "tackling": 17,
+          "positioning": 16,
+          "decisions": 15,
+          "finishing": 6,
+          "long_shots": 4,
+          "crossing": 11,
+          "heading": 15,
+          "jumping_reach": 16,
+          "left": 10,
+          "right": 20,
+          "corners": 4,
+          "free_kick_taking": 5,
+          "penalty_taking": 8
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "manchester_city_28108033",
+        "name": "Marc Guéhi",
+        "role": "CB",
+        "attributes": {
+          "pace": 14,
+          "acceleration": 15,
+          "stamina": 15,
+          "passing": 14,
+          "first_touch": 15,
+          "dribbling": 14,
+          "tackling": 15,
+          "positioning": 15,
+          "decisions": 15,
+          "finishing": 8,
+          "long_shots": 8,
+          "crossing": 12,
+          "heading": 14,
+          "jumping_reach": 14,
+          "left": 10,
+          "right": 20,
+          "corners": 5,
+          "free_kick_taking": 7,
+          "penalty_taking": 7
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "manchester_city_24060473",
+        "name": "Joško Gvardiol",
+        "role": "LB",
+        "allowed_positions": [
+          "CB"
+        ],
+        "attributes": {
+          "pace": 15,
+          "acceleration": 14,
+          "stamina": 15,
+          "passing": 16,
+          "first_touch": 14,
+          "dribbling": 13,
+          "tackling": 14,
+          "positioning": 14,
+          "decisions": 14,
+          "finishing": 12,
+          "long_shots": 8,
+          "crossing": 12,
+          "heading": 15,
+          "jumping_reach": 13,
+          "left": 10,
+          "right": 20,
+          "corners": 2,
+          "free_kick_taking": 6,
+          "penalty_taking": 7
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "manchester_city_83188780",
+        "name": "Matheus Nunes",
+        "role": "RB",
+        "allowed_positions": [
+          "CM"
+        ],
+        "attributes": {
+          "pace": 15,
+          "acceleration": 14,
+          "stamina": 15,
+          "passing": 13,
+          "first_touch": 14,
+          "dribbling": 14,
+          "tackling": 11,
+          "positioning": 12,
+          "decisions": 13,
+          "finishing": 12,
+          "long_shots": 13,
+          "crossing": 16,
+          "heading": 10,
+          "jumping_reach": 12,
+          "left": 10,
+          "right": 20,
+          "corners": 13,
+          "free_kick_taking": 11,
+          "penalty_taking": 11
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "manchester_city_28108494",
+        "name": "Phil Foden",
+        "role": "CM",
+        "allowed_positions": [
+          "AM",
+          "LW"
+        ],
+        "attributes": {
+          "pace": 16,
+          "acceleration": 16,
+          "stamina": 14,
+          "passing": 17,
+          "first_touch": 17,
+          "dribbling": 17,
+          "tackling": 8,
+          "positioning": 11,
+          "decisions": 14,
+          "finishing": 14,
+          "long_shots": 13,
+          "crossing": 13,
+          "heading": 8,
+          "jumping_reach": 7,
+          "left": 10,
+          "right": 20,
+          "corners": 13,
+          "free_kick_taking": 13,
+          "penalty_taking": 12
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "manchester_city_55041632",
+        "name": "Bernardo Silva",
+        "role": "CM",
+        "allowed_positions": [
+          "AM",
+          "RW"
+        ],
+        "attributes": {
+          "pace": 12,
+          "acceleration": 13,
+          "stamina": 16,
+          "passing": 17,
+          "first_touch": 17,
+          "dribbling": 17,
+          "tackling": 8,
+          "positioning": 13,
+          "decisions": 14,
+          "finishing": 15,
+          "long_shots": 13,
+          "crossing": 15,
+          "heading": 10,
+          "jumping_reach": 7,
+          "left": 10,
+          "right": 20,
+          "corners": 14,
+          "free_kick_taking": 13,
+          "penalty_taking": 13
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "manchester_city_29179241",
+        "name": "Erling Haaland",
+        "role": "ST",
+        "attributes": {
+          "pace": 19,
+          "acceleration": 17,
+          "stamina": 14,
+          "passing": 13,
+          "first_touch": 13,
+          "dribbling": 14,
+          "tackling": 7,
+          "positioning": 7,
+          "decisions": 15,
+          "finishing": 18,
+          "long_shots": 13,
+          "crossing": 10,
+          "heading": 15,
+          "jumping_reach": 18,
+          "left": 10,
+          "right": 20,
+          "corners": 7,
+          "free_kick_taking": 13,
+          "penalty_taking": 17
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "manchester_city_18106083",
+        "name": "Jérémy Doku",
+        "role": "ST",
+        "allowed_positions": [
+          "LW"
+        ],
+        "attributes": {
+          "pace": 16,
+          "acceleration": 19,
+          "stamina": 13,
+          "passing": 14,
+          "first_touch": 13,
+          "dribbling": 18,
+          "tackling": 7,
+          "positioning": 8,
+          "decisions": 16,
+          "finishing": 11,
+          "long_shots": 9,
+          "crossing": 12,
+          "heading": 5,
+          "jumping_reach": 8,
+          "left": 10,
+          "right": 20,
+          "corners": 11,
+          "free_kick_taking": 8,
+          "penalty_taking": 14
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "manchester_city_91205962",
+        "name": "Omar Marmoush",
+        "role": "LM",
+        "allowed_positions": [
+          "LW",
+          "ST"
+        ],
+        "attributes": {
+          "pace": 16,
+          "acceleration": 16,
+          "stamina": 13,
+          "passing": 13,
+          "first_touch": 14,
+          "dribbling": 16,
+          "tackling": 8,
+          "positioning": 7,
+          "decisions": 14,
+          "finishing": 14,
+          "long_shots": 14,
+          "crossing": 12,
+          "heading": 11,
+          "jumping_reach": 11,
+          "left": 10,
+          "right": 20,
+          "corners": 15,
+          "free_kick_taking": 18,
+          "penalty_taking": 16
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "manchester_city_49056279",
+        "name": "Rayan Cherki",
+        "role": "RM",
+        "allowed_positions": [
+          "AM",
+          "RW",
+          "LW"
+        ],
+        "attributes": {
+          "pace": 14,
+          "acceleration": 14,
+          "stamina": 12,
+          "passing": 16,
+          "first_touch": 17,
+          "dribbling": 18,
+          "tackling": 3,
+          "positioning": 7,
+          "decisions": 13,
+          "finishing": 12,
+          "long_shots": 10,
+          "crossing": 14,
+          "heading": 4,
+          "jumping_reach": 6,
+          "left": 10,
+          "right": 20,
+          "corners": 14,
+          "free_kick_taking": 14,
+          "penalty_taking": 11
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "manchester_city_28126242",
+        "name": "James Trafford",
+        "role": "GK",
+        "attributes": {
+          "pace": 13,
+          "acceleration": 13,
+          "stamina": 13,
+          "passing": 11,
+          "first_touch": 9,
+          "dribbling": 10,
+          "tackling": 10,
+          "positioning": 15,
+          "decisions": 11,
+          "finishing": 10,
+          "long_shots": 10,
+          "crossing": 10,
+          "heading": 10,
+          "jumping_reach": 15,
+          "left": 10,
+          "right": 20,
+          "corners": 10,
+          "free_kick_taking": 10,
+          "penalty_taking": 10,
+          "handling": 13,
+          "reflexes": 15,
+          "one_on_ones": 14,
+          "aerial_reach": 15,
+          "command_of_area": 13,
+          "kicking": 14,
+          "throwing": 14
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "manchester_city_67217524",
+        "name": "Rodri",
+        "role": "DM",
+        "attributes": {
+          "pace": 13,
+          "acceleration": 14,
+          "stamina": 17,
+          "passing": 16,
+          "first_touch": 15,
+          "dribbling": 13,
+          "tackling": 17,
+          "positioning": 17,
+          "decisions": 18,
+          "finishing": 13,
+          "long_shots": 15,
+          "crossing": 8,
+          "heading": 13,
+          "jumping_reach": 17,
+          "left": 10,
+          "right": 20,
+          "corners": 4,
+          "free_kick_taking": 8,
+          "penalty_taking": 8
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "manchester_city_28060397",
+        "name": "John Stones",
+        "role": "CB",
+        "attributes": {
+          "pace": 15,
+          "acceleration": 14,
+          "stamina": 15,
+          "passing": 16,
+          "first_touch": 14,
+          "dribbling": 14,
+          "tackling": 16,
+          "positioning": 15,
+          "decisions": 15,
+          "finishing": 8,
+          "long_shots": 6,
+          "crossing": 6,
+          "heading": 14,
+          "jumping_reach": 16,
+          "left": 10,
+          "right": 20,
+          "corners": 4,
+          "free_kick_taking": 5,
+          "penalty_taking": 12
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "manchester_city_29194724",
+        "name": "Antoine Semenyo",
+        "role": "RW",
+        "allowed_positions": [
+          "LW",
+          "ST"
+        ],
+        "attributes": {
+          "pace": 15,
+          "acceleration": 16,
+          "stamina": 14,
+          "passing": 12,
+          "first_touch": 16,
+          "dribbling": 16,
+          "tackling": 7,
+          "positioning": 7,
+          "decisions": 13,
+          "finishing": 16,
+          "long_shots": 13,
+          "crossing": 11,
+          "heading": 10,
+          "jumping_reach": 11,
+          "left": 10,
+          "right": 20,
+          "corners": 6,
+          "free_kick_taking": 7,
+          "penalty_taking": 10
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "manchester_city_37071126",
+        "name": "Tijjani Reijnders",
+        "role": "CM",
+        "allowed_positions": [
+          "AM"
+        ],
+        "attributes": {
+          "pace": 14,
+          "acceleration": 14,
+          "stamina": 15,
+          "passing": 15,
+          "first_touch": 15,
+          "dribbling": 14,
+          "tackling": 8,
+          "positioning": 11,
+          "decisions": 14,
+          "finishing": 14,
+          "long_shots": 15,
+          "crossing": 12,
+          "heading": 11,
+          "jumping_reach": 11,
+          "left": 10,
+          "right": 20,
+          "corners": 13,
+          "free_kick_taking": 12,
+          "penalty_taking": 12
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      }
+    ],
+    "starting_lineup": [
+      {
+        "slot": "GK",
+        "player_id": "manchester_city_43252073"
+      },
+      {
+        "slot": "CB_L",
+        "player_id": "manchester_city_55070299"
+      },
+      {
+        "slot": "CB_R",
+        "player_id": "manchester_city_28108033"
+      },
+      {
+        "slot": "LB",
+        "player_id": "manchester_city_24060473"
+      },
+      {
+        "slot": "RB",
+        "player_id": "manchester_city_83188780"
+      },
+      {
+        "slot": "CM_L",
+        "player_id": "manchester_city_28108494"
+      },
+      {
+        "slot": "CM_R",
+        "player_id": "manchester_city_55041632"
+      },
+      {
+        "slot": "ST_L",
+        "player_id": "manchester_city_29179241"
+      },
+      {
+        "slot": "ST_R",
+        "player_id": "manchester_city_18106083"
+      },
+      {
+        "slot": "LM",
+        "player_id": "manchester_city_91205962"
+      },
+      {
+        "slot": "RM",
+        "player_id": "manchester_city_49056279"
+      }
+    ],
+    "bench": [
+      "manchester_city_28126242",
+      "manchester_city_67217524",
+      "manchester_city_28060397",
+      "manchester_city_29194724",
+      "manchester_city_37071126"
+    ]
+  }
+}

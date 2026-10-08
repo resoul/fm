@@ -1,0 +1,5 @@
+{
+  "schema_version": "v1",
+  "match_id": "bad-json",
+  "rules_profile": "profile_a"
+  // syntax error: missing comma and brackets

@@ -1,0 +1,14 @@
+{
+  "profile_name": "profile_b1_short_test",
+  "timing": {
+    "half_duration_ms": 60000,
+    "added_time_mode": "tracked_delays",
+    "max_ticks_guard": 5000
+  },
+  "rules": {
+    "offside_enabled": true,
+    "fouls_enabled": true,
+    "cards_enabled": true,
+    "injuries_enabled": true
+  }
+}

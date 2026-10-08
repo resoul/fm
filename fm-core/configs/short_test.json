@@ -1,0 +1,7 @@
+{
+  "profile_name": "short_test",
+  "timing": {
+    "half_duration_ms": 60000,
+    "max_ticks_guard": 5000
+  }
+}

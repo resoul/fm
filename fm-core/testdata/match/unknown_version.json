@@ -1,0 +1,16 @@
+{
+  "schema_version": "v99",
+  "match_id": "version-mismatch",
+  "rules_profile": "profile_a",
+  "pitch": {"width": 68.0, "length": 105.0},
+  "home_team": {
+    "id": "home", "name": "Home FC",
+    "tactics": {"formation": "4-4-2", "width": 0.5, "line_height": 0.5, "tempo": 0.5, "pressing": 0.5},
+    "players": [], "starting_lineup": [], "bench": []
+  },
+  "away_team": {
+    "id": "away", "name": "Away FC",
+    "tactics": {"formation": "4-4-2", "width": 0.5, "line_height": 0.5, "tempo": 0.5, "pressing": 0.5},
+    "players": [], "starting_lineup": [], "bench": []
+  }
+}

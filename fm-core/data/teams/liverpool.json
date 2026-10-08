@@ -1,0 +1,5342 @@
+{
+  "team_name": "Liverpool",
+  "players": {
+    "98028755": {
+      "id": "98028755",
+      "name": "Mohamed Salah",
+      "nation": "Egypt",
+      "team_group": "first-team",
+      "sub_team": "First team",
+      "position_group": "attack",
+      "positions": [
+        "AMR"
+      ],
+      "ca": 181,
+      "pa": 187.0,
+      "age": 33,
+      "value_eur": -1,
+      "value_formatted": "",
+      "wage": "€463K pw",
+      "contract_until": "2027-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/98028755-mohamed-salah",
+      "full_url": "https://fminside.net/players/7-fm-26/98028755-mohamed-salah",
+      "photo_url": "https://img.fminside.net/facesfm26/98028755.png",
+      "is_first_team": true,
+      "attributes": {
+        "categories": {
+          "Technical": {
+            "fm_scale_20": {
+              "Crossing": 17,
+              "Dribbling": 16,
+              "Finishing": 17,
+              "First Touch": 17,
+              "Heading": 10,
+              "Long Shots": 15,
+              "Marking": 7,
+              "Passing": 16,
+              "Tackling": 7,
+              "Technique": 17
+            },
+            "display_scale_99": {
+              "Crossing": 85,
+              "Dribbling": 80,
+              "Finishing": 85,
+              "First Touch": 85,
+              "Heading": 50,
+              "Long Shots": 75,
+              "Marking": 35,
+              "Passing": 80,
+              "Tackling": 35,
+              "Technique": 85
+            }
+          },
+          "Mental": {
+            "fm_scale_20": {
+              "Aggression": 10,
+              "Anticipation": 17,
+              "Bravery": 9,
+              "Composure": 16,
+              "Concentration": 16,
+              "Decisions": 15,
+              "Determination": 17,
+              "Flair": 15,
+              "Leadership": 14,
+              "Off the Ball": 18,
+              "Positioning": 8,
+              "Teamwork": 16,
+              "Vision": 17,
+              "Work Rate": 16
+            },
+            "display_scale_99": {
+              "Aggression": 50,
+              "Anticipation": 85,
+              "Bravery": 45,
+              "Composure": 80,
+              "Concentration": 80,
+              "Decisions": 75,
+              "Determination": 85,
+              "Flair": 75,
+              "Leadership": 70,
+              "Off the Ball": 90,
+              "Positioning": 40,
+              "Teamwork": 80,
+              "Vision": 85,
+              "Work Rate": 80
+            }
+          },
+          "Physical": {
+            "fm_scale_20": {
+              "Acceleration": 15,
+              "Agility": 18,
+              "Balance": 18,
+              "Jumping Reach": 8,
+              "Natural Fitness": 19,
+              "Pace": 15,
+              "Stamina": 17,
+              "Strength": 16
+            },
+            "display_scale_99": {
+              "Acceleration": 75,
+              "Agility": 90,
+              "Balance": 90,
+              "Jumping Reach": 40,
+              "Natural Fitness": 95,
+              "Pace": 75,
+              "Stamina": 85,
+              "Strength": 80
+            }
+          },
+          "Set Pieces": {
+            "fm_scale_20": {
+              "Corners": 13,
+              "Free Kick Taking": 12,
+              "Long Throws": 7,
+              "Penalty Taking": 17
+            },
+            "display_scale_99": {
+              "Corners": 65,
+              "Free Kick Taking": 60,
+              "Long Throws": 35,
+              "Penalty Taking": 85
+            }
+          }
+        },
+        "engine_v2": {
+          "pace": 15,
+          "acceleration": 15,
+          "stamina": 17,
+          "passing": 16,
+          "first_touch": 17,
+          "dribbling": 16,
+          "tackling": 7,
+          "positioning": 8,
+          "decisions": 15,
+          "finishing": 17,
+          "long_shots": 15,
+          "crossing": 17,
+          "heading": 10,
+          "jumping_reach": 8,
+          "corners": 13,
+          "free_kick_taking": 12,
+          "penalty_taking": 17,
+          "handling": 0,
+          "reflexes": 0,
+          "one_on_ones": 0,
+          "aerial_reach": 0,
+          "command_of_area": 0,
+          "kicking": 0,
+          "throwing": 0,
+          "left": 10,
+          "right": 20
+        }
+      }
+    },
+    "37024025": {
+      "id": "37024025",
+      "name": "Virgil van Dijk",
+      "nation": "Netherlands",
+      "team_group": "first-team",
+      "sub_team": "First team",
+      "position_group": "defence",
+      "positions": [
+        "DC"
+      ],
+      "ca": 179,
+      "pa": 185.0,
+      "age": 34,
+      "value_eur": -1,
+      "value_formatted": "",
+      "wage": "€405K pw",
+      "contract_until": "2027-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/37024025-virgil-van-dijk",
+      "full_url": "https://fminside.net/players/7-fm-26/37024025-virgil-van-dijk",
+      "photo_url": "https://img.fminside.net/facesfm26/37024025.png",
+      "is_first_team": true,
+      "attributes": {
+        "categories": {
+          "Technical": {
+            "fm_scale_20": {
+              "Crossing": 4,
+              "Dribbling": 9,
+              "Finishing": 8,
+              "First Touch": 17,
+              "Heading": 18,
+              "Long Shots": 5,
+              "Marking": 16,
+              "Passing": 16,
+              "Tackling": 17,
+              "Technique": 16
+            },
+            "display_scale_99": {
+              "Crossing": 20,
+              "Dribbling": 45,
+              "Finishing": 40,
+              "First Touch": 85,
+              "Heading": 90,
+              "Long Shots": 25,
+              "Marking": 80,
+              "Passing": 80,
+              "Tackling": 85,
+              "Technique": 80
+            }
+          },
+          "Mental": {
+            "fm_scale_20": {
+              "Aggression": 17,
+              "Anticipation": 17,
+              "Bravery": 14,
+              "Composure": 18,
+              "Concentration": 17,
+              "Decisions": 16,
+              "Determination": 18,
+              "Flair": 11,
+              "Leadership": 18,
+              "Off the Ball": 10,
+              "Positioning": 17,
+              "Teamwork": 17,
+              "Vision": 15,
+              "Work Rate": 15
+            },
+            "display_scale_99": {
+              "Aggression": 85,
+              "Anticipation": 85,
+              "Bravery": 70,
+              "Composure": 90,
+              "Concentration": 85,
+              "Decisions": 80,
+              "Determination": 90,
+              "Flair": 55,
+              "Leadership": 90,
+              "Off the Ball": 50,
+              "Positioning": 85,
+              "Teamwork": 85,
+              "Vision": 75,
+              "Work Rate": 75
+            }
+          },
+          "Physical": {
+            "fm_scale_20": {
+              "Acceleration": 14,
+              "Agility": 12,
+              "Balance": 14,
+              "Jumping Reach": 17,
+              "Natural Fitness": 17,
+              "Pace": 14,
+              "Stamina": 14,
+              "Strength": 18
+            },
+            "display_scale_99": {
+              "Acceleration": 70,
+              "Agility": 60,
+              "Balance": 70,
+              "Jumping Reach": 85,
+              "Natural Fitness": 85,
+              "Pace": 70,
+              "Stamina": 70,
+              "Strength": 90
+            }
+          },
+          "Set Pieces": {
+            "fm_scale_20": {
+              "Corners": 2,
+              "Free Kick Taking": 13,
+              "Long Throws": 6,
+              "Penalty Taking": 11
+            },
+            "display_scale_99": {
+              "Corners": 10,
+              "Free Kick Taking": 65,
+              "Long Throws": 30,
+              "Penalty Taking": 55
+            }
+          }
+        },
+        "engine_v2": {
+          "pace": 14,
+          "acceleration": 14,
+          "stamina": 14,
+          "passing": 16,
+          "first_touch": 17,
+          "dribbling": 9,
+          "tackling": 17,
+          "positioning": 17,
+          "decisions": 16,
+          "finishing": 8,
+          "long_shots": 5,
+          "crossing": 4,
+          "heading": 18,
+          "jumping_reach": 17,
+          "corners": 2,
+          "free_kick_taking": 13,
+          "penalty_taking": 11,
+          "handling": 0,
+          "reflexes": 0,
+          "one_on_ones": 0,
+          "aerial_reach": 0,
+          "command_of_area": 0,
+          "kicking": 0,
+          "throwing": 0,
+          "left": 10,
+          "right": 20
+        }
+      }
+    },
+    "19058734": {
+      "id": "19058734",
+      "name": "Alisson",
+      "nation": "Brazil",
+      "team_group": "first-team",
+      "sub_team": "First team",
+      "position_group": "goalkeeper",
+      "positions": [
+        "GK"
+      ],
+      "ca": 177,
+      "pa": 182.0,
+      "age": 33,
+      "value_eur": -1,
+      "value_formatted": "",
+      "wage": "€272K pw",
+      "contract_until": "2027-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/19058734-alisson",
+      "full_url": "https://fminside.net/players/7-fm-26/19058734-alisson",
+      "photo_url": "https://img.fminside.net/facesfm26/19058734.png",
+      "is_first_team": true,
+      "attributes": {
+        "categories": {
+          "Goalkeeping": {
+            "fm_scale_20": {
+              "Aerial Reach": 14,
+              "Command of Area": 14,
+              "Communication": 14,
+              "Eccentricity": 11,
+              "First Touch": 14,
+              "Handling": 17,
+              "Kicking": 15,
+              "One on Ones": 18,
+              "Passing": 14,
+              "Punching (Tendency)": 13,
+              "Reflexes": 17,
+              "Rushing Out (Tendency)": 16,
+              "Throwing": 14
+            },
+            "display_scale_99": {
+              "Aerial Reach": 70,
+              "Command of Area": 70,
+              "Communication": 70,
+              "Eccentricity": 55,
+              "First Touch": 70,
+              "Handling": 85,
+              "Kicking": 75,
+              "One on Ones": 90,
+              "Passing": 70,
+              "Punching (Tendency)": 65,
+              "Reflexes": 85,
+              "Rushing Out (Tendency)": 80,
+              "Throwing": 70
+            }
+          },
+          "Mental": {
+            "fm_scale_20": {
+              "Aggression": 12,
+              "Anticipation": 17,
+              "Bravery": 14,
+              "Composure": 16,
+              "Concentration": 16,
+              "Decisions": 16,
+              "Determination": 19,
+              "Flair": 13,
+              "Leadership": 13,
+              "Off the Ball": 11,
+              "Positioning": 17,
+              "Teamwork": 12,
+              "Vision": 12,
+              "Work Rate": 17
+            },
+            "display_scale_99": {
+              "Aggression": 60,
+              "Anticipation": 85,
+              "Bravery": 70,
+              "Composure": 80,
+              "Concentration": 80,
+              "Decisions": 80,
+              "Determination": 95,
+              "Flair": 65,
+              "Leadership": 65,
+              "Off the Ball": 55,
+              "Positioning": 85,
+              "Teamwork": 60,
+              "Vision": 60,
+              "Work Rate": 85
+            }
+          },
+          "Physical": {
+            "fm_scale_20": {
+              "Acceleration": 13,
+              "Agility": 17,
+              "Balance": 16,
+              "Jumping Reach": 14,
+              "Natural Fitness": 16,
+              "Pace": 12,
+              "Stamina": 10,
+              "Strength": 14
+            },
+            "display_scale_99": {
+              "Acceleration": 65,
+              "Agility": 85,
+              "Balance": 80,
+              "Jumping Reach": 70,
+              "Natural Fitness": 80,
+              "Pace": 60,
+              "Stamina": 50,
+              "Strength": 70
+            }
+          },
+          "Technical": {
+            "fm_scale_20": {
+              "Technique": 13
+            },
+            "display_scale_99": {
+              "Technique": 65
+            }
+          }
+        },
+        "engine_v2": {
+          "pace": 12,
+          "acceleration": 13,
+          "stamina": 10,
+          "passing": 14,
+          "first_touch": 14,
+          "dribbling": 10,
+          "tackling": 10,
+          "positioning": 17,
+          "decisions": 16,
+          "finishing": 10,
+          "long_shots": 10,
+          "crossing": 10,
+          "heading": 10,
+          "jumping_reach": 14,
+          "corners": 10,
+          "free_kick_taking": 10,
+          "penalty_taking": 10,
+          "handling": 17,
+          "reflexes": 17,
+          "one_on_ones": 18,
+          "aerial_reach": 14,
+          "command_of_area": 14,
+          "kicking": 15,
+          "throwing": 14,
+          "left": 10,
+          "right": 20
+        }
+      }
+    },
+    "91193048": {
+      "id": "91193048",
+      "name": "Florian Wirtz",
+      "nation": "Germany",
+      "team_group": "first-team",
+      "sub_team": "First team",
+      "position_group": "midfield",
+      "positions": [
+        "AMC"
+      ],
+      "ca": 170,
+      "pa": 188.0,
+      "age": 22,
+      "value_eur": 317033497,
+      "value_formatted": "€254M - €476M",
+      "wage": "€231K pw",
+      "contract_until": "2030-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/91193048-florian-wirtz",
+      "full_url": "https://fminside.net/players/7-fm-26/91193048-florian-wirtz",
+      "photo_url": "https://img.fminside.net/facesfm26/91193048.png",
+      "is_first_team": true,
+      "attributes": {
+        "categories": {
+          "Technical": {
+            "fm_scale_20": {
+              "Crossing": 13,
+              "Dribbling": 17,
+              "Finishing": 13,
+              "First Touch": 18,
+              "Heading": 7,
+              "Long Shots": 14,
+              "Marking": 8,
+              "Passing": 18,
+              "Tackling": 10,
+              "Technique": 18
+            },
+            "display_scale_99": {
+              "Crossing": 65,
+              "Dribbling": 85,
+              "Finishing": 65,
+              "First Touch": 90,
+              "Heading": 35,
+              "Long Shots": 70,
+              "Marking": 40,
+              "Passing": 90,
+              "Tackling": 50,
+              "Technique": 90
+            }
+          },
+          "Mental": {
+            "fm_scale_20": {
+              "Aggression": 13,
+              "Anticipation": 16,
+              "Bravery": 13,
+              "Composure": 16,
+              "Concentration": 15,
+              "Decisions": 15,
+              "Determination": 17,
+              "Flair": 18,
+              "Leadership": 9,
+              "Off the Ball": 16,
+              "Positioning": 7,
+              "Teamwork": 16,
+              "Vision": 18,
+              "Work Rate": 17
+            },
+            "display_scale_99": {
+              "Aggression": 65,
+              "Anticipation": 80,
+              "Bravery": 65,
+              "Composure": 80,
+              "Concentration": 75,
+              "Decisions": 75,
+              "Determination": 85,
+              "Flair": 90,
+              "Leadership": 45,
+              "Off the Ball": 80,
+              "Positioning": 35,
+              "Teamwork": 80,
+              "Vision": 90,
+              "Work Rate": 85
+            }
+          },
+          "Physical": {
+            "fm_scale_20": {
+              "Acceleration": 14,
+              "Agility": 16,
+              "Balance": 15,
+              "Jumping Reach": 7,
+              "Natural Fitness": 13,
+              "Pace": 15,
+              "Stamina": 16,
+              "Strength": 10
+            },
+            "display_scale_99": {
+              "Acceleration": 70,
+              "Agility": 80,
+              "Balance": 75,
+              "Jumping Reach": 35,
+              "Natural Fitness": 65,
+              "Pace": 75,
+              "Stamina": 80,
+              "Strength": 50
+            }
+          },
+          "Set Pieces": {
+            "fm_scale_20": {
+              "Corners": 14,
+              "Free Kick Taking": 13,
+              "Long Throws": 3,
+              "Penalty Taking": 14
+            },
+            "display_scale_99": {
+              "Corners": 70,
+              "Free Kick Taking": 65,
+              "Long Throws": 15,
+              "Penalty Taking": 70
+            }
+          }
+        },
+        "engine_v2": {
+          "pace": 15,
+          "acceleration": 14,
+          "stamina": 16,
+          "passing": 18,
+          "first_touch": 18,
+          "dribbling": 17,
+          "tackling": 10,
+          "positioning": 7,
+          "decisions": 15,
+          "finishing": 13,
+          "long_shots": 14,
+          "crossing": 13,
+          "heading": 7,
+          "jumping_reach": 7,
+          "corners": 14,
+          "free_kick_taking": 13,
+          "penalty_taking": 14,
+          "handling": 0,
+          "reflexes": 0,
+          "one_on_ones": 0,
+          "aerial_reach": 0,
+          "command_of_area": 0,
+          "kicking": 0,
+          "throwing": 0,
+          "left": 10,
+          "right": 20
+        }
+      }
+    },
+    "93070286": {
+      "id": "93070286",
+      "name": "Alexander Isak",
+      "nation": "Sweden",
+      "team_group": "first-team",
+      "sub_team": "First team",
+      "position_group": "attack",
+      "positions": [
+        "AML",
+        "ST"
+      ],
+      "ca": 169,
+      "pa": 180.0,
+      "age": 26,
+      "value_eur": 287638773,
+      "value_formatted": "€230M - €431M",
+      "wage": "€347K pw",
+      "contract_until": "2031-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/93070286-alexander-isak",
+      "full_url": "https://fminside.net/players/7-fm-26/93070286-alexander-isak",
+      "photo_url": "https://img.fminside.net/facesfm26/93070286.png",
+      "is_first_team": true,
+      "attributes": {
+        "categories": {
+          "Technical": {
+            "fm_scale_20": {
+              "Crossing": 9,
+              "Dribbling": 17,
+              "Finishing": 18,
+              "First Touch": 15,
+              "Heading": 12,
+              "Long Shots": 10,
+              "Marking": 5,
+              "Passing": 13,
+              "Tackling": 6,
+              "Technique": 17
+            },
+            "display_scale_99": {
+              "Crossing": 45,
+              "Dribbling": 85,
+              "Finishing": 90,
+              "First Touch": 75,
+              "Heading": 60,
+              "Long Shots": 50,
+              "Marking": 25,
+              "Passing": 65,
+              "Tackling": 30,
+              "Technique": 85
+            }
+          },
+          "Mental": {
+            "fm_scale_20": {
+              "Aggression": 11,
+              "Anticipation": 15,
+              "Bravery": 13,
+              "Composure": 16,
+              "Concentration": 12,
+              "Decisions": 14,
+              "Determination": 15,
+              "Flair": 17,
+              "Leadership": 7,
+              "Off the Ball": 18,
+              "Positioning": 6,
+              "Teamwork": 14,
+              "Vision": 15,
+              "Work Rate": 14
+            },
+            "display_scale_99": {
+              "Aggression": 55,
+              "Anticipation": 75,
+              "Bravery": 65,
+              "Composure": 80,
+              "Concentration": 60,
+              "Decisions": 70,
+              "Determination": 75,
+              "Flair": 85,
+              "Leadership": 35,
+              "Off the Ball": 90,
+              "Positioning": 30,
+              "Teamwork": 70,
+              "Vision": 75,
+              "Work Rate": 70
+            }
+          },
+          "Physical": {
+            "fm_scale_20": {
+              "Acceleration": 17,
+              "Agility": 18,
+              "Balance": 15,
+              "Jumping Reach": 14,
+              "Natural Fitness": 14,
+              "Pace": 16,
+              "Stamina": 14,
+              "Strength": 12
+            },
+            "display_scale_99": {
+              "Acceleration": 85,
+              "Agility": 90,
+              "Balance": 75,
+              "Jumping Reach": 70,
+              "Natural Fitness": 70,
+              "Pace": 80,
+              "Stamina": 70,
+              "Strength": 60
+            }
+          },
+          "Set Pieces": {
+            "fm_scale_20": {
+              "Corners": 7,
+              "Free Kick Taking": 8,
+              "Long Throws": 6,
+              "Penalty Taking": 16
+            },
+            "display_scale_99": {
+              "Corners": 35,
+              "Free Kick Taking": 40,
+              "Long Throws": 30,
+              "Penalty Taking": 80
+            }
+          }
+        },
+        "engine_v2": {
+          "pace": 16,
+          "acceleration": 17,
+          "stamina": 14,
+          "passing": 13,
+          "first_touch": 15,
+          "dribbling": 17,
+          "tackling": 6,
+          "positioning": 6,
+          "decisions": 14,
+          "finishing": 18,
+          "long_shots": 10,
+          "crossing": 9,
+          "heading": 12,
+          "jumping_reach": 14,
+          "corners": 7,
+          "free_kick_taking": 8,
+          "penalty_taking": 16,
+          "handling": 0,
+          "reflexes": 0,
+          "one_on_ones": 0,
+          "aerial_reach": 0,
+          "command_of_area": 0,
+          "kicking": 0,
+          "throwing": 0,
+          "left": 10,
+          "right": 20
+        }
+      }
+    },
+    "16202373": {
+      "id": "16202373",
+      "name": "Dominik Szoboszlai",
+      "nation": "Hungary",
+      "team_group": "first-team",
+      "sub_team": "First team",
+      "position_group": "midfield",
+      "positions": [
+        "MC",
+        "AMC"
+      ],
+      "ca": 159,
+      "pa": 170.0,
+      "age": 25,
+      "value_eur": 94254834,
+      "value_formatted": "€75M - €141M",
+      "wage": "€168K pw",
+      "contract_until": "2028-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/16202373-dominik-szoboszlai",
+      "full_url": "https://fminside.net/players/7-fm-26/16202373-dominik-szoboszlai",
+      "photo_url": "https://img.fminside.net/facesfm26/16202373.png",
+      "is_first_team": true,
+      "attributes": {
+        "categories": {
+          "Technical": {
+            "fm_scale_20": {
+              "Crossing": 14,
+              "Dribbling": 13,
+              "Finishing": 11,
+              "First Touch": 16,
+              "Heading": 8,
+              "Long Shots": 14,
+              "Marking": 8,
+              "Passing": 16,
+              "Tackling": 11,
+              "Technique": 16
+            },
+            "display_scale_99": {
+              "Crossing": 70,
+              "Dribbling": 65,
+              "Finishing": 55,
+              "First Touch": 80,
+              "Heading": 40,
+              "Long Shots": 70,
+              "Marking": 40,
+              "Passing": 80,
+              "Tackling": 55,
+              "Technique": 80
+            }
+          },
+          "Mental": {
+            "fm_scale_20": {
+              "Aggression": 12,
+              "Anticipation": 14,
+              "Bravery": 12,
+              "Composure": 16,
+              "Concentration": 14,
+              "Decisions": 14,
+              "Determination": 15,
+              "Flair": 15,
+              "Leadership": 12,
+              "Off the Ball": 15,
+              "Positioning": 11,
+              "Teamwork": 16,
+              "Vision": 15,
+              "Work Rate": 16
+            },
+            "display_scale_99": {
+              "Aggression": 60,
+              "Anticipation": 70,
+              "Bravery": 60,
+              "Composure": 80,
+              "Concentration": 70,
+              "Decisions": 70,
+              "Determination": 75,
+              "Flair": 75,
+              "Leadership": 60,
+              "Off the Ball": 75,
+              "Positioning": 55,
+              "Teamwork": 80,
+              "Vision": 75,
+              "Work Rate": 80
+            }
+          },
+          "Physical": {
+            "fm_scale_20": {
+              "Acceleration": 14,
+              "Agility": 15,
+              "Balance": 14,
+              "Jumping Reach": 10,
+              "Natural Fitness": 18,
+              "Pace": 16,
+              "Stamina": 17,
+              "Strength": 11
+            },
+            "display_scale_99": {
+              "Acceleration": 70,
+              "Agility": 75,
+              "Balance": 70,
+              "Jumping Reach": 50,
+              "Natural Fitness": 90,
+              "Pace": 80,
+              "Stamina": 85,
+              "Strength": 55
+            }
+          },
+          "Set Pieces": {
+            "fm_scale_20": {
+              "Corners": 15,
+              "Free Kick Taking": 15,
+              "Long Throws": 5,
+              "Penalty Taking": 14
+            },
+            "display_scale_99": {
+              "Corners": 75,
+              "Free Kick Taking": 75,
+              "Long Throws": 25,
+              "Penalty Taking": 70
+            }
+          }
+        },
+        "engine_v2": {
+          "pace": 16,
+          "acceleration": 14,
+          "stamina": 17,
+          "passing": 16,
+          "first_touch": 16,
+          "dribbling": 13,
+          "tackling": 11,
+          "positioning": 11,
+          "decisions": 14,
+          "finishing": 11,
+          "long_shots": 14,
+          "crossing": 14,
+          "heading": 8,
+          "jumping_reach": 10,
+          "corners": 15,
+          "free_kick_taking": 15,
+          "penalty_taking": 14,
+          "handling": 0,
+          "reflexes": 0,
+          "one_on_ones": 0,
+          "aerial_reach": 0,
+          "command_of_area": 0,
+          "kicking": 0,
+          "throwing": 0,
+          "left": 10,
+          "right": 20
+        }
+      }
+    },
+    "14157184": {
+      "id": "14157184",
+      "name": "Alexis Mac Allister",
+      "nation": "Argentina",
+      "team_group": "first-team",
+      "sub_team": "First team",
+      "position_group": "midfield",
+      "positions": [
+        "DM",
+        "MC",
+        "AMC"
+      ],
+      "ca": 159,
+      "pa": 169.0,
+      "age": 26,
+      "value_eur": 73294089,
+      "value_formatted": "€59M - €110M",
+      "wage": "€202K pw",
+      "contract_until": "2028-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/14157184-alexis-mac-allister",
+      "full_url": "https://fminside.net/players/7-fm-26/14157184-alexis-mac-allister",
+      "photo_url": "https://img.fminside.net/facesfm26/14157184.png",
+      "is_first_team": true,
+      "attributes": {
+        "categories": {
+          "Technical": {
+            "fm_scale_20": {
+              "Crossing": 13,
+              "Dribbling": 13,
+              "Finishing": 11,
+              "First Touch": 16,
+              "Heading": 10,
+              "Long Shots": 13,
+              "Marking": 10,
+              "Passing": 16,
+              "Tackling": 14,
+              "Technique": 16
+            },
+            "display_scale_99": {
+              "Crossing": 65,
+              "Dribbling": 65,
+              "Finishing": 55,
+              "First Touch": 80,
+              "Heading": 50,
+              "Long Shots": 65,
+              "Marking": 50,
+              "Passing": 80,
+              "Tackling": 70,
+              "Technique": 80
+            }
+          },
+          "Mental": {
+            "fm_scale_20": {
+              "Aggression": 14,
+              "Anticipation": 16,
+              "Bravery": 13,
+              "Composure": 17,
+              "Concentration": 16,
+              "Decisions": 16,
+              "Determination": 16,
+              "Flair": 13,
+              "Leadership": 10,
+              "Off the Ball": 16,
+              "Positioning": 14,
+              "Teamwork": 17,
+              "Vision": 15,
+              "Work Rate": 16
+            },
+            "display_scale_99": {
+              "Aggression": 70,
+              "Anticipation": 80,
+              "Bravery": 65,
+              "Composure": 85,
+              "Concentration": 80,
+              "Decisions": 80,
+              "Determination": 80,
+              "Flair": 65,
+              "Leadership": 50,
+              "Off the Ball": 80,
+              "Positioning": 70,
+              "Teamwork": 85,
+              "Vision": 75,
+              "Work Rate": 80
+            }
+          },
+          "Physical": {
+            "fm_scale_20": {
+              "Acceleration": 12,
+              "Agility": 14,
+              "Balance": 14,
+              "Jumping Reach": 8,
+              "Natural Fitness": 14,
+              "Pace": 12,
+              "Stamina": 15,
+              "Strength": 12
+            },
+            "display_scale_99": {
+              "Acceleration": 60,
+              "Agility": 70,
+              "Balance": 70,
+              "Jumping Reach": 40,
+              "Natural Fitness": 70,
+              "Pace": 60,
+              "Stamina": 75,
+              "Strength": 60
+            }
+          },
+          "Set Pieces": {
+            "fm_scale_20": {
+              "Corners": 14,
+              "Free Kick Taking": 13,
+              "Long Throws": 4,
+              "Penalty Taking": 14
+            },
+            "display_scale_99": {
+              "Corners": 70,
+              "Free Kick Taking": 65,
+              "Long Throws": 20,
+              "Penalty Taking": 70
+            }
+          }
+        },
+        "engine_v2": {
+          "pace": 12,
+          "acceleration": 12,
+          "stamina": 15,
+          "passing": 16,
+          "first_touch": 16,
+          "dribbling": 13,
+          "tackling": 14,
+          "positioning": 14,
+          "decisions": 16,
+          "finishing": 11,
+          "long_shots": 13,
+          "crossing": 13,
+          "heading": 10,
+          "jumping_reach": 8,
+          "corners": 14,
+          "free_kick_taking": 13,
+          "penalty_taking": 14,
+          "handling": 0,
+          "reflexes": 0,
+          "one_on_ones": 0,
+          "aerial_reach": 0,
+          "command_of_area": 0,
+          "kicking": 0,
+          "throwing": 0,
+          "left": 10,
+          "right": 20
+        }
+      }
+    },
+    "48037822": {
+      "id": "48037822",
+      "name": "Ibrahima Konaté",
+      "nation": "France",
+      "team_group": "first-team",
+      "sub_team": "First team",
+      "position_group": "defence",
+      "positions": [
+        "DC"
+      ],
+      "ca": 158,
+      "pa": 170.0,
+      "age": 26,
+      "value_eur": 64567881,
+      "value_formatted": "€52M - €97M",
+      "wage": "€162K pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/48037822-ibrahima-konate",
+      "full_url": "https://fminside.net/players/7-fm-26/48037822-ibrahima-konate",
+      "photo_url": "https://img.fminside.net/facesfm26/48037822.png",
+      "is_first_team": true,
+      "attributes": {
+        "categories": {
+          "Technical": {
+            "fm_scale_20": {
+              "Crossing": 5,
+              "Dribbling": 13,
+              "Finishing": 5,
+              "First Touch": 14,
+              "Heading": 16,
+              "Long Shots": 4,
+              "Marking": 16,
+              "Passing": 14,
+              "Tackling": 16,
+              "Technique": 14
+            },
+            "display_scale_99": {
+              "Crossing": 25,
+              "Dribbling": 65,
+              "Finishing": 25,
+              "First Touch": 70,
+              "Heading": 80,
+              "Long Shots": 20,
+              "Marking": 80,
+              "Passing": 70,
+              "Tackling": 80,
+              "Technique": 70
+            }
+          },
+          "Mental": {
+            "fm_scale_20": {
+              "Aggression": 16,
+              "Anticipation": 14,
+              "Bravery": 16,
+              "Composure": 14,
+              "Concentration": 12,
+              "Decisions": 14,
+              "Determination": 14,
+              "Flair": 8,
+              "Leadership": 12,
+              "Off the Ball": 8,
+              "Positioning": 15,
+              "Teamwork": 15,
+              "Vision": 9,
+              "Work Rate": 15
+            },
+            "display_scale_99": {
+              "Aggression": 80,
+              "Anticipation": 70,
+              "Bravery": 80,
+              "Composure": 70,
+              "Concentration": 60,
+              "Decisions": 70,
+              "Determination": 70,
+              "Flair": 40,
+              "Leadership": 60,
+              "Off the Ball": 40,
+              "Positioning": 75,
+              "Teamwork": 75,
+              "Vision": 45,
+              "Work Rate": 75
+            }
+          },
+          "Physical": {
+            "fm_scale_20": {
+              "Acceleration": 14,
+              "Agility": 14,
+              "Balance": 14,
+              "Jumping Reach": 16,
+              "Natural Fitness": 14,
+              "Pace": 15,
+              "Stamina": 14,
+              "Strength": 18
+            },
+            "display_scale_99": {
+              "Acceleration": 70,
+              "Agility": 70,
+              "Balance": 70,
+              "Jumping Reach": 80,
+              "Natural Fitness": 70,
+              "Pace": 75,
+              "Stamina": 70,
+              "Strength": 90
+            }
+          },
+          "Set Pieces": {
+            "fm_scale_20": {
+              "Corners": 3,
+              "Free Kick Taking": 6,
+              "Long Throws": 12,
+              "Penalty Taking": 6
+            },
+            "display_scale_99": {
+              "Corners": 15,
+              "Free Kick Taking": 30,
+              "Long Throws": 60,
+              "Penalty Taking": 30
+            }
+          }
+        },
+        "engine_v2": {
+          "pace": 15,
+          "acceleration": 14,
+          "stamina": 14,
+          "passing": 14,
+          "first_touch": 14,
+          "dribbling": 13,
+          "tackling": 16,
+          "positioning": 15,
+          "decisions": 14,
+          "finishing": 5,
+          "long_shots": 4,
+          "crossing": 5,
+          "heading": 16,
+          "jumping_reach": 16,
+          "corners": 3,
+          "free_kick_taking": 6,
+          "penalty_taking": 6,
+          "handling": 0,
+          "reflexes": 0,
+          "one_on_ones": 0,
+          "aerial_reach": 0,
+          "command_of_area": 0,
+          "kicking": 0,
+          "throwing": 0,
+          "left": 10,
+          "right": 20
+        }
+      }
+    },
+    "37071197": {
+      "id": "37071197",
+      "name": "Ryan Gravenberch",
+      "nation": "Netherlands",
+      "team_group": "first-team",
+      "sub_team": "First team",
+      "position_group": "midfield",
+      "positions": [
+        "DM",
+        "MC"
+      ],
+      "ca": 158,
+      "pa": 169.0,
+      "age": 23,
+      "value_eur": 93155560,
+      "value_formatted": "€75M - €140M",
+      "wage": "€231K pw",
+      "contract_until": "2032-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/37071197-ryan-gravenberch",
+      "full_url": "https://fminside.net/players/7-fm-26/37071197-ryan-gravenberch",
+      "photo_url": "https://img.fminside.net/facesfm26/37071197.png",
+      "is_first_team": true,
+      "attributes": {
+        "categories": {
+          "Technical": {
+            "fm_scale_20": {
+              "Crossing": 11,
+              "Dribbling": 15,
+              "Finishing": 9,
+              "First Touch": 15,
+              "Heading": 12,
+              "Long Shots": 10,
+              "Marking": 12,
+              "Passing": 15,
+              "Tackling": 13,
+              "Technique": 16
+            },
+            "display_scale_99": {
+              "Crossing": 55,
+              "Dribbling": 75,
+              "Finishing": 45,
+              "First Touch": 75,
+              "Heading": 60,
+              "Long Shots": 50,
+              "Marking": 60,
+              "Passing": 75,
+              "Tackling": 65,
+              "Technique": 80
+            }
+          },
+          "Mental": {
+            "fm_scale_20": {
+              "Aggression": 13,
+              "Anticipation": 16,
+              "Bravery": 13,
+              "Composure": 16,
+              "Concentration": 14,
+              "Decisions": 14,
+              "Determination": 15,
+              "Flair": 15,
+              "Leadership": 7,
+              "Off the Ball": 14,
+              "Positioning": 14,
+              "Teamwork": 15,
+              "Vision": 14,
+              "Work Rate": 15
+            },
+            "display_scale_99": {
+              "Aggression": 65,
+              "Anticipation": 80,
+              "Bravery": 65,
+              "Composure": 80,
+              "Concentration": 70,
+              "Decisions": 70,
+              "Determination": 75,
+              "Flair": 75,
+              "Leadership": 35,
+              "Off the Ball": 70,
+              "Positioning": 70,
+              "Teamwork": 75,
+              "Vision": 70,
+              "Work Rate": 75
+            }
+          },
+          "Physical": {
+            "fm_scale_20": {
+              "Acceleration": 15,
+              "Agility": 18,
+              "Balance": 15,
+              "Jumping Reach": 12,
+              "Natural Fitness": 14,
+              "Pace": 14,
+              "Stamina": 15,
+              "Strength": 13
+            },
+            "display_scale_99": {
+              "Acceleration": 75,
+              "Agility": 90,
+              "Balance": 75,
+              "Jumping Reach": 60,
+              "Natural Fitness": 70,
+              "Pace": 70,
+              "Stamina": 75,
+              "Strength": 65
+            }
+          },
+          "Set Pieces": {
+            "fm_scale_20": {
+              "Corners": 11,
+              "Free Kick Taking": 10,
+              "Long Throws": 7,
+              "Penalty Taking": 10
+            },
+            "display_scale_99": {
+              "Corners": 55,
+              "Free Kick Taking": 50,
+              "Long Throws": 35,
+              "Penalty Taking": 50
+            }
+          }
+        },
+        "engine_v2": {
+          "pace": 14,
+          "acceleration": 15,
+          "stamina": 15,
+          "passing": 15,
+          "first_touch": 15,
+          "dribbling": 15,
+          "tackling": 13,
+          "positioning": 14,
+          "decisions": 14,
+          "finishing": 9,
+          "long_shots": 10,
+          "crossing": 11,
+          "heading": 12,
+          "jumping_reach": 12,
+          "corners": 11,
+          "free_kick_taking": 10,
+          "penalty_taking": 10,
+          "handling": 0,
+          "reflexes": 0,
+          "one_on_ones": 0,
+          "aerial_reach": 0,
+          "command_of_area": 0,
+          "kicking": 0,
+          "throwing": 0,
+          "left": 10,
+          "right": 20
+        }
+      }
+    },
+    "49062667": {
+      "id": "49062667",
+      "name": "Hugo Ekitiké",
+      "nation": "France",
+      "team_group": "first-team",
+      "sub_team": "First team",
+      "position_group": "attack",
+      "positions": [
+        "ST"
+      ],
+      "ca": 157,
+      "pa": 174.0,
+      "age": 23,
+      "value_eur": 95546964,
+      "value_formatted": "€76M - €143M",
+      "wage": "€289K pw",
+      "contract_until": "2031-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/49062667-hugo-ekitike",
+      "full_url": "https://fminside.net/players/7-fm-26/49062667-hugo-ekitike",
+      "photo_url": "https://img.fminside.net/facesfm26/49062667.png",
+      "is_first_team": true,
+      "attributes": {
+        "categories": {
+          "Technical": {
+            "fm_scale_20": {
+              "Crossing": 10,
+              "Dribbling": 15,
+              "Finishing": 14,
+              "First Touch": 16,
+              "Heading": 14,
+              "Long Shots": 13,
+              "Marking": 6,
+              "Passing": 15,
+              "Tackling": 7,
+              "Technique": 16
+            },
+            "display_scale_99": {
+              "Crossing": 50,
+              "Dribbling": 75,
+              "Finishing": 70,
+              "First Touch": 80,
+              "Heading": 70,
+              "Long Shots": 65,
+              "Marking": 30,
+              "Passing": 75,
+              "Tackling": 35,
+              "Technique": 80
+            }
+          },
+          "Mental": {
+            "fm_scale_20": {
+              "Aggression": 12,
+              "Anticipation": 15,
+              "Bravery": 12,
+              "Composure": 13,
+              "Concentration": 12,
+              "Decisions": 13,
+              "Determination": 14,
+              "Flair": 16,
+              "Leadership": 10,
+              "Off the Ball": 15,
+              "Positioning": 7,
+              "Teamwork": 14,
+              "Vision": 15,
+              "Work Rate": 13
+            },
+            "display_scale_99": {
+              "Aggression": 60,
+              "Anticipation": 75,
+              "Bravery": 60,
+              "Composure": 65,
+              "Concentration": 60,
+              "Decisions": 65,
+              "Determination": 70,
+              "Flair": 80,
+              "Leadership": 50,
+              "Off the Ball": 75,
+              "Positioning": 35,
+              "Teamwork": 70,
+              "Vision": 75,
+              "Work Rate": 65
+            }
+          },
+          "Physical": {
+            "fm_scale_20": {
+              "Acceleration": 16,
+              "Agility": 16,
+              "Balance": 16,
+              "Jumping Reach": 14,
+              "Natural Fitness": 12,
+              "Pace": 16,
+              "Stamina": 13,
+              "Strength": 13
+            },
+            "display_scale_99": {
+              "Acceleration": 80,
+              "Agility": 80,
+              "Balance": 80,
+              "Jumping Reach": 70,
+              "Natural Fitness": 60,
+              "Pace": 80,
+              "Stamina": 65,
+              "Strength": 65
+            }
+          },
+          "Set Pieces": {
+            "fm_scale_20": {
+              "Corners": 6,
+              "Free Kick Taking": 11,
+              "Long Throws": 5,
+              "Penalty Taking": 13
+            },
+            "display_scale_99": {
+              "Corners": 30,
+              "Free Kick Taking": 55,
+              "Long Throws": 25,
+              "Penalty Taking": 65
+            }
+          }
+        },
+        "engine_v2": {
+          "pace": 16,
+          "acceleration": 16,
+          "stamina": 13,
+          "passing": 15,
+          "first_touch": 16,
+          "dribbling": 15,
+          "tackling": 7,
+          "positioning": 7,
+          "decisions": 13,
+          "finishing": 14,
+          "long_shots": 13,
+          "crossing": 10,
+          "heading": 14,
+          "jumping_reach": 14,
+          "corners": 6,
+          "free_kick_taking": 11,
+          "penalty_taking": 13,
+          "handling": 0,
+          "reflexes": 0,
+          "one_on_ones": 0,
+          "aerial_reach": 0,
+          "command_of_area": 0,
+          "kicking": 0,
+          "throwing": 0,
+          "left": 10,
+          "right": 20
+        }
+      }
+    },
+    "59138294": {
+      "id": "59138294",
+      "name": "Giorgi Mamardashvili",
+      "nation": "Georgia",
+      "team_group": "first-team",
+      "sub_team": "First team",
+      "position_group": "goalkeeper",
+      "positions": [
+        "GK"
+      ],
+      "ca": 156,
+      "pa": 170.0,
+      "age": 25,
+      "value_eur": 60502496,
+      "value_formatted": "€48M - €91M",
+      "wage": "€145K pw",
+      "contract_until": "2030-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/59138294-giorgi-mamardashvili",
+      "full_url": "https://fminside.net/players/7-fm-26/59138294-giorgi-mamardashvili",
+      "photo_url": "https://img.fminside.net/facesfm26/59138294.png",
+      "is_first_team": true,
+      "attributes": {
+        "categories": {
+          "Goalkeeping": {
+            "fm_scale_20": {
+              "Aerial Reach": 17,
+              "Command of Area": 16,
+              "Communication": 16,
+              "Eccentricity": 8,
+              "First Touch": 12,
+              "Handling": 15,
+              "Kicking": 15,
+              "One on Ones": 14,
+              "Passing": 12,
+              "Punching (Tendency)": 11,
+              "Reflexes": 17,
+              "Rushing Out (Tendency)": 14,
+              "Throwing": 12
+            },
+            "display_scale_99": {
+              "Aerial Reach": 85,
+              "Command of Area": 80,
+              "Communication": 80,
+              "Eccentricity": 40,
+              "First Touch": 60,
+              "Handling": 75,
+              "Kicking": 75,
+              "One on Ones": 70,
+              "Passing": 60,
+              "Punching (Tendency)": 55,
+              "Reflexes": 85,
+              "Rushing Out (Tendency)": 70,
+              "Throwing": 60
+            }
+          },
+          "Mental": {
+            "fm_scale_20": {
+              "Aggression": 11,
+              "Anticipation": 13,
+              "Bravery": 14,
+              "Composure": 13,
+              "Concentration": 14,
+              "Decisions": 13,
+              "Determination": 14,
+              "Flair": 11,
+              "Leadership": 11,
+              "Off the Ball": 1,
+              "Positioning": 14,
+              "Teamwork": 14,
+              "Vision": 11,
+              "Work Rate": 15
+            },
+            "display_scale_99": {
+              "Aggression": 55,
+              "Anticipation": 65,
+              "Bravery": 70,
+              "Composure": 65,
+              "Concentration": 70,
+              "Decisions": 65,
+              "Determination": 70,
+              "Flair": 55,
+              "Leadership": 55,
+              "Off the Ball": 5,
+              "Positioning": 70,
+              "Teamwork": 70,
+              "Vision": 55,
+              "Work Rate": 75
+            }
+          },
+          "Physical": {
+            "fm_scale_20": {
+              "Acceleration": 10,
+              "Agility": 14,
+              "Balance": 11,
+              "Jumping Reach": 18,
+              "Natural Fitness": 12,
+              "Pace": 11,
+              "Stamina": 12,
+              "Strength": 15
+            },
+            "display_scale_99": {
+              "Acceleration": 50,
+              "Agility": 70,
+              "Balance": 55,
+              "Jumping Reach": 90,
+              "Natural Fitness": 60,
+              "Pace": 55,
+              "Stamina": 60,
+              "Strength": 75
+            }
+          },
+          "Technical": {
+            "fm_scale_20": {
+              "Technique": 13
+            },
+            "display_scale_99": {
+              "Technique": 65
+            }
+          }
+        },
+        "engine_v2": {
+          "pace": 11,
+          "acceleration": 10,
+          "stamina": 12,
+          "passing": 12,
+          "first_touch": 12,
+          "dribbling": 10,
+          "tackling": 10,
+          "positioning": 14,
+          "decisions": 13,
+          "finishing": 10,
+          "long_shots": 10,
+          "crossing": 10,
+          "heading": 10,
+          "jumping_reach": 18,
+          "corners": 10,
+          "free_kick_taking": 10,
+          "penalty_taking": 10,
+          "handling": 15,
+          "reflexes": 17,
+          "one_on_ones": 14,
+          "aerial_reach": 17,
+          "command_of_area": 16,
+          "kicking": 15,
+          "throwing": 12,
+          "left": 10,
+          "right": 20
+        }
+      }
+    },
+    "37062185": {
+      "id": "37062185",
+      "name": "Cody Gakpo",
+      "nation": "Netherlands",
+      "team_group": "first-team",
+      "sub_team": "First team",
+      "position_group": "attack",
+      "positions": [
+        "AML"
+      ],
+      "ca": 155,
+      "pa": 164.0,
+      "age": 26,
+      "value_eur": 59881502,
+      "value_formatted": "€48M - €90M",
+      "wage": "€191K pw",
+      "contract_until": "2030-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/37062185-cody-gakpo",
+      "full_url": "https://fminside.net/players/7-fm-26/37062185-cody-gakpo",
+      "photo_url": "https://img.fminside.net/facesfm26/37062185.png",
+      "is_first_team": true,
+      "attributes": {
+        "categories": {
+          "Technical": {
+            "fm_scale_20": {
+              "Crossing": 13,
+              "Dribbling": 15,
+              "Finishing": 13,
+              "First Touch": 15,
+              "Heading": 12,
+              "Long Shots": 14,
+              "Marking": 8,
+              "Passing": 14,
+              "Tackling": 8,
+              "Technique": 15
+            },
+            "display_scale_99": {
+              "Crossing": 65,
+              "Dribbling": 75,
+              "Finishing": 65,
+              "First Touch": 75,
+              "Heading": 60,
+              "Long Shots": 70,
+              "Marking": 40,
+              "Passing": 70,
+              "Tackling": 40,
+              "Technique": 75
+            }
+          },
+          "Mental": {
+            "fm_scale_20": {
+              "Aggression": 11,
+              "Anticipation": 14,
+              "Bravery": 12,
+              "Composure": 15,
+              "Concentration": 13,
+              "Decisions": 12,
+              "Determination": 14,
+              "Flair": 14,
+              "Leadership": 11,
+              "Off the Ball": 14,
+              "Positioning": 9,
+              "Teamwork": 14,
+              "Vision": 13,
+              "Work Rate": 13
+            },
+            "display_scale_99": {
+              "Aggression": 55,
+              "Anticipation": 70,
+              "Bravery": 60,
+              "Composure": 75,
+              "Concentration": 65,
+              "Decisions": 60,
+              "Determination": 70,
+              "Flair": 70,
+              "Leadership": 55,
+              "Off the Ball": 70,
+              "Positioning": 45,
+              "Teamwork": 70,
+              "Vision": 65,
+              "Work Rate": 65
+            }
+          },
+          "Physical": {
+            "fm_scale_20": {
+              "Acceleration": 15,
+              "Agility": 16,
+              "Balance": 15,
+              "Jumping Reach": 13,
+              "Natural Fitness": 12,
+              "Pace": 14,
+              "Stamina": 14,
+              "Strength": 13
+            },
+            "display_scale_99": {
+              "Acceleration": 75,
+              "Agility": 80,
+              "Balance": 75,
+              "Jumping Reach": 65,
+              "Natural Fitness": 60,
+              "Pace": 70,
+              "Stamina": 70,
+              "Strength": 65
+            }
+          },
+          "Set Pieces": {
+            "fm_scale_20": {
+              "Corners": 14,
+              "Free Kick Taking": 11,
+              "Long Throws": 6,
+              "Penalty Taking": 12
+            },
+            "display_scale_99": {
+              "Corners": 70,
+              "Free Kick Taking": 55,
+              "Long Throws": 30,
+              "Penalty Taking": 60
+            }
+          }
+        },
+        "engine_v2": {
+          "pace": 14,
+          "acceleration": 15,
+          "stamina": 14,
+          "passing": 14,
+          "first_touch": 15,
+          "dribbling": 15,
+          "tackling": 8,
+          "positioning": 9,
+          "decisions": 12,
+          "finishing": 13,
+          "long_shots": 14,
+          "crossing": 13,
+          "heading": 12,
+          "jumping_reach": 13,
+          "corners": 14,
+          "free_kick_taking": 11,
+          "penalty_taking": 12,
+          "handling": 0,
+          "reflexes": 0,
+          "one_on_ones": 0,
+          "aerial_reach": 0,
+          "command_of_area": 0,
+          "kicking": 0,
+          "throwing": 0,
+          "left": 10,
+          "right": 20
+        }
+      }
+    },
+    "28113828": {
+      "id": "28113828",
+      "name": "Jeremie Frimpong",
+      "nation": "Netherlands",
+      "team_group": "first-team",
+      "sub_team": "First team",
+      "position_group": "defence",
+      "positions": [
+        "DR",
+        "WBR",
+        "MR"
+      ],
+      "ca": 155,
+      "pa": 164.0,
+      "age": 24,
+      "value_eur": 81355913,
+      "value_formatted": "€65M - €122M",
+      "wage": "€231K pw",
+      "contract_until": "2030-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/28113828-jeremie-frimpong",
+      "full_url": "https://fminside.net/players/7-fm-26/28113828-jeremie-frimpong",
+      "photo_url": "https://img.fminside.net/facesfm26/28113828.png",
+      "is_first_team": true,
+      "attributes": {
+        "categories": {
+          "Technical": {
+            "fm_scale_20": {
+              "Crossing": 13,
+              "Dribbling": 16,
+              "Finishing": 12,
+              "First Touch": 12,
+              "Heading": 6,
+              "Long Shots": 9,
+              "Marking": 9,
+              "Passing": 12,
+              "Tackling": 11,
+              "Technique": 14
+            },
+            "display_scale_99": {
+              "Crossing": 65,
+              "Dribbling": 80,
+              "Finishing": 60,
+              "First Touch": 60,
+              "Heading": 30,
+              "Long Shots": 45,
+              "Marking": 45,
+              "Passing": 60,
+              "Tackling": 55,
+              "Technique": 70
+            }
+          },
+          "Mental": {
+            "fm_scale_20": {
+              "Aggression": 14,
+              "Anticipation": 12,
+              "Bravery": 13,
+              "Composure": 10,
+              "Concentration": 10,
+              "Decisions": 11,
+              "Determination": 14,
+              "Flair": 16,
+              "Leadership": 6,
+              "Off the Ball": 15,
+              "Positioning": 9,
+              "Teamwork": 13,
+              "Vision": 12,
+              "Work Rate": 15
+            },
+            "display_scale_99": {
+              "Aggression": 70,
+              "Anticipation": 60,
+              "Bravery": 65,
+              "Composure": 50,
+              "Concentration": 50,
+              "Decisions": 55,
+              "Determination": 70,
+              "Flair": 80,
+              "Leadership": 30,
+              "Off the Ball": 75,
+              "Positioning": 45,
+              "Teamwork": 65,
+              "Vision": 60,
+              "Work Rate": 75
+            }
+          },
+          "Physical": {
+            "fm_scale_20": {
+              "Acceleration": 18,
+              "Agility": 17,
+              "Balance": 12,
+              "Jumping Reach": 6,
+              "Natural Fitness": 16,
+              "Pace": 17,
+              "Stamina": 15,
+              "Strength": 9
+            },
+            "display_scale_99": {
+              "Acceleration": 90,
+              "Agility": 85,
+              "Balance": 60,
+              "Jumping Reach": 30,
+              "Natural Fitness": 80,
+              "Pace": 85,
+              "Stamina": 75,
+              "Strength": 45
+            }
+          },
+          "Set Pieces": {
+            "fm_scale_20": {
+              "Corners": 10,
+              "Free Kick Taking": 7,
+              "Long Throws": 8,
+              "Penalty Taking": 10
+            },
+            "display_scale_99": {
+              "Corners": 50,
+              "Free Kick Taking": 35,
+              "Long Throws": 40,
+              "Penalty Taking": 50
+            }
+          }
+        },
+        "engine_v2": {
+          "pace": 17,
+          "acceleration": 18,
+          "stamina": 15,
+          "passing": 12,
+          "first_touch": 12,
+          "dribbling": 16,
+          "tackling": 11,
+          "positioning": 9,
+          "decisions": 11,
+          "finishing": 12,
+          "long_shots": 9,
+          "crossing": 13,
+          "heading": 6,
+          "jumping_reach": 6,
+          "corners": 10,
+          "free_kick_taking": 7,
+          "penalty_taking": 10,
+          "handling": 0,
+          "reflexes": 0,
+          "one_on_ones": 0,
+          "aerial_reach": 0,
+          "command_of_area": 0,
+          "kicking": 0,
+          "throwing": 0,
+          "left": 10,
+          "right": 20
+        }
+      }
+    },
+    "43161651": {
+      "id": "43161651",
+      "name": "Federico Chiesa",
+      "nation": "Italy",
+      "team_group": "first-team",
+      "sub_team": "First team",
+      "position_group": "attack",
+      "positions": [
+        "AMR",
+        "AML"
+      ],
+      "ca": 153,
+      "pa": 165.0,
+      "age": 28,
+      "value_eur": 56757250,
+      "value_formatted": "€45M - €85M",
+      "wage": "€139K pw",
+      "contract_until": "2028-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/43161651-federico-chiesa",
+      "full_url": "https://fminside.net/players/7-fm-26/43161651-federico-chiesa",
+      "photo_url": "https://img.fminside.net/facesfm26/43161651.png",
+      "is_first_team": true,
+      "attributes": {
+        "categories": {
+          "Technical": {
+            "fm_scale_20": {
+              "Crossing": 14,
+              "Dribbling": 16,
+              "Finishing": 13,
+              "First Touch": 15,
+              "Heading": 9,
+              "Long Shots": 13,
+              "Marking": 7,
+              "Passing": 14,
+              "Tackling": 6,
+              "Technique": 14
+            },
+            "display_scale_99": {
+              "Crossing": 70,
+              "Dribbling": 80,
+              "Finishing": 65,
+              "First Touch": 75,
+              "Heading": 45,
+              "Long Shots": 65,
+              "Marking": 35,
+              "Passing": 70,
+              "Tackling": 30,
+              "Technique": 70
+            }
+          },
+          "Mental": {
+            "fm_scale_20": {
+              "Aggression": 16,
+              "Anticipation": 13,
+              "Bravery": 13,
+              "Composure": 15,
+              "Concentration": 12,
+              "Decisions": 12,
+              "Determination": 16,
+              "Flair": 16,
+              "Leadership": 11,
+              "Off the Ball": 15,
+              "Positioning": 8,
+              "Teamwork": 16,
+              "Vision": 13,
+              "Work Rate": 15
+            },
+            "display_scale_99": {
+              "Aggression": 80,
+              "Anticipation": 65,
+              "Bravery": 65,
+              "Composure": 75,
+              "Concentration": 60,
+              "Decisions": 60,
+              "Determination": 80,
+              "Flair": 80,
+              "Leadership": 55,
+              "Off the Ball": 75,
+              "Positioning": 40,
+              "Teamwork": 80,
+              "Vision": 65,
+              "Work Rate": 75
+            }
+          },
+          "Physical": {
+            "fm_scale_20": {
+              "Acceleration": 15,
+              "Agility": 14,
+              "Balance": 13,
+              "Jumping Reach": 8,
+              "Natural Fitness": 11,
+              "Pace": 15,
+              "Stamina": 12,
+              "Strength": 13
+            },
+            "display_scale_99": {
+              "Acceleration": 75,
+              "Agility": 70,
+              "Balance": 65,
+              "Jumping Reach": 40,
+              "Natural Fitness": 55,
+              "Pace": 75,
+              "Stamina": 60,
+              "Strength": 65
+            }
+          },
+          "Set Pieces": {
+            "fm_scale_20": {
+              "Corners": 10,
+              "Free Kick Taking": 5,
+              "Long Throws": 4,
+              "Penalty Taking": 10
+            },
+            "display_scale_99": {
+              "Corners": 50,
+              "Free Kick Taking": 25,
+              "Long Throws": 20,
+              "Penalty Taking": 50
+            }
+          }
+        },
+        "engine_v2": {
+          "pace": 15,
+          "acceleration": 15,
+          "stamina": 12,
+          "passing": 14,
+          "first_touch": 15,
+          "dribbling": 16,
+          "tackling": 6,
+          "positioning": 8,
+          "decisions": 12,
+          "finishing": 13,
+          "long_shots": 13,
+          "crossing": 14,
+          "heading": 9,
+          "jumping_reach": 8,
+          "corners": 10,
+          "free_kick_taking": 5,
+          "penalty_taking": 10,
+          "handling": 0,
+          "reflexes": 0,
+          "one_on_ones": 0,
+          "aerial_reach": 0,
+          "command_of_area": 0,
+          "kicking": 0,
+          "throwing": 0,
+          "left": 10,
+          "right": 20
+        }
+      }
+    },
+    "28115788": {
+      "id": "28115788",
+      "name": "Curtis Jones",
+      "nation": "England",
+      "team_group": "first-team",
+      "sub_team": "First team",
+      "position_group": "midfield",
+      "positions": [
+        "DM",
+        "MC"
+      ],
+      "ca": 153,
+      "pa": 162.0,
+      "age": 24,
+      "value_eur": 83665165,
+      "value_formatted": "€67M - €125M",
+      "wage": "€127K pw",
+      "contract_until": "2027-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/28115788-curtis-jones",
+      "full_url": "https://fminside.net/players/7-fm-26/28115788-curtis-jones",
+      "photo_url": "https://img.fminside.net/facesfm26/28115788.png",
+      "is_first_team": true,
+      "attributes": {
+        "categories": {
+          "Technical": {
+            "fm_scale_20": {
+              "Crossing": 12,
+              "Dribbling": 15,
+              "Finishing": 10,
+              "First Touch": 16,
+              "Heading": 8,
+              "Long Shots": 11,
+              "Marking": 10,
+              "Passing": 15,
+              "Tackling": 10,
+              "Technique": 17
+            },
+            "display_scale_99": {
+              "Crossing": 60,
+              "Dribbling": 75,
+              "Finishing": 50,
+              "First Touch": 80,
+              "Heading": 40,
+              "Long Shots": 55,
+              "Marking": 50,
+              "Passing": 75,
+              "Tackling": 50,
+              "Technique": 85
+            }
+          },
+          "Mental": {
+            "fm_scale_20": {
+              "Aggression": 13,
+              "Anticipation": 14,
+              "Bravery": 11,
+              "Composure": 14,
+              "Concentration": 13,
+              "Decisions": 14,
+              "Determination": 15,
+              "Flair": 14,
+              "Leadership": 10,
+              "Off the Ball": 15,
+              "Positioning": 11,
+              "Teamwork": 15,
+              "Vision": 15,
+              "Work Rate": 13
+            },
+            "display_scale_99": {
+              "Aggression": 65,
+              "Anticipation": 70,
+              "Bravery": 55,
+              "Composure": 70,
+              "Concentration": 65,
+              "Decisions": 70,
+              "Determination": 75,
+              "Flair": 70,
+              "Leadership": 50,
+              "Off the Ball": 75,
+              "Positioning": 55,
+              "Teamwork": 75,
+              "Vision": 75,
+              "Work Rate": 65
+            }
+          },
+          "Physical": {
+            "fm_scale_20": {
+              "Acceleration": 14,
+              "Agility": 16,
+              "Balance": 16,
+              "Jumping Reach": 9,
+              "Natural Fitness": 14,
+              "Pace": 13,
+              "Stamina": 13,
+              "Strength": 11
+            },
+            "display_scale_99": {
+              "Acceleration": 70,
+              "Agility": 80,
+              "Balance": 80,
+              "Jumping Reach": 45,
+              "Natural Fitness": 70,
+              "Pace": 65,
+              "Stamina": 65,
+              "Strength": 55
+            }
+          },
+          "Set Pieces": {
+            "fm_scale_20": {
+              "Corners": 11,
+              "Free Kick Taking": 11,
+              "Long Throws": 6,
+              "Penalty Taking": 13
+            },
+            "display_scale_99": {
+              "Corners": 55,
+              "Free Kick Taking": 55,
+              "Long Throws": 30,
+              "Penalty Taking": 65
+            }
+          }
+        },
+        "engine_v2": {
+          "pace": 13,
+          "acceleration": 14,
+          "stamina": 13,
+          "passing": 15,
+          "first_touch": 16,
+          "dribbling": 15,
+          "tackling": 10,
+          "positioning": 11,
+          "decisions": 14,
+          "finishing": 10,
+          "long_shots": 11,
+          "crossing": 12,
+          "heading": 8,
+          "jumping_reach": 9,
+          "corners": 11,
+          "free_kick_taking": 11,
+          "penalty_taking": 13,
+          "handling": 0,
+          "reflexes": 0,
+          "one_on_ones": 0,
+          "aerial_reach": 0,
+          "command_of_area": 0,
+          "kicking": 0,
+          "throwing": 0,
+          "left": 10,
+          "right": 20
+        }
+      }
+    },
+    "2000011147": {
+      "id": "2000011147",
+      "name": "Miloš Kerkez",
+      "nation": "Hungary",
+      "team_group": "first-team",
+      "sub_team": "First team",
+      "position_group": "defence",
+      "positions": [
+        "DL",
+        "WBL"
+      ],
+      "ca": 152,
+      "pa": 173.0,
+      "age": 22,
+      "value_eur": 84515653,
+      "value_formatted": "€68M - €127M",
+      "wage": "€162K pw",
+      "contract_until": "2030-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000011147-milo-kerkez",
+      "full_url": "https://fminside.net/players/7-fm-26/2000011147-milo-kerkez",
+      "photo_url": "https://img.fminside.net/facesfm26/2000011147.png",
+      "is_first_team": true,
+      "attributes": {
+        "categories": {
+          "Technical": {
+            "fm_scale_20": {
+              "Crossing": 14,
+              "Dribbling": 13,
+              "Finishing": 7,
+              "First Touch": 14,
+              "Heading": 8,
+              "Long Shots": 10,
+              "Marking": 13,
+              "Passing": 13,
+              "Tackling": 15,
+              "Technique": 14
+            },
+            "display_scale_99": {
+              "Crossing": 70,
+              "Dribbling": 65,
+              "Finishing": 35,
+              "First Touch": 70,
+              "Heading": 40,
+              "Long Shots": 50,
+              "Marking": 65,
+              "Passing": 65,
+              "Tackling": 75,
+              "Technique": 70
+            }
+          },
+          "Mental": {
+            "fm_scale_20": {
+              "Aggression": 16,
+              "Anticipation": 14,
+              "Bravery": 16,
+              "Composure": 13,
+              "Concentration": 13,
+              "Decisions": 14,
+              "Determination": 17,
+              "Flair": 12,
+              "Leadership": 7,
+              "Off the Ball": 16,
+              "Positioning": 14,
+              "Teamwork": 16,
+              "Vision": 12,
+              "Work Rate": 17
+            },
+            "display_scale_99": {
+              "Aggression": 80,
+              "Anticipation": 70,
+              "Bravery": 80,
+              "Composure": 65,
+              "Concentration": 65,
+              "Decisions": 70,
+              "Determination": 85,
+              "Flair": 60,
+              "Leadership": 35,
+              "Off the Ball": 80,
+              "Positioning": 70,
+              "Teamwork": 80,
+              "Vision": 60,
+              "Work Rate": 85
+            }
+          },
+          "Physical": {
+            "fm_scale_20": {
+              "Acceleration": 16,
+              "Agility": 15,
+              "Balance": 14,
+              "Jumping Reach": 10,
+              "Natural Fitness": 15,
+              "Pace": 15,
+              "Stamina": 16,
+              "Strength": 13
+            },
+            "display_scale_99": {
+              "Acceleration": 80,
+              "Agility": 75,
+              "Balance": 70,
+              "Jumping Reach": 50,
+              "Natural Fitness": 75,
+              "Pace": 75,
+              "Stamina": 80,
+              "Strength": 65
+            }
+          },
+          "Set Pieces": {
+            "fm_scale_20": {
+              "Corners": 9,
+              "Free Kick Taking": 8,
+              "Long Throws": 11,
+              "Penalty Taking": 7
+            },
+            "display_scale_99": {
+              "Corners": 45,
+              "Free Kick Taking": 40,
+              "Long Throws": 55,
+              "Penalty Taking": 35
+            }
+          }
+        },
+        "engine_v2": {
+          "pace": 15,
+          "acceleration": 16,
+          "stamina": 16,
+          "passing": 13,
+          "first_touch": 14,
+          "dribbling": 13,
+          "tackling": 15,
+          "positioning": 14,
+          "decisions": 14,
+          "finishing": 7,
+          "long_shots": 10,
+          "crossing": 14,
+          "heading": 8,
+          "jumping_reach": 10,
+          "corners": 9,
+          "free_kick_taking": 8,
+          "penalty_taking": 7,
+          "handling": 0,
+          "reflexes": 0,
+          "one_on_ones": 0,
+          "aerial_reach": 0,
+          "command_of_area": 0,
+          "kicking": 0,
+          "throwing": 0,
+          "left": 10,
+          "right": 20
+        }
+      }
+    },
+    "61043456": {
+      "id": "61043456",
+      "name": "Andrew Robertson",
+      "nation": "Scotland",
+      "team_group": "first-team",
+      "sub_team": "First team",
+      "position_group": "defence",
+      "positions": [
+        "DL",
+        "WBL"
+      ],
+      "ca": 152,
+      "pa": 165.0,
+      "age": 31,
+      "value_eur": 49984098,
+      "value_formatted": "€40M - €75M",
+      "wage": "€202K pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/61043456-andrew-robertson",
+      "full_url": "https://fminside.net/players/7-fm-26/61043456-andrew-robertson",
+      "photo_url": "https://img.fminside.net/facesfm26/61043456.png",
+      "is_first_team": true,
+      "attributes": {
+        "categories": {
+          "Technical": {
+            "fm_scale_20": {
+              "Crossing": 16,
+              "Dribbling": 12,
+              "Finishing": 2,
+              "First Touch": 15,
+              "Heading": 10,
+              "Long Shots": 5,
+              "Marking": 14,
+              "Passing": 14,
+              "Tackling": 15,
+              "Technique": 14
+            },
+            "display_scale_99": {
+              "Crossing": 80,
+              "Dribbling": 60,
+              "Finishing": 10,
+              "First Touch": 75,
+              "Heading": 50,
+              "Long Shots": 25,
+              "Marking": 70,
+              "Passing": 70,
+              "Tackling": 75,
+              "Technique": 70
+            }
+          },
+          "Mental": {
+            "fm_scale_20": {
+              "Aggression": 17,
+              "Anticipation": 14,
+              "Bravery": 16,
+              "Composure": 15,
+              "Concentration": 14,
+              "Decisions": 13,
+              "Determination": 16,
+              "Flair": 11,
+              "Leadership": 16,
+              "Off the Ball": 14,
+              "Positioning": 13,
+              "Teamwork": 17,
+              "Vision": 12,
+              "Work Rate": 17
+            },
+            "display_scale_99": {
+              "Aggression": 85,
+              "Anticipation": 70,
+              "Bravery": 80,
+              "Composure": 75,
+              "Concentration": 70,
+              "Decisions": 65,
+              "Determination": 80,
+              "Flair": 55,
+              "Leadership": 80,
+              "Off the Ball": 70,
+              "Positioning": 65,
+              "Teamwork": 85,
+              "Vision": 60,
+              "Work Rate": 85
+            }
+          },
+          "Physical": {
+            "fm_scale_20": {
+              "Acceleration": 15,
+              "Agility": 15,
+              "Balance": 15,
+              "Jumping Reach": 9,
+              "Natural Fitness": 17,
+              "Pace": 15,
+              "Stamina": 18,
+              "Strength": 12
+            },
+            "display_scale_99": {
+              "Acceleration": 75,
+              "Agility": 75,
+              "Balance": 75,
+              "Jumping Reach": 45,
+              "Natural Fitness": 85,
+              "Pace": 75,
+              "Stamina": 90,
+              "Strength": 60
+            }
+          },
+          "Set Pieces": {
+            "fm_scale_20": {
+              "Corners": 14,
+              "Free Kick Taking": 9,
+              "Long Throws": 13,
+              "Penalty Taking": 7
+            },
+            "display_scale_99": {
+              "Corners": 70,
+              "Free Kick Taking": 45,
+              "Long Throws": 65,
+              "Penalty Taking": 35
+            }
+          }
+        },
+        "engine_v2": {
+          "pace": 15,
+          "acceleration": 15,
+          "stamina": 18,
+          "passing": 14,
+          "first_touch": 15,
+          "dribbling": 12,
+          "tackling": 15,
+          "positioning": 13,
+          "decisions": 13,
+          "finishing": 2,
+          "long_shots": 5,
+          "crossing": 16,
+          "heading": 10,
+          "jumping_reach": 9,
+          "corners": 14,
+          "free_kick_taking": 9,
+          "penalty_taking": 7,
+          "handling": 0,
+          "reflexes": 0,
+          "one_on_ones": 0,
+          "aerial_reach": 0,
+          "command_of_area": 0,
+          "kicking": 0,
+          "throwing": 0,
+          "left": 10,
+          "right": 20
+        }
+      }
+    },
+    "29115800": {
+      "id": "29115800",
+      "name": "Joe Gomez",
+      "nation": "England",
+      "team_group": "first-team",
+      "sub_team": "First team",
+      "position_group": "defence",
+      "positions": [
+        "DC"
+      ],
+      "ca": 149,
+      "pa": 160.0,
+      "age": 28,
+      "value_eur": 45457871,
+      "value_formatted": "€36M - €68M",
+      "wage": "€139K pw",
+      "contract_until": "2027-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/29115800-joe-gomez",
+      "full_url": "https://fminside.net/players/7-fm-26/29115800-joe-gomez",
+      "photo_url": "https://img.fminside.net/facesfm26/29115800.png",
+      "is_first_team": true,
+      "attributes": {
+        "categories": {
+          "Technical": {
+            "fm_scale_20": {
+              "Crossing": 13,
+              "Dribbling": 11,
+              "Finishing": 1,
+              "First Touch": 15,
+              "Heading": 15,
+              "Long Shots": 1,
+              "Marking": 15,
+              "Passing": 13,
+              "Tackling": 15,
+              "Technique": 14
+            },
+            "display_scale_99": {
+              "Crossing": 65,
+              "Dribbling": 55,
+              "Finishing": 5,
+              "First Touch": 75,
+              "Heading": 75,
+              "Long Shots": 5,
+              "Marking": 75,
+              "Passing": 65,
+              "Tackling": 75,
+              "Technique": 70
+            }
+          },
+          "Mental": {
+            "fm_scale_20": {
+              "Aggression": 14,
+              "Anticipation": 14,
+              "Bravery": 14,
+              "Composure": 14,
+              "Concentration": 14,
+              "Decisions": 14,
+              "Determination": 12,
+              "Flair": 5,
+              "Leadership": 13,
+              "Off the Ball": 11,
+              "Positioning": 15,
+              "Teamwork": 16,
+              "Vision": 7,
+              "Work Rate": 14
+            },
+            "display_scale_99": {
+              "Aggression": 70,
+              "Anticipation": 70,
+              "Bravery": 70,
+              "Composure": 70,
+              "Concentration": 70,
+              "Decisions": 70,
+              "Determination": 60,
+              "Flair": 25,
+              "Leadership": 65,
+              "Off the Ball": 55,
+              "Positioning": 75,
+              "Teamwork": 80,
+              "Vision": 35,
+              "Work Rate": 70
+            }
+          },
+          "Physical": {
+            "fm_scale_20": {
+              "Acceleration": 16,
+              "Agility": 15,
+              "Balance": 14,
+              "Jumping Reach": 14,
+              "Natural Fitness": 15,
+              "Pace": 15,
+              "Stamina": 15,
+              "Strength": 15
+            },
+            "display_scale_99": {
+              "Acceleration": 80,
+              "Agility": 75,
+              "Balance": 70,
+              "Jumping Reach": 70,
+              "Natural Fitness": 75,
+              "Pace": 75,
+              "Stamina": 75,
+              "Strength": 75
+            }
+          },
+          "Set Pieces": {
+            "fm_scale_20": {
+              "Corners": 3,
+              "Free Kick Taking": 4,
+              "Long Throws": 16,
+              "Penalty Taking": 1
+            },
+            "display_scale_99": {
+              "Corners": 15,
+              "Free Kick Taking": 20,
+              "Long Throws": 80,
+              "Penalty Taking": 5
+            }
+          }
+        },
+        "engine_v2": {
+          "pace": 15,
+          "acceleration": 16,
+          "stamina": 15,
+          "passing": 13,
+          "first_touch": 15,
+          "dribbling": 11,
+          "tackling": 15,
+          "positioning": 15,
+          "decisions": 14,
+          "finishing": 1,
+          "long_shots": 1,
+          "crossing": 13,
+          "heading": 15,
+          "jumping_reach": 14,
+          "corners": 3,
+          "free_kick_taking": 4,
+          "penalty_taking": 1,
+          "handling": 0,
+          "reflexes": 0,
+          "one_on_ones": 0,
+          "aerial_reach": 0,
+          "command_of_area": 0,
+          "kicking": 0,
+          "throwing": 0,
+          "left": 10,
+          "right": 20
+        }
+      }
+    },
+    "28127166": {
+      "id": "28127166",
+      "name": "Conor Bradley",
+      "nation": "Northern Ireland",
+      "team_group": "first-team",
+      "sub_team": "First team",
+      "position_group": "defence",
+      "positions": [
+        "DR",
+        "WBR"
+      ],
+      "ca": 148,
+      "pa": 165.0,
+      "age": 22,
+      "value_eur": 59067654,
+      "value_formatted": "€47M - €89M",
+      "wage": "€139K pw",
+      "contract_until": "2030-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/28127166-conor-bradley",
+      "full_url": "https://fminside.net/players/7-fm-26/28127166-conor-bradley",
+      "photo_url": "https://img.fminside.net/facesfm26/28127166.png",
+      "is_first_team": true,
+      "attributes": {
+        "categories": {
+          "Technical": {
+            "fm_scale_20": {
+              "Crossing": 15,
+              "Dribbling": 14,
+              "Finishing": 9,
+              "First Touch": 15,
+              "Heading": 8,
+              "Long Shots": 8,
+              "Marking": 11,
+              "Passing": 14,
+              "Tackling": 15,
+              "Technique": 14
+            },
+            "display_scale_99": {
+              "Crossing": 75,
+              "Dribbling": 70,
+              "Finishing": 45,
+              "First Touch": 75,
+              "Heading": 40,
+              "Long Shots": 40,
+              "Marking": 55,
+              "Passing": 70,
+              "Tackling": 75,
+              "Technique": 70
+            }
+          },
+          "Mental": {
+            "fm_scale_20": {
+              "Aggression": 15,
+              "Anticipation": 14,
+              "Bravery": 14,
+              "Composure": 14,
+              "Concentration": 13,
+              "Decisions": 13,
+              "Determination": 15,
+              "Flair": 11,
+              "Leadership": 12,
+              "Off the Ball": 15,
+              "Positioning": 12,
+              "Teamwork": 16,
+              "Vision": 12,
+              "Work Rate": 16
+            },
+            "display_scale_99": {
+              "Aggression": 75,
+              "Anticipation": 70,
+              "Bravery": 70,
+              "Composure": 70,
+              "Concentration": 65,
+              "Decisions": 65,
+              "Determination": 75,
+              "Flair": 55,
+              "Leadership": 60,
+              "Off the Ball": 75,
+              "Positioning": 60,
+              "Teamwork": 80,
+              "Vision": 60,
+              "Work Rate": 80
+            }
+          },
+          "Physical": {
+            "fm_scale_20": {
+              "Acceleration": 16,
+              "Agility": 16,
+              "Balance": 14,
+              "Jumping Reach": 9,
+              "Natural Fitness": 15,
+              "Pace": 16,
+              "Stamina": 15,
+              "Strength": 9
+            },
+            "display_scale_99": {
+              "Acceleration": 80,
+              "Agility": 80,
+              "Balance": 70,
+              "Jumping Reach": 45,
+              "Natural Fitness": 75,
+              "Pace": 80,
+              "Stamina": 75,
+              "Strength": 45
+            }
+          },
+          "Set Pieces": {
+            "fm_scale_20": {
+              "Corners": 10,
+              "Free Kick Taking": 7,
+              "Long Throws": 7,
+              "Penalty Taking": 8
+            },
+            "display_scale_99": {
+              "Corners": 50,
+              "Free Kick Taking": 35,
+              "Long Throws": 35,
+              "Penalty Taking": 40
+            }
+          }
+        },
+        "engine_v2": {
+          "pace": 16,
+          "acceleration": 16,
+          "stamina": 15,
+          "passing": 14,
+          "first_touch": 15,
+          "dribbling": 14,
+          "tackling": 15,
+          "positioning": 12,
+          "decisions": 13,
+          "finishing": 9,
+          "long_shots": 8,
+          "crossing": 15,
+          "heading": 8,
+          "jumping_reach": 9,
+          "corners": 10,
+          "free_kick_taking": 7,
+          "penalty_taking": 8,
+          "handling": 0,
+          "reflexes": 0,
+          "one_on_ones": 0,
+          "aerial_reach": 0,
+          "command_of_area": 0,
+          "kicking": 0,
+          "throwing": 0,
+          "left": 10,
+          "right": 20
+        }
+      }
+    },
+    "45030953": {
+      "id": "45030953",
+      "name": "Wataru Endo",
+      "nation": "Japan",
+      "team_group": "first-team",
+      "sub_team": "First team",
+      "position_group": "midfield",
+      "positions": [
+        "DM"
+      ],
+      "ca": 148,
+      "pa": 151.0,
+      "age": 32,
+      "value_eur": 30039813,
+      "value_formatted": "€24M - €45M",
+      "wage": "€110K pw",
+      "contract_until": "2027-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/45030953-wataru-endo",
+      "full_url": "https://fminside.net/players/7-fm-26/45030953-wataru-endo",
+      "photo_url": "https://img.fminside.net/facesfm26/45030953.png",
+      "is_first_team": true,
+      "attributes": {
+        "categories": {
+          "Technical": {
+            "fm_scale_20": {
+              "Crossing": 7,
+              "Dribbling": 11,
+              "Finishing": 6,
+              "First Touch": 13,
+              "Heading": 15,
+              "Long Shots": 6,
+              "Marking": 14,
+              "Passing": 14,
+              "Tackling": 16,
+              "Technique": 13
+            },
+            "display_scale_99": {
+              "Crossing": 35,
+              "Dribbling": 55,
+              "Finishing": 30,
+              "First Touch": 65,
+              "Heading": 75,
+              "Long Shots": 30,
+              "Marking": 70,
+              "Passing": 70,
+              "Tackling": 80,
+              "Technique": 65
+            }
+          },
+          "Mental": {
+            "fm_scale_20": {
+              "Aggression": 15,
+              "Anticipation": 17,
+              "Bravery": 16,
+              "Composure": 15,
+              "Concentration": 16,
+              "Decisions": 14,
+              "Determination": 17,
+              "Flair": 6,
+              "Leadership": 13,
+              "Off the Ball": 12,
+              "Positioning": 15,
+              "Teamwork": 18,
+              "Vision": 12,
+              "Work Rate": 17
+            },
+            "display_scale_99": {
+              "Aggression": 75,
+              "Anticipation": 85,
+              "Bravery": 80,
+              "Composure": 75,
+              "Concentration": 80,
+              "Decisions": 70,
+              "Determination": 85,
+              "Flair": 30,
+              "Leadership": 65,
+              "Off the Ball": 60,
+              "Positioning": 75,
+              "Teamwork": 90,
+              "Vision": 60,
+              "Work Rate": 85
+            }
+          },
+          "Physical": {
+            "fm_scale_20": {
+              "Acceleration": 13,
+              "Agility": 14,
+              "Balance": 15,
+              "Jumping Reach": 14,
+              "Natural Fitness": 17,
+              "Pace": 12,
+              "Stamina": 16,
+              "Strength": 12
+            },
+            "display_scale_99": {
+              "Acceleration": 65,
+              "Agility": 70,
+              "Balance": 75,
+              "Jumping Reach": 70,
+              "Natural Fitness": 85,
+              "Pace": 60,
+              "Stamina": 80,
+              "Strength": 60
+            }
+          },
+          "Set Pieces": {
+            "fm_scale_20": {
+              "Corners": 3,
+              "Free Kick Taking": 5,
+              "Long Throws": 8,
+              "Penalty Taking": 11
+            },
+            "display_scale_99": {
+              "Corners": 15,
+              "Free Kick Taking": 25,
+              "Long Throws": 40,
+              "Penalty Taking": 55
+            }
+          }
+        },
+        "engine_v2": {
+          "pace": 12,
+          "acceleration": 13,
+          "stamina": 16,
+          "passing": 14,
+          "first_touch": 13,
+          "dribbling": 11,
+          "tackling": 16,
+          "positioning": 15,
+          "decisions": 14,
+          "finishing": 6,
+          "long_shots": 6,
+          "crossing": 7,
+          "heading": 15,
+          "jumping_reach": 14,
+          "corners": 3,
+          "free_kick_taking": 5,
+          "penalty_taking": 11,
+          "handling": 0,
+          "reflexes": 0,
+          "one_on_ones": 0,
+          "aerial_reach": 0,
+          "command_of_area": 0,
+          "kicking": 0,
+          "throwing": 0,
+          "left": 10,
+          "right": 20
+        }
+      }
+    },
+    "29233143": {
+      "id": "29233143",
+      "name": "Harvey Elliott",
+      "nation": "England",
+      "team_group": "unassigned",
+      "sub_team": "Unassigned",
+      "position_group": "midfield",
+      "positions": [
+        "AMC",
+        "AMR"
+      ],
+      "ca": 146,
+      "pa": 164.0,
+      "age": 22,
+      "value_eur": 60247927,
+      "value_formatted": "€48M - €90M",
+      "wage": "€98K pw",
+      "contract_until": "2027-06-30",
+      "status": "loaned-out",
+      "relative_url": "/players/7-fm-26/29233143-harvey-elliott",
+      "full_url": "https://fminside.net/players/7-fm-26/29233143-harvey-elliott",
+      "photo_url": "https://img.fminside.net/facesfm26/29233143.png",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "36096824": {
+      "id": "36096824",
+      "name": "Kostas Tsimikas",
+      "nation": "Greece",
+      "team_group": "unassigned",
+      "sub_team": "Unassigned",
+      "position_group": "defence",
+      "positions": [
+        "DL"
+      ],
+      "ca": 144,
+      "pa": 159.0,
+      "age": 29,
+      "value_eur": 38428303,
+      "value_formatted": "€31M - €58M",
+      "wage": "€127K pw",
+      "contract_until": "2027-06-30",
+      "status": "loaned-out",
+      "relative_url": "/players/7-fm-26/36096824-kostas-tsimikas",
+      "full_url": "https://fminside.net/players/7-fm-26/36096824-kostas-tsimikas",
+      "photo_url": "https://img.fminside.net/facesfm26/36096824.png",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "28116414": {
+      "id": "28116414",
+      "name": "Vítězslav Jaroš",
+      "nation": "Czechia",
+      "team_group": "unassigned",
+      "sub_team": "Unassigned",
+      "position_group": "goalkeeper",
+      "positions": [
+        "GK"
+      ],
+      "ca": 130,
+      "pa": 146.0,
+      "age": 24,
+      "value_eur": 14367704,
+      "value_formatted": "€11M - €22M",
+      "wage": "€29K pw",
+      "contract_until": "2028-06-30",
+      "status": "loaned-out",
+      "relative_url": "/players/7-fm-26/28116414-vitzslav-jaro",
+      "full_url": "https://fminside.net/players/7-fm-26/28116414-vitzslav-jaro",
+      "photo_url": "https://img.fminside.net/facesfm26/28116414.png",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000399897": {
+      "id": "2000399897",
+      "name": "Rio Ngumoha",
+      "nation": "England",
+      "team_group": "first-team",
+      "sub_team": "First team",
+      "position_group": "attack",
+      "positions": [
+        "AMR",
+        "AML"
+      ],
+      "ca": 127,
+      "pa": 158.9,
+      "age": 17,
+      "value_eur": 33869209,
+      "value_formatted": "€27M - €51M",
+      "wage": "€353 pw",
+      "contract_until": "2028-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000399897-rio-ngumoha",
+      "full_url": "https://fminside.net/players/7-fm-26/2000399897-rio-ngumoha",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": true,
+      "attributes": {
+        "categories": {
+          "Technical": {
+            "fm_scale_20": {
+              "Crossing": 14,
+              "Dribbling": 16,
+              "Finishing": 10,
+              "First Touch": 16,
+              "Heading": 5,
+              "Long Shots": 11,
+              "Marking": 3,
+              "Passing": 13,
+              "Tackling": 5,
+              "Technique": 15
+            },
+            "display_scale_99": {
+              "Crossing": 70,
+              "Dribbling": 80,
+              "Finishing": 50,
+              "First Touch": 80,
+              "Heading": 25,
+              "Long Shots": 55,
+              "Marking": 15,
+              "Passing": 65,
+              "Tackling": 25,
+              "Technique": 75
+            }
+          },
+          "Mental": {
+            "fm_scale_20": {
+              "Aggression": 8,
+              "Anticipation": 11,
+              "Bravery": 3,
+              "Composure": 11,
+              "Concentration": 9,
+              "Decisions": 10,
+              "Determination": 14,
+              "Flair": 17,
+              "Leadership": 3,
+              "Off the Ball": 11,
+              "Positioning": 4,
+              "Teamwork": 11,
+              "Vision": 12,
+              "Work Rate": 12
+            },
+            "display_scale_99": {
+              "Aggression": 40,
+              "Anticipation": 55,
+              "Bravery": 15,
+              "Composure": 55,
+              "Concentration": 45,
+              "Decisions": 50,
+              "Determination": 70,
+              "Flair": 85,
+              "Leadership": 15,
+              "Off the Ball": 55,
+              "Positioning": 20,
+              "Teamwork": 55,
+              "Vision": 60,
+              "Work Rate": 60
+            }
+          },
+          "Physical": {
+            "fm_scale_20": {
+              "Acceleration": 16,
+              "Agility": 17,
+              "Balance": 16,
+              "Jumping Reach": 5,
+              "Natural Fitness": 12,
+              "Pace": 15,
+              "Stamina": 8,
+              "Strength": 8
+            },
+            "display_scale_99": {
+              "Acceleration": 80,
+              "Agility": 85,
+              "Balance": 80,
+              "Jumping Reach": 25,
+              "Natural Fitness": 60,
+              "Pace": 75,
+              "Stamina": 40,
+              "Strength": 40
+            }
+          },
+          "Set Pieces": {
+            "fm_scale_20": {
+              "Corners": 8,
+              "Free Kick Taking": 5,
+              "Long Throws": 3,
+              "Penalty Taking": 7
+            },
+            "display_scale_99": {
+              "Corners": 40,
+              "Free Kick Taking": 25,
+              "Long Throws": 15,
+              "Penalty Taking": 35
+            }
+          }
+        },
+        "engine_v2": {
+          "pace": 15,
+          "acceleration": 16,
+          "stamina": 8,
+          "passing": 13,
+          "first_touch": 16,
+          "dribbling": 16,
+          "tackling": 5,
+          "positioning": 4,
+          "decisions": 10,
+          "finishing": 10,
+          "long_shots": 11,
+          "crossing": 14,
+          "heading": 5,
+          "jumping_reach": 5,
+          "corners": 8,
+          "free_kick_taking": 5,
+          "penalty_taking": 7,
+          "handling": 0,
+          "reflexes": 0,
+          "one_on_ones": 0,
+          "aerial_reach": 0,
+          "command_of_area": 0,
+          "kicking": 0,
+          "throwing": 0,
+          "left": 10,
+          "right": 20
+        }
+      }
+    },
+    "2000259904": {
+      "id": "2000259904",
+      "name": "Giovanni Leoni",
+      "nation": "Italy",
+      "team_group": "first-team",
+      "sub_team": "First team",
+      "position_group": "defence",
+      "positions": [
+        "DC"
+      ],
+      "ca": 125,
+      "pa": 158.9,
+      "age": 18,
+      "value_eur": 34906769,
+      "value_formatted": "€28M - €52M",
+      "wage": "€58K pw",
+      "contract_until": "2031-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000259904-giovanni-leoni",
+      "full_url": "https://fminside.net/players/7-fm-26/2000259904-giovanni-leoni",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": true,
+      "attributes": {
+        "categories": {
+          "Technical": {
+            "fm_scale_20": {
+              "Crossing": 6,
+              "Dribbling": 7,
+              "Finishing": 6,
+              "First Touch": 10,
+              "Heading": 14,
+              "Long Shots": 6,
+              "Marking": 14,
+              "Passing": 11,
+              "Tackling": 13,
+              "Technique": 11
+            },
+            "display_scale_99": {
+              "Crossing": 30,
+              "Dribbling": 35,
+              "Finishing": 30,
+              "First Touch": 50,
+              "Heading": 70,
+              "Long Shots": 30,
+              "Marking": 70,
+              "Passing": 55,
+              "Tackling": 65,
+              "Technique": 55
+            }
+          },
+          "Mental": {
+            "fm_scale_20": {
+              "Aggression": 11,
+              "Anticipation": 14,
+              "Bravery": 10,
+              "Composure": 10,
+              "Concentration": 11,
+              "Decisions": 12,
+              "Determination": 16,
+              "Flair": 7,
+              "Leadership": 9,
+              "Off the Ball": 9,
+              "Positioning": 13,
+              "Teamwork": 13,
+              "Vision": 8,
+              "Work Rate": 13
+            },
+            "display_scale_99": {
+              "Aggression": 55,
+              "Anticipation": 70,
+              "Bravery": 50,
+              "Composure": 50,
+              "Concentration": 55,
+              "Decisions": 60,
+              "Determination": 80,
+              "Flair": 35,
+              "Leadership": 45,
+              "Off the Ball": 45,
+              "Positioning": 65,
+              "Teamwork": 65,
+              "Vision": 40,
+              "Work Rate": 65
+            }
+          },
+          "Physical": {
+            "fm_scale_20": {
+              "Acceleration": 12,
+              "Agility": 13,
+              "Balance": 14,
+              "Jumping Reach": 15,
+              "Natural Fitness": 14,
+              "Pace": 13,
+              "Stamina": 14,
+              "Strength": 14
+            },
+            "display_scale_99": {
+              "Acceleration": 60,
+              "Agility": 65,
+              "Balance": 70,
+              "Jumping Reach": 75,
+              "Natural Fitness": 70,
+              "Pace": 65,
+              "Stamina": 70,
+              "Strength": 70
+            }
+          },
+          "Set Pieces": {
+            "fm_scale_20": {
+              "Corners": 4,
+              "Free Kick Taking": 5,
+              "Long Throws": 10,
+              "Penalty Taking": 5
+            },
+            "display_scale_99": {
+              "Corners": 20,
+              "Free Kick Taking": 25,
+              "Long Throws": 50,
+              "Penalty Taking": 25
+            }
+          }
+        },
+        "engine_v2": {
+          "pace": 13,
+          "acceleration": 12,
+          "stamina": 14,
+          "passing": 11,
+          "first_touch": 10,
+          "dribbling": 7,
+          "tackling": 13,
+          "positioning": 13,
+          "decisions": 12,
+          "finishing": 6,
+          "long_shots": 6,
+          "crossing": 6,
+          "heading": 14,
+          "jumping_reach": 15,
+          "corners": 4,
+          "free_kick_taking": 5,
+          "penalty_taking": 5,
+          "handling": 0,
+          "reflexes": 0,
+          "one_on_ones": 0,
+          "aerial_reach": 0,
+          "command_of_area": 0,
+          "kicking": 0,
+          "throwing": 0,
+          "left": 10,
+          "right": 20
+        }
+      }
+    },
+    "2000082598": {
+      "id": "2000082598",
+      "name": "Stefan Bajčetić",
+      "nation": "Spain",
+      "team_group": "first-team",
+      "sub_team": "First team",
+      "position_group": "midfield",
+      "positions": [
+        "DC",
+        "DM",
+        "MC"
+      ],
+      "ca": 125,
+      "pa": 158.8,
+      "age": 21,
+      "value_eur": 19825502,
+      "value_formatted": "€16M - €30M",
+      "wage": "€14K pw",
+      "contract_until": "2027-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000082598-stefan-bajeti",
+      "full_url": "https://fminside.net/players/7-fm-26/2000082598-stefan-bajeti",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": true,
+      "attributes": {
+        "categories": {
+          "Technical": {
+            "fm_scale_20": {
+              "Crossing": 7,
+              "Dribbling": 13,
+              "Finishing": 6,
+              "First Touch": 14,
+              "Heading": 12,
+              "Long Shots": 6,
+              "Marking": 13,
+              "Passing": 13,
+              "Tackling": 14,
+              "Technique": 14
+            },
+            "display_scale_99": {
+              "Crossing": 35,
+              "Dribbling": 65,
+              "Finishing": 30,
+              "First Touch": 70,
+              "Heading": 60,
+              "Long Shots": 30,
+              "Marking": 65,
+              "Passing": 65,
+              "Tackling": 70,
+              "Technique": 70
+            }
+          },
+          "Mental": {
+            "fm_scale_20": {
+              "Aggression": 13,
+              "Anticipation": 14,
+              "Bravery": 13,
+              "Composure": 14,
+              "Concentration": 13,
+              "Decisions": 13,
+              "Determination": 15,
+              "Flair": 9,
+              "Leadership": 5,
+              "Off the Ball": 10,
+              "Positioning": 13,
+              "Teamwork": 15,
+              "Vision": 11,
+              "Work Rate": 14
+            },
+            "display_scale_99": {
+              "Aggression": 65,
+              "Anticipation": 70,
+              "Bravery": 65,
+              "Composure": 70,
+              "Concentration": 65,
+              "Decisions": 65,
+              "Determination": 75,
+              "Flair": 45,
+              "Leadership": 25,
+              "Off the Ball": 50,
+              "Positioning": 65,
+              "Teamwork": 75,
+              "Vision": 55,
+              "Work Rate": 70
+            }
+          },
+          "Physical": {
+            "fm_scale_20": {
+              "Acceleration": 14,
+              "Agility": 14,
+              "Balance": 14,
+              "Jumping Reach": 11,
+              "Natural Fitness": 11,
+              "Pace": 13,
+              "Stamina": 12,
+              "Strength": 11
+            },
+            "display_scale_99": {
+              "Acceleration": 70,
+              "Agility": 70,
+              "Balance": 70,
+              "Jumping Reach": 55,
+              "Natural Fitness": 55,
+              "Pace": 65,
+              "Stamina": 60,
+              "Strength": 55
+            }
+          },
+          "Set Pieces": {
+            "fm_scale_20": {
+              "Corners": 3,
+              "Free Kick Taking": 7,
+              "Long Throws": 6,
+              "Penalty Taking": 7
+            },
+            "display_scale_99": {
+              "Corners": 15,
+              "Free Kick Taking": 35,
+              "Long Throws": 30,
+              "Penalty Taking": 35
+            }
+          }
+        },
+        "engine_v2": {
+          "pace": 13,
+          "acceleration": 14,
+          "stamina": 12,
+          "passing": 13,
+          "first_touch": 14,
+          "dribbling": 13,
+          "tackling": 14,
+          "positioning": 13,
+          "decisions": 13,
+          "finishing": 6,
+          "long_shots": 6,
+          "crossing": 7,
+          "heading": 12,
+          "jumping_reach": 11,
+          "corners": 3,
+          "free_kick_taking": 7,
+          "penalty_taking": 7,
+          "handling": 0,
+          "reflexes": 0,
+          "one_on_ones": 0,
+          "aerial_reach": 0,
+          "command_of_area": 0,
+          "kicking": 0,
+          "throwing": 0,
+          "left": 10,
+          "right": 20
+        }
+      }
+    },
+    "2000261214": {
+      "id": "2000261214",
+      "name": "Trey Nyoni",
+      "nation": "England",
+      "team_group": "first-team",
+      "sub_team": "First team",
+      "position_group": "midfield",
+      "positions": [
+        "MC",
+        "AMC"
+      ],
+      "ca": 123,
+      "pa": 158.8,
+      "age": 18,
+      "value_eur": 22602615,
+      "value_formatted": "€18M - €34M",
+      "wage": "€9K pw",
+      "contract_until": "2030-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000261214-trey-nyoni",
+      "full_url": "https://fminside.net/players/7-fm-26/2000261214-trey-nyoni",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": true,
+      "attributes": {
+        "categories": {
+          "Technical": {
+            "fm_scale_20": {
+              "Crossing": 8,
+              "Dribbling": 12,
+              "Finishing": 8,
+              "First Touch": 15,
+              "Heading": 6,
+              "Long Shots": 9,
+              "Marking": 6,
+              "Passing": 15,
+              "Tackling": 8,
+              "Technique": 15
+            },
+            "display_scale_99": {
+              "Crossing": 40,
+              "Dribbling": 60,
+              "Finishing": 40,
+              "First Touch": 75,
+              "Heading": 30,
+              "Long Shots": 45,
+              "Marking": 30,
+              "Passing": 75,
+              "Tackling": 40,
+              "Technique": 75
+            }
+          },
+          "Mental": {
+            "fm_scale_20": {
+              "Aggression": 11,
+              "Anticipation": 13,
+              "Bravery": 7,
+              "Composure": 15,
+              "Concentration": 13,
+              "Decisions": 13,
+              "Determination": 13,
+              "Flair": 12,
+              "Leadership": 5,
+              "Off the Ball": 13,
+              "Positioning": 8,
+              "Teamwork": 13,
+              "Vision": 13,
+              "Work Rate": 13
+            },
+            "display_scale_99": {
+              "Aggression": 55,
+              "Anticipation": 65,
+              "Bravery": 35,
+              "Composure": 75,
+              "Concentration": 65,
+              "Decisions": 65,
+              "Determination": 65,
+              "Flair": 60,
+              "Leadership": 25,
+              "Off the Ball": 65,
+              "Positioning": 40,
+              "Teamwork": 65,
+              "Vision": 65,
+              "Work Rate": 65
+            }
+          },
+          "Physical": {
+            "fm_scale_20": {
+              "Acceleration": 13,
+              "Agility": 16,
+              "Balance": 13,
+              "Jumping Reach": 7,
+              "Natural Fitness": 10,
+              "Pace": 13,
+              "Stamina": 12,
+              "Strength": 8
+            },
+            "display_scale_99": {
+              "Acceleration": 65,
+              "Agility": 80,
+              "Balance": 65,
+              "Jumping Reach": 35,
+              "Natural Fitness": 50,
+              "Pace": 65,
+              "Stamina": 60,
+              "Strength": 40
+            }
+          },
+          "Set Pieces": {
+            "fm_scale_20": {
+              "Corners": 8,
+              "Free Kick Taking": 8,
+              "Long Throws": 3,
+              "Penalty Taking": 7
+            },
+            "display_scale_99": {
+              "Corners": 40,
+              "Free Kick Taking": 40,
+              "Long Throws": 15,
+              "Penalty Taking": 35
+            }
+          }
+        },
+        "engine_v2": {
+          "pace": 13,
+          "acceleration": 13,
+          "stamina": 12,
+          "passing": 15,
+          "first_touch": 15,
+          "dribbling": 12,
+          "tackling": 8,
+          "positioning": 8,
+          "decisions": 13,
+          "finishing": 8,
+          "long_shots": 9,
+          "crossing": 8,
+          "heading": 6,
+          "jumping_reach": 7,
+          "corners": 8,
+          "free_kick_taking": 8,
+          "penalty_taking": 7,
+          "handling": 0,
+          "reflexes": 0,
+          "one_on_ones": 0,
+          "aerial_reach": 0,
+          "command_of_area": 0,
+          "kicking": 0,
+          "throwing": 0,
+          "left": 10,
+          "right": 20
+        }
+      }
+    },
+    "28121435": {
+      "id": "28121435",
+      "name": "Owen Beck",
+      "nation": "Wales",
+      "team_group": "unassigned",
+      "sub_team": "Unassigned",
+      "position_group": "defence",
+      "positions": [
+        "DL",
+        "WBL"
+      ],
+      "ca": 123,
+      "pa": 145.0,
+      "age": 23,
+      "value_eur": 1812066,
+      "value_formatted": "€1M - €3M",
+      "wage": "€17K pw",
+      "contract_until": "2029-06-30",
+      "status": "loaned-out",
+      "relative_url": "/players/7-fm-26/28121435-owen-beck",
+      "full_url": "https://fminside.net/players/7-fm-26/28121435-owen-beck",
+      "photo_url": "https://img.fminside.net/facesfm26/28121435.png",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000191846": {
+      "id": "2000191846",
+      "name": "Jayden Danns",
+      "nation": "England",
+      "team_group": "staff-team-10",
+      "sub_team": "U21 Team",
+      "position_group": "attack",
+      "positions": [
+        "ST"
+      ],
+      "ca": 121,
+      "pa": 165.0,
+      "age": 19,
+      "value_eur": 21198630,
+      "value_formatted": "€17M - €32M",
+      "wage": "€6K pw",
+      "contract_until": "2029-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000191846-jayden-danns",
+      "full_url": "https://fminside.net/players/7-fm-26/2000191846-jayden-danns",
+      "photo_url": "https://img.fminside.net/facesfm26/2000191846.png",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000108364": {
+      "id": "2000108364",
+      "name": "James McConnell",
+      "nation": "England",
+      "team_group": "staff-team-10",
+      "sub_team": "U21 Team",
+      "position_group": "midfield",
+      "positions": [
+        "DM",
+        "MC"
+      ],
+      "ca": 116,
+      "pa": 138.8,
+      "age": 21,
+      "value_eur": 6541644,
+      "value_formatted": "€5M - €10M",
+      "wage": "€17K pw",
+      "contract_until": "2030-06-30",
+      "status": "loaned-out",
+      "relative_url": "/players/7-fm-26/2000108364-james-mcconnell",
+      "full_url": "https://fminside.net/players/7-fm-26/2000108364-james-mcconnell",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000049220": {
+      "id": "2000049220",
+      "name": "Luca Stephenson",
+      "nation": "England",
+      "team_group": "unassigned",
+      "sub_team": "Unassigned",
+      "position_group": "defence",
+      "positions": [
+        "WBR",
+        "DM",
+        "MC"
+      ],
+      "ca": 116,
+      "pa": 136.0,
+      "age": 22,
+      "value_eur": 4082356,
+      "value_formatted": "€3M - €6M",
+      "wage": "€7K pw",
+      "contract_until": "2028-06-30",
+      "status": "loaned-out",
+      "relative_url": "/players/7-fm-26/2000049220-luca-stephenson",
+      "full_url": "https://fminside.net/players/7-fm-26/2000049220-luca-stephenson",
+      "photo_url": "https://img.fminside.net/facesfm26/2000049220.png",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000049215": {
+      "id": "2000049215",
+      "name": "Luke Chambers",
+      "nation": "England",
+      "team_group": "staff-team-10",
+      "sub_team": "U21 Team",
+      "position_group": "defence",
+      "positions": [
+        "DL",
+        "WBL"
+      ],
+      "ca": 116,
+      "pa": 118.9,
+      "age": 21,
+      "value_eur": 7334665,
+      "value_formatted": "€6M - €11M",
+      "wage": "€5K pw",
+      "contract_until": "2026-06-30",
+      "status": "loaned-out",
+      "relative_url": "/players/7-fm-26/2000049215-luke-chambers",
+      "full_url": "https://fminside.net/players/7-fm-26/2000049215-luke-chambers",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "28091347": {
+      "id": "28091347",
+      "name": "Freddie Woodman",
+      "nation": "England",
+      "team_group": "first-team",
+      "sub_team": "First team",
+      "position_group": "goalkeeper",
+      "positions": [
+        "GK"
+      ],
+      "ca": 113,
+      "pa": 145.0,
+      "age": 28,
+      "value_eur": 494673,
+      "value_formatted": "€396K - €742K",
+      "wage": "€23K pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/28091347-freddie-woodman",
+      "full_url": "https://fminside.net/players/7-fm-26/28091347-freddie-woodman",
+      "photo_url": "https://img.fminside.net/facesfm26/28091347.png",
+      "is_first_team": true,
+      "attributes": {
+        "categories": {
+          "Goalkeeping": {
+            "fm_scale_20": {
+              "Aerial Reach": 11,
+              "Command of Area": 10,
+              "Communication": 11,
+              "Eccentricity": 8,
+              "First Touch": 10,
+              "Handling": 14,
+              "Kicking": 10,
+              "One on Ones": 13,
+              "Passing": 7,
+              "Punching (Tendency)": 15,
+              "Reflexes": 13,
+              "Rushing Out (Tendency)": 12,
+              "Throwing": 11
+            },
+            "display_scale_99": {
+              "Aerial Reach": 55,
+              "Command of Area": 50,
+              "Communication": 55,
+              "Eccentricity": 40,
+              "First Touch": 50,
+              "Handling": 70,
+              "Kicking": 50,
+              "One on Ones": 65,
+              "Passing": 35,
+              "Punching (Tendency)": 75,
+              "Reflexes": 65,
+              "Rushing Out (Tendency)": 60,
+              "Throwing": 55
+            }
+          },
+          "Mental": {
+            "fm_scale_20": {
+              "Aggression": 10,
+              "Anticipation": 13,
+              "Bravery": 10,
+              "Composure": 11,
+              "Concentration": 14,
+              "Decisions": 11,
+              "Determination": 12,
+              "Flair": 5,
+              "Leadership": 10,
+              "Off the Ball": 2,
+              "Positioning": 16,
+              "Teamwork": 11,
+              "Vision": 6,
+              "Work Rate": 11
+            },
+            "display_scale_99": {
+              "Aggression": 50,
+              "Anticipation": 65,
+              "Bravery": 50,
+              "Composure": 55,
+              "Concentration": 70,
+              "Decisions": 55,
+              "Determination": 60,
+              "Flair": 25,
+              "Leadership": 50,
+              "Off the Ball": 10,
+              "Positioning": 80,
+              "Teamwork": 55,
+              "Vision": 30,
+              "Work Rate": 55
+            }
+          },
+          "Physical": {
+            "fm_scale_20": {
+              "Acceleration": 10,
+              "Agility": 14,
+              "Balance": 12,
+              "Jumping Reach": 15,
+              "Natural Fitness": 12,
+              "Pace": 9,
+              "Stamina": 13,
+              "Strength": 12
+            },
+            "display_scale_99": {
+              "Acceleration": 50,
+              "Agility": 70,
+              "Balance": 60,
+              "Jumping Reach": 75,
+              "Natural Fitness": 60,
+              "Pace": 45,
+              "Stamina": 65,
+              "Strength": 60
+            }
+          },
+          "Technical": {
+            "fm_scale_20": {
+              "Technique": 8
+            },
+            "display_scale_99": {
+              "Technique": 40
+            }
+          }
+        },
+        "engine_v2": {
+          "pace": 9,
+          "acceleration": 10,
+          "stamina": 13,
+          "passing": 7,
+          "first_touch": 10,
+          "dribbling": 10,
+          "tackling": 10,
+          "positioning": 16,
+          "decisions": 11,
+          "finishing": 10,
+          "long_shots": 10,
+          "crossing": 10,
+          "heading": 10,
+          "jumping_reach": 15,
+          "corners": 10,
+          "free_kick_taking": 10,
+          "penalty_taking": 10,
+          "handling": 14,
+          "reflexes": 13,
+          "one_on_ones": 13,
+          "aerial_reach": 11,
+          "command_of_area": 10,
+          "kicking": 10,
+          "throwing": 11,
+          "left": 10,
+          "right": 20
+        }
+      }
+    },
+    "61098180": {
+      "id": "61098180",
+      "name": "Calvin Ramsay",
+      "nation": "Scotland",
+      "team_group": "unassigned",
+      "sub_team": "Unassigned",
+      "position_group": "defence",
+      "positions": [
+        "DR"
+      ],
+      "ca": 113,
+      "pa": 142.0,
+      "age": 22,
+      "value_eur": 1385085,
+      "value_formatted": "€1M - €2M",
+      "wage": "€17K pw",
+      "contract_until": "2027-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/61098180-calvin-ramsay",
+      "full_url": "https://fminside.net/players/7-fm-26/61098180-calvin-ramsay",
+      "photo_url": "https://img.fminside.net/facesfm26/61098180.png",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000191802": {
+      "id": "2000191802",
+      "name": "Lewis Koumas",
+      "nation": "Wales",
+      "team_group": "staff-team-10",
+      "sub_team": "U21 Team",
+      "position_group": "attack",
+      "positions": [
+        "AMC",
+        "AML"
+      ],
+      "ca": 113,
+      "pa": 118.9,
+      "age": 20,
+      "value_eur": 3434363,
+      "value_formatted": "€3M - €5M",
+      "wage": "€6K pw",
+      "contract_until": "2027-06-30",
+      "status": "loaned-out",
+      "relative_url": "/players/7-fm-26/2000191802-lewis-koumas",
+      "full_url": "https://fminside.net/players/7-fm-26/2000191802-lewis-koumas",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000133129": {
+      "id": "2000133129",
+      "name": "Ármin Pécsi",
+      "nation": "Hungary",
+      "team_group": "staff-team-10",
+      "sub_team": "U21 Team",
+      "position_group": "goalkeeper",
+      "positions": [
+        "GK"
+      ],
+      "ca": 110,
+      "pa": 138.8,
+      "age": 20,
+      "value_eur": 4562179,
+      "value_formatted": "€4M - €7M",
+      "wage": "€3K pw",
+      "contract_until": "2030-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000133129-armin-pecsi",
+      "full_url": "https://fminside.net/players/7-fm-26/2000133129-armin-pecsi",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "28115793": {
+      "id": "28115793",
+      "name": "Rhys Williams",
+      "nation": "England",
+      "team_group": "unassigned",
+      "sub_team": "Unassigned",
+      "position_group": "defence",
+      "positions": [
+        "DC"
+      ],
+      "ca": 104,
+      "pa": 120.0,
+      "age": 24,
+      "value_eur": 199952,
+      "value_formatted": "€160K - €300K",
+      "wage": "€12K pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/28115793-rhys-williams",
+      "full_url": "https://fminside.net/players/7-fm-26/28115793-rhys-williams",
+      "photo_url": "https://img.fminside.net/facesfm26/28115793.png",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000086809": {
+      "id": "2000086809",
+      "name": "Kaide Gordon",
+      "nation": "England",
+      "team_group": "staff-team-10",
+      "sub_team": "U21 Team",
+      "position_group": "attack",
+      "positions": [
+        "AMR",
+        "AML"
+      ],
+      "ca": 101,
+      "pa": 118.9,
+      "age": 21,
+      "value_eur": 745192,
+      "value_formatted": "€596K - €1M",
+      "wage": "€3K pw",
+      "contract_until": "2028-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000086809-kaide-gordon",
+      "full_url": "https://fminside.net/players/7-fm-26/2000086809-kaide-gordon",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000108358": {
+      "id": "2000108358",
+      "name": "Calum Scanlon",
+      "nation": "England",
+      "team_group": "staff-team-10",
+      "sub_team": "U21 Team",
+      "position_group": "defence",
+      "positions": [
+        "DL",
+        "WBL"
+      ],
+      "ca": 100,
+      "pa": 138.8,
+      "age": 20,
+      "value_eur": 2530259,
+      "value_formatted": "€2M - €4M",
+      "wage": "€3K pw",
+      "contract_until": "2027-06-30",
+      "status": "loaned-out",
+      "relative_url": "/players/7-fm-26/2000108358-calum-scanlon",
+      "full_url": "https://fminside.net/players/7-fm-26/2000108358-calum-scanlon",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000276761": {
+      "id": "2000276761",
+      "name": "Kieran Morrison",
+      "nation": "Northern Ireland",
+      "team_group": "staff-team-10",
+      "sub_team": "U21 Team",
+      "position_group": "attack",
+      "positions": [
+        "AMR",
+        "AML"
+      ],
+      "ca": 96,
+      "pa": 158.8,
+      "age": 19,
+      "value_eur": 5607454,
+      "value_formatted": "€4M - €8M",
+      "wage": "€1K pw",
+      "contract_until": "2027-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000276761-kieran-morrison",
+      "full_url": "https://fminside.net/players/7-fm-26/2000276761-kieran-morrison",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000260919": {
+      "id": "2000260919",
+      "name": "Amara Nallo",
+      "nation": "England",
+      "team_group": "staff-team-10",
+      "sub_team": "U21 Team",
+      "position_group": "defence",
+      "positions": [
+        "DC"
+      ],
+      "ca": 94,
+      "pa": 118.9,
+      "age": 19,
+      "value_eur": 909582,
+      "value_formatted": "€728K - €1M",
+      "wage": "€1K pw",
+      "contract_until": "2028-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000260919-amara-nallo",
+      "full_url": "https://fminside.net/players/7-fm-26/2000260919-amara-nallo",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000017534": {
+      "id": "2000017534",
+      "name": "Fabian Mrozek",
+      "nation": "Poland",
+      "team_group": "unassigned",
+      "sub_team": "Unassigned",
+      "position_group": "goalkeeper",
+      "positions": [
+        "GK"
+      ],
+      "ca": 92,
+      "pa": 120.0,
+      "age": 22,
+      "value_eur": 270383,
+      "value_formatted": "€216K - €406K",
+      "wage": "€3K pw",
+      "contract_until": "2027-06-30",
+      "status": "loaned-out",
+      "relative_url": "/players/7-fm-26/2000017534-fabian-mrozek",
+      "full_url": "https://fminside.net/players/7-fm-26/2000017534-fabian-mrozek",
+      "photo_url": "https://img.fminside.net/facesfm26/2000017534.png",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000191774": {
+      "id": "2000191774",
+      "name": "Wellity Lucky",
+      "nation": "England",
+      "team_group": "staff-team-10",
+      "sub_team": "U21 Team",
+      "position_group": "defence",
+      "positions": [
+        "DC"
+      ],
+      "ca": 91,
+      "pa": 118.9,
+      "age": 19,
+      "value_eur": 692157,
+      "value_formatted": "€554K - €1M",
+      "wage": "€3K pw",
+      "contract_until": "2028-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000191774-wellity-lucky",
+      "full_url": "https://fminside.net/players/7-fm-26/2000191774-wellity-lucky",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000049216": {
+      "id": "2000049216",
+      "name": "Harvey Davies",
+      "nation": "England",
+      "team_group": "unassigned",
+      "sub_team": "Unassigned",
+      "position_group": "goalkeeper",
+      "positions": [
+        "GK"
+      ],
+      "ca": 90,
+      "pa": 122.0,
+      "age": 22,
+      "value_eur": 154959,
+      "value_formatted": "€124K - €232K",
+      "wage": "€5K pw",
+      "contract_until": "2027-06-30",
+      "status": "loaned-out",
+      "relative_url": "/players/7-fm-26/2000049216-harvey-davies",
+      "full_url": "https://fminside.net/players/7-fm-26/2000049216-harvey-davies",
+      "photo_url": "https://img.fminside.net/facesfm26/2000049216.png",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000108376": {
+      "id": "2000108376",
+      "name": "Isaac Mabaya",
+      "nation": "England",
+      "team_group": "staff-team-10",
+      "sub_team": "U21 Team",
+      "position_group": "midfield",
+      "positions": [
+        "WBR",
+        "MC"
+      ],
+      "ca": 90,
+      "pa": 118.9,
+      "age": 21,
+      "value_eur": 269322,
+      "value_formatted": "€215K - €404K",
+      "wage": "€5K pw",
+      "contract_until": "2026-06-30",
+      "status": "loaned-out",
+      "relative_url": "/players/7-fm-26/2000108376-isaac-mabaya",
+      "full_url": "https://fminside.net/players/7-fm-26/2000108376-isaac-mabaya",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000108380": {
+      "id": "2000108380",
+      "name": "Tommy Pilling",
+      "nation": "England",
+      "team_group": "staff-team-10",
+      "sub_team": "U21 Team",
+      "position_group": "midfield",
+      "positions": [
+        "DM",
+        "MC"
+      ],
+      "ca": 90,
+      "pa": 118.8,
+      "age": 21,
+      "value_eur": 275782,
+      "value_formatted": "€221K - €414K",
+      "wage": "€1K pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000108380-tommy-pilling",
+      "full_url": "https://fminside.net/players/7-fm-26/2000108380-tommy-pilling",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000191782": {
+      "id": "2000191782",
+      "name": "Josh Davidson",
+      "nation": "England",
+      "team_group": "staff-team-10",
+      "sub_team": "U21 Team",
+      "position_group": "defence",
+      "positions": [
+        "DR",
+        "WBR",
+        "DM"
+      ],
+      "ca": 88,
+      "pa": 118.8,
+      "age": 20,
+      "value_eur": 233278,
+      "value_formatted": "€187K - €350K",
+      "wage": "€1K pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000191782-josh-davidson",
+      "full_url": "https://fminside.net/players/7-fm-26/2000191782-josh-davidson",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "28000443": {
+      "id": "28000443",
+      "name": "Jay Spearing",
+      "nation": "England",
+      "team_group": "unassigned",
+      "sub_team": "Unassigned",
+      "position_group": "midfield",
+      "positions": [
+        "DM"
+      ],
+      "ca": 87,
+      "pa": 130.0,
+      "age": 37,
+      "value_eur": 5029,
+      "value_formatted": "€4K - €8K",
+      "wage": "€3K pw",
+      "contract_until": "2027-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/28000443-jay-spearing",
+      "full_url": "https://fminside.net/players/7-fm-26/28000443-jay-spearing",
+      "photo_url": "https://img.fminside.net/facesfm26/28000443.png",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000524865": {
+      "id": "2000524865",
+      "name": "Mor Talla Ndiaye",
+      "nation": "Senegal",
+      "team_group": "staff-team-12",
+      "sub_team": "U18 Team",
+      "position_group": "defence",
+      "positions": [
+        "DC"
+      ],
+      "ca": 85,
+      "pa": 138.9,
+      "age": 17,
+      "value_eur": 1150380,
+      "value_formatted": "€920K - €2M",
+      "wage": "€353 pw",
+      "contract_until": "2030-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000524865-mor-talla-ndiaye",
+      "full_url": "https://fminside.net/players/7-fm-26/2000524865-mor-talla-ndiaye",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000191843": {
+      "id": "2000191843",
+      "name": "Keyrol Figueroa",
+      "nation": "United States",
+      "team_group": "staff-team-10",
+      "sub_team": "U21 Team",
+      "position_group": "attack",
+      "positions": [
+        "ST"
+      ],
+      "ca": 85,
+      "pa": 138.8,
+      "age": 19,
+      "value_eur": 277133,
+      "value_formatted": "€222K - €416K",
+      "wage": "€1K pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000191843-keyrol-figueroa",
+      "full_url": "https://fminside.net/players/7-fm-26/2000191843-keyrol-figueroa",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000276756": {
+      "id": "2000276756",
+      "name": "Carter Pinnington",
+      "nation": "England",
+      "team_group": "staff-team-12",
+      "sub_team": "U18 Team",
+      "position_group": "defence",
+      "positions": [
+        "DC"
+      ],
+      "ca": 85,
+      "pa": 118.9,
+      "age": 18,
+      "value_eur": 812499,
+      "value_formatted": "€650K - €1M",
+      "wage": "€1K pw",
+      "contract_until": "2027-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000276756-carter-pinnington",
+      "full_url": "https://fminside.net/players/7-fm-26/2000276756-carter-pinnington",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000285680": {
+      "id": "2000285680",
+      "name": "Noah Adekoya",
+      "nation": "England",
+      "team_group": "staff-team-10",
+      "sub_team": "U21 Team",
+      "position_group": "defence",
+      "positions": [
+        "DC"
+      ],
+      "ca": 85,
+      "pa": 118.9,
+      "age": 19,
+      "value_eur": 334604,
+      "value_formatted": "€268K - €502K",
+      "wage": "€3K pw",
+      "contract_until": "2028-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000285680-noah-adekoya",
+      "full_url": "https://fminside.net/players/7-fm-26/2000285680-noah-adekoya",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000049214": {
+      "id": "2000049214",
+      "name": "Oakley Cannonier",
+      "nation": "England",
+      "team_group": "staff-team-10",
+      "sub_team": "U21 Team",
+      "position_group": "attack",
+      "positions": [
+        "ST"
+      ],
+      "ca": 84,
+      "pa": 98.9,
+      "age": 21,
+      "value_eur": 210598,
+      "value_formatted": "€168K - €316K",
+      "wage": "€3K pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000049214-oakley-cannonier",
+      "full_url": "https://fminside.net/players/7-fm-26/2000049214-oakley-cannonier",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000399869": {
+      "id": "2000399869",
+      "name": "Josh Sonni-Lambie",
+      "nation": "England",
+      "team_group": "staff-team-12",
+      "sub_team": "U18 Team",
+      "position_group": "attack",
+      "positions": [
+        "AMC",
+        "ST"
+      ],
+      "ca": 83,
+      "pa": 138.9,
+      "age": 18,
+      "value_eur": 1366571,
+      "value_formatted": "€1M - €2M",
+      "wage": "€1K pw",
+      "contract_until": "2028-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000399869-josh-sonni-lambie",
+      "full_url": "https://fminside.net/players/7-fm-26/2000399869-josh-sonni-lambie",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000049211": {
+      "id": "2000049211",
+      "name": "James Balagizi",
+      "nation": "England",
+      "team_group": "unassigned",
+      "sub_team": "Unassigned",
+      "position_group": "midfield",
+      "positions": [
+        "MC",
+        "AMC"
+      ],
+      "ca": 83,
+      "pa": 118.8,
+      "age": 22,
+      "value_eur": 128894,
+      "value_formatted": "€103K - €193K",
+      "wage": "€5K pw",
+      "contract_until": "2026-06-30",
+      "status": "loaned-out",
+      "relative_url": "/players/7-fm-26/2000049211-james-balagizi",
+      "full_url": "https://fminside.net/players/7-fm-26/2000049211-james-balagizi",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000108360": {
+      "id": "2000108360",
+      "name": "Terence Miles",
+      "nation": "Wales",
+      "team_group": "staff-team-10",
+      "sub_team": "U21 Team",
+      "position_group": "defence",
+      "positions": [
+        "DR",
+        "DC"
+      ],
+      "ca": 83,
+      "pa": 98.9,
+      "age": 21,
+      "value_eur": 178603,
+      "value_formatted": "€143K - €268K",
+      "wage": "€3K pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000108360-terence-miles",
+      "full_url": "https://fminside.net/players/7-fm-26/2000108360-terence-miles",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000191792": {
+      "id": "2000191792",
+      "name": "Michael Laffey",
+      "nation": "England",
+      "team_group": "staff-team-10",
+      "sub_team": "U21 Team",
+      "position_group": "midfield",
+      "positions": [
+        "DM",
+        "MC"
+      ],
+      "ca": 82,
+      "pa": 118.9,
+      "age": 20,
+      "value_eur": 208620,
+      "value_formatted": "€167K - €313K",
+      "wage": "€2K pw",
+      "contract_until": "2027-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000191792-michael-laffey",
+      "full_url": "https://fminside.net/players/7-fm-26/2000191792-michael-laffey",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000222246": {
+      "id": "2000222246",
+      "name": "Kyle Kelly",
+      "nation": "Saint Kitts and Nevis",
+      "team_group": "staff-team-10",
+      "sub_team": "U21 Team",
+      "position_group": "midfield",
+      "positions": [
+        "DM",
+        "MC"
+      ],
+      "ca": 82,
+      "pa": 118.8,
+      "age": 20,
+      "value_eur": 176983,
+      "value_formatted": "€142K - €265K",
+      "wage": "€2K pw",
+      "contract_until": "2027-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000222246-kyle-kelly",
+      "full_url": "https://fminside.net/players/7-fm-26/2000222246-kyle-kelly",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000276737": {
+      "id": "2000276737",
+      "name": "Kornel Miściur",
+      "nation": "England",
+      "team_group": "staff-team-12",
+      "sub_team": "U18 Team",
+      "position_group": "goalkeeper",
+      "positions": [
+        "GK"
+      ],
+      "ca": 81,
+      "pa": 138.8,
+      "age": 18,
+      "value_eur": 2159108,
+      "value_formatted": "€2M - €3M",
+      "wage": "€1K pw",
+      "contract_until": "2027-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000276737-kornel-miciur",
+      "full_url": "https://fminside.net/players/7-fm-26/2000276737-kornel-miciur",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000276738": {
+      "id": "2000276738",
+      "name": "Lucas Pitt",
+      "nation": "England",
+      "team_group": "staff-team-10",
+      "sub_team": "U21 Team",
+      "position_group": "defence",
+      "positions": [
+        "DC"
+      ],
+      "ca": 81,
+      "pa": 118.9,
+      "age": 19,
+      "value_eur": 220974,
+      "value_formatted": "€177K - €331K",
+      "wage": "€1K pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000276738-lucas-pitt",
+      "full_url": "https://fminside.net/players/7-fm-26/2000276738-lucas-pitt",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000388194": {
+      "id": "2000388194",
+      "name": "Will Wright",
+      "nation": "England",
+      "team_group": "staff-team-12",
+      "sub_team": "U18 Team",
+      "position_group": "attack",
+      "positions": [
+        "ST"
+      ],
+      "ca": 79,
+      "pa": 138.8,
+      "age": 17,
+      "value_eur": 829162,
+      "value_formatted": "€663K - €1M",
+      "wage": "€353 pw",
+      "contract_until": "2028-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000388194-will-wright",
+      "full_url": "https://fminside.net/players/7-fm-26/2000388194-will-wright",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000399830": {
+      "id": "2000399830",
+      "name": "Joe Bradshaw",
+      "nation": "England",
+      "team_group": "staff-team-12",
+      "sub_team": "U18 Team",
+      "position_group": "attack",
+      "positions": [
+        "AMR",
+        "AML"
+      ],
+      "ca": 77,
+      "pa": 138.9,
+      "age": 17,
+      "value_eur": 2155734,
+      "value_formatted": "€2M - €3M",
+      "wage": "€353 pw",
+      "contract_until": "2028-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000399830-joe-bradshaw",
+      "full_url": "https://fminside.net/players/7-fm-26/2000399830-joe-bradshaw",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000276770": {
+      "id": "2000276770",
+      "name": "Clae Ewing",
+      "nation": "England",
+      "team_group": "staff-team-10",
+      "sub_team": "U21 Team",
+      "position_group": "defence",
+      "positions": [
+        "DL",
+        "WBL"
+      ],
+      "ca": 77,
+      "pa": 118.8,
+      "age": 19,
+      "value_eur": 134902,
+      "value_formatted": "€108K - €202K",
+      "wage": "€1K pw",
+      "contract_until": "2027-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000276770-clae-ewing",
+      "full_url": "https://fminside.net/players/7-fm-26/2000276770-clae-ewing",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000276771": {
+      "id": "2000276771",
+      "name": "Kareem Ahmed",
+      "nation": "England",
+      "team_group": "staff-team-12",
+      "sub_team": "U18 Team",
+      "position_group": "midfield",
+      "positions": [
+        "AMC",
+        "ST"
+      ],
+      "ca": 75,
+      "pa": 118.8,
+      "age": 18,
+      "value_eur": 170484,
+      "value_formatted": "€136K - €256K",
+      "wage": "€1K pw",
+      "contract_until": "2027-07-22",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000276771-kareem-ahmed",
+      "full_url": "https://fminside.net/players/7-fm-26/2000276771-kareem-ahmed",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000399893": {
+      "id": "2000399893",
+      "name": "Alvin Ayman",
+      "nation": "Egypt",
+      "team_group": "staff-team-12",
+      "sub_team": "U18 Team",
+      "position_group": "midfield",
+      "positions": [
+        "DM",
+        "MC"
+      ],
+      "ca": 73,
+      "pa": 118.9,
+      "age": 18,
+      "value_eur": 1607097,
+      "value_formatted": "€1M - €2M",
+      "wage": "€1K pw",
+      "contract_until": "2028-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000399893-alvin-ayman",
+      "full_url": "https://fminside.net/players/7-fm-26/2000399893-alvin-ayman",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000399755": {
+      "id": "2000399755",
+      "name": "DJ Esdaille",
+      "nation": "England",
+      "team_group": "staff-team-12",
+      "sub_team": "U18 Team",
+      "position_group": "defence",
+      "positions": [
+        "DR",
+        "WBR"
+      ],
+      "ca": 72,
+      "pa": 118.9,
+      "age": 18,
+      "value_eur": 144835,
+      "value_formatted": "€116K - €217K",
+      "wage": "€353 pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000399755-dj-esdaille",
+      "full_url": "https://fminside.net/players/7-fm-26/2000399755-dj-esdaille",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000502106": {
+      "id": "2000502106",
+      "name": "La'more Lee-Forrester",
+      "nation": "England",
+      "team_group": "staff-team-12",
+      "sub_team": "U18 Team",
+      "position_group": "attack",
+      "positions": [
+        "AMR",
+        "AML"
+      ],
+      "ca": 71,
+      "pa": 138.8,
+      "age": 17,
+      "value_eur": 223905,
+      "value_formatted": "€179K - €336K",
+      "wage": "€353 pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000502106-lamore-lee-forrester",
+      "full_url": "https://fminside.net/players/7-fm-26/2000502106-lamore-lee-forrester",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000276768": {
+      "id": "2000276768",
+      "name": "Emmanuel Airoboma",
+      "nation": "England",
+      "team_group": "staff-team-12",
+      "sub_team": "U18 Team",
+      "position_group": "defence",
+      "positions": [
+        "DC"
+      ],
+      "ca": 71,
+      "pa": 98.9,
+      "age": 18,
+      "value_eur": 126610,
+      "value_formatted": "€101K - €190K",
+      "wage": "€1K pw",
+      "contract_until": "2027-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000276768-emmanuel-airoboma",
+      "full_url": "https://fminside.net/players/7-fm-26/2000276768-emmanuel-airoboma",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000276758": {
+      "id": "2000276758",
+      "name": "Ben Trueman",
+      "nation": "England",
+      "team_group": "staff-team-10",
+      "sub_team": "U21 Team",
+      "position_group": "midfield",
+      "positions": [
+        "DM",
+        "MC"
+      ],
+      "ca": 71,
+      "pa": 98.8,
+      "age": 19,
+      "value_eur": 90690,
+      "value_formatted": "€73K - €136K",
+      "wage": "€1K pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000276758-ben-trueman",
+      "full_url": "https://fminside.net/players/7-fm-26/2000276758-ben-trueman",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000276766": {
+      "id": "2000276766",
+      "name": "Fola Onanuga",
+      "nation": "England",
+      "team_group": "staff-team-10",
+      "sub_team": "U21 Team",
+      "position_group": "midfield",
+      "positions": [
+        "MC",
+        "AMC",
+        "AMR"
+      ],
+      "ca": 71,
+      "pa": 98.8,
+      "age": 19,
+      "value_eur": 104189,
+      "value_formatted": "€83K - €156K",
+      "wage": "€1K pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000276766-fola-onanuga",
+      "full_url": "https://fminside.net/players/7-fm-26/2000276766-fola-onanuga",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000399787": {
+      "id": "2000399787",
+      "name": "Joe Upton",
+      "nation": "England",
+      "team_group": "staff-team-12",
+      "sub_team": "U18 Team",
+      "position_group": "midfield",
+      "positions": [
+        "DM",
+        "MC"
+      ],
+      "ca": 70,
+      "pa": 118.9,
+      "age": 17,
+      "value_eur": 275880,
+      "value_formatted": "€221K - €414K",
+      "wage": "€353 pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000399787-joe-upton",
+      "full_url": "https://fminside.net/players/7-fm-26/2000399787-joe-upton",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000499492": {
+      "id": "2000499492",
+      "name": "Cam Williams",
+      "nation": "Scotland",
+      "team_group": "staff-team-12",
+      "sub_team": "U18 Team",
+      "position_group": "defence",
+      "positions": [
+        "DL",
+        "WBL"
+      ],
+      "ca": 69,
+      "pa": 138.8,
+      "age": 17,
+      "value_eur": 235704,
+      "value_formatted": "€189K - €354K",
+      "wage": "€353 pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000499492-cam-williams",
+      "full_url": "https://fminside.net/players/7-fm-26/2000499492-cam-williams",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000502122": {
+      "id": "2000502122",
+      "name": "Haydn Murray-Holme",
+      "nation": "England",
+      "team_group": "staff-team-12",
+      "sub_team": "U18 Team",
+      "position_group": "midfield",
+      "positions": [
+        "DM",
+        "MC"
+      ],
+      "ca": 69,
+      "pa": 138.8,
+      "age": 17,
+      "value_eur": 334833,
+      "value_formatted": "€268K - €502K",
+      "wage": "€353 pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000502122-haydn-murray-holme",
+      "full_url": "https://fminside.net/players/7-fm-26/2000502122-haydn-murray-holme",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000399794": {
+      "id": "2000399794",
+      "name": "Oliver O'Connor",
+      "nation": "England",
+      "team_group": "staff-team-12",
+      "sub_team": "U18 Team",
+      "position_group": "midfield",
+      "positions": [
+        "MC",
+        "AMC"
+      ],
+      "ca": 67,
+      "pa": 118.8,
+      "age": 17,
+      "value_eur": 157672,
+      "value_formatted": "€126K - €237K",
+      "wage": "€353 pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000399794-oliver-oconnor",
+      "full_url": "https://fminside.net/players/7-fm-26/2000399794-oliver-oconnor",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000399741": {
+      "id": "2000399741",
+      "name": "Bailey Hall",
+      "nation": "England",
+      "team_group": "staff-team-12",
+      "sub_team": "U18 Team",
+      "position_group": "goalkeeper",
+      "positions": [
+        "GK"
+      ],
+      "ca": 67,
+      "pa": 98.9,
+      "age": 18,
+      "value_eur": 118306,
+      "value_formatted": "€95K - €177K",
+      "wage": "€1K pw",
+      "contract_until": "2027-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000399741-bailey-hall",
+      "full_url": "https://fminside.net/players/7-fm-26/2000399741-bailey-hall",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000502158": {
+      "id": "2000502158",
+      "name": "Finn Inglethorpe",
+      "nation": "England",
+      "team_group": "staff-team-12",
+      "sub_team": "U18 Team",
+      "position_group": "attack",
+      "positions": [
+        "ST"
+      ],
+      "ca": 66,
+      "pa": 118.9,
+      "age": 17,
+      "value_eur": 370204,
+      "value_formatted": "€296K - €555K",
+      "wage": "€353 pw",
+      "contract_until": "2029-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000502158-finn-inglethorpe",
+      "full_url": "https://fminside.net/players/7-fm-26/2000502158-finn-inglethorpe",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000502095": {
+      "id": "2000502095",
+      "name": "Lucas Clarke",
+      "nation": "England",
+      "team_group": "staff-team-12",
+      "sub_team": "U18 Team",
+      "position_group": "defence",
+      "positions": [
+        "DC"
+      ],
+      "ca": 66,
+      "pa": 118.9,
+      "age": 17,
+      "value_eur": 162330,
+      "value_formatted": "€130K - €243K",
+      "wage": "€353 pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000502095-lucas-clarke",
+      "full_url": "https://fminside.net/players/7-fm-26/2000502095-lucas-clarke",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000399858": {
+      "id": "2000399858",
+      "name": "Prince Cissé",
+      "nation": "Wales",
+      "team_group": "staff-team-12",
+      "sub_team": "U18 Team",
+      "position_group": "defence",
+      "positions": [
+        "DC"
+      ],
+      "ca": 66,
+      "pa": 118.8,
+      "age": 17,
+      "value_eur": 150180,
+      "value_formatted": "€120K - €225K",
+      "wage": "€353 pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000399858-prince-cisse",
+      "full_url": "https://fminside.net/players/7-fm-26/2000399858-prince-cisse",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000222287": {
+      "id": "2000222287",
+      "name": "Jacob Poytress",
+      "nation": "England",
+      "team_group": "staff-team-10",
+      "sub_team": "U21 Team",
+      "position_group": "goalkeeper",
+      "positions": [
+        "GK"
+      ],
+      "ca": 65,
+      "pa": 110.0,
+      "age": 21,
+      "value_eur": 50696,
+      "value_formatted": "€41K - €76K",
+      "wage": "€1K pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000222287-jacob-poytress",
+      "full_url": "https://fminside.net/players/7-fm-26/2000222287-jacob-poytress",
+      "photo_url": "https://img.fminside.net/facesfm26/2000222287.png",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000502101": {
+      "id": "2000502101",
+      "name": "Harvey Owen",
+      "nation": "England",
+      "team_group": "staff-team-12",
+      "sub_team": "U18 Team",
+      "position_group": "defence",
+      "positions": [
+        "DC"
+      ],
+      "ca": 64,
+      "pa": 118.9,
+      "age": 17,
+      "value_eur": 202899,
+      "value_formatted": "€162K - €304K",
+      "wage": "€353 pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000502101-harvey-owen",
+      "full_url": "https://fminside.net/players/7-fm-26/2000502101-harvey-owen",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000399687": {
+      "id": "2000399687",
+      "name": "DJ Bernard",
+      "nation": "England",
+      "team_group": "staff-team-12",
+      "sub_team": "U18 Team",
+      "position_group": "goalkeeper",
+      "positions": [
+        "GK"
+      ],
+      "ca": 61,
+      "pa": 98.8,
+      "age": 17,
+      "value_eur": 63420,
+      "value_formatted": "€51K - €95K",
+      "wage": "€353 pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000399687-dj-bernard",
+      "full_url": "https://fminside.net/players/7-fm-26/2000399687-dj-bernard",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000502125": {
+      "id": "2000502125",
+      "name": "AJ Yeguo",
+      "nation": "England",
+      "team_group": "staff-team-12",
+      "sub_team": "U18 Team",
+      "position_group": "midfield",
+      "positions": [
+        "AMC"
+      ],
+      "ca": 60,
+      "pa": 118.9,
+      "age": 16,
+      "value_eur": 186105,
+      "value_formatted": "€149K - €279K",
+      "wage": "€104 pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000502125-aj-yeguo",
+      "full_url": "https://fminside.net/players/7-fm-26/2000502125-aj-yeguo",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000399824": {
+      "id": "2000399824",
+      "name": "Ryan Cowley",
+      "nation": "England",
+      "team_group": "staff-team-12",
+      "sub_team": "U18 Team",
+      "position_group": "midfield",
+      "positions": [
+        "DM"
+      ],
+      "ca": 60,
+      "pa": 78.9,
+      "age": 17,
+      "value_eur": 66323,
+      "value_formatted": "€53K - €99K",
+      "wage": "€353 pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000399824-ryan-cowley",
+      "full_url": "https://fminside.net/players/7-fm-26/2000399824-ryan-cowley",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000502098": {
+      "id": "2000502098",
+      "name": "Lenix Conde",
+      "nation": "England",
+      "team_group": "staff-team-12",
+      "sub_team": "U18 Team",
+      "position_group": "defence",
+      "positions": [
+        "DR",
+        "WBR"
+      ],
+      "ca": 59,
+      "pa": 98.9,
+      "age": 17,
+      "value_eur": 71021,
+      "value_formatted": "€57K - €107K",
+      "wage": "€353 pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000502098-lenix-conde",
+      "full_url": "https://fminside.net/players/7-fm-26/2000502098-lenix-conde",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000502100": {
+      "id": "2000502100",
+      "name": "Harry Moran",
+      "nation": "Northern Ireland",
+      "team_group": "staff-team-12",
+      "sub_team": "U18 Team",
+      "position_group": "defence",
+      "positions": [
+        "DC"
+      ],
+      "ca": 58,
+      "pa": 118.8,
+      "age": 17,
+      "value_eur": 97531,
+      "value_formatted": "€78K - €146K",
+      "wage": "€353 pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000502100-harry-moran",
+      "full_url": "https://fminside.net/players/7-fm-26/2000502100-harry-moran",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000502112": {
+      "id": "2000502112",
+      "name": "Ellis Hickman",
+      "nation": "England",
+      "team_group": "staff-team-12",
+      "sub_team": "U18 Team",
+      "position_group": "midfield",
+      "positions": [
+        "DM",
+        "MC"
+      ],
+      "ca": 58,
+      "pa": 98.8,
+      "age": 16,
+      "value_eur": 130903,
+      "value_formatted": "€105K - €196K",
+      "wage": "€104 pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000502112-ellis-hickman",
+      "full_url": "https://fminside.net/players/7-fm-26/2000502112-ellis-hickman",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000499521": {
+      "id": "2000499521",
+      "name": "Cian Powney-Wain",
+      "nation": "England",
+      "team_group": "staff-team-12",
+      "sub_team": "U18 Team",
+      "position_group": "defence",
+      "positions": [
+        "DL"
+      ],
+      "ca": 57,
+      "pa": 78.9,
+      "age": 17,
+      "value_eur": 40728,
+      "value_formatted": "€33K - €61K",
+      "wage": "€353 pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000499521-cian-powney-wain",
+      "full_url": "https://fminside.net/players/7-fm-26/2000499521-cian-powney-wain",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    },
+    "2000507507": {
+      "id": "2000507507",
+      "name": "Matty Wright",
+      "nation": "England",
+      "team_group": "staff-team-12",
+      "sub_team": "U18 Team",
+      "position_group": "goalkeeper",
+      "positions": [
+        "GK"
+      ],
+      "ca": 48,
+      "pa": 78.9,
+      "age": 17,
+      "value_eur": 26363,
+      "value_formatted": "€21K - €40K",
+      "wage": "€353 pw",
+      "contract_until": "2026-06-30",
+      "status": "available",
+      "relative_url": "/players/7-fm-26/2000507507-matty-wright",
+      "full_url": "https://fminside.net/players/7-fm-26/2000507507-matty-wright",
+      "photo_url": "https://icon.ontbrand.com/regular/000/atom.svg",
+      "is_first_team": false,
+      "attributes": null
+    }
+  }
+}

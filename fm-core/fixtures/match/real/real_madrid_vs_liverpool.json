@@ -1,0 +1,1205 @@
+{
+  "schema_version": "v2",
+  "match_id": "real_madrid_vs_liverpool",
+  "rules_profile": "profile_a",
+  "pitch": {
+    "width": 68.0,
+    "length": 105.0
+  },
+  "home_team": {
+    "id": "real_madrid",
+    "name": "Real Madrid",
+    "tactics": {
+      "formation": "4-4-2",
+      "width": 0.5,
+      "line_height": 0.5,
+      "tempo": 0.5,
+      "pressing": 0.5
+    },
+    "players": [
+      {
+        "id": "real_madrid_18026122",
+        "name": "Thibaut Courtois",
+        "role": "GK",
+        "attributes": {
+          "pace": 11,
+          "acceleration": 12,
+          "stamina": 8,
+          "passing": 13,
+          "first_touch": 10,
+          "dribbling": 10,
+          "tackling": 10,
+          "positioning": 16,
+          "decisions": 16,
+          "finishing": 10,
+          "long_shots": 10,
+          "crossing": 10,
+          "heading": 10,
+          "jumping_reach": 18,
+          "left": 10,
+          "right": 20,
+          "corners": 10,
+          "free_kick_taking": 10,
+          "penalty_taking": 10,
+          "handling": 16,
+          "reflexes": 19,
+          "one_on_ones": 18,
+          "aerial_reach": 20,
+          "command_of_area": 16,
+          "kicking": 16,
+          "throwing": 15
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "real_madrid_19273276",
+        "name": "Éder Militão",
+        "role": "CB",
+        "attributes": {
+          "pace": 15,
+          "acceleration": 14,
+          "stamina": 15,
+          "passing": 14,
+          "first_touch": 12,
+          "dribbling": 12,
+          "tackling": 16,
+          "positioning": 16,
+          "decisions": 14,
+          "finishing": 8,
+          "long_shots": 11,
+          "crossing": 10,
+          "heading": 16,
+          "jumping_reach": 14,
+          "left": 10,
+          "right": 20,
+          "corners": 9,
+          "free_kick_taking": 10,
+          "penalty_taking": 13
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "real_madrid_92023410",
+        "name": "Antonio Rüdiger",
+        "role": "CB",
+        "attributes": {
+          "pace": 15,
+          "acceleration": 14,
+          "stamina": 15,
+          "passing": 12,
+          "first_touch": 10,
+          "dribbling": 10,
+          "tackling": 17,
+          "positioning": 14,
+          "decisions": 16,
+          "finishing": 7,
+          "long_shots": 8,
+          "crossing": 10,
+          "heading": 15,
+          "jumping_reach": 15,
+          "left": 10,
+          "right": 20,
+          "corners": 5,
+          "free_kick_taking": 9,
+          "penalty_taking": 7
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "real_madrid_16010162",
+        "name": "David Alaba",
+        "role": "LB",
+        "allowed_positions": [
+          "CB"
+        ],
+        "attributes": {
+          "pace": 13,
+          "acceleration": 13,
+          "stamina": 13,
+          "passing": 16,
+          "first_touch": 15,
+          "dribbling": 12,
+          "tackling": 13,
+          "positioning": 15,
+          "decisions": 14,
+          "finishing": 10,
+          "long_shots": 14,
+          "crossing": 12,
+          "heading": 13,
+          "jumping_reach": 11,
+          "left": 10,
+          "right": 20,
+          "corners": 12,
+          "free_kick_taking": 15,
+          "penalty_taking": 14
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "real_madrid_28104124",
+        "name": "Trent Alexander-Arnold",
+        "role": "RB",
+        "attributes": {
+          "pace": 14,
+          "acceleration": 14,
+          "stamina": 13,
+          "passing": 19,
+          "first_touch": 17,
+          "dribbling": 11,
+          "tackling": 12,
+          "positioning": 11,
+          "decisions": 13,
+          "finishing": 8,
+          "long_shots": 12,
+          "crossing": 17,
+          "heading": 11,
+          "jumping_reach": 11,
+          "left": 10,
+          "right": 20,
+          "corners": 15,
+          "free_kick_taking": 15,
+          "penalty_taking": 11
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "real_madrid_29232937",
+        "name": "Jude Bellingham",
+        "role": "CM",
+        "attributes": {
+          "pace": 14,
+          "acceleration": 15,
+          "stamina": 16,
+          "passing": 17,
+          "first_touch": 17,
+          "dribbling": 17,
+          "tackling": 15,
+          "positioning": 12,
+          "decisions": 14,
+          "finishing": 17,
+          "long_shots": 14,
+          "crossing": 12,
+          "heading": 14,
+          "jumping_reach": 12,
+          "left": 10,
+          "right": 20,
+          "corners": 11,
+          "free_kick_taking": 11,
+          "penalty_taking": 13
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "real_madrid_78074594",
+        "name": "Federico Valverde",
+        "role": "CM",
+        "attributes": {
+          "pace": 17,
+          "acceleration": 17,
+          "stamina": 18,
+          "passing": 15,
+          "first_touch": 14,
+          "dribbling": 12,
+          "tackling": 15,
+          "positioning": 13,
+          "decisions": 13,
+          "finishing": 13,
+          "long_shots": 17,
+          "crossing": 12,
+          "heading": 12,
+          "jumping_reach": 12,
+          "left": 10,
+          "right": 20,
+          "corners": 13,
+          "free_kick_taking": 14,
+          "penalty_taking": 11
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "real_madrid_85139014",
+        "name": "Kylian Mbappé",
+        "role": "ST",
+        "allowed_positions": [
+          "LW"
+        ],
+        "attributes": {
+          "pace": 19,
+          "acceleration": 20,
+          "stamina": 15,
+          "passing": 15,
+          "first_touch": 18,
+          "dribbling": 18,
+          "tackling": 4,
+          "positioning": 4,
+          "decisions": 16,
+          "finishing": 18,
+          "long_shots": 15,
+          "crossing": 13,
+          "heading": 9,
+          "jumping_reach": 8,
+          "left": 10,
+          "right": 20,
+          "corners": 13,
+          "free_kick_taking": 11,
+          "penalty_taking": 18
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "real_madrid_2000143029",
+        "name": "Gonzalo",
+        "role": "ST",
+        "allowed_positions": [
+          "RW"
+        ],
+        "attributes": {
+          "pace": 13,
+          "acceleration": 15,
+          "stamina": 13,
+          "passing": 11,
+          "first_touch": 13,
+          "dribbling": 13,
+          "tackling": 6,
+          "positioning": 7,
+          "decisions": 12,
+          "finishing": 14,
+          "long_shots": 9,
+          "crossing": 8,
+          "heading": 14,
+          "jumping_reach": 12,
+          "left": 10,
+          "right": 20,
+          "corners": 7,
+          "free_kick_taking": 10,
+          "penalty_taking": 13
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "real_madrid_19302146",
+        "name": "Vinícius Júnior",
+        "role": "LM",
+        "allowed_positions": [
+          "LW"
+        ],
+        "attributes": {
+          "pace": 18,
+          "acceleration": 19,
+          "stamina": 16,
+          "passing": 15,
+          "first_touch": 15,
+          "dribbling": 19,
+          "tackling": 6,
+          "positioning": 8,
+          "decisions": 12,
+          "finishing": 16,
+          "long_shots": 12,
+          "crossing": 13,
+          "heading": 12,
+          "jumping_reach": 8,
+          "left": 10,
+          "right": 20,
+          "corners": 7,
+          "free_kick_taking": 8,
+          "penalty_taking": 14
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "real_madrid_19306929",
+        "name": "Rodrygo",
+        "role": "RM",
+        "allowed_positions": [
+          "RW",
+          "LW"
+        ],
+        "attributes": {
+          "pace": 16,
+          "acceleration": 15,
+          "stamina": 15,
+          "passing": 15,
+          "first_touch": 15,
+          "dribbling": 17,
+          "tackling": 6,
+          "positioning": 10,
+          "decisions": 14,
+          "finishing": 17,
+          "long_shots": 14,
+          "crossing": 12,
+          "heading": 12,
+          "jumping_reach": 7,
+          "left": 10,
+          "right": 20,
+          "corners": 11,
+          "free_kick_taking": 14,
+          "penalty_taking": 12
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "real_madrid_71099053",
+        "name": "Andriy Lunin",
+        "role": "GK",
+        "attributes": {
+          "pace": 12,
+          "acceleration": 14,
+          "stamina": 14,
+          "passing": 10,
+          "first_touch": 12,
+          "dribbling": 10,
+          "tackling": 10,
+          "positioning": 14,
+          "decisions": 13,
+          "finishing": 10,
+          "long_shots": 10,
+          "crossing": 10,
+          "heading": 10,
+          "jumping_reach": 15,
+          "left": 10,
+          "right": 20,
+          "corners": 10,
+          "free_kick_taking": 10,
+          "penalty_taking": 10,
+          "handling": 14,
+          "reflexes": 16,
+          "one_on_ones": 15,
+          "aerial_reach": 15,
+          "command_of_area": 16,
+          "kicking": 12,
+          "throwing": 13
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "real_madrid_48042326",
+        "name": "Aurélien Tchouaméni",
+        "role": "DM",
+        "attributes": {
+          "pace": 16,
+          "acceleration": 15,
+          "stamina": 17,
+          "passing": 15,
+          "first_touch": 13,
+          "dribbling": 12,
+          "tackling": 16,
+          "positioning": 15,
+          "decisions": 14,
+          "finishing": 9,
+          "long_shots": 13,
+          "crossing": 10,
+          "heading": 13,
+          "jumping_reach": 14,
+          "left": 10,
+          "right": 20,
+          "corners": 8,
+          "free_kick_taking": 6,
+          "penalty_taking": 10
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "real_madrid_49056243",
+        "name": "Eduardo Camavinga",
+        "role": "DM",
+        "attributes": {
+          "pace": 17,
+          "acceleration": 16,
+          "stamina": 17,
+          "passing": 15,
+          "first_touch": 15,
+          "dribbling": 13,
+          "tackling": 16,
+          "positioning": 14,
+          "decisions": 13,
+          "finishing": 10,
+          "long_shots": 12,
+          "crossing": 13,
+          "heading": 13,
+          "jumping_reach": 13,
+          "left": 10,
+          "right": 20,
+          "corners": 6,
+          "free_kick_taking": 6,
+          "penalty_taking": 7
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "real_madrid_67139735",
+        "name": "Dani Carvajal",
+        "role": "RB",
+        "attributes": {
+          "pace": 13,
+          "acceleration": 14,
+          "stamina": 15,
+          "passing": 13,
+          "first_touch": 13,
+          "dribbling": 13,
+          "tackling": 15,
+          "positioning": 15,
+          "decisions": 15,
+          "finishing": 11,
+          "long_shots": 11,
+          "crossing": 14,
+          "heading": 12,
+          "jumping_reach": 7,
+          "left": 10,
+          "right": 20,
+          "corners": 11,
+          "free_kick_taking": 8,
+          "penalty_taking": 9
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "real_madrid_28106999",
+        "name": "Brahim Díaz",
+        "role": "AM",
+        "attributes": {
+          "pace": 14,
+          "acceleration": 16,
+          "stamina": 12,
+          "passing": 15,
+          "first_touch": 16,
+          "dribbling": 16,
+          "tackling": 8,
+          "positioning": 9,
+          "decisions": 12,
+          "finishing": 12,
+          "long_shots": 12,
+          "crossing": 13,
+          "heading": 6,
+          "jumping_reach": 6,
+          "left": 10,
+          "right": 20,
+          "corners": 12,
+          "free_kick_taking": 9,
+          "penalty_taking": 12
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      }
+    ],
+    "starting_lineup": [
+      {
+        "slot": "GK",
+        "player_id": "real_madrid_18026122"
+      },
+      {
+        "slot": "CB_L",
+        "player_id": "real_madrid_19273276"
+      },
+      {
+        "slot": "CB_R",
+        "player_id": "real_madrid_92023410"
+      },
+      {
+        "slot": "LB",
+        "player_id": "real_madrid_16010162"
+      },
+      {
+        "slot": "RB",
+        "player_id": "real_madrid_28104124"
+      },
+      {
+        "slot": "CM_L",
+        "player_id": "real_madrid_29232937"
+      },
+      {
+        "slot": "CM_R",
+        "player_id": "real_madrid_78074594"
+      },
+      {
+        "slot": "ST_L",
+        "player_id": "real_madrid_85139014"
+      },
+      {
+        "slot": "ST_R",
+        "player_id": "real_madrid_2000143029"
+      },
+      {
+        "slot": "LM",
+        "player_id": "real_madrid_19302146"
+      },
+      {
+        "slot": "RM",
+        "player_id": "real_madrid_19306929"
+      }
+    ],
+    "bench": [
+      "real_madrid_71099053",
+      "real_madrid_48042326",
+      "real_madrid_49056243",
+      "real_madrid_67139735",
+      "real_madrid_28106999"
+    ]
+  },
+  "away_team": {
+    "id": "liverpool",
+    "name": "Liverpool",
+    "tactics": {
+      "formation": "4-4-2",
+      "width": 0.5,
+      "line_height": 0.5,
+      "tempo": 0.5,
+      "pressing": 0.5
+    },
+    "players": [
+      {
+        "id": "liverpool_19058734",
+        "name": "Alisson",
+        "role": "GK",
+        "attributes": {
+          "pace": 12,
+          "acceleration": 13,
+          "stamina": 10,
+          "passing": 14,
+          "first_touch": 14,
+          "dribbling": 10,
+          "tackling": 10,
+          "positioning": 17,
+          "decisions": 16,
+          "finishing": 10,
+          "long_shots": 10,
+          "crossing": 10,
+          "heading": 10,
+          "jumping_reach": 14,
+          "left": 10,
+          "right": 20,
+          "corners": 10,
+          "free_kick_taking": 10,
+          "penalty_taking": 10,
+          "handling": 17,
+          "reflexes": 17,
+          "one_on_ones": 18,
+          "aerial_reach": 14,
+          "command_of_area": 14,
+          "kicking": 15,
+          "throwing": 14
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "liverpool_37024025",
+        "name": "Virgil van Dijk",
+        "role": "CB",
+        "attributes": {
+          "pace": 14,
+          "acceleration": 14,
+          "stamina": 14,
+          "passing": 16,
+          "first_touch": 17,
+          "dribbling": 9,
+          "tackling": 17,
+          "positioning": 17,
+          "decisions": 16,
+          "finishing": 8,
+          "long_shots": 5,
+          "crossing": 4,
+          "heading": 18,
+          "jumping_reach": 17,
+          "left": 10,
+          "right": 20,
+          "corners": 2,
+          "free_kick_taking": 13,
+          "penalty_taking": 11
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "liverpool_48037822",
+        "name": "Ibrahima Konaté",
+        "role": "CB",
+        "attributes": {
+          "pace": 15,
+          "acceleration": 14,
+          "stamina": 14,
+          "passing": 14,
+          "first_touch": 14,
+          "dribbling": 13,
+          "tackling": 16,
+          "positioning": 15,
+          "decisions": 14,
+          "finishing": 5,
+          "long_shots": 4,
+          "crossing": 5,
+          "heading": 16,
+          "jumping_reach": 16,
+          "left": 10,
+          "right": 20,
+          "corners": 3,
+          "free_kick_taking": 6,
+          "penalty_taking": 6
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "liverpool_2000011147",
+        "name": "Miloš Kerkez",
+        "role": "LB",
+        "attributes": {
+          "pace": 15,
+          "acceleration": 16,
+          "stamina": 16,
+          "passing": 13,
+          "first_touch": 14,
+          "dribbling": 13,
+          "tackling": 15,
+          "positioning": 14,
+          "decisions": 14,
+          "finishing": 7,
+          "long_shots": 10,
+          "crossing": 14,
+          "heading": 8,
+          "jumping_reach": 10,
+          "left": 10,
+          "right": 20,
+          "corners": 9,
+          "free_kick_taking": 8,
+          "penalty_taking": 7
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "liverpool_28113828",
+        "name": "Jeremie Frimpong",
+        "role": "RB",
+        "allowed_positions": [
+          "RM"
+        ],
+        "attributes": {
+          "pace": 17,
+          "acceleration": 18,
+          "stamina": 15,
+          "passing": 12,
+          "first_touch": 12,
+          "dribbling": 16,
+          "tackling": 11,
+          "positioning": 9,
+          "decisions": 11,
+          "finishing": 12,
+          "long_shots": 9,
+          "crossing": 13,
+          "heading": 6,
+          "jumping_reach": 6,
+          "left": 10,
+          "right": 20,
+          "corners": 10,
+          "free_kick_taking": 7,
+          "penalty_taking": 10
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "liverpool_14157184",
+        "name": "Alexis Mac Allister",
+        "role": "CM",
+        "allowed_positions": [
+          "DM",
+          "AM"
+        ],
+        "attributes": {
+          "pace": 12,
+          "acceleration": 12,
+          "stamina": 15,
+          "passing": 16,
+          "first_touch": 16,
+          "dribbling": 13,
+          "tackling": 14,
+          "positioning": 14,
+          "decisions": 16,
+          "finishing": 11,
+          "long_shots": 13,
+          "crossing": 13,
+          "heading": 10,
+          "jumping_reach": 8,
+          "left": 10,
+          "right": 20,
+          "corners": 14,
+          "free_kick_taking": 13,
+          "penalty_taking": 14
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "liverpool_16202373",
+        "name": "Dominik Szoboszlai",
+        "role": "CM",
+        "allowed_positions": [
+          "AM"
+        ],
+        "attributes": {
+          "pace": 16,
+          "acceleration": 14,
+          "stamina": 17,
+          "passing": 16,
+          "first_touch": 16,
+          "dribbling": 13,
+          "tackling": 11,
+          "positioning": 11,
+          "decisions": 14,
+          "finishing": 11,
+          "long_shots": 14,
+          "crossing": 14,
+          "heading": 8,
+          "jumping_reach": 10,
+          "left": 10,
+          "right": 20,
+          "corners": 15,
+          "free_kick_taking": 15,
+          "penalty_taking": 14
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "liverpool_93070286",
+        "name": "Alexander Isak",
+        "role": "ST",
+        "allowed_positions": [
+          "LW"
+        ],
+        "attributes": {
+          "pace": 16,
+          "acceleration": 17,
+          "stamina": 14,
+          "passing": 13,
+          "first_touch": 15,
+          "dribbling": 17,
+          "tackling": 6,
+          "positioning": 6,
+          "decisions": 14,
+          "finishing": 18,
+          "long_shots": 10,
+          "crossing": 9,
+          "heading": 12,
+          "jumping_reach": 14,
+          "left": 10,
+          "right": 20,
+          "corners": 7,
+          "free_kick_taking": 8,
+          "penalty_taking": 16
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "liverpool_49062667",
+        "name": "Hugo Ekitiké",
+        "role": "ST",
+        "attributes": {
+          "pace": 16,
+          "acceleration": 16,
+          "stamina": 13,
+          "passing": 15,
+          "first_touch": 16,
+          "dribbling": 15,
+          "tackling": 7,
+          "positioning": 7,
+          "decisions": 13,
+          "finishing": 14,
+          "long_shots": 13,
+          "crossing": 10,
+          "heading": 14,
+          "jumping_reach": 14,
+          "left": 10,
+          "right": 20,
+          "corners": 6,
+          "free_kick_taking": 11,
+          "penalty_taking": 13
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "liverpool_37062185",
+        "name": "Cody Gakpo",
+        "role": "LM",
+        "allowed_positions": [
+          "LW"
+        ],
+        "attributes": {
+          "pace": 14,
+          "acceleration": 15,
+          "stamina": 14,
+          "passing": 14,
+          "first_touch": 15,
+          "dribbling": 15,
+          "tackling": 8,
+          "positioning": 9,
+          "decisions": 12,
+          "finishing": 13,
+          "long_shots": 14,
+          "crossing": 13,
+          "heading": 12,
+          "jumping_reach": 13,
+          "left": 10,
+          "right": 20,
+          "corners": 14,
+          "free_kick_taking": 11,
+          "penalty_taking": 12
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "liverpool_98028755",
+        "name": "Mohamed Salah",
+        "role": "RM",
+        "allowed_positions": [
+          "RW"
+        ],
+        "attributes": {
+          "pace": 15,
+          "acceleration": 15,
+          "stamina": 17,
+          "passing": 16,
+          "first_touch": 17,
+          "dribbling": 16,
+          "tackling": 7,
+          "positioning": 8,
+          "decisions": 15,
+          "finishing": 17,
+          "long_shots": 15,
+          "crossing": 17,
+          "heading": 10,
+          "jumping_reach": 8,
+          "left": 10,
+          "right": 20,
+          "corners": 13,
+          "free_kick_taking": 12,
+          "penalty_taking": 17
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 90.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "liverpool_59138294",
+        "name": "Giorgi Mamardashvili",
+        "role": "GK",
+        "attributes": {
+          "pace": 11,
+          "acceleration": 10,
+          "stamina": 12,
+          "passing": 12,
+          "first_touch": 12,
+          "dribbling": 10,
+          "tackling": 10,
+          "positioning": 14,
+          "decisions": 13,
+          "finishing": 10,
+          "long_shots": 10,
+          "crossing": 10,
+          "heading": 10,
+          "jumping_reach": 18,
+          "left": 10,
+          "right": 20,
+          "corners": 10,
+          "free_kick_taking": 10,
+          "penalty_taking": 10,
+          "handling": 15,
+          "reflexes": 17,
+          "one_on_ones": 14,
+          "aerial_reach": 17,
+          "command_of_area": 16,
+          "kicking": 15,
+          "throwing": 12
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "liverpool_91193048",
+        "name": "Florian Wirtz",
+        "role": "AM",
+        "attributes": {
+          "pace": 15,
+          "acceleration": 14,
+          "stamina": 16,
+          "passing": 18,
+          "first_touch": 18,
+          "dribbling": 17,
+          "tackling": 10,
+          "positioning": 7,
+          "decisions": 15,
+          "finishing": 13,
+          "long_shots": 14,
+          "crossing": 13,
+          "heading": 7,
+          "jumping_reach": 7,
+          "left": 10,
+          "right": 20,
+          "corners": 14,
+          "free_kick_taking": 13,
+          "penalty_taking": 14
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "liverpool_37071197",
+        "name": "Ryan Gravenberch",
+        "role": "DM",
+        "allowed_positions": [
+          "CM"
+        ],
+        "attributes": {
+          "pace": 14,
+          "acceleration": 15,
+          "stamina": 15,
+          "passing": 15,
+          "first_touch": 15,
+          "dribbling": 15,
+          "tackling": 13,
+          "positioning": 14,
+          "decisions": 14,
+          "finishing": 9,
+          "long_shots": 10,
+          "crossing": 11,
+          "heading": 12,
+          "jumping_reach": 12,
+          "left": 10,
+          "right": 20,
+          "corners": 11,
+          "free_kick_taking": 10,
+          "penalty_taking": 10
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "liverpool_28115788",
+        "name": "Curtis Jones",
+        "role": "DM",
+        "allowed_positions": [
+          "CM"
+        ],
+        "attributes": {
+          "pace": 13,
+          "acceleration": 14,
+          "stamina": 13,
+          "passing": 15,
+          "first_touch": 16,
+          "dribbling": 15,
+          "tackling": 10,
+          "positioning": 11,
+          "decisions": 14,
+          "finishing": 10,
+          "long_shots": 11,
+          "crossing": 12,
+          "heading": 8,
+          "jumping_reach": 9,
+          "left": 10,
+          "right": 20,
+          "corners": 11,
+          "free_kick_taking": 11,
+          "penalty_taking": 13
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      },
+      {
+        "id": "liverpool_43161651",
+        "name": "Federico Chiesa",
+        "role": "RW",
+        "allowed_positions": [
+          "LW"
+        ],
+        "attributes": {
+          "pace": 15,
+          "acceleration": 15,
+          "stamina": 12,
+          "passing": 14,
+          "first_touch": 15,
+          "dribbling": 16,
+          "tackling": 6,
+          "positioning": 8,
+          "decisions": 12,
+          "finishing": 13,
+          "long_shots": 13,
+          "crossing": 14,
+          "heading": 9,
+          "jumping_reach": 8,
+          "left": 10,
+          "right": 20,
+          "corners": 10,
+          "free_kick_taking": 5,
+          "penalty_taking": 10
+        },
+        "starting_condition": {
+          "fitness": 100.0,
+          "sharpness": 85.0,
+          "initial_fatigue": 0.0
+        }
+      }
+    ],
+    "starting_lineup": [
+      {
+        "slot": "GK",
+        "player_id": "liverpool_19058734"
+      },
+      {
+        "slot": "CB_L",
+        "player_id": "liverpool_37024025"
+      },
+      {
+        "slot": "CB_R",
+        "player_id": "liverpool_48037822"
+      },
+      {
+        "slot": "LB",
+        "player_id": "liverpool_2000011147"
+      },
+      {
+        "slot": "RB",
+        "player_id": "liverpool_28113828"
+      },
+      {
+        "slot": "CM_L",
+        "player_id": "liverpool_14157184"
+      },
+      {
+        "slot": "CM_R",
+        "player_id": "liverpool_16202373"
+      },
+      {
+        "slot": "ST_L",
+        "player_id": "liverpool_93070286"
+      },
+      {
+        "slot": "ST_R",
+        "player_id": "liverpool_49062667"
+      },
+      {
+        "slot": "LM",
+        "player_id": "liverpool_37062185"
+      },
+      {
+        "slot": "RM",
+        "player_id": "liverpool_98028755"
+      }
+    ],
+    "bench": [
+      "liverpool_59138294",
+      "liverpool_91193048",
+      "liverpool_37071197",
+      "liverpool_28115788",
+      "liverpool_43161651"
+    ]
+  }
+}

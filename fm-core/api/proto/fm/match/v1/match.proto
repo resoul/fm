@@ -1,0 +1,258 @@
+syntax = "proto3";
+
+package fm.match.v1;
+
+option go_package = "github.com/resoul/fm-core/gen/go/fm/match/v1;matchv1";
+option csharp_namespace = "FM.Generated.Proto.Match.V1";
+
+// Source of truth for this schema: docs/contracts/protobuf-unity.md and
+// docs/architecture/decisions.md (decision 16). Transport is intentionally
+// not fixed by this schema; C1 must select it after a Go <-> Unity smoke test.
+//
+// Generated types must not leak into the Go simulation domain: explicit
+// mapping functions with tests at the boundary. First value of every enum is
+// UNSPECIFIED. Removed field numbers/names are reserved, never reused.
+
+// ---------------------------------------------------------------------------
+// HTTP (auxiliary API for creating/checking a match, not the runtime stream)
+// ---------------------------------------------------------------------------
+
+message CreateMatchRequest {
+  string idempotency_key = 1;
+  bytes match_input = 2;       // serialized MatchInput, same schema as CLI/API
+  string profile = 3;          // resolved profile, e.g. "b7"
+  string engine_version = 4;   // expected engine version at creation time
+  int64 seed = 5;
+}
+
+message MatchInfo {
+  string match_id = 1;
+  string protocol_version = 2; // version of this .proto schema, not engine_version
+  string engine_version = 3;
+  int32 step_ms = 4;           // duration of one sim tick
+  double pitch_width_m = 5;
+  double pitch_length_m = 6;
+  MatchPhase phase = 7;
+}
+
+enum MatchPhase {
+  MATCH_PHASE_UNSPECIFIED = 0;
+  MATCH_PHASE_PRE_KICKOFF = 1;
+  MATCH_PHASE_FIRST_HALF = 2;
+  MATCH_PHASE_HALFTIME = 3;
+  MATCH_PHASE_SECOND_HALF = 4;
+  MATCH_PHASE_FINISHED = 5;
+  MATCH_PHASE_PAUSED = 6;
+  MATCH_PHASE_ABANDONED = 7;
+}
+
+// ---------------------------------------------------------------------------
+// WebSocket: client -> server
+// ---------------------------------------------------------------------------
+
+// Same Apply path for the user and the AI coach (decision 22); command_id
+// gives at-most-once application at the tick boundary (never applied twice).
+message MatchCommand {
+  string match_id = 1;
+  string command_id = 2;
+  int64 expected_tick = 3;   // 0/absent = "current", command does not target a specific tick
+  oneof payload {
+    PauseCommand pause = 10;
+    ResumeCommand resume = 11;
+    SubstituteCommand substitute = 12;
+    ChangeTacticsCommand change_tactics = 13;
+  }
+}
+
+message PauseCommand {}
+message ResumeCommand {}
+
+message SubstituteCommand {
+  string team_id = 1;
+  string player_out_id = 2;
+  string player_in_id = 3;
+}
+
+message ChangeTacticsCommand {
+  string team_id = 1;
+  bytes tactics = 2; // serialized Tactics, same schema as MatchInput
+}
+
+// Resumes the stream after a reconnect. last_event_seq is the consistency
+// anchor: snapshots are coalesced/dropped, so their seq cannot anchor resync.
+message ResyncRequest {
+  string match_id = 1;
+  int64 last_stream_seq = 2;
+  int64 last_event_seq = 3;
+}
+
+// ---------------------------------------------------------------------------
+// WebSocket: server -> client
+// ---------------------------------------------------------------------------
+
+// The only message type sent server->client as a WebSocket binary message.
+// stream_seq is monotonic over the whole transport stream (snapshots
+// included); the receiver detects a gap by a break in stream_seq.
+//
+// Delivery policy (contracted in docs, to be enforced by the C1 implementation):
+// a snapshot may be silently coalesced/dropped in a bounded slow-client queue.
+// event/command_outcome/result must never be silently dropped — they get a
+// separate bounded redelivery buffer; once it is exhausted the server must
+// explicitly move to history_truncated/disconnect, not drop silently.
+// These two streams must not share one buffer: overflow of the droppable
+// queue must never evict a non-droppable message.
+message StreamEnvelope {
+  int64 stream_seq = 1;
+  oneof payload {
+    MatchSnapshot snapshot = 2;
+    MatchEvent event = 3;
+    CommandOutcome outcome = 4;
+    MatchResult result = 5;
+  }
+}
+
+message MatchSnapshot {
+  int64 stream_seq = 1;
+  int64 tick = 2;
+  MatchPhase phase = 3;
+  bool paused = 4;
+  int64 last_event_seq = 5;      // last event reflected in this snapshot
+  bool discontinuity = 6;        // client must not interpolate across this gap
+  int32 home_score = 7;
+  int32 away_score = 8;
+  repeated PlayerState players = 9;
+  BallState ball = 10;
+  int32 period = 11;             // 1 or 2; zero only before kickoff
+  int64 period_elapsed_ms = 12;  // simulation time, not wall-clock time
+  int64 added_time_ms = 13;      // authoritative added time for the current period
+}
+
+message PlayerState {
+  string player_id = 1;
+  Vec2 position = 2;
+  Vec2 velocity = 3;
+  double facing_rad = 4;
+  string action = 5; // e.g. "idle"/"passing"/"crossing" — see model.md
+  string team_id = 6;
+  bool active = 7;
+}
+
+// A loose ball is never encoded as a fake player with ID=0 (contract decision).
+message BallState {
+  Vec3 position = 1;
+  Vec3 velocity = 2;
+  BallMode mode = 3;
+  optional string carrier_id = 4;
+}
+
+enum BallMode {
+  BALL_MODE_UNSPECIFIED = 0;
+  BALL_MODE_LOOSE = 1;
+  BALL_MODE_CARRIED = 2;
+  BALL_MODE_IN_FLIGHT = 3;
+}
+
+message Vec2 {
+  double x = 1;
+  double z = 2;
+}
+
+message Vec3 {
+  double x = 1;
+  double y = 2; // ball height
+  double z = 3;
+}
+
+// event_seq is an independent monotonic counter over domain events; resync
+// anchors on it, not on stream_seq.
+message MatchEvent {
+  int64 event_seq = 1;
+  int64 tick = 2;
+  oneof payload {
+    GoalEvent goal = 10;
+    ShotEvent shot = 11;
+    PassEvent pass = 12;
+    CrossEvent cross = 13;
+    InterceptionEvent interception = 14;
+    FoulEvent foul = 15;
+    CardEvent card = 16;
+    InjuryEvent injury = 17;
+    SubstitutionEvent substitution = 18;
+    RestartEvent restart = 19; // corner/free_kick/goal_kick/throw_in/kickoff
+  }
+}
+
+message GoalEvent {
+  string team_id = 1;
+  string scorer_id = 2;
+  double x_g = 3;
+}
+message ShotEvent {
+  string player_id = 1;
+  bool on_target = 2;
+  double x_g = 3;
+}
+message PassEvent {
+  string from_player_id = 1;
+  string to_player_id = 2;
+  bool completed = 3;
+}
+message CrossEvent {
+  string from_player_id = 1;
+  bool completed = 2;
+}
+message InterceptionEvent {
+  string player_id = 1;
+}
+message FoulEvent {
+  string player_id = 1;
+  string against_player_id = 2;
+}
+message CardEvent {
+  string player_id = 1;
+  CardType type = 2;
+}
+enum CardType {
+  CARD_TYPE_UNSPECIFIED = 0;
+  CARD_TYPE_YELLOW = 1;
+  CARD_TYPE_RED = 2;
+}
+message InjuryEvent {
+  string player_id = 1;
+  string reason = 2;
+  int32 estimated_days = 3;
+}
+message SubstitutionEvent {
+  string team_id = 1;
+  string player_out_id = 2;
+  string player_in_id = 3;
+}
+message RestartEvent {
+  RestartType type = 1;
+  string team_id = 2;
+}
+enum RestartType {
+  RESTART_TYPE_UNSPECIFIED = 0;
+  RESTART_TYPE_KICKOFF = 1;
+  RESTART_TYPE_CORNER = 2;
+  RESTART_TYPE_FREE_KICK = 3;
+  RESTART_TYPE_GOAL_KICK = 4;
+  RESTART_TYPE_THROW_IN = 5;
+}
+
+// Response to a MatchCommand at the tick boundary; goes on the non-droppable stream.
+message CommandOutcome {
+  string command_id = 1;
+  bool accepted = 2;
+  int64 applied_tick = 3;
+  string reason = 4; // set when accepted=false, or as coach diagnostics
+}
+
+message MatchResult {
+  MatchPhase final_phase = 1;
+  int32 home_score = 2;
+  int32 away_score = 3;
+  bytes stats = 4;               // serialized team/player stats, same schema as CLI
+  string engine_version = 5;
+  string state_hash = 6;         // for reproducibility checks, not for display
+}
