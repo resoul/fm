@@ -1,0 +1,10 @@
+{
+  "file": {
+    "defaultLevel": "debug",
+    "filterRecurring": true
+  },
+  "console": {
+    "defaultLevel": "info",
+    "filterRecurring": true
+  }
+}
